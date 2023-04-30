@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "402993811587",
+    "project_id": "pharmaff-dab40",
+    "storage_bucket": "pharmaff-dab40.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402993811587:android:ca4e5f0b0f48c96a2b0bb6",
+        "android_client_info": {
+          "package_name": "com.pharmabox.mobileapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402993811587-d3h00i05s8obdo0hgt70jpjnf57i1ios.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pharmabox.mobileapp",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "402993811587-jpr61bqjh0agk6co8110cegnar8qqlng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGiDwJv6PfzO6hPQeymoo7tl4NcdiyloQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402993811587-jpr61bqjh0agk6co8110cegnar8qqlng.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "402993811587-84qan834bued1e9qa723hg6rodd6n150.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pharmabox.mobileapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
