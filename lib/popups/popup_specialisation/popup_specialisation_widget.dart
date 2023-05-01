@@ -1,7 +1,9 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -189,7 +191,8 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                     child: StreamBuilder<List<SpecialisationsRecord>>(
                       stream: querySpecialisationsRecord(
                         queryBuilder: (specialisationsRecord) =>
-                            specialisationsRecord.orderBy('name'),
+                            specialisationsRecord.where('name',
+                                isEqualTo: FFAppState().searchField),
                       ),
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
@@ -217,15 +220,29 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                             return Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   15.0, 5.0, 15.0, 5.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    listViewSpecialisationsRecord.name!,
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                  ),
-                                ],
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  final usersUpdateData = {
+                                    'specialisations': FieldValue.arrayUnion(
+                                        [listViewSpecialisationsRecord.name]),
+                                  };
+                                  await currentUserReference!
+                                      .update(usersUpdateData);
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      listViewSpecialisationsRecord.name!,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },

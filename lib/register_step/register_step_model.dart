@@ -1,6 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/backend/firebase_storage/storage.dart';
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -8,7 +7,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
-import '/flutter_flow/upload_data.dart';
 import '/popups/popup_experiences/popup_experiences_widget.dart';
 import '/popups/popup_langues/popup_langues_widget.dart';
 import '/popups/popup_lgo/popup_lgo_widget.dart';
@@ -34,11 +32,6 @@ class RegisterStepModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
-  bool isDataUploading = false;
-  FFUploadedFile uploadedLocalFile =
-      FFUploadedFile(bytes: Uint8List.fromList([]));
-  String uploadedFileUrl = '';
-
   // State field(s) for NomFamille widget.
   TextEditingController? nomFamilleController;
   String? Function(BuildContext, String?)? nomFamilleControllerValidator;

@@ -1,6 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/backend/firebase_storage/storage.dart';
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -8,7 +7,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
-import '/flutter_flow/upload_data.dart';
 import '/popups/popup_experiences/popup_experiences_widget.dart';
 import '/popups/popup_langues/popup_langues_widget.dart';
 import '/popups/popup_lgo/popup_lgo_widget.dart';
@@ -121,8 +119,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                     ),
-                                    child: Image.network(
-                                      _model.uploadedFileUrl,
+                                    child: Image.asset(
+                                      'assets/images/Group_18.png',
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -142,60 +140,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         .primaryText,
                                     size: 30.0,
                                   ),
-                                  onPressed: () async {
-                                    final selectedMedia = await selectMedia(
-                                      mediaSource: MediaSource.photoGallery,
-                                      multiImage: false,
-                                    );
-                                    if (selectedMedia != null &&
-                                        selectedMedia.every((m) =>
-                                            validateFileFormat(
-                                                m.storagePath, context))) {
-                                      setState(
-                                          () => _model.isDataUploading = true);
-                                      var selectedUploadedFiles =
-                                          <FFUploadedFile>[];
-                                      var downloadUrls = <String>[];
-                                      try {
-                                        selectedUploadedFiles = selectedMedia
-                                            .map((m) => FFUploadedFile(
-                                                  name: m.storagePath
-                                                      .split('/')
-                                                      .last,
-                                                  bytes: m.bytes,
-                                                  height: m.dimensions?.height,
-                                                  width: m.dimensions?.width,
-                                                  blurHash: m.blurHash,
-                                                ))
-                                            .toList();
-
-                                        downloadUrls = (await Future.wait(
-                                          selectedMedia.map(
-                                            (m) async => await uploadData(
-                                                m.storagePath, m.bytes),
-                                          ),
-                                        ))
-                                            .where((u) => u != null)
-                                            .map((u) => u!)
-                                            .toList();
-                                      } finally {
-                                        _model.isDataUploading = false;
-                                      }
-                                      if (selectedUploadedFiles.length ==
-                                              selectedMedia.length &&
-                                          downloadUrls.length ==
-                                              selectedMedia.length) {
-                                        setState(() {
-                                          _model.uploadedLocalFile =
-                                              selectedUploadedFiles.first;
-                                          _model.uploadedFileUrl =
-                                              downloadUrls.first;
-                                        });
-                                      } else {
-                                        setState(() {});
-                                        return;
-                                      }
-                                    }
+                                  onPressed: () {
+                                    print('IconButton pressed ...');
                                   },
                                 ),
                               ),
@@ -742,6 +688,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Color(0xFFEFF6F7),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -835,61 +788,89 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ),
                               ],
                             ),
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 10.0, 0.0, 0.0),
-                                  child: Row(
+                            AuthUserStreamWidget(
+                              builder: (context) => Builder(
+                                builder: (context) {
+                                  final listSpecialisationUser =
+                                      (currentUserDocument?.specialisations
+                                                  ?.toList() ??
+                                              [])
+                                          .toList();
+                                  return Column(
                                     mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      FlutterFlowIconButton(
-                                        borderColor: Colors.transparent,
-                                        borderRadius: 30.0,
-                                        borderWidth: 1.0,
-                                        buttonSize: 40.0,
-                                        icon: Icon(
-                                          Icons.delete_outline_sharp,
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
-                                          size: 20.0,
+                                    children: List.generate(
+                                        listSpecialisationUser.length,
+                                        (listSpecialisationUserIndex) {
+                                      final listSpecialisationUserItem =
+                                          listSpecialisationUser[
+                                              listSpecialisationUserIndex];
+                                      return Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 10.0, 0.0, 0.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            FlutterFlowIconButton(
+                                              borderColor: Colors.transparent,
+                                              borderRadius: 30.0,
+                                              borderWidth: 1.0,
+                                              buttonSize: 40.0,
+                                              icon: Icon(
+                                                Icons.delete_outline_sharp,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .alternate,
+                                                size: 20.0,
+                                              ),
+                                              onPressed: () async {
+                                                final usersUpdateData = {
+                                                  'specialisations':
+                                                      FieldValue.arrayRemove([
+                                                    listSpecialisationUserItem
+                                                  ]),
+                                                };
+                                                await currentUserReference!
+                                                    .update(usersUpdateData);
+                                              },
+                                            ),
+                                            Icon(
+                                              Icons.verified,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              size: 24.0,
+                                            ),
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.6,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        5.0, 0.0, 0.0, 0.0),
+                                                child: Text(
+                                                  listSpecialisationUserItem,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        onPressed: () {
-                                          print('IconButton pressed ...');
-                                        },
-                                      ),
-                                      Icon(
-                                        Icons.verified,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        size: 24.0,
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  5.0, 0.0, 0.0, 0.0),
-                                          child: Text(
-                                            'Tiers Payant',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),
@@ -904,6 +885,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Column(
@@ -1008,42 +996,138 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                             ),
                           ),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 1.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                          ),
-                          child: Builder(
-                            builder: (context) {
-                              final listLGOUser =
-                                  FFAppState().listLgoRegister.toList();
-                              return Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: List.generate(listLGOUser.length,
-                                    (listLGOUserIndex) {
-                                  final listLGOUserItem =
-                                      listLGOUser[listLGOUserIndex];
-                                  return wrapWithModel(
-                                    model: _model.listSkillWithSliderModels1
-                                        .getModel(
-                                      listLGOUserItem,
-                                      listLGOUserIndex,
-                                    ),
-                                    updateCallback: () => setState(() {}),
-                                    child: ListSkillWithSliderWidget(
-                                      key: Key(
-                                        'Key0ye_${listLGOUserItem}',
-                                      ),
-                                      text: listLGOUserItem,
-                                      icone: Icon(
-                                        Icons.computer,
-                                      ),
-                                    ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              5.0, 5.0, 5.0, 5.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 1.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
+                            child: AuthUserStreamWidget(
+                              builder: (context) => Builder(
+                                builder: (context) {
+                                  final listLGO =
+                                      (currentUserDocument?.lgo?.toList() ?? [])
+                                          .toList();
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: List.generate(listLGO.length,
+                                        (listLGOIndex) {
+                                      final listLGOItem = listLGO[listLGOIndex];
+                                      return Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.4,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                FlutterFlowIconButton(
+                                                  borderColor:
+                                                      Colors.transparent,
+                                                  borderRadius: 30.0,
+                                                  borderWidth: 1.0,
+                                                  buttonSize: 40.0,
+                                                  icon: Icon(
+                                                    Icons.delete_outline_sharp,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .alternate,
+                                                    size: 20.0,
+                                                  ),
+                                                  onPressed: () async {
+                                                    final usersUpdateData = {
+                                                      'lgo': FieldValue
+                                                          .arrayRemove([
+                                                        getDataTypeLgoFirestoreData(
+                                                          updateDataTypeLgoStruct(
+                                                            listLGOItem,
+                                                            clearUnsetFields:
+                                                                false,
+                                                          ),
+                                                          true,
+                                                        )
+                                                      ]),
+                                                    };
+                                                    await currentUserReference!
+                                                        .update(
+                                                            usersUpdateData);
+                                                  },
+                                                ),
+                                                Container(
+                                                  width: 50.0,
+                                                  height: 30.0,
+                                                  child: custom_widgets
+                                                      .ImageFromStorageFirebase(
+                                                    width: 50.0,
+                                                    height: 30.0,
+                                                    folder: 'lgo',
+                                                    imageName:
+                                                        listLGOItem.imageName!,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          5.0, 0.0, 0.0, 0.0),
+                                                  child: Text(
+                                                    listLGOItem.name!,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.4,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                            ),
+                                            child: wrapWithModel(
+                                              model: _model
+                                                  .listSkillWithSliderModels1
+                                                  .getModel(
+                                                listLGOIndex.toString(),
+                                                listLGOIndex,
+                                              ),
+                                              updateCallback: () =>
+                                                  setState(() {}),
+                                              child: ListSkillWithSliderWidget(
+                                                key: Key(
+                                                  'Key6t9_${listLGOIndex.toString()}',
+                                                ),
+                                                slider: listLGOItem.niveau!,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }),
                                   );
-                                }),
-                              );
-                            },
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -1063,6 +1147,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       width: 100.0,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 12.0,
+                            color: Color(0x2B1F5C67),
+                            offset: Offset(10.0, 10.0),
+                          )
+                        ],
                         borderRadius: BorderRadius.circular(15.0),
                         shape: BoxShape.rectangle,
                       ),
@@ -1313,6 +1404,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Column(
@@ -1417,40 +1515,92 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                             ),
                           ),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 1.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              wrapWithModel(
-                                model: _model.listSkillWithSliderModel2,
-                                updateCallback: () => setState(() {}),
-                                child: ListSkillWithSliderWidget(
-                                  text: 'Langue',
-                                  icone: Icon(
-                                    Icons.language_sharp,
-                                  ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              5.0, 5.0, 5.0, 5.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 1.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          FlutterFlowIconButton(
+                                            borderColor: Colors.transparent,
+                                            borderRadius: 30.0,
+                                            borderWidth: 1.0,
+                                            buttonSize: 40.0,
+                                            icon: Icon(
+                                              Icons.delete_outline_sharp,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              size: 20.0,
+                                            ),
+                                            onPressed: () {
+                                              print('IconButton pressed ...');
+                                            },
+                                          ),
+                                          Icon(
+                                            Icons.computer,
+                                            color: Color(0xFF595A71),
+                                            size: 24.0,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    5.0, 0.0, 0.0, 0.0),
+                                            child: Text(
+                                              'Hello World',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: wrapWithModel(
+                                        model: _model.listSkillWithSliderModel2,
+                                        updateCallback: () => setState(() {}),
+                                        child: ListSkillWithSliderWidget(
+                                          slider: 50.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(15.0),
                     ),
                   ),
                 ),
@@ -1467,6 +1617,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       width: 100.0,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 12.0,
+                            color: Color(0x2B1F5C67),
+                            offset: Offset(10.0, 10.0),
+                          )
+                        ],
                         borderRadius: BorderRadius.circular(15.0),
                         shape: BoxShape.rectangle,
                       ),
@@ -1618,14 +1775,19 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
                   child: Container(
                     width: double.infinity,
-                    height: 150.0,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(4.0),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
                       width: 100.0,
-                      height: 300.0,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                         borderRadius: BorderRadius.circular(15.0),
@@ -1738,7 +1900,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                     ),
                     child: FFButtonWidget(
                       onPressed: () async {
-                        context.pushNamed('RegisterPharmacy');
+                        final usersUpdateData = createUsersRecordData(
+                          nom: _model.nomFamilleController.text,
+                          prenom: _model.prenomController.text,
+                          email: '',
+                        );
+                        await currentUserReference!.update(usersUpdateData);
                       },
                       text: 'Créer mon compte',
                       options: FFButtonOptions(

@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/backend/firebase_storage/storage.dart';
 import '/composants/maps_widget_adresse_pharmacie/maps_widget_adresse_pharmacie_widget.dart';
 import '/composants/repeater_field/repeater_field_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -8,6 +9,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import '/flutter_flow/upload_data.dart';
 import '/popups/popup_groupement/popup_groupement_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -101,34 +103,151 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(100.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/283/600',
-                                width: 200.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              50.0, 0.0, 50.0, 0.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 250.0,
+                                height: 150.0,
+                                child: Stack(
+                                  alignment: AlignmentDirectional(0.0, 1.0),
+                                  children: [
+                                    Container(
+                                      width: 150.0,
+                                      height: 150.0,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x00FFFFFF),
+                                        borderRadius:
+                                            BorderRadius.circular(95.0),
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            7.0, 7.0, 7.0, 7.0),
+                                        child: Container(
+                                          width: 150.0,
+                                          height: 150.0,
+                                          clipBehavior: Clip.antiAlias,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Image.network(
+                                            _model.uploadedFileUrl,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.65, 1.0),
+                                      child: FlutterFlowIconButton(
+                                        borderColor: Colors.transparent,
+                                        borderRadius: 30.0,
+                                        borderWidth: 1.0,
+                                        buttonSize: 60.0,
+                                        fillColor: Colors.white,
+                                        icon: Icon(
+                                          Icons.add_a_photo_outlined,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          size: 30.0,
+                                        ),
+                                        onPressed: () async {
+                                          final selectedMedia =
+                                              await selectMedia(
+                                            mediaSource:
+                                                MediaSource.photoGallery,
+                                            multiImage: false,
+                                          );
+                                          if (selectedMedia != null &&
+                                              selectedMedia.every((m) =>
+                                                  validateFileFormat(
+                                                      m.storagePath,
+                                                      context))) {
+                                            setState(() =>
+                                                _model.isDataUploading = true);
+                                            var selectedUploadedFiles =
+                                                <FFUploadedFile>[];
+                                            var downloadUrls = <String>[];
+                                            try {
+                                              selectedUploadedFiles =
+                                                  selectedMedia
+                                                      .map(
+                                                          (m) => FFUploadedFile(
+                                                                name: m
+                                                                    .storagePath
+                                                                    .split('/')
+                                                                    .last,
+                                                                bytes: m.bytes,
+                                                                height: m
+                                                                    .dimensions
+                                                                    ?.height,
+                                                                width: m
+                                                                    .dimensions
+                                                                    ?.width,
+                                                                blurHash:
+                                                                    m.blurHash,
+                                                              ))
+                                                      .toList();
+
+                                              downloadUrls = (await Future.wait(
+                                                selectedMedia.map(
+                                                  (m) async => await uploadData(
+                                                      m.storagePath, m.bytes),
+                                                ),
+                                              ))
+                                                  .where((u) => u != null)
+                                                  .map((u) => u!)
+                                                  .toList();
+                                            } finally {
+                                              _model.isDataUploading = false;
+                                            }
+                                            if (selectedUploadedFiles.length ==
+                                                    selectedMedia.length &&
+                                                downloadUrls.length ==
+                                                    selectedMedia.length) {
+                                              setState(() {
+                                                _model.uploadedLocalFile =
+                                                    selectedUploadedFiles.first;
+                                                _model.uploadedFileUrl =
+                                                    downloadUrls.first;
+                                              });
+                                            } else {
+                                              setState(() {});
+                                              return;
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            FlutterFlowIconButton(
-                              borderColor: Colors.transparent,
-                              borderRadius: 30.0,
-                              borderWidth: 1.0,
-                              buttonSize: 60.0,
-                              fillColor: FlutterFlowTheme.of(context).accent3,
-                              icon: Icon(
-                                Icons.add_a_photo_outlined,
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                size: 30.0,
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 10.0, 0.0, 0.0),
+                                child: Text(
+                                  'Les profils avec photo ont 80% de vues en plus',
+                                  textAlign: TextAlign.center,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                      ),
+                                ),
                               ),
-                              onPressed: () {
-                                print('IconButton pressed ...');
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),

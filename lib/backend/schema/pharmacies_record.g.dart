@@ -19,14 +19,7 @@ class _$PharmaciesRecordSerializer
   @override
   Iterable<Object?> serialize(Serializers serializers, PharmaciesRecord object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object?>[
-      'groupement',
-      serializers.serialize(object.groupement,
-          specifiedType: const FullType(GroupementStruct)),
-      'lgo',
-      serializers.serialize(object.lgo,
-          specifiedType: const FullType(LgoStruct)),
-    ];
+    final result = <Object?>[];
     Object? value;
     value = object.nom;
     if (value != null) {
@@ -413,11 +406,6 @@ class _$PharmaciesRecordSerializer
           result.nom = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'groupement':
-          result.groupement.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(GroupementStruct))!
-              as GroupementStruct);
-          break;
         case 'presentation':
           result.presentation = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
@@ -497,10 +485,6 @@ class _$PharmaciesRecordSerializer
         case 'mission-borne-telemedecine':
           result.missionBorneTelemedecine = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool?;
-          break;
-        case 'lgo':
-          result.lgo.replace(serializers.deserialize(value,
-              specifiedType: const FullType(LgoStruct))! as LgoStruct);
           break;
         case 'confort-salle-de-pause':
           result.confortSalleDePause = serializers.deserialize(value,
@@ -651,8 +635,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
   @override
   final String? nom;
   @override
-  final GroupementStruct groupement;
-  @override
   final String? presentation;
   @override
   final bool? maitreDeStage;
@@ -692,8 +674,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
   final String? missionTypePreparation;
   @override
   final bool? missionBorneTelemedecine;
-  @override
-  final LgoStruct lgo;
   @override
   final bool? confortSalleDePause;
   @override
@@ -761,7 +741,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
 
   _$PharmaciesRecord._(
       {this.nom,
-      required this.groupement,
       this.presentation,
       this.maitreDeStage,
       this.email,
@@ -782,7 +761,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
       this.missionEntretienPharmaceutique,
       this.missionTypePreparation,
       this.missionBorneTelemedecine,
-      required this.lgo,
       this.confortSalleDePause,
       this.confortRobot,
       this.confortEtiquetteElectronique,
@@ -813,11 +791,7 @@ class _$PharmaciesRecord extends PharmaciesRecord {
       this.titulaire,
       this.coTitulaire,
       this.ffRef})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-        groupement, r'PharmaciesRecord', 'groupement');
-    BuiltValueNullFieldError.checkNotNull(lgo, r'PharmaciesRecord', 'lgo');
-  }
+      : super._();
 
   @override
   PharmaciesRecord rebuild(void Function(PharmaciesRecordBuilder) updates) =>
@@ -832,7 +806,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
     if (identical(other, this)) return true;
     return other is PharmaciesRecord &&
         nom == other.nom &&
-        groupement == other.groupement &&
         presentation == other.presentation &&
         maitreDeStage == other.maitreDeStage &&
         email == other.email &&
@@ -854,7 +827,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
             other.missionEntretienPharmaceutique &&
         missionTypePreparation == other.missionTypePreparation &&
         missionBorneTelemedecine == other.missionBorneTelemedecine &&
-        lgo == other.lgo &&
         confortSalleDePause == other.confortSalleDePause &&
         confortRobot == other.confortRobot &&
         confortEtiquetteElectronique == other.confortEtiquetteElectronique &&
@@ -891,7 +863,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
   int get hashCode {
     var _$hash = 0;
     _$hash = $jc(_$hash, nom.hashCode);
-    _$hash = $jc(_$hash, groupement.hashCode);
     _$hash = $jc(_$hash, presentation.hashCode);
     _$hash = $jc(_$hash, maitreDeStage.hashCode);
     _$hash = $jc(_$hash, email.hashCode);
@@ -912,7 +883,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
     _$hash = $jc(_$hash, missionEntretienPharmaceutique.hashCode);
     _$hash = $jc(_$hash, missionTypePreparation.hashCode);
     _$hash = $jc(_$hash, missionBorneTelemedecine.hashCode);
-    _$hash = $jc(_$hash, lgo.hashCode);
     _$hash = $jc(_$hash, confortSalleDePause.hashCode);
     _$hash = $jc(_$hash, confortRobot.hashCode);
     _$hash = $jc(_$hash, confortEtiquetteElectronique.hashCode);
@@ -951,7 +921,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
   String toString() {
     return (newBuiltValueToStringHelper(r'PharmaciesRecord')
           ..add('nom', nom)
-          ..add('groupement', groupement)
           ..add('presentation', presentation)
           ..add('maitreDeStage', maitreDeStage)
           ..add('email', email)
@@ -973,7 +942,6 @@ class _$PharmaciesRecord extends PharmaciesRecord {
               'missionEntretienPharmaceutique', missionEntretienPharmaceutique)
           ..add('missionTypePreparation', missionTypePreparation)
           ..add('missionBorneTelemedecine', missionBorneTelemedecine)
-          ..add('lgo', lgo)
           ..add('confortSalleDePause', confortSalleDePause)
           ..add('confortRobot', confortRobot)
           ..add('confortEtiquetteElectronique', confortEtiquetteElectronique)
@@ -1015,12 +983,6 @@ class PharmaciesRecordBuilder
   String? _nom;
   String? get nom => _$this._nom;
   set nom(String? nom) => _$this._nom = nom;
-
-  GroupementStructBuilder? _groupement;
-  GroupementStructBuilder get groupement =>
-      _$this._groupement ??= new GroupementStructBuilder();
-  set groupement(GroupementStructBuilder? groupement) =>
-      _$this._groupement = groupement;
 
   String? _presentation;
   String? get presentation => _$this._presentation;
@@ -1109,10 +1071,6 @@ class PharmaciesRecordBuilder
   bool? get missionBorneTelemedecine => _$this._missionBorneTelemedecine;
   set missionBorneTelemedecine(bool? missionBorneTelemedecine) =>
       _$this._missionBorneTelemedecine = missionBorneTelemedecine;
-
-  LgoStructBuilder? _lgo;
-  LgoStructBuilder get lgo => _$this._lgo ??= new LgoStructBuilder();
-  set lgo(LgoStructBuilder? lgo) => _$this._lgo = lgo;
 
   bool? _confortSalleDePause;
   bool? get confortSalleDePause => _$this._confortSalleDePause;
@@ -1276,7 +1234,6 @@ class PharmaciesRecordBuilder
     final $v = _$v;
     if ($v != null) {
       _nom = $v.nom;
-      _groupement = $v.groupement.toBuilder();
       _presentation = $v.presentation;
       _maitreDeStage = $v.maitreDeStage;
       _email = $v.email;
@@ -1297,7 +1254,6 @@ class PharmaciesRecordBuilder
       _missionEntretienPharmaceutique = $v.missionEntretienPharmaceutique;
       _missionTypePreparation = $v.missionTypePreparation;
       _missionBorneTelemedecine = $v.missionBorneTelemedecine;
-      _lgo = $v.lgo.toBuilder();
       _confortSalleDePause = $v.confortSalleDePause;
       _confortRobot = $v.confortRobot;
       _confortEtiquetteElectronique = $v.confortEtiquetteElectronique;
@@ -1353,7 +1309,6 @@ class PharmaciesRecordBuilder
       _$result = _$v ??
           new _$PharmaciesRecord._(
               nom: nom,
-              groupement: groupement.build(),
               presentation: presentation,
               maitreDeStage: maitreDeStage,
               email: email,
@@ -1374,7 +1329,6 @@ class PharmaciesRecordBuilder
               missionEntretienPharmaceutique: missionEntretienPharmaceutique,
               missionTypePreparation: missionTypePreparation,
               missionBorneTelemedecine: missionBorneTelemedecine,
-              lgo: lgo.build(),
               confortSalleDePause: confortSalleDePause,
               confortRobot: confortRobot,
               confortEtiquetteElectronique: confortEtiquetteElectronique,
@@ -1408,12 +1362,6 @@ class PharmaciesRecordBuilder
     } catch (_) {
       late String _$failedField;
       try {
-        _$failedField = 'groupement';
-        groupement.build();
-
-        _$failedField = 'lgo';
-        lgo.build();
-
         _$failedField = 'horaireLundi';
         _horaireLundi?.build();
         _$failedField = 'horaireMardi';

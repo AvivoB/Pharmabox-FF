@@ -7,14 +7,12 @@ part of 'serializers.dart';
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
-      ..add(DataTypeLanguesStruct.serializer)
+      ..add(ChatMessagesRecord.serializer)
+      ..add(ChatsRecord.serializer)
+      ..add(DataTypeLgoStruct.serializer)
       ..add(DataTypeSpecialisationsStruct.serializer)
-      ..add(ExperiencesStruct.serializer)
-      ..add(GroupementStruct.serializer)
       ..add(GroupementsRecord.serializer)
-      ..add(HoraireOuvertureStruct.serializer)
       ..add(LgoRecord.serializer)
-      ..add(LgoStruct.serializer)
       ..add(PharmaciesRecord.serializer)
       ..add(SpecialisationsRecord.serializer)
       ..add(UsersRecord.serializer)
@@ -43,8 +41,17 @@ Serializers _$serializers = (new Serializers().toBuilder()
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
       ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(String)]),
-          () => new ListBuilder<String>())
+          const FullType(BuiltList, const [
+            const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])
+          ]),
+          () => new ListBuilder<DocumentReference<Object?>>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [
+            const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])
+          ]),
+          () => new ListBuilder<DocumentReference<Object?>>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
@@ -56,7 +63,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
           () => new ListBuilder<String>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
-          () => new ListBuilder<String>()))
+          () => new ListBuilder<String>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(DataTypeLgoStruct)]),
+          () => new ListBuilder<DataTypeLgoStruct>()))
     .build();
 
 // ignore_for_file: deprecated_member_use_from_same_package,type=lint

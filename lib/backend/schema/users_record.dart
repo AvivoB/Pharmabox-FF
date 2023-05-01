@@ -40,8 +40,6 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
 
   BuiltList<String>? get specialisations;
 
-  BuiltList<String>? get lgo;
-
   @BuiltValueField(wireName: 'faculte_ecole')
   BuiltList<String>? get faculteEcole;
 
@@ -56,6 +54,8 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
 
   @BuiltValueField(wireName: 'display_name')
   String? get displayName;
+
+  BuiltList<DataTypeLgoStruct>? get lgo;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -74,13 +74,13 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..dateNaissance = ''
     ..poste = ''
     ..specialisations = ListBuilder()
-    ..lgo = ListBuilder()
     ..faculteEcole = ListBuilder()
     ..experiences = ListBuilder()
     ..competences = ListBuilder()
     ..isTitulaire = false
     ..likes = 0
-    ..displayName = '';
+    ..displayName = ''
+    ..lgo = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -137,13 +137,13 @@ Map<String, dynamic> createUsersRecordData({
         ..dateNaissance = dateNaissance
         ..poste = poste
         ..specialisations = null
-        ..lgo = null
         ..faculteEcole = null
         ..experiences = null
         ..competences = null
         ..isTitulaire = isTitulaire
         ..likes = likes
-        ..displayName = displayName,
+        ..displayName = displayName
+        ..lgo = null,
     ),
   );
 

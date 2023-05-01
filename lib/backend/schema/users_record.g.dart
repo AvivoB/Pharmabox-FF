@@ -110,14 +110,6 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
             specifiedType:
                 const FullType(BuiltList, const [const FullType(String)])));
     }
-    value = object.lgo;
-    if (value != null) {
-      result
-        ..add('lgo')
-        ..add(serializers.serialize(value,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(String)])));
-    }
     value = object.faculteEcole;
     if (value != null) {
       result
@@ -161,6 +153,14 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add('display_name')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
+    }
+    value = object.lgo;
+    if (value != null) {
+      result
+        ..add('lgo')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(DataTypeLgoStruct)])));
     }
     value = object.ffRef;
     if (value != null) {
@@ -238,12 +238,6 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
                       BuiltList, const [const FullType(String)]))!
               as BuiltList<Object?>);
           break;
-        case 'lgo':
-          result.lgo.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(String)]))!
-              as BuiltList<Object?>);
-          break;
         case 'faculte_ecole':
           result.faculteEcole.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -273,6 +267,12 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         case 'display_name':
           result.displayName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
+          break;
+        case 'lgo':
+          result.lgo.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(DataTypeLgoStruct)]))!
+              as BuiltList<Object?>);
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -315,8 +315,6 @@ class _$UsersRecord extends UsersRecord {
   @override
   final BuiltList<String>? specialisations;
   @override
-  final BuiltList<String>? lgo;
-  @override
   final BuiltList<String>? faculteEcole;
   @override
   final BuiltList<String>? experiences;
@@ -328,6 +326,8 @@ class _$UsersRecord extends UsersRecord {
   final int? likes;
   @override
   final String? displayName;
+  @override
+  final BuiltList<DataTypeLgoStruct>? lgo;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -348,13 +348,13 @@ class _$UsersRecord extends UsersRecord {
       this.dateNaissance,
       this.poste,
       this.specialisations,
-      this.lgo,
       this.faculteEcole,
       this.experiences,
       this.competences,
       this.isTitulaire,
       this.likes,
       this.displayName,
+      this.lgo,
       this.ffRef})
       : super._();
 
@@ -382,13 +382,13 @@ class _$UsersRecord extends UsersRecord {
         dateNaissance == other.dateNaissance &&
         poste == other.poste &&
         specialisations == other.specialisations &&
-        lgo == other.lgo &&
         faculteEcole == other.faculteEcole &&
         experiences == other.experiences &&
         competences == other.competences &&
         isTitulaire == other.isTitulaire &&
         likes == other.likes &&
         displayName == other.displayName &&
+        lgo == other.lgo &&
         ffRef == other.ffRef;
   }
 
@@ -408,13 +408,13 @@ class _$UsersRecord extends UsersRecord {
     _$hash = $jc(_$hash, dateNaissance.hashCode);
     _$hash = $jc(_$hash, poste.hashCode);
     _$hash = $jc(_$hash, specialisations.hashCode);
-    _$hash = $jc(_$hash, lgo.hashCode);
     _$hash = $jc(_$hash, faculteEcole.hashCode);
     _$hash = $jc(_$hash, experiences.hashCode);
     _$hash = $jc(_$hash, competences.hashCode);
     _$hash = $jc(_$hash, isTitulaire.hashCode);
     _$hash = $jc(_$hash, likes.hashCode);
     _$hash = $jc(_$hash, displayName.hashCode);
+    _$hash = $jc(_$hash, lgo.hashCode);
     _$hash = $jc(_$hash, ffRef.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -436,13 +436,13 @@ class _$UsersRecord extends UsersRecord {
           ..add('dateNaissance', dateNaissance)
           ..add('poste', poste)
           ..add('specialisations', specialisations)
-          ..add('lgo', lgo)
           ..add('faculteEcole', faculteEcole)
           ..add('experiences', experiences)
           ..add('competences', competences)
           ..add('isTitulaire', isTitulaire)
           ..add('likes', likes)
           ..add('displayName', displayName)
+          ..add('lgo', lgo)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -506,10 +506,6 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   set specialisations(ListBuilder<String>? specialisations) =>
       _$this._specialisations = specialisations;
 
-  ListBuilder<String>? _lgo;
-  ListBuilder<String> get lgo => _$this._lgo ??= new ListBuilder<String>();
-  set lgo(ListBuilder<String>? lgo) => _$this._lgo = lgo;
-
   ListBuilder<String>? _faculteEcole;
   ListBuilder<String> get faculteEcole =>
       _$this._faculteEcole ??= new ListBuilder<String>();
@@ -540,6 +536,11 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   String? get displayName => _$this._displayName;
   set displayName(String? displayName) => _$this._displayName = displayName;
 
+  ListBuilder<DataTypeLgoStruct>? _lgo;
+  ListBuilder<DataTypeLgoStruct> get lgo =>
+      _$this._lgo ??= new ListBuilder<DataTypeLgoStruct>();
+  set lgo(ListBuilder<DataTypeLgoStruct>? lgo) => _$this._lgo = lgo;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -564,13 +565,13 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _dateNaissance = $v.dateNaissance;
       _poste = $v.poste;
       _specialisations = $v.specialisations?.toBuilder();
-      _lgo = $v.lgo?.toBuilder();
       _faculteEcole = $v.faculteEcole?.toBuilder();
       _experiences = $v.experiences?.toBuilder();
       _competences = $v.competences?.toBuilder();
       _isTitulaire = $v.isTitulaire;
       _likes = $v.likes;
       _displayName = $v.displayName;
+      _lgo = $v.lgo?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -609,27 +610,28 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
               dateNaissance: dateNaissance,
               poste: poste,
               specialisations: _specialisations?.build(),
-              lgo: _lgo?.build(),
               faculteEcole: _faculteEcole?.build(),
               experiences: _experiences?.build(),
               competences: _competences?.build(),
               isTitulaire: isTitulaire,
               likes: likes,
               displayName: displayName,
+              lgo: _lgo?.build(),
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'specialisations';
         _specialisations?.build();
-        _$failedField = 'lgo';
-        _lgo?.build();
         _$failedField = 'faculteEcole';
         _faculteEcole?.build();
         _$failedField = 'experiences';
         _experiences?.build();
         _$failedField = 'competences';
         _competences?.build();
+
+        _$failedField = 'lgo';
+        _lgo?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'UsersRecord', _$failedField, e.toString());

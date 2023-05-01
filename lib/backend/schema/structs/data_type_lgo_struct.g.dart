@@ -1,27 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'data_type_langues_struct.dart';
+part of 'data_type_lgo_struct.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<DataTypeLanguesStruct> _$dataTypeLanguesStructSerializer =
-    new _$DataTypeLanguesStructSerializer();
+Serializer<DataTypeLgoStruct> _$dataTypeLgoStructSerializer =
+    new _$DataTypeLgoStructSerializer();
 
-class _$DataTypeLanguesStructSerializer
-    implements StructuredSerializer<DataTypeLanguesStruct> {
+class _$DataTypeLgoStructSerializer
+    implements StructuredSerializer<DataTypeLgoStruct> {
   @override
-  final Iterable<Type> types = const [
-    DataTypeLanguesStruct,
-    _$DataTypeLanguesStruct
-  ];
+  final Iterable<Type> types = const [DataTypeLgoStruct, _$DataTypeLgoStruct];
   @override
-  final String wireName = 'DataTypeLanguesStruct';
+  final String wireName = 'DataTypeLgoStruct';
 
   @override
-  Iterable<Object?> serialize(
-      Serializers serializers, DataTypeLanguesStruct object,
+  Iterable<Object?> serialize(Serializers serializers, DataTypeLgoStruct object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[
       'firestoreUtilData',
@@ -29,10 +25,10 @@ class _$DataTypeLanguesStructSerializer
           specifiedType: const FullType(FirestoreUtilData)),
     ];
     Object? value;
-    value = object.langue;
+    value = object.name;
     if (value != null) {
       result
-        ..add('langue')
+        ..add('name')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
@@ -43,14 +39,21 @@ class _$DataTypeLanguesStructSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
+    value = object.imageName;
+    if (value != null) {
+      result
+        ..add('image_name')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
   @override
-  DataTypeLanguesStruct deserialize(
+  DataTypeLgoStruct deserialize(
       Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new DataTypeLanguesStructBuilder();
+    final result = new DataTypeLgoStructBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -58,13 +61,17 @@ class _$DataTypeLanguesStructSerializer
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
-        case 'langue':
-          result.langue = serializers.deserialize(value,
+        case 'name':
+          result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
         case 'niveau':
           result.niveau = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
+          break;
+        case 'image_name':
+          result.imageName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'firestoreUtilData':
           result.firestoreUtilData = serializers.deserialize(value,
@@ -78,48 +85,51 @@ class _$DataTypeLanguesStructSerializer
   }
 }
 
-class _$DataTypeLanguesStruct extends DataTypeLanguesStruct {
+class _$DataTypeLgoStruct extends DataTypeLgoStruct {
   @override
-  final String? langue;
+  final String? name;
   @override
   final double? niveau;
   @override
+  final String? imageName;
+  @override
   final FirestoreUtilData firestoreUtilData;
 
-  factory _$DataTypeLanguesStruct(
-          [void Function(DataTypeLanguesStructBuilder)? updates]) =>
-      (new DataTypeLanguesStructBuilder()..update(updates))._build();
+  factory _$DataTypeLgoStruct(
+          [void Function(DataTypeLgoStructBuilder)? updates]) =>
+      (new DataTypeLgoStructBuilder()..update(updates))._build();
 
-  _$DataTypeLanguesStruct._(
-      {this.langue, this.niveau, required this.firestoreUtilData})
+  _$DataTypeLgoStruct._(
+      {this.name, this.niveau, this.imageName, required this.firestoreUtilData})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        firestoreUtilData, r'DataTypeLanguesStruct', 'firestoreUtilData');
+        firestoreUtilData, r'DataTypeLgoStruct', 'firestoreUtilData');
   }
 
   @override
-  DataTypeLanguesStruct rebuild(
-          void Function(DataTypeLanguesStructBuilder) updates) =>
+  DataTypeLgoStruct rebuild(void Function(DataTypeLgoStructBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  DataTypeLanguesStructBuilder toBuilder() =>
-      new DataTypeLanguesStructBuilder()..replace(this);
+  DataTypeLgoStructBuilder toBuilder() =>
+      new DataTypeLgoStructBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is DataTypeLanguesStruct &&
-        langue == other.langue &&
+    return other is DataTypeLgoStruct &&
+        name == other.name &&
         niveau == other.niveau &&
+        imageName == other.imageName &&
         firestoreUtilData == other.firestoreUtilData;
   }
 
   @override
   int get hashCode {
     var _$hash = 0;
-    _$hash = $jc(_$hash, langue.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
     _$hash = $jc(_$hash, niveau.hashCode);
+    _$hash = $jc(_$hash, imageName.hashCode);
     _$hash = $jc(_$hash, firestoreUtilData.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -127,40 +137,46 @@ class _$DataTypeLanguesStruct extends DataTypeLanguesStruct {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'DataTypeLanguesStruct')
-          ..add('langue', langue)
+    return (newBuiltValueToStringHelper(r'DataTypeLgoStruct')
+          ..add('name', name)
           ..add('niveau', niveau)
+          ..add('imageName', imageName)
           ..add('firestoreUtilData', firestoreUtilData))
         .toString();
   }
 }
 
-class DataTypeLanguesStructBuilder
-    implements Builder<DataTypeLanguesStruct, DataTypeLanguesStructBuilder> {
-  _$DataTypeLanguesStruct? _$v;
+class DataTypeLgoStructBuilder
+    implements Builder<DataTypeLgoStruct, DataTypeLgoStructBuilder> {
+  _$DataTypeLgoStruct? _$v;
 
-  String? _langue;
-  String? get langue => _$this._langue;
-  set langue(String? langue) => _$this._langue = langue;
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
 
   double? _niveau;
   double? get niveau => _$this._niveau;
   set niveau(double? niveau) => _$this._niveau = niveau;
+
+  String? _imageName;
+  String? get imageName => _$this._imageName;
+  set imageName(String? imageName) => _$this._imageName = imageName;
 
   FirestoreUtilData? _firestoreUtilData;
   FirestoreUtilData? get firestoreUtilData => _$this._firestoreUtilData;
   set firestoreUtilData(FirestoreUtilData? firestoreUtilData) =>
       _$this._firestoreUtilData = firestoreUtilData;
 
-  DataTypeLanguesStructBuilder() {
-    DataTypeLanguesStruct._initializeBuilder(this);
+  DataTypeLgoStructBuilder() {
+    DataTypeLgoStruct._initializeBuilder(this);
   }
 
-  DataTypeLanguesStructBuilder get _$this {
+  DataTypeLgoStructBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _langue = $v.langue;
+      _name = $v.name;
       _niveau = $v.niveau;
+      _imageName = $v.imageName;
       _firestoreUtilData = $v.firestoreUtilData;
       _$v = null;
     }
@@ -168,28 +184,27 @@ class DataTypeLanguesStructBuilder
   }
 
   @override
-  void replace(DataTypeLanguesStruct other) {
+  void replace(DataTypeLgoStruct other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$DataTypeLanguesStruct;
+    _$v = other as _$DataTypeLgoStruct;
   }
 
   @override
-  void update(void Function(DataTypeLanguesStructBuilder)? updates) {
+  void update(void Function(DataTypeLgoStructBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  DataTypeLanguesStruct build() => _build();
+  DataTypeLgoStruct build() => _build();
 
-  _$DataTypeLanguesStruct _build() {
+  _$DataTypeLgoStruct _build() {
     final _$result = _$v ??
-        new _$DataTypeLanguesStruct._(
-            langue: langue,
+        new _$DataTypeLgoStruct._(
+            name: name,
             niveau: niveau,
+            imageName: imageName,
             firestoreUtilData: BuiltValueNullFieldError.checkNotNull(
-                firestoreUtilData,
-                r'DataTypeLanguesStruct',
-                'firestoreUtilData'));
+                firestoreUtilData, r'DataTypeLgoStruct', 'firestoreUtilData'));
     replace(_$result);
     return _$result;
   }

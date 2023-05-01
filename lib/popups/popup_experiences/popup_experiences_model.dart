@@ -1,4 +1,3 @@
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -10,10 +9,6 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class PopupExperiencesModel extends FlutterFlowModel {
-  ///  Local state fields for this component.
-
-  ExperiencesStruct? listExp;
-
   ///  State fields for stateful widgets in this component.
 
   // State field(s) for LgoFilter widget.

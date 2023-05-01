@@ -13,8 +13,6 @@ abstract class PharmaciesRecord
 
   String? get nom;
 
-  GroupementStruct get groupement;
-
   String? get presentation;
 
   @BuiltValueField(wireName: 'maitre-de-stage')
@@ -63,8 +61,6 @@ abstract class PharmaciesRecord
 
   @BuiltValueField(wireName: 'mission-borne-telemedecine')
   bool? get missionBorneTelemedecine;
-
-  LgoStruct get lgo;
 
   @BuiltValueField(wireName: 'confort-salle-de-pause')
   bool? get confortSalleDePause;
@@ -158,7 +154,6 @@ abstract class PharmaciesRecord
 
   static void _initializeBuilder(PharmaciesRecordBuilder builder) => builder
     ..nom = ''
-    ..groupement = GroupementStructBuilder()
     ..presentation = ''
     ..maitreDeStage = false
     ..email = ''
@@ -178,7 +173,6 @@ abstract class PharmaciesRecord
     ..missionEntretienPharmaceutique = false
     ..missionTypePreparation = ''
     ..missionBorneTelemedecine = false
-    ..lgo = LgoStructBuilder()
     ..confortSalleDePause = false
     ..confortRobot = false
     ..confortEtiquetteElectronique = false
@@ -232,7 +226,6 @@ abstract class PharmaciesRecord
 
 Map<String, dynamic> createPharmaciesRecordData({
   String? nom,
-  GroupementStruct? groupement,
   String? presentation,
   bool? maitreDeStage,
   String? email,
@@ -253,7 +246,6 @@ Map<String, dynamic> createPharmaciesRecordData({
   bool? missionEntretienPharmaceutique,
   String? missionTypePreparation,
   bool? missionBorneTelemedecine,
-  LgoStruct? lgo,
   bool? confortSalleDePause,
   bool? confortRobot,
   bool? confortEtiquetteElectronique,
@@ -281,7 +273,6 @@ Map<String, dynamic> createPharmaciesRecordData({
     PharmaciesRecord(
       (p) => p
         ..nom = nom
-        ..groupement = GroupementStructBuilder()
         ..presentation = presentation
         ..maitreDeStage = maitreDeStage
         ..email = email
@@ -302,7 +293,6 @@ Map<String, dynamic> createPharmaciesRecordData({
         ..missionEntretienPharmaceutique = missionEntretienPharmaceutique
         ..missionTypePreparation = missionTypePreparation
         ..missionBorneTelemedecine = missionBorneTelemedecine
-        ..lgo = LgoStructBuilder()
         ..confortSalleDePause = confortSalleDePause
         ..confortRobot = confortRobot
         ..confortEtiquetteElectronique = confortEtiquetteElectronique
@@ -334,12 +324,6 @@ Map<String, dynamic> createPharmaciesRecordData({
         ..coTitulaire = null,
     ),
   );
-
-  // Handle nested data for "groupement" field.
-  addGroupementStructData(firestoreData, groupement, 'groupement');
-
-  // Handle nested data for "lgo" field.
-  addLgoStructData(firestoreData, lgo, 'lgo');
 
   return firestoreData;
 }
