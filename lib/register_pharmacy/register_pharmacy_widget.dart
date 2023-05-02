@@ -723,6 +723,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Color(0xFFEFF6F7),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -939,6 +946,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -1049,6 +1063,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -1408,6 +1429,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -5588,6 +5616,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -5979,6 +6014,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -6238,6 +6280,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -6620,6 +6669,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(
@@ -6879,6 +6935,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Color(0xFFEFF6F7),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12.0,
+                          color: Color(0x2B1F5C67),
+                          offset: Offset(10.0, 10.0),
+                        )
+                      ],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Container(

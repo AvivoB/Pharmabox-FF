@@ -1068,18 +1068,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                             usersUpdateData);
                                                   },
                                                 ),
-                                                Container(
-                                                  width: 50.0,
-                                                  height: 30.0,
-                                                  child: custom_widgets
-                                                      .ImageFromStorageFirebase(
-                                                    width: 50.0,
-                                                    height: 30.0,
-                                                    folder: 'lgo',
-                                                    imageName:
-                                                        listLGOItem.imageName!,
-                                                  ),
-                                                ),
                                                 Padding(
                                                   padding: EdgeInsetsDirectional
                                                       .fromSTEB(

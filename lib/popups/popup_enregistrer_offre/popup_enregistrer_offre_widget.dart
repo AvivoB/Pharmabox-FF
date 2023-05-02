@@ -1,24 +1,24 @@
-import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'popup_lgo_model.dart';
-export 'popup_lgo_model.dart';
+import 'popup_enregistrer_offre_model.dart';
+export 'popup_enregistrer_offre_model.dart';
 
-class PopupLgoWidget extends StatefulWidget {
-  const PopupLgoWidget({Key? key}) : super(key: key);
+class PopupEnregistrerOffreWidget extends StatefulWidget {
+  const PopupEnregistrerOffreWidget({Key? key}) : super(key: key);
 
   @override
-  _PopupLgoWidgetState createState() => _PopupLgoWidgetState();
+  _PopupEnregistrerOffreWidgetState createState() =>
+      _PopupEnregistrerOffreWidgetState();
 }
 
-class _PopupLgoWidgetState extends State<PopupLgoWidget> {
-  late PopupLgoModel _model;
+class _PopupEnregistrerOffreWidgetState
+    extends State<PopupEnregistrerOffreWidget> {
+  late PopupEnregistrerOffreModel _model;
 
   @override
   void setState(VoidCallback callback) {
@@ -29,7 +29,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => PopupLgoModel());
+    _model = createModel(context, () => PopupEnregistrerOffreModel());
 
     _model.lgoFilterController ??= TextEditingController();
   }
@@ -51,7 +51,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.4,
+          height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -74,7 +74,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Sélectionnez vos LGO',
+                        'Enregistrez votre offre',
                         style: FlutterFlowTheme.of(context).displaySmall,
                       ),
                       FlutterFlowIconButton(
@@ -105,8 +105,8 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                             readOnly: true,
                             obscureText: false,
                             decoration: InputDecoration(
-                              labelText: 'LGO',
-                              hintText: 'Recherchez vos LGO dans cette liste',
+                              labelText: 'Nom de l\'offre',
+                              hintText: 'Entrez le nom de l\'offre',
                               hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -150,7 +150,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                                 ),
                               ),
                               prefixIcon: Icon(
-                                Icons.computer,
+                                Icons.save_sharp,
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
@@ -161,86 +161,30 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                       ),
                     ],
                   ),
-                  StreamBuilder<List<LgoRecord>>(
-                    stream: queryLgoRecord(),
-                    builder: (context, snapshot) {
-                      // Customize what your widget looks like when it's loading.
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: CircularProgressIndicator(
-                              color: FlutterFlowTheme.of(context).accent3,
-                            ),
-                          ),
-                        );
-                      }
-                      List<LgoRecord> listViewLgoRecordList = snapshot.data!;
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: listViewLgoRecordList.length,
-                        itemBuilder: (context, listViewIndex) {
-                          final listViewLgoRecord =
-                              listViewLgoRecordList[listViewIndex];
-                          return Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 5.0, 0.0, 5.0),
-                            child: InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                final usersUpdateData = {
-                                  'lgo': FieldValue.arrayUnion([
-                                    getDataTypeLgoFirestoreData(
-                                      createDataTypeLgoStruct(
-                                        name: listViewLgoRecord.name,
-                                        imageName: listViewLgoRecord.image,
-                                        clearUnsetFields: false,
-                                      ),
-                                      true,
-                                    )
-                                  ]),
-                                };
-                                await currentUserReference!
-                                    .update(usersUpdateData);
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        25.0, 0.0, 0.0, 0.0),
-                                    child: InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        FFAppState().update(() {
-                                          FFAppState().addToListLgoRegister(
-                                              listViewLgoRecord.name!);
-                                        });
-                                      },
-                                      child: Text(
-                                        listViewLgoRecord.name!,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
+                  FFButtonWidget(
+                    onPressed: () {
+                      print('Button pressed ...');
                     },
+                    text: 'Enregistrer',
+                    options: FFButtonOptions(
+                      width: double.infinity,
+                      height: 40.0,
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      iconPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: FlutterFlowTheme.of(context).primary,
+                      textStyle:
+                          FlutterFlowTheme.of(context).titleSmall.override(
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                              ),
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
                 ],
               ),

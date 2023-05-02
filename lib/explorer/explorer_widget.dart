@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_google_map.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -134,60 +135,43 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                   ),
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.65,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: FlutterFlowGoogleMap(
-                  controller: _model.googleMapsController,
-                  onCameraIdle: (latLng) => _model.googleMapsCenter = latLng,
-                  initialLocation: _model.googleMapsCenter ??=
-                      LatLng(13.106061, -59.613158),
-                  markerColor: GoogleMarkerColor.violet,
-                  mapType: MapType.normal,
-                  style: GoogleMapStyle.standard,
-                  initialZoom: 14.0,
-                  allowInteraction: true,
-                  allowZoom: true,
-                  showZoomControls: true,
-                  showLocation: true,
-                  showCompass: false,
-                  showMapToolbar: false,
-                  showTraffic: false,
-                  centerMapOnMarkerTap: true,
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.1,
-                decoration: BoxDecoration(
-                  color: Color(0xFFEFF6F7),
-                  borderRadius: BorderRadius.circular(56.0),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          width: 40.0,
-                          height: 5.0,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFD0D1DE),
-                          ),
-                        ),
-                        Text(
-                          '6 résultats',
-                          style: FlutterFlowTheme.of(context).bodyMedium,
-                        ),
-                      ],
+              Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.73,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
                     ),
-                  ],
-                ),
+                    child: FlutterFlowGoogleMap(
+                      controller: _model.googleMapsController,
+                      onCameraIdle: (latLng) =>
+                          _model.googleMapsCenter = latLng,
+                      initialLocation: _model.googleMapsCenter ??=
+                          LatLng(13.106061, -59.613158),
+                      markerColor: GoogleMarkerColor.violet,
+                      mapType: MapType.normal,
+                      style: GoogleMapStyle.standard,
+                      initialZoom: 14.0,
+                      allowInteraction: true,
+                      allowZoom: true,
+                      showZoomControls: true,
+                      showLocation: true,
+                      showCompass: false,
+                      showMapToolbar: false,
+                      showTraffic: false,
+                      centerMapOnMarkerTap: true,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: custom_widgets.ScrollableSheet(
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      height: MediaQuery.of(context).size.height * 0.5,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

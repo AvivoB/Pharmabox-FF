@@ -157,10 +157,10 @@ class _MultiSelectLangState extends State<MultiSelectLang> {
                     setState(() {
                       if (value!) {
                         selectedLanguages.add(language);
-                        FFAppState().listLangRegister.add(language);
+                        // FFAppState().listLangRegister.add(language);
                       } else {
                         selectedLanguages.remove(language);
-                        FFAppState().listLangRegister.remove(language);
+                        // FFAppState().listLangRegister.remove(language);
                       }
                     });
                   },

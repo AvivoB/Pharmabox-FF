@@ -7,6 +7,7 @@ class FFIcons {
   static const String _customIconFamily = 'CustomIcon';
   static const String _villageFamily = 'Village';
   static const String _pharmaboxFamily = 'Pharmabox';
+  static const String _likeCardUserFamily = 'LikeCardUser';
 
   // icomoon
   static const IconData klabsFILL0Wght400GRAD0Opsz48 =
@@ -43,4 +44,12 @@ class FFIcons {
       IconData(0xe90b, fontFamily: _pharmaboxFamily);
   static const IconData kqrcode =
       IconData(0xe90c, fontFamily: _pharmaboxFamily);
+
+  // like_card_user
+  static const IconData kmessage =
+      IconData(0xe900, fontFamily: _likeCardUserFamily);
+  static const IconData kbadgeOr =
+      IconData(0xe901, fontFamily: _likeCardUserFamily);
+  static const IconData klike =
+      IconData(0xe902, fontFamily: _likeCardUserFamily);
 }

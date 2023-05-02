@@ -32,6 +32,7 @@ dependencies:
   cloud_firestore: 4.2.0
   cloud_firestore_platform_interface: 5.9.1
   cloud_firestore_web: 3.1.1
+  dash_chat: 1.1.16
   dropdown_button2: 2.0.0
   easy_debounce: 2.0.1
   file_picker: 5.2.6
@@ -41,7 +42,6 @@ dependencies:
   firebase_core: 2.4.0
   firebase_core_platform_interface: 4.5.2
   firebase_core_web: 2.0.2
-  firebase_image: ^1.1.1
   firebase_storage: 11.0.7
   firebase_storage_platform_interface: 4.1.25
   firebase_storage_web: 3.3.17
@@ -157,6 +157,9 @@ flutter:
       fonts:
         - asset: assets/fonts/icomoon.ttf
     - family: Pharmabox
+      fonts:
+        - asset: assets/fonts/icomoon.ttf
+    - family: LikeCardUser
       fonts:
         - asset: assets/fonts/icomoon.ttf
 

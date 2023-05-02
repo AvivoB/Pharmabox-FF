@@ -2,6 +2,8 @@ import '/flutter_flow/flutter_flow_google_map.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/popups/popup_notifications/popup_notifications_widget.dart';
+import '/popups/popup_offre/popup_offre_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +44,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -68,41 +70,45 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                           ),
                     ),
                     Container(
-                      width: 100.0,
-                      height: 100.0,
+                      width: MediaQuery.of(context).size.width * 0.3,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 60.0,
-                            icon: Icon(
-                              Icons.group,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 30.0,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
+                          InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              await showModalBottomSheet(
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                enableDrag: false,
+                                context: context,
+                                builder: (bottomSheetContext) {
+                                  return Padding(
+                                    padding: MediaQuery.of(bottomSheetContext)
+                                        .viewInsets,
+                                    child: PopupNotificationsWidget(),
+                                  );
+                                },
+                              ).then((value) => setState(() {}));
                             },
+                            child: Image.asset(
+                              'assets/images/Frame_88.png',
+                              width: 50.0,
+                              height: 50.0,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 60.0,
-                            icon: Icon(
-                              Icons.send_outlined,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 30.0,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
+                          Image.asset(
+                            'assets/images/Message_Button.png',
+                            width: 50.0,
+                            height: 50.0,
+                            fit: BoxFit.cover,
                           ),
                         ],
                       ),
@@ -112,16 +118,13 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
               child: Container(
                 width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.1,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Stack(
                   children: [
                     TextFormField(
                       controller: _model.textController,
@@ -171,6 +174,40 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                       validator:
                           _model.textControllerValidator.asValidator(context),
                     ),
+                    Align(
+                      alignment: AlignmentDirectional(0.94, -0.07),
+                      child: Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
+                        child: FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 60.0,
+                          borderWidth: 1.0,
+                          buttonSize: 40.0,
+                          fillColor: Color(0xFFEFF6F7),
+                          icon: Icon(
+                            Icons.tune,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 20.0,
+                          ),
+                          onPressed: () async {
+                            await showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              enableDrag: false,
+                              context: context,
+                              builder: (bottomSheetContext) {
+                                return Padding(
+                                  padding: MediaQuery.of(bottomSheetContext)
+                                      .viewInsets,
+                                  child: PopupOffreWidget(),
+                                );
+                              },
+                            ).then((value) => setState(() {}));
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -198,14 +235,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                 showMapToolbar: false,
                 showTraffic: false,
                 centerMapOnMarkerTap: true,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 1.0,
-              height: MediaQuery.of(context).size.height * 0.1,
-              decoration: BoxDecoration(
-                color: Color(0xFFEFF6F7),
-                borderRadius: BorderRadius.circular(56.0),
               ),
             ),
           ],

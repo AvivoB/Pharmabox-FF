@@ -128,6 +128,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   initialPage: 'Reseau',
                   page: ReseauWidget(),
                 ),
+        ),
+        FFRoute(
+          name: 'ChatToUser',
+          path: '/chatToUser',
+          asyncParams: {
+            'chatUser': getDoc(['users'], UsersRecord.serializer),
+          },
+          builder: (context, params) => ChatToUserWidget(
+            chatUser: params.getParam('chatUser', ParamType.Document),
+            chatRef: params.getParam(
+                'chatRef', ParamType.DocumentReference, false, ['chats']),
+          ),
+        ),
+        FFRoute(
+          name: 'Discussions',
+          path: '/discussions',
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Discussions')
+              : DiscussionsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       urlPathStrategy: UrlPathStrategy.path,
