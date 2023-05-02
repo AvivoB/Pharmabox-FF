@@ -41,8 +41,8 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   // State field(s) for Nomdelapharmacie widget.
   TextEditingController? nomdelapharmacieController2;
   String? Function(BuildContext, String?)? nomdelapharmacieController2Validator;
-  // Models for repeaterField dynamic component.
-  late FlutterFlowDynamicModels<RepeaterFieldModel> repeaterFieldModels;
+  // Model for repeaterField component.
+  late RepeaterFieldModel repeaterFieldModel;
   // State field(s) for Presentation widget.
   TextEditingController? presentationController;
   String? Function(BuildContext, String?)? presentationControllerValidator;
@@ -218,7 +218,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
-    repeaterFieldModels = FlutterFlowDynamicModels(() => RepeaterFieldModel());
+    repeaterFieldModel = createModel(context, () => RepeaterFieldModel());
     mapsWidgetAdressePharmacieModel =
         createModel(context, () => MapsWidgetAdressePharmacieModel());
   }
@@ -226,7 +226,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   void dispose() {
     nomdelapharmacieController1?.dispose();
     nomdelapharmacieController2?.dispose();
-    repeaterFieldModels.dispose();
+    repeaterFieldModel.dispose();
     presentationController?.dispose();
     emailPharmacieController?.dispose();
     phonePharmacieController1?.dispose();

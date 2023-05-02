@@ -379,74 +379,51 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       .asValidator(context),
                                 ),
                               ),
-                              Builder(
-                                builder: (context) {
-                                  final listTitulaires = _model.titulaires
-                                      .toList()
-                                      .take(2)
-                                      .toList();
-                                  return Column(
+                              Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    children:
-                                        List.generate(listTitulaires.length,
-                                            (listTitulairesIndex) {
-                                      final listTitulairesItem =
-                                          listTitulaires[listTitulairesIndex];
-                                      return Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
                                                 0.75,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: wrapWithModel(
+                                          model: _model.repeaterFieldModel,
+                                          updateCallback: () => setState(() {}),
+                                          child: RepeaterFieldWidget(
+                                            icone: Icon(
+                                              Icons.person,
                                             ),
-                                            child: wrapWithModel(
-                                              model: _model.repeaterFieldModels
-                                                  .getModel(
-                                                listTitulairesIndex.toString(),
-                                                listTitulairesIndex,
-                                              ),
-                                              updateCallback: () =>
-                                                  setState(() {}),
-                                              child: RepeaterFieldWidget(
-                                                key: Key(
-                                                  'Keyiva_${listTitulairesIndex.toString()}',
-                                                ),
-                                                icone: Icon(
-                                                  Icons.person,
-                                                ),
-                                                label: 'Titulaire',
-                                              ),
-                                            ),
+                                            label: 'Titulaire',
                                           ),
-                                          FlutterFlowIconButton(
-                                            borderColor: Colors.transparent,
-                                            borderRadius: 30.0,
-                                            borderWidth: 1.0,
-                                            buttonSize: 40.0,
-                                            icon: Icon(
-                                              Icons.delete_outline_sharp,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                              size: 20.0,
-                                            ),
-                                            onPressed: () async {
-                                              setState(() {
-                                                _model.removeFromTitulaires(1);
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    }),
-                                  );
-                                },
+                                        ),
+                                      ),
+                                      FlutterFlowIconButton(
+                                        borderColor: Colors.transparent,
+                                        borderRadius: 30.0,
+                                        borderWidth: 1.0,
+                                        buttonSize: 40.0,
+                                        icon: Icon(
+                                          Icons.delete_outline_sharp,
+                                          color: FlutterFlowTheme.of(context)
+                                              .alternate,
+                                          size: 20.0,
+                                        ),
+                                        onPressed: () async {
+                                          setState(() {
+                                            _model.removeFromTitulaires(1);
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                               InkWell(
                                 splashColor: Colors.transparent,

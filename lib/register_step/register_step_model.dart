@@ -62,9 +62,8 @@ class RegisterStepModel extends FlutterFlowModel {
   // State field(s) for Presentation widget.
   TextEditingController? presentationController;
   String? Function(BuildContext, String?)? presentationControllerValidator;
-  // Models for ListSkillWithSlider dynamic component.
-  late FlutterFlowDynamicModels<ListSkillWithSliderModel>
-      listSkillWithSliderModels1;
+  // Model for ListSkillWithSlider component.
+  late ListSkillWithSliderModel listSkillWithSliderModel1;
   // State field(s) for ComptencesTestCovid widget.
   bool? comptencesTestCovidValue;
   // State field(s) for ComptencesVaccination widget.
@@ -85,8 +84,8 @@ class RegisterStepModel extends FlutterFlowModel {
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
-    listSkillWithSliderModels1 =
-        FlutterFlowDynamicModels(() => ListSkillWithSliderModel());
+    listSkillWithSliderModel1 =
+        createModel(context, () => ListSkillWithSliderModel());
     listSkillWithSliderModel2 =
         createModel(context, () => ListSkillWithSliderModel());
   }
@@ -100,7 +99,7 @@ class RegisterStepModel extends FlutterFlowModel {
     postcodeController?.dispose();
     cityController?.dispose();
     presentationController?.dispose();
-    listSkillWithSliderModels1.dispose();
+    listSkillWithSliderModel1.dispose();
     listSkillWithSliderModel2.dispose();
   }
 

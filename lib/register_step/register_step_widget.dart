@@ -788,89 +788,61 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ),
                               ],
                             ),
-                            AuthUserStreamWidget(
-                              builder: (context) => Builder(
-                                builder: (context) {
-                                  final listSpecialisationUser =
-                                      (currentUserDocument?.specialisations
-                                                  ?.toList() ??
-                                              [])
-                                          .toList();
-                                  return Column(
+                            Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 0.0),
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    children: List.generate(
-                                        listSpecialisationUser.length,
-                                        (listSpecialisationUserIndex) {
-                                      final listSpecialisationUserItem =
-                                          listSpecialisationUser[
-                                              listSpecialisationUserIndex];
-                                      return Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 10.0, 0.0, 0.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            FlutterFlowIconButton(
-                                              borderColor: Colors.transparent,
-                                              borderRadius: 30.0,
-                                              borderWidth: 1.0,
-                                              buttonSize: 40.0,
-                                              icon: Icon(
-                                                Icons.delete_outline_sharp,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .alternate,
-                                                size: 20.0,
-                                              ),
-                                              onPressed: () async {
-                                                final usersUpdateData = {
-                                                  'specialisations':
-                                                      FieldValue.arrayRemove([
-                                                    listSpecialisationUserItem
-                                                  ]),
-                                                };
-                                                await currentUserReference!
-                                                    .update(usersUpdateData);
-                                              },
-                                            ),
-                                            Icon(
-                                              Icons.verified,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 24.0,
-                                            ),
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.6,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        5.0, 0.0, 0.0, 0.0),
-                                                child: Text(
-                                                  listSpecialisationUserItem,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      FlutterFlowIconButton(
+                                        borderColor: Colors.transparent,
+                                        borderRadius: 30.0,
+                                        borderWidth: 1.0,
+                                        buttonSize: 40.0,
+                                        icon: Icon(
+                                          Icons.delete_outline_sharp,
+                                          color: FlutterFlowTheme.of(context)
+                                              .alternate,
+                                          size: 20.0,
                                         ),
-                                      );
-                                    }),
-                                  );
-                                },
-                              ),
+                                        onPressed: () {
+                                          print('IconButton pressed ...');
+                                        },
+                                      ),
+                                      Icon(
+                                        Icons.verified,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        size: 24.0,
+                                      ),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  5.0, 0.0, 0.0, 0.0),
+                                          child: Text(
+                                            'Tiers Payant',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -1005,116 +977,74 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                               color: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
                             ),
-                            child: AuthUserStreamWidget(
-                              builder: (context) => Builder(
-                                builder: (context) {
-                                  final listLGO =
-                                      (currentUserDocument?.lgo?.toList() ?? [])
-                                          .toList();
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: List.generate(listLGO.length,
-                                        (listLGOIndex) {
-                                      final listLGOItem = listLGO[listLGOIndex];
-                                      return Row(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.4,
-                                            decoration: BoxDecoration(
+                                          FlutterFlowIconButton(
+                                            borderColor: Colors.transparent,
+                                            borderRadius: 30.0,
+                                            borderWidth: 1.0,
+                                            buttonSize: 40.0,
+                                            icon: Icon(
+                                              Icons.delete_outline_sharp,
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
+                                                      .alternate,
+                                              size: 20.0,
                                             ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                FlutterFlowIconButton(
-                                                  borderColor:
-                                                      Colors.transparent,
-                                                  borderRadius: 30.0,
-                                                  borderWidth: 1.0,
-                                                  buttonSize: 40.0,
-                                                  icon: Icon(
-                                                    Icons.delete_outline_sharp,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .alternate,
-                                                    size: 20.0,
-                                                  ),
-                                                  onPressed: () async {
-                                                    final usersUpdateData = {
-                                                      'lgo': FieldValue
-                                                          .arrayRemove([
-                                                        getDataTypeLgoFirestoreData(
-                                                          updateDataTypeLgoStruct(
-                                                            listLGOItem,
-                                                            clearUnsetFields:
-                                                                false,
-                                                          ),
-                                                          true,
-                                                        )
-                                                      ]),
-                                                    };
-                                                    await currentUserReference!
-                                                        .update(
-                                                            usersUpdateData);
-                                                  },
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          5.0, 0.0, 0.0, 0.0),
-                                                  child: Text(
-                                                    listLGOItem.name!,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                            onPressed: () {
+                                              print('IconButton pressed ...');
+                                            },
                                           ),
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.4,
-                                            decoration: BoxDecoration(
-                                              color:
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    5.0, 0.0, 0.0, 0.0),
+                                            child: Text(
+                                              'Hello World',
+                                              style:
                                                   FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                            ),
-                                            child: wrapWithModel(
-                                              model: _model
-                                                  .listSkillWithSliderModels1
-                                                  .getModel(
-                                                listLGOIndex.toString(),
-                                                listLGOIndex,
-                                              ),
-                                              updateCallback: () =>
-                                                  setState(() {}),
-                                              child: ListSkillWithSliderWidget(
-                                                key: Key(
-                                                  'Key6t9_${listLGOIndex.toString()}',
-                                                ),
-                                                slider: listLGOItem.niveau!,
-                                              ),
+                                                      .bodyMedium,
                                             ),
                                           ),
                                         ],
-                                      );
-                                    }),
-                                  );
-                                },
-                              ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: wrapWithModel(
+                                        model: _model.listSkillWithSliderModel1,
+                                        updateCallback: () => setState(() {}),
+                                        child: ListSkillWithSliderWidget(
+                                          slider: 1.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
