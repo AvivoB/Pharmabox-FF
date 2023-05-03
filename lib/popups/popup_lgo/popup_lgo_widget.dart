@@ -17,8 +17,6 @@ class PopupLgoWidget extends StatefulWidget {
 class _PopupLgoWidgetState extends State<PopupLgoWidget> {
   late PopupLgoModel _model;
 
-  List<dynamic> _lgo = [];
-
   @override
   void setState(VoidCallback callback) {
     super.setState(callback);
@@ -31,11 +29,6 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
     _model = createModel(context, () => PopupLgoModel());
 
     _model.lgoFilterController ??= TextEditingController();
-    PopupLgoModel().getAllLgo().then((items) {
-      setState(() {
-        _lgo = items;
-      });
-    });
   }
 
   @override
@@ -163,13 +156,12 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                       ),
                     ],
                   ),
-                  ListView.builder(
+                  ListView(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: _lgo.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
+                    children: [
+                      Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
                         child: Row(
@@ -182,18 +174,19 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                             //   height: 60.0,
                             //   fit: BoxFit.cover,
                             // ),
+
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   25.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                _lgo[index]['name'],
+                                'Winpharma',
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
                             ),
                           ],
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
                 ],
               ),

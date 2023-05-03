@@ -88,19 +88,19 @@ class _FlutterFlowIconButtonState extends State<FlutterFlowIconButton> {
           );
         },
       ),
-      // iconColor: MaterialStateProperty.resolveWith<Color?>(
-      //   (states) {
-      //     if (states.contains(MaterialState.disabled) &&
-      //         widget.disabledIconColor != null) {
-      //       return widget.disabledIconColor;
-      //     }
-      //     if (states.contains(MaterialState.hovered) &&
-      //         widget.hoverIconColor != null) {
-      //       return widget.hoverIconColor;
-      //     }
-      //     return iconColor;
-      //   },
-      // ),
+      iconColor: MaterialStateProperty.resolveWith<Color?>(
+        (states) {
+          if (states.contains(MaterialState.disabled) &&
+              widget.disabledIconColor != null) {
+            return widget.disabledIconColor;
+          }
+          if (states.contains(MaterialState.hovered) &&
+              widget.hoverIconColor != null) {
+            return widget.hoverIconColor;
+          }
+          return iconColor;
+        },
+      ),
       backgroundColor: MaterialStateProperty.resolveWith<Color?>(
         (states) {
           if (states.contains(MaterialState.disabled) &&
