@@ -21,5 +21,35 @@ class PopupLgoModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
+  
+  // Récupère les LGO firebase
+  Future<List> getAllLgo() async {
+    // Récupération de la collection Firestore
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('lgo');
+    QuerySnapshot querySnapshot = await collectionRef.get();
 
+    // Récupération des documents dans la collection
+    List<dynamic> results = [];
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      // Récupération des champs ID et nom
+      dynamic data = doc.data();
+      String id = doc.id;
+      String name = data['name'];
+
+      // Récupération de l'image depuis Firebase Storage
+      String imagePath = data['imagePath'];
+      Reference ref = FirebaseStorage.instance.ref(imagePath);
+      String imageUrl = await ref.getDownloadURL();
+
+      // Ajout de l'élément dans le tableau de résultats
+      results.add({
+        'id': id,
+        'name': name,
+        'imageUrl': imageUrl,
+      });
+    }
+
+    return results;
+  }
 }
