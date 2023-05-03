@@ -99,7 +99,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.emailController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
@@ -158,7 +157,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.motdepasseController,
-                                  autofocus: true,
                                   obscureText: !_model.motdepasseVisibility,
                                   decoration: InputDecoration(
                                     labelText: 'Mot de passe',
@@ -231,7 +229,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.confirmpasswordController,
-                                  autofocus: true,
                                   obscureText:
                                       !_model.confirmpasswordVisibility,
                                   decoration: InputDecoration(
