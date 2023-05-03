@@ -364,7 +364,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                    elevation: 2.0,
+                                    elevation: 0.0,
                                     borderSide: BorderSide(
                                       color: Colors.transparent,
                                       width: 1.0,
@@ -431,7 +431,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                    elevation: 2.0,
+                                    elevation: 0.0,
                                     borderSide: BorderSide(
                                       color: Colors.transparent,
                                       width: 1.0,
