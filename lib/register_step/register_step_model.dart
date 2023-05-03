@@ -14,8 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterStepModel extends FlutterFlowModel {
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
@@ -91,5 +98,15 @@ class RegisterStepModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
+  // Inscription des utilisateurs
+  Future creerNonTitulaire(user) async {
+    User? authUser = firebaseAuth.currentUser!;
 
+    
+
+    await _firebaseFirestore
+        .collection("users")
+        .doc(authUser.uid)
+        .set(user.toJson());
+  }
 }
