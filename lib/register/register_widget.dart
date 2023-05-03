@@ -422,7 +422,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     text: 'S\'inscire avec Google',
                                     icon: FaIcon(
                                       FontAwesomeIcons.google,
-                                      color: Color(0xFFF22B2B),
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
                                     ),
                                     options: FFButtonOptions(
                                       width: double.infinity,
