@@ -10,6 +10,7 @@ import '/popups/popup_langues/popup_langues_widget.dart';
 import '/popups/popup_lgo/popup_lgo_widget.dart';
 import '/popups/popup_specialisation/popup_specialisation_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -39,6 +40,7 @@ class RegisterStepModel extends FlutterFlowModel {
   TextEditingController? birthDateController;
   final birthDateMask = MaskTextInputFormatter(mask: '##/##/####');
   String? Function(BuildContext, String?)? birthDateControllerValidator;
+  DateTime? datePicked;
   // State field(s) for Postcode widget.
   TextEditingController? postcodeController;
   final postcodeMask = MaskTextInputFormatter(mask: '#####');

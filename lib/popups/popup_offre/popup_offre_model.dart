@@ -9,7 +9,6 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class PopupOffreModel extends FlutterFlowModel {
@@ -23,17 +22,16 @@ class PopupOffreModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this component.
 
   // State field(s) for Poste widget.
-  String? posteValue1;
-  FormFieldController<String>? posteValueController1;
+  String? posteValue;
+  FormFieldController<String>? posteValueController;
   // State field(s) for LgoFilter widget.
   TextEditingController? lgoFilterController1;
   String? Function(BuildContext, String?)? lgoFilterController1Validator;
-  // State field(s) for Poste widget.
-  String? posteValue2;
-  FormFieldController<String>? posteValueController2;
+  // State field(s) for Contrat widget.
+  String? contratValue;
+  FormFieldController<String>? contratValueController;
   // State field(s) for TextField widget.
   TextEditingController? textController2;
-  final textFieldMask = MaskTextInputFormatter(mask: '## mois');
   String? Function(BuildContext, String?)? textController2Validator;
   // State field(s) for Tempspleinpartiel widget.
   String? tempspleinpartielValue;
@@ -46,11 +44,9 @@ class PopupOffreModel extends FlutterFlowModel {
   DateTime? datePicked;
   // State field(s) for SalaireNegocierSwitc widget.
   bool? salaireNegocierSwitcValue1;
-  // State field(s) for Salairenetmensuel widget.
-  TextEditingController? salairenetmensuelController;
-  final salairenetmensuelMask =
-      MaskTextInputFormatter(mask: '# ### €  net/mois');
-  String? Function(BuildContext, String?)? salairenetmensuelControllerValidator;
+  // State field(s) for TextField widget.
+  TextEditingController? textController4;
+  String? Function(BuildContext, String?)? textController4Validator;
   // State field(s) for ChoiceChips widget.
   String? choiceChipsValue1;
   FormFieldController<List<String>>? choiceChipsValueController1;
@@ -74,7 +70,7 @@ class PopupOffreModel extends FlutterFlowModel {
     lgoFilterController1?.dispose();
     textController2?.dispose();
     lgoFilterController2?.dispose();
-    salairenetmensuelController?.dispose();
+    textController4?.dispose();
     descriptionOffreController?.dispose();
     nomOffreController?.dispose();
   }

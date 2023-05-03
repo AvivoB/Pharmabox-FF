@@ -168,11 +168,17 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            Image.network(
+                              'https://picsum.photos/seed/555/600',
+                              width: 120.0,
+                              height: 60.0,
+                              fit: BoxFit.cover,
+                            ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   25.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                'Hello World',
+                                'Winpharma',
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
                             ),

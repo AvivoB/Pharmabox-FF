@@ -99,7 +99,6 @@ class _PopupEnregistrerOffreWidgetState
                               0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
                             controller: _model.lgoFilterController,
-                            autofocus: true,
                             readOnly: true,
                             obscureText: false,
                             decoration: InputDecoration(
