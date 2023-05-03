@@ -10,6 +10,7 @@ import '/popups/popup_langues/popup_langues_widget.dart';
 import '/popups/popup_lgo/popup_lgo_widget.dart';
 import '/popups/popup_specialisation/popup_specialisation_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -185,7 +186,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.nomFamilleController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nom de famille',
@@ -238,7 +238,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.prenomController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Prénom',
@@ -357,7 +356,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.emailController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
@@ -409,7 +407,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.telephoneController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Téléphone',
@@ -463,7 +460,25 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.birthDateController,
-                                  autofocus: true,
+                                  onFieldSubmitted: (_) async {
+                                    final _datePickedDate =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: getCurrentTimestamp,
+                                      firstDate: DateTime(1900),
+                                      lastDate: getCurrentTimestamp,
+                                    );
+
+                                    if (_datePickedDate != null) {
+                                      setState(() {
+                                        _model.datePicked = DateTime(
+                                          _datePickedDate.year,
+                                          _datePickedDate.month,
+                                          _datePickedDate.day,
+                                        );
+                                      });
+                                    }
+                                  },
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Date de naissance',
@@ -518,7 +533,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.postcodeController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Code postal',
@@ -572,7 +586,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.cityController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Ville',
@@ -624,7 +637,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.presentationController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Présentation',

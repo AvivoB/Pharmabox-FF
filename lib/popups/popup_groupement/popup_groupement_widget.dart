@@ -95,12 +95,6 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
                           controller: _model.groupementFilterController,
-                          onFieldSubmitted: (_) async {
-                            setState(() {
-                              _model.searchField =
-                                  _model.groupementFilterController.text;
-                            });
-                          },
                           autofocus: true,
                           readOnly: true,
                           obscureText: false,

@@ -9,7 +9,6 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'popup_offre_model.dart';
 export 'popup_offre_model.dart';
@@ -39,7 +38,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
     _model.textController2 ??= TextEditingController();
     _model.lgoFilterController2 ??=
         TextEditingController(text: dateTimeFormat('d/M/y', _model.datePicked));
-    _model.salairenetmensuelController ??= TextEditingController();
+    _model.textController4 ??= TextEditingController();
     _model.descriptionOffreController ??= TextEditingController();
     _model.nomOffreController ??= TextEditingController();
   }
@@ -125,7 +124,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                             ),
                           ),
                           FlutterFlowDropDown<String>(
-                            controller: _model.posteValueController1 ??=
+                            controller: _model.posteValueController ??=
                                 FormFieldController<String>(null),
                             options: [
                               'Rayonniste',
@@ -137,7 +136,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                               'Pharmacien(ne)'
                             ],
                             onChanged: (val) =>
-                                setState(() => _model.posteValue1 = val),
+                                setState(() => _model.posteValue = val),
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: 50.0,
                             textStyle: FlutterFlowTheme.of(context)
@@ -168,7 +167,6 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: TextFormField(
                         controller: _model.lgoFilterController1,
-                        autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
                           labelText: 'Localisation',
@@ -261,13 +259,13 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                             ),
                           ),
                           FlutterFlowDropDown<String>(
-                            controller: _model.posteValueController2 ??=
+                            controller: _model.contratValueController ??=
                                 FormFieldController<String>(null),
                             options: ['CDI', 'CDD', 'Stage', 'Alternance'],
                             onChanged: (val) async {
-                              setState(() => _model.posteValue2 = val);
+                              setState(() => _model.contratValue = val);
                               setState(() {
-                                _model.addToContratType(_model.posteValue2!);
+                                _model.addToContratType(_model.contratValue!);
                               });
                             },
                             width: MediaQuery.of(context).size.width * 0.6,
@@ -278,7 +276,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   fontFamily: 'Poppins',
                                   color: Colors.black,
                                 ),
-                            hintText: '  ',
+                            hintText: ' ',
                             fillColor: Colors.white,
                             elevation: 2.0,
                             borderColor: Colors.transparent,
@@ -293,73 +291,74 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                    child: Builder(
-                      builder: (context) {
-                        final selectedContrats =
-                            _model.contratType.toList().take(4).toList();
-                        return Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: List.generate(selectedContrats.length,
-                              (selectedContratsIndex) {
-                            final selectedContratsItem =
-                                selectedContrats[selectedContratsIndex];
-                            return Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  5.0, 0.0, 5.0, 0.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFEFF6F7),
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5.0, 5.0, 5.0, 5.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
-                                        child: Text(
-                                          selectedContratsItem,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Poppins',
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                        ),
+                  Builder(
+                    builder: (context) {
+                      final selectedContrats =
+                          _model.contratType.toList().take(4).toList();
+                      return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: selectedContrats.length,
+                        itemBuilder: (context, selectedContratsIndex) {
+                          final selectedContratsItem =
+                              selectedContrats[selectedContratsIndex];
+                          return Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                5.0, 0.0, 5.0, 0.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.25,
+                              decoration: BoxDecoration(
+                                color: Color(0xFFEFF6F7),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    5.0, 5.0, 5.0, 5.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 10.0, 0.0),
+                                      child: Text(
+                                        selectedContratsItem,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                       ),
-                                      FlutterFlowIconButton(
-                                        borderColor: Colors.transparent,
-                                        borderRadius: 20.0,
-                                        borderWidth: 1.0,
-                                        buttonSize: 25.0,
-                                        fillColor: Color(0xFF7CEDAC),
-                                        icon: Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 10.0,
-                                        ),
-                                        onPressed: () async {
-                                          setState(() {
-                                            _model.removeFromContratType(
-                                                selectedContratsItem);
-                                          });
-                                        },
+                                    ),
+                                    FlutterFlowIconButton(
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 20.0,
+                                      borderWidth: 1.0,
+                                      buttonSize: 25.0,
+                                      fillColor: Color(0xFF7CEDAC),
+                                      icon: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 10.0,
                                       ),
-                                    ],
-                                  ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          _model.removeFromContratType(
+                                              selectedContratsItem);
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          }),
-                        );
-                      },
-                    ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                   Padding(
                     padding:
@@ -385,13 +384,17 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                               size: 24.0,
                             ),
                           ),
-                          Expanded(
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
                             child: Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   10.0, 0.0, 0.0, 0.0),
                               child: TextFormField(
                                 controller: _model.textController2,
-                                autofocus: true,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText: 'Durée',
@@ -442,9 +445,12 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                 keyboardType: TextInputType.number,
                                 validator: _model.textController2Validator
                                     .asValidator(context),
-                                inputFormatters: [_model.textFieldMask],
                               ),
                             ),
+                          ),
+                          Text(
+                            'mois',
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                           ),
                         ],
                       ),
@@ -577,7 +583,6 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                               }
                             },
                           ),
-                          autofocus: true,
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
@@ -674,74 +679,113 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ],
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(),
-                    child: Visibility(
-                      visible: _model.salaireNegocierSwitcValue1 == false,
-                      child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                        child: TextFormField(
-                          controller: _model.salairenetmensuelController,
-                          autofocus: true,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            labelText: 'Salaire net mensuel avant impôts',
-                            hintText: 'Salaire',
-                            hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFD0D1DE),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).focusColor,
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            prefixIcon: Icon(
-                              Icons.payments_outlined,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                            ),
+                  if (_model.salaireNegocierSwitcValue2 == false)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      child: Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(4.0),
+                          border: Border.all(
+                            color: Color(0xFFD0D1DE),
                           ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
-                          keyboardType: TextInputType.number,
-                          validator: _model.salairenetmensuelControllerValidator
-                              .asValidator(context),
-                          inputFormatters: [_model.salairenetmensuelMask],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  5.0, 0.0, 0.0, 0.0),
+                              child: Icon(
+                                Icons.payments_outlined,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                size: 24.0,
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 0.0, 0.0, 0.0),
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 1.0,
+                                  child: TextFormField(
+                                    controller: _model.textController4,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Salaire mensuel',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                    ),
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    keyboardType: TextInputType.number,
+                                    validator: _model.textController4Validator
+                                        .asValidator(context),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '€ / mois',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                            ),
+                          ],
                         ),
                       ),
                     ),
+                  Container(
+                    decoration: BoxDecoration(),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 1.0,
@@ -938,7 +982,6 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                     child: TextFormField(
                       controller: _model.descriptionOffreController,
-                      autofocus: true,
                       obscureText: false,
                       decoration: InputDecoration(
                         labelText: 'Description de l\'offre',
@@ -984,7 +1027,6 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                     child: TextFormField(
                       controller: _model.nomOffreController,
-                      autofocus: true,
                       obscureText: false,
                       decoration: InputDecoration(
                         labelText: 'Nom de l\'offre',
@@ -1025,29 +1067,55 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                           .asValidator(context),
                     ),
                   ),
-                  FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
-                    },
-                    text: 'Enregistrer l\'offre',
-                    options: FFButtonOptions(
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                    child: Container(
                       width: double.infinity,
-                      height: 40.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).primary,
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                              ),
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                        width: 1.0,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 4.0,
+                            color: Color(0x301F5C67),
+                            offset: Offset(0.0, 4.0),
+                          )
+                        ],
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                          stops: [0.0, 1.0],
+                          begin: AlignmentDirectional(1.0, -1.0),
+                          end: AlignmentDirectional(-1.0, 1.0),
+                        ),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      child: FFButtonWidget(
+                        onPressed: () {
+                          print('Button pressed ...');
+                        },
+                        text: 'Enregistrer mon offre',
+                        options: FFButtonOptions(
+                          width: double.infinity,
+                          height: 40.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: Color(0x00FFFFFF),
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
                     ),
                   ),
                 ],

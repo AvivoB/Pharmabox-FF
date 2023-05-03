@@ -133,8 +133,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                           ),
-                                          child: Image.network(
-                                            _model.uploadedFileUrl,
+                                          child: Image.asset(
+                                            'assets/images/Group_18.png',
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -224,21 +224,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 10.0, 0.0, 0.0),
-                                child: Text(
-                                  'Les profils avec photo ont 80% de vues en plus',
-                                  textAlign: TextAlign.center,
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                      ),
                                 ),
                               ),
                             ],

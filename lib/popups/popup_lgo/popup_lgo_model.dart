@@ -9,16 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PopupLgoModel extends FlutterFlowModel {
-  ///  Local state fields for this component.
-  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-
-  List<String> lgoTabRegister = [];
-  void addToLgoTabRegister(String item) => lgoTabRegister.add(item);
-  void removeFromLgoTabRegister(String item) => lgoTabRegister.remove(item);
-  void removeAtIndexFromLgoTabRegister(int index) =>
-      lgoTabRegister.removeAt(index);
 
   ///  State fields for stateful widgets in this component.
 
