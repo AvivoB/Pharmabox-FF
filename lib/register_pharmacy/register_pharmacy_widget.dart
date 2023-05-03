@@ -1,5 +1,3 @@
-import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/composants/maps_widget_adresse_pharmacie/maps_widget_adresse_pharmacie_widget.dart';
 import '/composants/repeater_field/repeater_field_widget.dart';
@@ -12,7 +10,6 @@ import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/upload_data.dart';
 import '/popups/popup_groupement/popup_groupement_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -69,8 +66,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -6067,14 +6062,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       setState(() =>
                                           _model.comptencesTestCovidValue2 =
                                               newValue!);
-                                      if (newValue!) {
-                                        final usersUpdateData = {
-                                          'competences': FieldValue.arrayUnion(
-                                              ['Test COVID']),
-                                        };
-                                        await currentUserReference!
-                                            .update(usersUpdateData);
-                                      }
                                     },
                                     activeColor: Color(0xFF7CEDAC),
                                   ),
@@ -6333,14 +6320,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       setState(() =>
                                           _model.comptencesTestCovidValue3 =
                                               newValue!);
-                                      if (newValue!) {
-                                        final usersUpdateData = {
-                                          'competences': FieldValue.arrayUnion(
-                                              ['Test COVID']),
-                                        };
-                                        await currentUserReference!
-                                            .update(usersUpdateData);
-                                      }
                                     },
                                     activeColor: Color(0xFF7CEDAC),
                                   ),
@@ -6722,14 +6701,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       setState(() =>
                                           _model.comptencesTestCovidValue4 =
                                               newValue!);
-                                      if (newValue!) {
-                                        final usersUpdateData = {
-                                          'competences': FieldValue.arrayUnion(
-                                              ['Test COVID']),
-                                        };
-                                        await currentUserReference!
-                                            .update(usersUpdateData);
-                                      }
                                     },
                                     activeColor: Color(0xFF7CEDAC),
                                   ),

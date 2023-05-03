@@ -39,8 +39,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,

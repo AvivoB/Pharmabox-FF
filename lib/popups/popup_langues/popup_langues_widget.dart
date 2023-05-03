@@ -39,8 +39,6 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,

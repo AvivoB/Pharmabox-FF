@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_google_map.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +38,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -161,14 +158,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                       showMapToolbar: false,
                       showTraffic: false,
                       centerMapOnMarkerTap: true,
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: custom_widgets.ScrollableSheet(
-                      width: MediaQuery.of(context).size.width * 1.0,
-                      height: MediaQuery.of(context).size.height * 0.5,
                     ),
                   ),
                 ],

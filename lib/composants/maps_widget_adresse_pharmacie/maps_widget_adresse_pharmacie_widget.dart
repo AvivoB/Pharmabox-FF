@@ -45,7 +45,6 @@ class _MapsWidgetAdressePharmacieWidgetState
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
     if (currentUserLocationValue == null) {
       return Container(
         color: FlutterFlowTheme.of(context).primaryBackground,

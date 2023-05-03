@@ -1,10 +1,6 @@
-import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -45,8 +41,6 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -109,16 +103,6 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.lgoFilterController,
-                                  onChanged: (_) => EasyDebounce.debounce(
-                                    '_model.lgoFilterController',
-                                    Duration(milliseconds: 2000),
-                                    () async {
-                                      FFAppState().update(() {
-                                        FFAppState().searchField =
-                                            _model.lgoFilterController.text;
-                                      });
-                                    },
-                                  ),
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Spécialisations',
@@ -188,72 +172,30 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                     ),
-                    child: StreamBuilder<List<SpecialisationsRecord>>(
-                      stream: querySpecialisationsRecord(
-                        queryBuilder: (specialisationsRecord) =>
-                            specialisationsRecord.where('name',
-                                isEqualTo: FFAppState().searchField),
-                      ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                color: FlutterFlowTheme.of(context).accent3,
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.vertical,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              15.0, 5.0, 15.0, 5.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Image.network(
+                                'https://picsum.photos/seed/218/600',
+                                width: 100.0,
+                                height: 50.0,
+                                fit: BoxFit.cover,
                               ),
-                            ),
-                          );
-                        }
-                        List<SpecialisationsRecord>
-                            listViewSpecialisationsRecordList = snapshot.data!;
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          scrollDirection: Axis.vertical,
-                          itemCount: listViewSpecialisationsRecordList.length,
-                          itemBuilder: (context, listViewIndex) {
-                            final listViewSpecialisationsRecord =
-                                listViewSpecialisationsRecordList[
-                                    listViewIndex];
-                            return Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  15.0, 5.0, 15.0, 5.0),
-                              child: InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  final usersUpdateData = {
-                                    'specialisations': FieldValue.arrayUnion(
-                                        [listViewSpecialisationsRecord.name]),
-                                  };
-                                  await currentUserReference!
-                                      .update(usersUpdateData);
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Image.network(
-                                      'https://picsum.photos/seed/218/600',
-                                      width: 100.0,
-                                      height: 50.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    Text(
-                                      listViewSpecialisationsRecord.name!,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                    ),
-                                  ],
-                                ),
+                              Text(
+                                'Hello World',
+                                style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
-                            );
-                          },
-                        );
-                      },
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -1,10 +1,8 @@
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'popup_groupement_model.dart';
 export 'popup_groupement_model.dart';
@@ -42,8 +40,6 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -164,121 +160,36 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                     ),
                   ],
                 ),
-                PagedListView<DocumentSnapshot<Object?>?, GroupementsRecord>(
-                  pagingController: () {
-                    final Query<Object?> Function(Query<Object?>) queryBuilder =
-                        (groupementsRecord) => groupementsRecord.where('name',
-                            isEqualTo: _model.searchField);
-                    if (_model.pagingController != null) {
-                      final query = queryBuilder(GroupementsRecord.collection);
-                      if (query != _model.pagingQuery) {
-                        // The query has changed
-                        _model.pagingQuery = query;
-                        _model.streamSubscriptions.forEach((s) => s?.cancel());
-                        _model.streamSubscriptions.clear();
-                        _model.pagingController!.refresh();
-                      }
-                      return _model.pagingController!;
-                    }
-
-                    _model.pagingController =
-                        PagingController(firstPageKey: null);
-                    _model.pagingQuery =
-                        queryBuilder(GroupementsRecord.collection);
-                    _model.pagingController!
-                        .addPageRequestListener((nextPageMarker) {
-                      queryGroupementsRecordPage(
-                        queryBuilder: (groupementsRecord) => groupementsRecord
-                            .where('name', isEqualTo: _model.searchField),
-                        nextPageMarker: nextPageMarker,
-                        pageSize: 10,
-                        isStream: true,
-                      ).then((page) {
-                        _model.pagingController!.appendPage(
-                          page.data,
-                          page.nextPageMarker,
-                        );
-                        final streamSubscription =
-                            page.dataStream?.listen((data) {
-                          data.forEach((item) {
-                            final itemIndexes = _model
-                                .pagingController!.itemList!
-                                .asMap()
-                                .map((k, v) => MapEntry(v.reference.id, k));
-                            final index = itemIndexes[item.reference.id];
-                            final items = _model.pagingController!.itemList!;
-                            if (index != null) {
-                              items.replaceRange(index, index + 1, [item]);
-                              _model.pagingController!.itemList = {
-                                for (var item in items) item.reference: item
-                              }.values.toList();
-                            }
-                          });
-                          setState(() {});
-                        });
-                        _model.streamSubscriptions.add(streamSubscription);
-                      });
-                    });
-                    return _model.pagingController!;
-                  }(),
+                ListView(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
-                  reverse: false,
                   scrollDirection: Axis.vertical,
-                  builderDelegate: PagedChildBuilderDelegate<GroupementsRecord>(
-                    // Customize what your widget looks like when it's loading the first page.
-                    firstPageProgressIndicatorBuilder: (_) => Center(
-                      child: SizedBox(
-                        width: 50.0,
-                        height: 50.0,
-                        child: CircularProgressIndicator(
-                          color: FlutterFlowTheme.of(context).accent3,
-                        ),
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.network(
+                            'https://picsum.photos/seed/854/600',
+                            width: 100.0,
+                            height: 50.0,
+                            fit: BoxFit.cover,
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                25.0, 0.0, 0.0, 0.0),
+                            child: Text(
+                              'Hello World',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-
-                    itemBuilder: (context, _, listViewIndex) {
-                      final listViewGroupementsRecord =
-                          _model.pagingController!.itemList![listViewIndex];
-                      return Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.network(
-                              'https://picsum.photos/seed/854/600',
-                              width: 100.0,
-                              height: 50.0,
-                              fit: BoxFit.cover,
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  25.0, 0.0, 0.0, 0.0),
-                              child: InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  FFAppState().update(() {
-                                    FFAppState().addToListLgoRegister(
-                                        listViewGroupementsRecord.name!);
-                                  });
-                                },
-                                child: Text(
-                                  listViewGroupementsRecord.name!,
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                  ],
                 ),
               ],
             ),

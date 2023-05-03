@@ -39,8 +39,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Container(
       width: MediaQuery.of(context).size.width * 1.0,
       height: MediaQuery.of(context).size.height * 1.0,

@@ -1,5 +1,3 @@
-import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -12,7 +10,6 @@ import '/popups/popup_langues/popup_langues_widget.dart';
 import '/popups/popup_lgo/popup_lgo_widget.dart';
 import '/popups/popup_specialisation/popup_specialisation_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -58,8 +55,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -1135,14 +1130,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       setState(() =>
                                           _model.comptencesTestCovidValue =
                                               newValue!);
-                                      if (newValue!) {
-                                        final usersUpdateData = {
-                                          'competences': FieldValue.arrayUnion(
-                                              ['Test COVID']),
-                                        };
-                                        await currentUserReference!
-                                            .update(usersUpdateData);
-                                      }
                                     },
                                     activeColor: Color(0xFF7CEDAC),
                                   ),
@@ -1817,13 +1804,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                     ),
                     child: FFButtonWidget(
-                      onPressed: () async {
-                        final usersUpdateData = createUsersRecordData(
-                          nom: _model.nomFamilleController.text,
-                          prenom: _model.prenomController.text,
-                          email: '',
-                        );
-                        await currentUserReference!.update(usersUpdateData);
+                      onPressed: () {
+                        print('Button pressed ...');
                       },
                       text: 'Créer mon compte',
                       options: FFButtonOptions(

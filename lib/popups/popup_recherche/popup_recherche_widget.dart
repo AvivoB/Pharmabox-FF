@@ -1,4 +1,3 @@
-import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -53,8 +52,6 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -129,11 +126,9 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 10.0, 0.0, 0.0, 0.0),
-                            child: AuthUserStreamWidget(
-                              builder: (context) => Text(
-                                valueOrDefault(currentUserDocument?.poste, ''),
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
+                            child: Text(
+                              'Poste actuel',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
                           ),
                         ],

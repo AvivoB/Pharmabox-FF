@@ -45,8 +45,6 @@ class _ListSkillWithSliderWidgetState extends State<ListSkillWithSliderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
       child: Slider(

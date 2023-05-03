@@ -1,5 +1,3 @@
-import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -12,23 +10,12 @@ import '/popups/popup_langues/popup_langues_widget.dart';
 import '/popups/popup_lgo/popup_lgo_widget.dart';
 import '/popups/popup_specialisation/popup_specialisation_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class RegisterStepModel extends FlutterFlowModel {
-  ///  Local state fields for this page.
-
-  List<DataTypeSpecialisationsStruct> listSpecialisation = [];
-  void addToListSpecialisation(DataTypeSpecialisationsStruct item) =>
-      listSpecialisation.add(item);
-  void removeFromListSpecialisation(DataTypeSpecialisationsStruct item) =>
-      listSpecialisation.remove(item);
-  void removeAtIndexFromListSpecialisation(int index) =>
-      listSpecialisation.removeAt(index);
-
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();

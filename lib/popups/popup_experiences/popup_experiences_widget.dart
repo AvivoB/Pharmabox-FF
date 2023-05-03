@@ -2,7 +2,6 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -52,8 +51,6 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -116,16 +113,6 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                                     0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.lgoFilterController,
-                                  onChanged: (_) => EasyDebounce.debounce(
-                                    '_model.lgoFilterController',
-                                    Duration(milliseconds: 2000),
-                                    () async {
-                                      FFAppState().update(() {
-                                        FFAppState().searchField =
-                                            _model.lgoFilterController.text;
-                                      });
-                                    },
-                                  ),
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nom de la pharmacie',
@@ -200,16 +187,6 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                                   child: TextFormField(
                                     controller:
                                         _model.experienceDebutController,
-                                    onChanged: (_) => EasyDebounce.debounce(
-                                      '_model.experienceDebutController',
-                                      Duration(milliseconds: 2000),
-                                      () async {
-                                        FFAppState().update(() {
-                                          FFAppState().searchField = _model
-                                              .experienceDebutController.text;
-                                        });
-                                      },
-                                    ),
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Date de début',
@@ -279,16 +256,6 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                                       5.0, 0.0, 0.0, 0.0),
                                   child: TextFormField(
                                     controller: _model.experienceFinController,
-                                    onChanged: (_) => EasyDebounce.debounce(
-                                      '_model.experienceFinController',
-                                      Duration(milliseconds: 2000),
-                                      () async {
-                                        FFAppState().update(() {
-                                          FFAppState().searchField = _model
-                                              .experienceFinController.text;
-                                        });
-                                      },
-                                    ),
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Date de fin',
