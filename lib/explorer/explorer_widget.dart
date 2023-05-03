@@ -86,7 +86,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                     children: [
                       TextFormField(
                         controller: _model.textController,
-                        autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
                           hintText: 'Rechercher...',
