@@ -9,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PopupLgoModel extends FlutterFlowModel {
-
   ///  State fields for stateful widgets in this component.
 
   // State field(s) for LgoFilter widget.
@@ -26,13 +25,14 @@ class PopupLgoModel extends FlutterFlowModel {
 
   /// Additional helper methods are added here.
   // Récupère les LGO firebase
-  Future<List<Map<String, dynamic>>> getAllLgo() async {
+  Future<List> getAllLgo() async {
     // Récupération de la collection Firestore
-    CollectionReference collectionRef = FirebaseFirestore.instance.collection('lgo');
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('lgo');
     QuerySnapshot querySnapshot = await collectionRef.get();
 
     // Récupération des documents dans la collection
-    List<Map<String, dynamic>> results = [];
+    List<dynamic> results = [];
     for (QueryDocumentSnapshot doc in querySnapshot.docs) {
       // Récupération des champs ID et nom
       dynamic data = doc.data();
@@ -54,6 +54,4 @@ class PopupLgoModel extends FlutterFlowModel {
 
     return results;
   }
-
-
 }
