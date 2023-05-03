@@ -153,8 +153,8 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                               FlutterFlowTheme.of(context).secondaryBackground,
                         ),
                         child: FlutterFlowIconButton(
-                          borderColor: Colors.transparent,
-                          borderRadius: 30.0,
+                          borderColor: FlutterFlowTheme.of(context).focusColor,
+                          borderRadius: 100.0,
                           borderWidth: 1.0,
                           buttonSize: 40.0,
                           icon: Icon(
