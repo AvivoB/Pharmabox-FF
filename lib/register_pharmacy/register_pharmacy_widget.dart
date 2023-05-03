@@ -7313,25 +7313,40 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                     width: double.infinity,
                     height: 50.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Color(0x301F5C67),
+                          offset: Offset(0.0, 4.0),
+                        )
+                      ],
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                        stops: [0.0, 1.0],
+                        begin: AlignmentDirectional(1.0, -1.0),
+                        end: AlignmentDirectional(-1.0, 1.0),
+                      ),
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: FFButtonWidget(
                       onPressed: () {
                         print('Button pressed ...');
                       },
-                      text: 'Créer ma pharmacie',
+                      text: 'Créer la pharmacie',
                       options: FFButtonOptions(
-                        width: 130.0,
+                        width: double.infinity,
                         height: 40.0,
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                         iconPadding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: FlutterFlowTheme.of(context).primary,
+                        color: Color(0x00FFFFFF),
                         textStyle:
                             FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Poppins',
                                   color: Colors.white,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
                                 ),
                         borderSide: BorderSide(
                           color: Colors.transparent,
