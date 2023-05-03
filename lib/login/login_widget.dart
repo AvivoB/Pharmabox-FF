@@ -264,7 +264,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                    elevation: 2.0,
                                     borderSide: BorderSide(
                                       color: Colors.transparent,
                                       width: 1.0,
@@ -306,7 +305,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   text: 'Connexion via Google',
                                   icon: FaIcon(
                                     FontAwesomeIcons.google,
-                                    color: Color(0xFFF22B2B),
+                                    color: Colors.white,
                                   ),
                                   options: FFButtonOptions(
                                     width: double.infinity,
@@ -324,7 +323,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                    elevation: 2.0,
+                                    elevation: 0.0,
                                     borderSide: BorderSide(
                                       color: Colors.transparent,
                                       width: 1.0,
@@ -348,14 +347,15 @@ class _LoginWidgetState extends State<LoginWidget> {
                           iconPadding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 0.0, 0.0),
                           color: Color(0x004B39EF),
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF5F6077),
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                          elevation: 2.0,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .titleSmall
+                              .override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.of(context).focusColor,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                          elevation: 0.0,
                           borderSide: BorderSide(
                             color: Colors.transparent,
                             width: 1.0,
