@@ -6,8 +6,6 @@ import 'groupements_record.dart';
 import 'lgo_record.dart';
 import 'specialisations_record.dart';
 import 'pharmacies_record.dart';
-import 'chats_record.dart';
-import 'chat_messages_record.dart';
 
 import 'index.dart';
 
@@ -23,8 +21,6 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   LgoRecord,
   SpecialisationsRecord,
   PharmaciesRecord,
-  ChatsRecord,
-  ChatMessagesRecord,
   DataTypeSpecialisationsStruct,
   DataTypeLgoStruct,
 ])
