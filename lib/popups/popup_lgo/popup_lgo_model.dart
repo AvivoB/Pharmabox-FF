@@ -40,17 +40,20 @@ class PopupLgoModel extends FlutterFlowModel {
       String name = data['name'];
 
       // Récupération de l'image depuis Firebase Storage
-      String imagePath = data['imagePath'];
-      Reference ref = FirebaseStorage.instance.ref(imagePath);
-      String imageUrl = await ref.getDownloadURL();
+      // String imagePath = data['imagePath'];
+      // Reference ref = FirebaseStorage.instance.ref(imagePath);
+      // String imageUrl = await ref.getDownloadURL();
 
       // Ajout de l'élément dans le tableau de résultats
       results.add({
         'id': id,
         'name': name,
-        'imageUrl': imageUrl,
+        // 'imageUrl': imageUrl,
       });
+
+      print(doc.data());
     }
+    print(results);
 
     return results;
   }
