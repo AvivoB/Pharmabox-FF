@@ -44,7 +44,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
   Widget build(BuildContext context) {
     // final List listLGO = PopupLgoModel.selectLGO().where(
     //     (item) => item.name.toLowerCase().contains(_searchText.toLowerCase()));
-    Set<Map<String, String>> listLGO = PopupLgoModel.selectLGO();
+    List<Map> listLGO = PopupLgoModel.selectLGO();
     print(listLGO);
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -184,7 +184,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             // Image.asset(
-                            //   item.imageUrl.toString(),
+                            //   'assets/lgo/'+item[index]['image'],
                             //   width: 120.0,
                             //   height: 60.0,
                             //   fit: BoxFit.cover,
@@ -193,7 +193,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   25.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                item.length.toString(),
+                                item[index]['name'],
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
                             ),

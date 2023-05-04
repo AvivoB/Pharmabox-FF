@@ -39,6 +39,8 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // List<String> selectLang = PopupLanguesModel().selectLang();
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -97,8 +99,8 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
                       width: MediaQuery.of(context).size.width * 1.0,
                       height: 200.0,
                       action: () async {},
-                    ),
                   ),
+                ),
                 ),
               ],
             ),
