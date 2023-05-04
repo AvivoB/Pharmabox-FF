@@ -1507,7 +1507,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         model: _model.listSkillWithSliderModel2,
                                         updateCallback: () => setState(() {}),
                                         child: ListSkillWithSliderWidget(
-                                          slider: 50.0,
+                                          slider: 2.0,
                                         ),
                                       ),
                                     ),

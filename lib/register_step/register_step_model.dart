@@ -16,6 +16,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pharmabox/constant.dart';
+
 class RegisterStepModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
@@ -90,6 +95,10 @@ class RegisterStepModel extends FlutterFlowModel {
     presentationController?.dispose();
     listSkillWithSliderModel1.dispose();
     listSkillWithSliderModel2.dispose();
+  }
+
+  listSelectedLGO() {
+    // Map selectedLGO = [];
   }
 
   /// Additional helper methods are added here.

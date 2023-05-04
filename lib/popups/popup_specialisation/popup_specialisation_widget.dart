@@ -39,8 +39,18 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
     super.dispose();
   }
 
+  String? _search = '';
+
   @override
   Widget build(BuildContext context) {
+    List<String> listSpecialite =
+        PopupSpecialisationModel().getSpecialite().toList();
+
+    List filtered = listSpecialite
+        .where((item) => item.toLowerCase().contains(_search!.toLowerCase()))
+        .toList();
+
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -158,6 +168,9 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                                       FlutterFlowTheme.of(context).bodyMedium,
                                   validator: _model.lgoFilterControllerValidator
                                       .asValidator(context),
+                                  onChanged: (value) => setState(() {
+                                    _search = value;
+                                  }),
                                 ),
                               ),
                             ),
@@ -172,30 +185,25 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                     ),
-                    child: ListView(
+                    child: ListView.builder(
                       padding: EdgeInsets.zero,
                       scrollDirection: Axis.vertical,
-                      children: [
-                        Padding(
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               15.0, 5.0, 15.0, 5.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Image.network(
-                                'https://picsum.photos/seed/218/600',
-                                width: 100.0,
-                                height: 50.0,
-                                fit: BoxFit.cover,
-                              ),
                               Text(
-                                'Hello World',
+                                filtered[index],
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
                 ],
