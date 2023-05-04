@@ -56,6 +56,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
 
   @override
   Widget build(BuildContext context) {
+    List listeSpecialisation = RegisterStepModel().listeSpecialisation;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -798,57 +800,69 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                             Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 10.0, 0.0, 0.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      FlutterFlowIconButton(
-                                        borderColor: Colors.transparent,
-                                        borderRadius: 30.0,
-                                        borderWidth: 1.0,
-                                        buttonSize: 40.0,
-                                        icon: Icon(
-                                          Icons.delete_outline_sharp,
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
-                                          size: 20.0,
-                                        ),
-                                        onPressed: () {
-                                          print('IconButton pressed ...');
-                                        },
-                                      ),
-                                      Icon(
-                                        Icons.verified,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        size: 24.0,
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  5.0, 0.0, 0.0, 0.0),
-                                          child: Text(
-                                            'Tiers Payant',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // ListView.builder(
+                                //     itemCount: listeSpecialisation.length,
+                                //     itemBuilder: (context, index) {
+                                //       print(listeSpecialisation[index]);
+                                //       return Padding(
+                                //         padding: EdgeInsetsDirectional.fromSTEB(
+                                //             0.0, 10.0, 0.0, 0.0),
+                                //         child: Row(
+                                //           mainAxisSize: MainAxisSize.max,
+                                //           crossAxisAlignment:
+                                //               CrossAxisAlignment.center,
+                                //           children: [
+                                //             FlutterFlowIconButton(
+                                //               borderColor: Colors.transparent,
+                                //               borderRadius: 30.0,
+                                //               borderWidth: 1.0,
+                                //               buttonSize: 40.0,
+                                //               icon: Icon(
+                                //                 Icons.delete_outline_sharp,
+                                //                 color:
+                                //                     FlutterFlowTheme.of(context)
+                                //                         .alternate,
+                                //                 size: 20.0,
+                                //               ),
+                                //               onPressed: () {
+                                //                 RegisterStepModel()
+                                //                     .deleteSpecialisation(
+                                //                         index);
+                                //               },
+                                //             ),
+                                //             Icon(
+                                //               Icons.verified,
+                                //               color:
+                                //                   FlutterFlowTheme.of(context)
+                                //                       .secondaryText,
+                                //               size: 24.0,
+                                //             ),
+                                //             Container(
+                                //               width: MediaQuery.of(context)
+                                //                       .size
+                                //                       .width *
+                                //                   0.6,
+                                //               decoration: BoxDecoration(
+                                //                 color:
+                                //                     FlutterFlowTheme.of(context)
+                                //                         .secondaryBackground,
+                                //               ),
+                                //               child: Padding(
+                                //                 padding: EdgeInsetsDirectional
+                                //                     .fromSTEB(
+                                //                         5.0, 0.0, 0.0, 0.0),
+                                //                 child: Text(
+                                //                   listeSpecialisation[index],
+                                //                   style: FlutterFlowTheme.of(
+                                //                           context)
+                                //                       .bodyMedium,
+                                //                 ),
+                                //               ),
+                                //             ),
+                                //           ],
+                                //         ),
+                                //       );
+                                //     })
                               ],
                             ),
                           ],
@@ -1507,7 +1521,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         model: _model.listSkillWithSliderModel2,
                                         updateCallback: () => setState(() {}),
                                         child: ListSkillWithSliderWidget(
-                                          slider: 50.0,
+                                          slider: 2.0,
                                         ),
                                       ),
                                     ),
@@ -1834,6 +1848,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       },
                       text: 'Créer mon compte',
                       options: FFButtonOptions(
+                        elevation: 0,
                         width: double.infinity,
                         height: 40.0,
                         padding:

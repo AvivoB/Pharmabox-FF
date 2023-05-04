@@ -1,3 +1,6 @@
+import 'package:pharmabox/register_step/register_step_model.dart';
+
+import '../../constant.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -39,15 +42,23 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
     super.dispose();
   }
 
+  String? _search = '';
+
   @override
   Widget build(BuildContext context) {
+    List<String> listSpecialite =
+        PopupSpecialisationModel().getSpecialite().toList();
+
+    List filtered = listSpecialite
+        .where((item) => item.toLowerCase().contains(_search!.toLowerCase()))
+        .toList();
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.4,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -158,6 +169,9 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                                       FlutterFlowTheme.of(context).bodyMedium,
                                   validator: _model.lgoFilterControllerValidator
                                       .asValidator(context),
+                                  onChanged: (value) => setState(() {
+                                    _search = value;
+                                  }),
                                 ),
                               ),
                             ),
@@ -166,31 +180,49 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                       ],
                     ),
                   ),
-                  ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            15.0, 5.0, 15.0, 5.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Image.network(
-                              'https://picsum.photos/seed/218/600',
-                              width: 100.0,
-                              height: 50.0,
-                              fit: BoxFit.cover,
-                            ),
-                            Text(
-                              'Hello World',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.23,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.vertical,
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              15.0, 5.0, 15.0, 5.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              GestureDetector(
+                                child: Text(filtered[index],
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium),
+                                onTap: () {
+                                  // setState(() {
+                                  //   PopupSpecialisationModel().upadteWidgetSpecialisationRegister(filtered[index]).toList();
+                                  // });
+                                  print(RegisterStepModel().listeSpecialisation);
+                                  RegisterStepModel registerStepModel = RegisterStepModel();
+                                  registerStepModel.addSpecialisation(filtered[index]);
+                                  print(RegisterStepModel().listeSpecialisation);
+                                  // print(filtered[index]);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Votre spécialisation a été ajoutée'),
+                                        backgroundColor: greenColor),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

@@ -16,6 +16,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pharmabox/constant.dart';
+
 class RegisterStepModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
@@ -92,6 +97,30 @@ class RegisterStepModel extends FlutterFlowModel {
     listSkillWithSliderModel2.dispose();
   }
 
-  /// Additional helper methods are added here.
+// Recupere les specialisations depuis le popup specialisation
+  List<String> listeSpecialisation = [];
 
+  void addSpecialisation(String newSpecialisation) {
+    listeSpecialisation.add(newSpecialisation);
+    // notifyListeners(); // Notify listeners to update connected widgets
+    print('from class en question');
+    print('addSpecialisation ' + newSpecialisation);
+    print(listeSpecialisation);
+  }
+
+  deleteSpecialisation(specialisation) {
+    listeSpecialisation.remove(specialisation);
+  }
+
+// Recupere les lgo depuis le popup
+  List<Map> listeLGO = [];
+
+  deleteLGO(lgo) {
+    listeLGO.remove(lgo);
+  }
+
+  updateLevelLgo() {}
+
+// Recupere les langues selectionnées
+  List<Map> listeLangues = [];
 }
