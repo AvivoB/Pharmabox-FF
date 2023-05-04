@@ -1,5 +1,6 @@
 import 'package:pharmabox/register_step/register_step_model.dart';
 
+import '../../constant.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -58,7 +59,6 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.4,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -202,9 +202,20 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium),
                                 onTap: () {
-                                  RegisterStepModel()
-                                      .listeSpecialisation
-                                      .add(filtered[index]);
+                                  // setState(() {
+                                  //   PopupSpecialisationModel().upadteWidgetSpecialisationRegister(filtered[index]).toList();
+                                  // });
+                                  print(RegisterStepModel().listeSpecialisation);
+                                  RegisterStepModel registerStepModel = RegisterStepModel();
+                                  registerStepModel.addSpecialisation(filtered[index]);
+                                  print(RegisterStepModel().listeSpecialisation);
+                                  // print(filtered[index]);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Votre spécialisation a été ajoutée'),
+                                        backgroundColor: greenColor),
+                                  );
                                 },
                               )
                             ],

@@ -1,3 +1,5 @@
+import 'package:pharmabox/register_step/register_step_model.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -24,7 +26,7 @@ class PopupSpecialisationModel extends FlutterFlowModel {
 
   getSpecialite() {
     List<String> listSpecialisation = [
-      'Addictologie & Dopage',
+      // 'Addictologie & Dopage',
       'Aromathérapie & Phytothérapie',
       'Autres DU',
       'Botanique & Mycologie',
@@ -66,5 +68,10 @@ class PopupSpecialisationModel extends FlutterFlowModel {
     ];
 
     return listSpecialisation;
+  }
+
+  upadteWidgetSpecialisationRegister(value) {
+    RegisterStepModel().listeSpecialisation.add(value);
+    print('heeloo');
   }
 }

@@ -42,8 +42,9 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final List listLGO = PopupLgoModel.selectLGO().where(
-        (item) => item.name.toLowerCase().contains(_searchText.toLowerCase()));
+    // final List listLGO = PopupLgoModel.selectLGO().where(
+    //     (item) => item.name.toLowerCase().contains(_searchText.toLowerCase()));
+    Set<Map<String, String>> listLGO = PopupLgoModel.selectLGO();
     print(listLGO);
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -173,7 +174,8 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: listLGO.length,
                     itemBuilder: (context, index) {
-                      final item = listLGO[index];
+                      final item = listLGO;
+                      print(index);
                       return Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
@@ -191,7 +193,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   25.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                item.name,
+                                item.length.toString(),
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
                             ),

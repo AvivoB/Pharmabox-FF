@@ -100,6 +100,14 @@ class RegisterStepModel extends FlutterFlowModel {
 // Recupere les specialisations depuis le popup specialisation
   List<String> listeSpecialisation = [];
 
+  void addSpecialisation(String newSpecialisation) {
+    listeSpecialisation.add(newSpecialisation);
+    // notifyListeners(); // Notify listeners to update connected widgets
+    print('from class en question');
+    print('addSpecialisation ' + newSpecialisation);
+    print(listeSpecialisation);
+  }
+
   deleteSpecialisation(specialisation) {
     listeSpecialisation.remove(specialisation);
   }
@@ -111,11 +119,8 @@ class RegisterStepModel extends FlutterFlowModel {
     listeLGO.remove(lgo);
   }
 
-  updateLevelLgo() {
-  }
+  updateLevelLgo() {}
 
 // Recupere les langues selectionnées
   List<Map> listeLangues = [];
-
-
 }
