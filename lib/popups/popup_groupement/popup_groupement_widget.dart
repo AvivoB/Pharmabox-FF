@@ -68,7 +68,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Groupement',
+                      'Choix du groupement',
                       style: FlutterFlowTheme.of(context).displaySmall,
                     ),
                     FlutterFlowIconButton(
@@ -168,15 +168,15 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                         children: [
                           Image.network(
                             'https://picsum.photos/seed/854/600',
-                            width: 100.0,
-                            height: 50.0,
+                            width: 120.0,
+                            height: 60.0,
                             fit: BoxFit.cover,
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 25.0, 0.0, 0.0, 0.0),
                             child: Text(
-                              'Hello World',
+                              'Groupement texte',
                               style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
                           ),

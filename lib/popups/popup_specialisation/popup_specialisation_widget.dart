@@ -69,7 +69,7 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
             ),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Column(
                 mainAxisSize: MainAxisSize.max,

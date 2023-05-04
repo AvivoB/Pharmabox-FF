@@ -67,291 +67,295 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
               topRight: Radius.circular(25.0),
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Ajouter une expérience',
-                              style: FlutterFlowTheme.of(context).displaySmall,
-                            ),
-                            FlutterFlowIconButton(
-                              borderColor: Colors.transparent,
-                              borderWidth: 1.0,
-                              buttonSize: 60.0,
-                              icon: Icon(
-                                Icons.close,
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                size: 24.0,
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Ajouter une expérience',
+                      style: FlutterFlowTheme.of(context).displaySmall,
+                    ),
+                    FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 30.0,
+                      borderWidth: 1.0,
+                      buttonSize: 60.0,
+                      icon: Icon(
+                        Icons.close,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                        child: TextFormField(
+                          controller: _model.lgoFilterController,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Nom de la pharmacie',
+                            labelStyle: FlutterFlowTheme.of(context).bodyMedium,
+                            hintText: 'Où avez - vous travailler ?',
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFD0D1DE),
+                                width: 1.0,
                               ),
-                              onPressed: () async {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.lgoFilterController,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Nom de la pharmacie',
-                                    labelStyle:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    hintText: 'Où avez - vous travailler ?',
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .focusColor,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    prefixIcon: Icon(
-                                      Icons.local_hospital,
-                                    ),
-                                  ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.lgoFilterControllerValidator
-                                      .asValidator(context),
-                                ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
                               ),
                             ),
-                          ],
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).focusColor,
+                                width: 1.0,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1.0,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1.0,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.local_hospital,
+                            ),
+                          ),
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          validator: _model.lgoFilterControllerValidator
+                              .asValidator(context),
                         ),
-                        Padding(
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 5.0, 0.0),
-                                  child: TextFormField(
-                                    controller:
-                                        _model.experienceDebutController,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Date de début',
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                      hintText: 'Année',
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.date_range_rounded,
-                                      ),
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    keyboardType: TextInputType.number,
-                                    validator: _model
-                                        .experienceDebutControllerValidator
-                                        .asValidator(context),
-                                    inputFormatters: [
-                                      _model.experienceDebutMask
-                                    ],
-                                  ),
+                              0.0, 0.0, 5.0, 0.0),
+                          child: TextFormField(
+                            controller: _model.experienceDebutController,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'Date de début',
+                              labelStyle:
+                                  FlutterFlowTheme.of(context).bodyMedium,
+                              hintText: 'Année',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFD0D1DE),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
                                 ),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5.0, 0.0, 0.0, 0.0),
-                                  child: TextFormField(
-                                    controller: _model.experienceFinController,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Date de fin',
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                      hintText: 'Année',
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.date_range_rounded,
-                                      ),
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    keyboardType: TextInputType.number,
-                                    validator: _model
-                                        .experienceFinControllerValidator
-                                        .asValidator(context),
-                                    inputFormatters: [_model.experienceFinMask],
-                                  ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color:
+                                      FlutterFlowTheme.of(context).focusColor,
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
                                 ),
                               ),
-                            ],
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              prefixIcon: Icon(
+                                Icons.date_range_rounded,
+                              ),
+                            ),
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                            keyboardType: TextInputType.number,
+                            validator: _model.experienceDebutControllerValidator
+                                .asValidator(context),
+                            inputFormatters: [_model.experienceDebutMask],
                           ),
                         ),
-                        FFButtonWidget(
-                          onPressed: () async {
-                            setState(() {});
-                          },
-                          text: 'Button',
-                          options: FFButtonOptions(
-                            width: 130.0,
-                            height: 40.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: FlutterFlowTheme.of(context).primary,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              5.0, 0.0, 0.0, 0.0),
+                          child: TextFormField(
+                            controller: _model.experienceFinController,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'Date de fin',
+                              labelStyle:
+                                  FlutterFlowTheme.of(context).bodyMedium,
+                              hintText: 'Année',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFD0D1DE),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color:
+                                      FlutterFlowTheme.of(context).focusColor,
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              prefixIcon: Icon(
+                                Icons.date_range_rounded,
+                              ),
+                            ),
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                            keyboardType: TextInputType.number,
+                            validator: _model.experienceFinControllerValidator
+                                .asValidator(context),
+                            inputFormatters: [_model.experienceFinMask],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Color(0x301F5C67),
+                          offset: Offset(0.0, 4.0),
+                        )
+                      ],
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                        stops: [0.0, 1.0],
+                        begin: AlignmentDirectional(1.0, -1.0),
+                        end: AlignmentDirectional(-1.0, 1.0),
+                      ),
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: FFButtonWidget(
+                      onPressed: () {
+                        print('Button pressed ...');
+                      },
+                      text: 'Ajouter',
+                      options: FFButtonOptions(
+                        width: double.infinity,
+                        height: 40.0,
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: Color(0x00FFFFFF),
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Poppins',
                                   color: Colors.white,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
+                        elevation: 0.0,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1.0,
                         ),
-                      ],
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ],
