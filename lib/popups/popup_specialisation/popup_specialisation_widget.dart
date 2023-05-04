@@ -1,3 +1,5 @@
+import 'package:pharmabox/register_step/register_step_model.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -49,7 +51,6 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
     List filtered = listSpecialite
         .where((item) => item.toLowerCase().contains(_search!.toLowerCase()))
         .toList();
-
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -196,10 +197,16 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Text(
-                                filtered[index],
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
+                              GestureDetector(
+                                child: Text(filtered[index],
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium),
+                                onTap: () {
+                                  RegisterStepModel()
+                                      .listeSpecialisation
+                                      .add(filtered[index]);
+                                },
+                              )
                             ],
                           ),
                         );

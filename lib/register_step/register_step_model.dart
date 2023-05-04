@@ -97,10 +97,25 @@ class RegisterStepModel extends FlutterFlowModel {
     listSkillWithSliderModel2.dispose();
   }
 
-  listSelectedLGO() {
-    // Map selectedLGO = [];
+// Recupere les specialisations depuis le popup specialisation
+  List<String> listeSpecialisation = [];
+
+  deleteSpecialisation(specialisation) {
+    listeSpecialisation.remove(specialisation);
   }
 
-  /// Additional helper methods are added here.
+// Recupere les lgo depuis le popup
+  List<Map> listeLGO = [];
+
+  deleteLGO(lgo) {
+    listeLGO.remove(lgo);
+  }
+
+  updateLevelLgo() {
+  }
+
+// Recupere les langues selectionnées
+  List<Map> listeLangues = [];
+
 
 }
