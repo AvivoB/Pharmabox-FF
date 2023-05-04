@@ -1109,6 +1109,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w600,
                                   ),
+                          elevation: 0.0,
                           borderSide: BorderSide(
                             color: Colors.transparent,
                             width: 1.0,

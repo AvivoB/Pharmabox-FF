@@ -58,7 +58,7 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
             ),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Column(
                 mainAxisSize: MainAxisSize.max,
@@ -166,37 +166,31 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                       ],
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    height: MediaQuery.of(context).size.height * 0.23,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      scrollDirection: Axis.vertical,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              15.0, 5.0, 15.0, 5.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Image.network(
-                                'https://picsum.photos/seed/218/600',
-                                width: 100.0,
-                                height: 50.0,
-                                fit: BoxFit.cover,
-                              ),
-                              Text(
-                                'Hello World',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
-                            ],
-                          ),
+                  ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            15.0, 5.0, 15.0, 5.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Image.network(
+                              'https://picsum.photos/seed/218/600',
+                              width: 100.0,
+                              height: 50.0,
+                              fit: BoxFit.cover,
+                            ),
+                            Text(
+                              'Hello World',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
