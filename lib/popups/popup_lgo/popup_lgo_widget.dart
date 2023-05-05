@@ -181,7 +181,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Image.asset(
-                              'lgo/' + item[index]['image'],
+                              'assets/lgo/' + item[index]['image'],
                               width: 120.0,
                               height: 60.0,
                               fit: BoxFit.cover,

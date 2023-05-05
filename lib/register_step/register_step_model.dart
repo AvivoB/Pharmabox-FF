@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -123,4 +125,19 @@ class RegisterStepModel extends FlutterFlowModel {
 
 // Recupere les langues selectionnées
   List<Map> listeLangues = [];
+
+// Recuperer la photo utilisateur
+  Future getUserProfilePicture() async {
+    final ImagePicker picker = ImagePicker();
+    // Pick an image.
+    try {
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      return image;
+    } catch (e) {}
+  }
+
+
+// Envoyer les données dans firebase
+
+
 }

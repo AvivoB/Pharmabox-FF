@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -27,9 +32,11 @@ class RegisterStepWidget extends StatefulWidget {
 
 class _RegisterStepWidgetState extends State<RegisterStepWidget> {
   late RegisterStepModel _model;
+  File? image;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+  String? _imageURL;
 
   @override
   void initState() {
@@ -44,6 +51,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
     _model.postcodeController ??= TextEditingController();
     _model.cityController ??= TextEditingController();
     _model.presentationController ??= TextEditingController();
+    _imageURL = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
   }
 
   @override
@@ -57,6 +65,35 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
   @override
   Widget build(BuildContext context) {
     List listeSpecialisation = RegisterStepModel().listeSpecialisation;
+    File? _image;
+    bool _isUploading = false;
+
+    Future<void> _pickImage() async {
+      final pickedFile =
+          await ImagePicker().getImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+          _isUploading = true;
+        });
+
+        final Reference storageRef = FirebaseStorage.instance
+            .ref()
+            .child('profile_pictures/${DateTime.now()}.png');
+        final UploadTask uploadTask = storageRef.putFile(_image!);
+        final TaskSnapshot downloadUrl = (await uploadTask);
+
+        String url = (await downloadUrl.ref.getDownloadURL());
+
+        // TODO : Enregistrer l'url de l'image en tant que photo de profil
+
+        setState(() {
+          _isUploading = false;
+          _imageURL = url;
+        });
+      }
+    }
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
@@ -111,17 +148,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       7.0, 7.0, 7.0, 7.0),
                                   child: Container(
-                                    width: 150.0,
-                                    height: 150.0,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/Group_18.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                                      width: 150.0,
+                                      height: 150.0,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Image.network(_imageURL!, fit: BoxFit.cover,)),
                                 ),
                               ),
                               Align(
@@ -138,8 +171,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         .primaryText,
                                     size: 30.0,
                                   ),
-                                  onPressed: () {
-                                    print('IconButton pressed ...');
+                                  onPressed: () async {
+                                    _pickImage();
                                   },
                                 ),
                               ),
@@ -1409,7 +1442,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         height: 30.0,
                                         child:
                                             custom_widgets.GradientTextCustom(
-                                          width: 100.0,
+                                          // width: 100.0,
                                           height: 30.0,
                                           text: 'Ajouter',
                                           radius: 0.0,

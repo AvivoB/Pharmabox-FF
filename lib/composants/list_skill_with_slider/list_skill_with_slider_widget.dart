@@ -42,22 +42,41 @@ class _ListSkillWithSliderWidgetState extends State<ListSkillWithSliderWidget> {
 
     super.dispose();
   }
+  int _currentStep = 0;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
-      child: Slider(
-        activeColor: FlutterFlowTheme.of(context).primary,
-        inactiveColor: FlutterFlowTheme.of(context).accent2,
-        min: 0.0,
-        max: 3.0,
-        value: _model.sliderValue ??= widget.slider!,
-        onChanged: (newValue) {
-          newValue = double.parse(newValue.toStringAsFixed(4));
-          setState(() => _model.sliderValue = newValue);
-        },
-      ),
+      child: Column(
+      children: [
+        Text(
+          _currentStep == 0
+              ? 'Maîtrise basique'
+              : _currentStep == 1
+                  ? 'Maîtrise moyenne'
+                  : 'Maîtrise complète',
+          // style: TextStyle(fontSize: 20),
+        ),
+        Slider(
+          value: _currentStep.toDouble(),
+          min: 0,
+          max: 2,
+          divisions: 2,
+          onChanged: (double value) {
+            setState(() {
+              _currentStep = value.toInt();
+            });
+          },
+          activeColor: _currentStep == 0
+              ? Colors.red
+              : _currentStep == 1
+                  ? Colors.yellow
+                  : Colors.green,
+        ),
+        
+      ],
+    )
     );
   }
 }
