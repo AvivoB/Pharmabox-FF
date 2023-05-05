@@ -42,10 +42,8 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // final List listLGO = PopupLgoModel.selectLGO().where(
-    //     (item) => item.name.toLowerCase().contains(_searchText.toLowerCase()));
     List<Map> listLGO = PopupLgoModel.selectLGO();
-    print(listLGO);
+    listLGO = listLGO.where((element) => element['name'].toString().toLowerCase().contains(_searchText!.toLowerCase())).toList();
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -175,7 +173,6 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                     itemCount: listLGO.length,
                     itemBuilder: (context, index) {
                       final item = listLGO;
-                      print(index);
                       return Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
@@ -183,12 +180,12 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            // Image.asset(
-                            //   'assets/lgo/'+item[index]['image'],
-                            //   width: 120.0,
-                            //   height: 60.0,
-                            //   fit: BoxFit.cover,
-                            // ),
+                            Image.asset(
+                              'lgo/' + item[index]['image'],
+                              width: 120.0,
+                              height: 60.0,
+                              fit: BoxFit.cover,
+                            ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   25.0, 0.0, 0.0, 0.0),
@@ -200,7 +197,6 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                           ],
                         ),
                       );
-                      print(index);
                     },
                   ),
                 ],
