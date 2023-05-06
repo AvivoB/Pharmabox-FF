@@ -42,8 +42,6 @@ class _MyAppState extends State<MyApp> {
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
 
-  final authUserSub = authenticatedUserStream.listen((_) {});
-
   @override
   void initState() {
     super.initState();
@@ -56,13 +54,6 @@ class _MyAppState extends State<MyApp> {
       Duration(seconds: 1),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
-  }
-
-  @override
-  void dispose() {
-    authUserSub.cancel();
-
-    super.dispose();
   }
 
   void setLocale(String language) {
@@ -123,7 +114,6 @@ class _NavBarPageState extends State<NavBarPage> {
       'Explorer': ExplorerWidget(),
       'PharmaJob': PharmaJobWidget(),
       'Reseau': ReseauWidget(),
-      'Discussions': DiscussionsWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
@@ -211,21 +201,6 @@ class _NavBarPageState extends State<NavBarPage> {
                         : Color(0x00000000),
                     fontSize: 11.0,
                   ),
-                ),
-              ],
-            ),
-          ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  currentIndex == 3
-                      ? Icons.chat_bubble_rounded
-                      : Icons.chat_bubble_outline,
-                  color:
-                      currentIndex == 3 ? Color(0xFF7CEDAC) : Color(0x00000000),
-                  size: 24.0,
                 ),
               ],
             ),

@@ -26,6 +26,13 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.displayName;
+    if (value != null) {
+      result
+        ..add('display_name')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.photoUrl;
     if (value != null) {
       result
@@ -54,114 +61,6 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.nom;
-    if (value != null) {
-      result
-        ..add('nom')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.prenom;
-    if (value != null) {
-      result
-        ..add('prenom')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.ville;
-    if (value != null) {
-      result
-        ..add('ville')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.codePostal;
-    if (value != null) {
-      result
-        ..add('code_postal')
-        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
-    }
-    value = object.presentation;
-    if (value != null) {
-      result
-        ..add('presentation')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.dateNaissance;
-    if (value != null) {
-      result
-        ..add('date_naissance')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.poste;
-    if (value != null) {
-      result
-        ..add('poste')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.specialisations;
-    if (value != null) {
-      result
-        ..add('specialisations')
-        ..add(serializers.serialize(value,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(String)])));
-    }
-    value = object.faculteEcole;
-    if (value != null) {
-      result
-        ..add('faculte_ecole')
-        ..add(serializers.serialize(value,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(String)])));
-    }
-    value = object.experiences;
-    if (value != null) {
-      result
-        ..add('experiences')
-        ..add(serializers.serialize(value,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(String)])));
-    }
-    value = object.competences;
-    if (value != null) {
-      result
-        ..add('competences')
-        ..add(serializers.serialize(value,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(String)])));
-    }
-    value = object.isTitulaire;
-    if (value != null) {
-      result
-        ..add('IsTitulaire')
-        ..add(
-            serializers.serialize(value, specifiedType: const FullType(bool)));
-    }
-    value = object.likes;
-    if (value != null) {
-      result
-        ..add('likes')
-        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
-    }
-    value = object.displayName;
-    if (value != null) {
-      result
-        ..add('display_name')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.lgo;
-    if (value != null) {
-      result
-        ..add('lgo')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                BuiltList, const [const FullType(DataTypeLgoStruct)])));
-    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -188,6 +87,10 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
           result.email = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'display_name':
+          result.displayName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'photo_url':
           result.photoUrl = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
@@ -203,76 +106,6 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         case 'phone_number':
           result.phoneNumber = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
-          break;
-        case 'nom':
-          result.nom = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'prenom':
-          result.prenom = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'ville':
-          result.ville = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'code_postal':
-          result.codePostal = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int?;
-          break;
-        case 'presentation':
-          result.presentation = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'date_naissance':
-          result.dateNaissance = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'poste':
-          result.poste = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'specialisations':
-          result.specialisations.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(String)]))!
-              as BuiltList<Object?>);
-          break;
-        case 'faculte_ecole':
-          result.faculteEcole.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(String)]))!
-              as BuiltList<Object?>);
-          break;
-        case 'experiences':
-          result.experiences.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(String)]))!
-              as BuiltList<Object?>);
-          break;
-        case 'competences':
-          result.competences.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(String)]))!
-              as BuiltList<Object?>);
-          break;
-        case 'IsTitulaire':
-          result.isTitulaire = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool?;
-          break;
-        case 'likes':
-          result.likes = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int?;
-          break;
-        case 'display_name':
-          result.displayName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'lgo':
-          result.lgo.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(DataTypeLgoStruct)]))!
-              as BuiltList<Object?>);
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -291,6 +124,8 @@ class _$UsersRecord extends UsersRecord {
   @override
   final String? email;
   @override
+  final String? displayName;
+  @override
   final String? photoUrl;
   @override
   final String? uid;
@@ -299,36 +134,6 @@ class _$UsersRecord extends UsersRecord {
   @override
   final String? phoneNumber;
   @override
-  final String? nom;
-  @override
-  final String? prenom;
-  @override
-  final String? ville;
-  @override
-  final int? codePostal;
-  @override
-  final String? presentation;
-  @override
-  final String? dateNaissance;
-  @override
-  final String? poste;
-  @override
-  final BuiltList<String>? specialisations;
-  @override
-  final BuiltList<String>? faculteEcole;
-  @override
-  final BuiltList<String>? experiences;
-  @override
-  final BuiltList<String>? competences;
-  @override
-  final bool? isTitulaire;
-  @override
-  final int? likes;
-  @override
-  final String? displayName;
-  @override
-  final BuiltList<DataTypeLgoStruct>? lgo;
-  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UsersRecord([void Function(UsersRecordBuilder)? updates]) =>
@@ -336,25 +141,11 @@ class _$UsersRecord extends UsersRecord {
 
   _$UsersRecord._(
       {this.email,
+      this.displayName,
       this.photoUrl,
       this.uid,
       this.createdTime,
       this.phoneNumber,
-      this.nom,
-      this.prenom,
-      this.ville,
-      this.codePostal,
-      this.presentation,
-      this.dateNaissance,
-      this.poste,
-      this.specialisations,
-      this.faculteEcole,
-      this.experiences,
-      this.competences,
-      this.isTitulaire,
-      this.likes,
-      this.displayName,
-      this.lgo,
       this.ffRef})
       : super._();
 
@@ -370,25 +161,11 @@ class _$UsersRecord extends UsersRecord {
     if (identical(other, this)) return true;
     return other is UsersRecord &&
         email == other.email &&
+        displayName == other.displayName &&
         photoUrl == other.photoUrl &&
         uid == other.uid &&
         createdTime == other.createdTime &&
         phoneNumber == other.phoneNumber &&
-        nom == other.nom &&
-        prenom == other.prenom &&
-        ville == other.ville &&
-        codePostal == other.codePostal &&
-        presentation == other.presentation &&
-        dateNaissance == other.dateNaissance &&
-        poste == other.poste &&
-        specialisations == other.specialisations &&
-        faculteEcole == other.faculteEcole &&
-        experiences == other.experiences &&
-        competences == other.competences &&
-        isTitulaire == other.isTitulaire &&
-        likes == other.likes &&
-        displayName == other.displayName &&
-        lgo == other.lgo &&
         ffRef == other.ffRef;
   }
 
@@ -396,25 +173,11 @@ class _$UsersRecord extends UsersRecord {
   int get hashCode {
     var _$hash = 0;
     _$hash = $jc(_$hash, email.hashCode);
+    _$hash = $jc(_$hash, displayName.hashCode);
     _$hash = $jc(_$hash, photoUrl.hashCode);
     _$hash = $jc(_$hash, uid.hashCode);
     _$hash = $jc(_$hash, createdTime.hashCode);
     _$hash = $jc(_$hash, phoneNumber.hashCode);
-    _$hash = $jc(_$hash, nom.hashCode);
-    _$hash = $jc(_$hash, prenom.hashCode);
-    _$hash = $jc(_$hash, ville.hashCode);
-    _$hash = $jc(_$hash, codePostal.hashCode);
-    _$hash = $jc(_$hash, presentation.hashCode);
-    _$hash = $jc(_$hash, dateNaissance.hashCode);
-    _$hash = $jc(_$hash, poste.hashCode);
-    _$hash = $jc(_$hash, specialisations.hashCode);
-    _$hash = $jc(_$hash, faculteEcole.hashCode);
-    _$hash = $jc(_$hash, experiences.hashCode);
-    _$hash = $jc(_$hash, competences.hashCode);
-    _$hash = $jc(_$hash, isTitulaire.hashCode);
-    _$hash = $jc(_$hash, likes.hashCode);
-    _$hash = $jc(_$hash, displayName.hashCode);
-    _$hash = $jc(_$hash, lgo.hashCode);
     _$hash = $jc(_$hash, ffRef.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -424,25 +187,11 @@ class _$UsersRecord extends UsersRecord {
   String toString() {
     return (newBuiltValueToStringHelper(r'UsersRecord')
           ..add('email', email)
+          ..add('displayName', displayName)
           ..add('photoUrl', photoUrl)
           ..add('uid', uid)
           ..add('createdTime', createdTime)
           ..add('phoneNumber', phoneNumber)
-          ..add('nom', nom)
-          ..add('prenom', prenom)
-          ..add('ville', ville)
-          ..add('codePostal', codePostal)
-          ..add('presentation', presentation)
-          ..add('dateNaissance', dateNaissance)
-          ..add('poste', poste)
-          ..add('specialisations', specialisations)
-          ..add('faculteEcole', faculteEcole)
-          ..add('experiences', experiences)
-          ..add('competences', competences)
-          ..add('isTitulaire', isTitulaire)
-          ..add('likes', likes)
-          ..add('displayName', displayName)
-          ..add('lgo', lgo)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -454,6 +203,10 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   String? _email;
   String? get email => _$this._email;
   set email(String? email) => _$this._email = email;
+
+  String? _displayName;
+  String? get displayName => _$this._displayName;
+  set displayName(String? displayName) => _$this._displayName = displayName;
 
   String? _photoUrl;
   String? get photoUrl => _$this._photoUrl;
@@ -471,76 +224,6 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   String? get phoneNumber => _$this._phoneNumber;
   set phoneNumber(String? phoneNumber) => _$this._phoneNumber = phoneNumber;
 
-  String? _nom;
-  String? get nom => _$this._nom;
-  set nom(String? nom) => _$this._nom = nom;
-
-  String? _prenom;
-  String? get prenom => _$this._prenom;
-  set prenom(String? prenom) => _$this._prenom = prenom;
-
-  String? _ville;
-  String? get ville => _$this._ville;
-  set ville(String? ville) => _$this._ville = ville;
-
-  int? _codePostal;
-  int? get codePostal => _$this._codePostal;
-  set codePostal(int? codePostal) => _$this._codePostal = codePostal;
-
-  String? _presentation;
-  String? get presentation => _$this._presentation;
-  set presentation(String? presentation) => _$this._presentation = presentation;
-
-  String? _dateNaissance;
-  String? get dateNaissance => _$this._dateNaissance;
-  set dateNaissance(String? dateNaissance) =>
-      _$this._dateNaissance = dateNaissance;
-
-  String? _poste;
-  String? get poste => _$this._poste;
-  set poste(String? poste) => _$this._poste = poste;
-
-  ListBuilder<String>? _specialisations;
-  ListBuilder<String> get specialisations =>
-      _$this._specialisations ??= new ListBuilder<String>();
-  set specialisations(ListBuilder<String>? specialisations) =>
-      _$this._specialisations = specialisations;
-
-  ListBuilder<String>? _faculteEcole;
-  ListBuilder<String> get faculteEcole =>
-      _$this._faculteEcole ??= new ListBuilder<String>();
-  set faculteEcole(ListBuilder<String>? faculteEcole) =>
-      _$this._faculteEcole = faculteEcole;
-
-  ListBuilder<String>? _experiences;
-  ListBuilder<String> get experiences =>
-      _$this._experiences ??= new ListBuilder<String>();
-  set experiences(ListBuilder<String>? experiences) =>
-      _$this._experiences = experiences;
-
-  ListBuilder<String>? _competences;
-  ListBuilder<String> get competences =>
-      _$this._competences ??= new ListBuilder<String>();
-  set competences(ListBuilder<String>? competences) =>
-      _$this._competences = competences;
-
-  bool? _isTitulaire;
-  bool? get isTitulaire => _$this._isTitulaire;
-  set isTitulaire(bool? isTitulaire) => _$this._isTitulaire = isTitulaire;
-
-  int? _likes;
-  int? get likes => _$this._likes;
-  set likes(int? likes) => _$this._likes = likes;
-
-  String? _displayName;
-  String? get displayName => _$this._displayName;
-  set displayName(String? displayName) => _$this._displayName = displayName;
-
-  ListBuilder<DataTypeLgoStruct>? _lgo;
-  ListBuilder<DataTypeLgoStruct> get lgo =>
-      _$this._lgo ??= new ListBuilder<DataTypeLgoStruct>();
-  set lgo(ListBuilder<DataTypeLgoStruct>? lgo) => _$this._lgo = lgo;
-
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -553,25 +236,11 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
     final $v = _$v;
     if ($v != null) {
       _email = $v.email;
+      _displayName = $v.displayName;
       _photoUrl = $v.photoUrl;
       _uid = $v.uid;
       _createdTime = $v.createdTime;
       _phoneNumber = $v.phoneNumber;
-      _nom = $v.nom;
-      _prenom = $v.prenom;
-      _ville = $v.ville;
-      _codePostal = $v.codePostal;
-      _presentation = $v.presentation;
-      _dateNaissance = $v.dateNaissance;
-      _poste = $v.poste;
-      _specialisations = $v.specialisations?.toBuilder();
-      _faculteEcole = $v.faculteEcole?.toBuilder();
-      _experiences = $v.experiences?.toBuilder();
-      _competences = $v.competences?.toBuilder();
-      _isTitulaire = $v.isTitulaire;
-      _likes = $v.likes;
-      _displayName = $v.displayName;
-      _lgo = $v.lgo?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -593,51 +262,15 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   UsersRecord build() => _build();
 
   _$UsersRecord _build() {
-    _$UsersRecord _$result;
-    try {
-      _$result = _$v ??
-          new _$UsersRecord._(
-              email: email,
-              photoUrl: photoUrl,
-              uid: uid,
-              createdTime: createdTime,
-              phoneNumber: phoneNumber,
-              nom: nom,
-              prenom: prenom,
-              ville: ville,
-              codePostal: codePostal,
-              presentation: presentation,
-              dateNaissance: dateNaissance,
-              poste: poste,
-              specialisations: _specialisations?.build(),
-              faculteEcole: _faculteEcole?.build(),
-              experiences: _experiences?.build(),
-              competences: _competences?.build(),
-              isTitulaire: isTitulaire,
-              likes: likes,
-              displayName: displayName,
-              lgo: _lgo?.build(),
-              ffRef: ffRef);
-    } catch (_) {
-      late String _$failedField;
-      try {
-        _$failedField = 'specialisations';
-        _specialisations?.build();
-        _$failedField = 'faculteEcole';
-        _faculteEcole?.build();
-        _$failedField = 'experiences';
-        _experiences?.build();
-        _$failedField = 'competences';
-        _competences?.build();
-
-        _$failedField = 'lgo';
-        _lgo?.build();
-      } catch (e) {
-        throw new BuiltValueNestedFieldError(
-            r'UsersRecord', _$failedField, e.toString());
-      }
-      rethrow;
-    }
+    final _$result = _$v ??
+        new _$UsersRecord._(
+            email: email,
+            displayName: displayName,
+            photoUrl: photoUrl,
+            uid: uid,
+            createdTime: createdTime,
+            phoneNumber: phoneNumber,
+            ffRef: ffRef);
     replace(_$result);
     return _$result;
   }

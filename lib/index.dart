@@ -8,6 +8,3 @@ export '/register_pharmacy/register_pharmacy_widget.dart'
     show RegisterPharmacyWidget;
 export '/pharma_job/pharma_job_widget.dart' show PharmaJobWidget;
 export '/reseau/reseau_widget.dart' show ReseauWidget;
-export '/discussion_avec_user/discussion_avec_user_widget.dart'
-    show DiscussionAvecUserWidget;
-export '/discussions/discussions_widget.dart' show DiscussionsWidget;
