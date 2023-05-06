@@ -1,3 +1,5 @@
+import 'package:pharmabox/constant.dart';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -51,12 +53,7 @@ class _ListSkillWithSliderWidgetState extends State<ListSkillWithSliderWidget> {
       child: Column(
       children: [
         Text(
-          _currentStep == 0
-              ? 'Maîtrise basique'
-              : _currentStep == 1
-                  ? 'Maîtrise moyenne'
-                  : 'Maîtrise complète',
-          // style: TextStyle(fontSize: 20),
+          _currentStep == 0 ? 'Maîtrise basique' : _currentStep == 1 ? 'Maîtrise moyenne' : 'Maîtrise complète',
         ),
         Slider(
           value: _currentStep.toDouble(),
@@ -69,10 +66,10 @@ class _ListSkillWithSliderWidgetState extends State<ListSkillWithSliderWidget> {
             });
           },
           activeColor: _currentStep == 0
-              ? Colors.red
+              ? redColor
               : _currentStep == 1
-                  ? Colors.yellow
-                  : Colors.green,
+                  ? yellowColor
+                  : greenColor
         ),
         
       ],

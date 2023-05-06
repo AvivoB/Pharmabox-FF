@@ -1,3 +1,5 @@
+import 'package:pharmabox/register/register_provider.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -43,7 +45,12 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
   @override
   Widget build(BuildContext context) {
     List<Map> listLGO = PopupLgoModel.selectLGO();
-    listLGO = listLGO.where((element) => element['name'].toString().toLowerCase().contains(_searchText!.toLowerCase())).toList();
+    listLGO = listLGO
+        .where((element) => element['name']
+            .toString()
+            .toLowerCase()
+            .contains(_searchText!.toLowerCase()))
+        .toList();
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -176,25 +183,33 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                       return Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'assets/lgo/' + item[index]['image'],
-                              width: 120.0,
-                              height: 60.0,
-                              fit: BoxFit.cover,
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  25.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                item[index]['name'],
-                                style: FlutterFlowTheme.of(context).bodyMedium,
+                        child: GestureDetector(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                'assets/lgo/' + item[index]['image'],
+                                width: 120.0,
+                                height: 60.0,
+                                fit: BoxFit.cover,
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    25.0, 0.0, 0.0, 0.0),
+                                child: Text(
+                                  item[index]['name'],
+                                  style:
+                                      FlutterFlowTheme.of(context).bodyMedium,
+                                ),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            var lgo = context.read<ProviderUserRegister>();
+                            lgo.updateSelectedLgo(item[index]);
+                            Navigator.pop(context);
+                          },
                         ),
                       );
                     },
