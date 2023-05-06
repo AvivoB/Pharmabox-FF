@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -15,11 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pharmabox/constant.dart';
 
 class RegisterStepModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
@@ -97,30 +93,6 @@ class RegisterStepModel extends FlutterFlowModel {
     listSkillWithSliderModel2.dispose();
   }
 
-// Recupere les specialisations depuis le popup specialisation
-  List<String> listeSpecialisation = [];
+  /// Additional helper methods are added here.
 
-  void addSpecialisation(String newSpecialisation) {
-    listeSpecialisation.add(newSpecialisation);
-    // notifyListeners(); // Notify listeners to update connected widgets
-    print('from class en question');
-    print('addSpecialisation ' + newSpecialisation);
-    print(listeSpecialisation);
-  }
-
-  deleteSpecialisation(specialisation) {
-    listeSpecialisation.remove(specialisation);
-  }
-
-// Recupere les lgo depuis le popup
-  List<Map> listeLGO = [];
-
-  deleteLGO(lgo) {
-    listeLGO.remove(lgo);
-  }
-
-  updateLevelLgo() {}
-
-// Recupere les langues selectionnées
-  List<Map> listeLangues = [];
 }

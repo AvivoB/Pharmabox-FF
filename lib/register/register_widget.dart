@@ -1,5 +1,3 @@
-import 'package:pharmabox/constant.dart';
-
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -333,9 +331,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                            backgroundColor: redColor,
                                             content: Text(
-                                              'Les mots de passent ne correspondent pas',
+                                              'Passwords don\'t match!',
                                             ),
                                           ),
                                         );

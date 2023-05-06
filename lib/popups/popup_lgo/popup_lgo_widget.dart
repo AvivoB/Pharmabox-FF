@@ -38,14 +38,8 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
     super.dispose();
   }
 
-  String _searchText = '';
-
   @override
   Widget build(BuildContext context) {
-    // final List listLGO = PopupLgoModel.selectLGO().where(
-    //     (item) => item.name.toLowerCase().contains(_searchText.toLowerCase()));
-    List<Map> listLGO = PopupLgoModel.selectLGO();
-    print(listLGO);
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -102,8 +96,8 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                               0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
                             controller: _model.lgoFilterController,
-                            autofocus: false,
-                            readOnly: false,
+                            autofocus: true,
+                            readOnly: true,
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'LGO',
@@ -154,11 +148,6 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                                 Icons.computer,
                               ),
                             ),
-                            onChanged: (value) => {
-                              setState(() {
-                                _searchText = value;
-                              })
-                            },
                             style: FlutterFlowTheme.of(context).bodyMedium,
                             validator: _model.lgoFilterControllerValidator
                                 .asValidator(context),
@@ -167,41 +156,36 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                       ),
                     ],
                   ),
-                  ListView.builder(
+                  ListView(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: listLGO.length,
-                    itemBuilder: (context, index) {
-                      final item = listLGO;
-                      print(index);
-                      return Padding(
+                    children: [
+                      Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            // Image.asset(
-                            //   'assets/lgo/'+item[index]['image'],
-                            //   width: 120.0,
-                            //   height: 60.0,
-                            //   fit: BoxFit.cover,
-                            // ),
+                            Image.network(
+                              'https://picsum.photos/seed/555/600',
+                              width: 120.0,
+                              height: 60.0,
+                              fit: BoxFit.cover,
+                            ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   25.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                item[index]['name'],
+                                'Winpharma',
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
                             ),
                           ],
                         ),
-                      );
-                      print(index);
-                    },
+                      ),
+                    ],
                   ),
                 ],
               ),
