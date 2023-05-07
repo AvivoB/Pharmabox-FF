@@ -146,8 +146,7 @@ class _NavBarPageState extends State<NavBarPage> {
         selectedBackgroundColor: Color(0x00000000),
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
-        margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+        margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
         width: double.infinity,
         elevation: 0.0,
         items: [
@@ -212,8 +211,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: currentIndex == 2
-                        ? Color(0xFF7CEDAC)
-                        : Color(0x00000000),
+                        ? Color(0xFF7CEDAC)                        : Color(0x00000000),
                     fontSize: 11.0,
                   ),
                 ),

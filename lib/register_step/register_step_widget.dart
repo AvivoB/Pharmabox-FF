@@ -97,6 +97,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
       }
     }
 
+    var widget_context_provider = context;
+
     final providerUserRegister = Provider.of<ProviderUserRegister>(context);
 
     return Consumer<ProviderUserRegister>(
@@ -207,7 +209,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       ),
                     ),
                   ),
-
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
@@ -232,7 +233,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     controller: _model.nomFamilleController,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Nom de famille',
+                                      labelText: 'Nom de famille *',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodySmall,
                                       enabledBorder: OutlineInputBorder(
@@ -284,7 +285,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     controller: _model.prenomController,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Prénom',
+                                      labelText: 'Prénom *',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodySmall,
                                       enabledBorder: OutlineInputBorder(
@@ -424,43 +425,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         ),
                                         borderRadius: BorderRadius.circular(4),
                                       ),
-                                      FlutterFlowDropDown<String>(
-                                        controller: _model
-                                                .posteValueController ??=
-                                            FormFieldController<String>(null),
-                                        options: [
-                                          'Rayonniste',
-                                          'Conseiller',
-                                          'Préparateur',
-                                          'Apprenti',
-                                          'Etudiant pharmacie',
-                                          'Etudiant pharmacie 6ème année validée',
-                                          'Pharmacien(ne)',
-                                          'Pharmacien(ne) titulaire'
-                                        ],
-                                        onChanged: (val) => setState(
-                                            () => _model.posteValue = val),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.78,
-                                        height: 50.0,
-                                        textStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: Colors.black,
-                                            ),
-                                        hintText: 'Poste *',
-                                        fillColor: Colors.white,
-                                        elevation: 2.0,
-                                        borderColor: Colors.transparent,
-                                        borderWidth: 0.0,
-                                        borderRadius: 0.0,
-                                        margin: EdgeInsetsDirectional.fromSTEB(
-                                            12.0, 4.0, 12.0, 4.0),
-                                        hidesUnderline: true,
-                                        isSearchable: false,
-
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -609,21 +579,22 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     inputFormatters: [_model.birthDateMask],
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.postcodeController,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Code postal *',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 10),
+                                  child: TextFormField(
+                                    controller: _model.postcodeController,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Code postal *',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFD0D1DE),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -662,21 +633,22 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     inputFormatters: [_model.postcodeMask],
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.cityController,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Ville *',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 10),
+                                  child: TextFormField(
+                                    controller: _model.cityController,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Ville *',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFD0D1DE),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -893,6 +865,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         padding: EdgeInsets.zero,
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         itemCount: providerUserRegister
                                             .selectedSpecialisation.length,
                                         itemBuilder: (context, index) {
@@ -1103,6 +1077,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
                                 itemCount: userRegisterSate.selectedLgo.length,
                                 itemBuilder: (context, index) {
@@ -1146,27 +1121,27 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                   userRegisterSate
                                                           .selectedLgo[index]
                                                       ['image'],
-                                              width: 30,
-                                              height: 20,
+                                              width: 120,
+                                              height: 60,
                                               fit: BoxFit.cover,
                                             ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(5, 0, 0, 0),
-                                              child: Text(
-                                                userRegisterSate
-                                                    .selectedLgo[index]['name'],
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          fontSize: 13,
-                                                          color:
-                                                              Color(0xFF595A71),
-                                                        ),
-                                              ),
-                                            ),
+                                            // Padding(
+                                            //   padding: EdgeInsetsDirectional
+                                            //       .fromSTEB(5, 0, 0, 0),
+                                            //   child: Text(
+                                            //     userRegisterSate
+                                            //         .selectedLgo[index]['name'],
+                                            //     style:
+                                            //         FlutterFlowTheme.of(context)
+                                            //             .bodyMedium
+                                            //             .override(
+                                            //               fontFamily: 'Poppins',
+                                            //               fontSize: 13,
+                                            //               color:
+                                            //                   Color(0xFF595A71),
+                                            //             ),
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                       ),
@@ -1254,26 +1229,27 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   ),
                                 ],
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
-                                        child: Icon(
-                                          FFIcons.klabs,
-                                          color: Color(0xFF595A71),
-                                          size: 28.0,
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 10, 0),
+                                          child: Icon(
+                                            Icons.coronavirus,
+                                            color: Color(0xFF595A71),
+                                            size: 28,
+                                          ),
                                         ),
                                         Text(
                                           'Test COVID',
@@ -1437,8 +1413,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
                                           child: Icon(
-                                            FFIcons
-                                                .klabsFILL0Wght400GRAD0Opsz48,
+                                            FFIcons.klabs,
                                             color: Color(0xFF595A71),
                                             size: 28,
                                           ),
@@ -1599,6 +1574,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
                                 itemCount:
                                     userRegisterSate.selectedLangues.length,
@@ -1650,6 +1626,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                 userRegisterSate
                                                         .selectedLangues[index]
                                                     ['name'],
+                                                overflow: TextOverflow.ellipsis,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium,
@@ -1801,6 +1778,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount:
                                     userRegisterSate.selectedExperiences.length,
                                 itemBuilder: (context, index) {
@@ -2018,31 +1996,51 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () {
-                          print('Button pressed ...');
+                          var send_data = RegisterStepModel().createUserToFirebase(
+                            widget_context_provider,
+                            _model.nomFamilleController.text,
+                            _model.prenomController.text,
+                            _model.posteValue,
+                            _model.emailController.text,
+                            _model.telephoneController.text,
+                            _model.birthDateController.text,
+                            _model.postcodeController.text,
+                            _model.cityController.text,
+                            _model.presentationController.text,
+                            _model.comptencesTestCovidValue,
+                            _model.comptencesVaccinationValue,
+                            _model.comptencesTiersPayantValue,
+                            _model.comptencesLaboValue,
+                            _model.comptencesTRODValue,
+                            _model.allowNotifsValue,
+                            _model.allowCGUValue,
+                            _imageURL!
+                          );
+                          
+                          // if(send_data) {
+                          //    if (_model.posteValue == 'Pharmacien(ne) titulaire') {
+                          //     context.pushNamed('RegisterPharmacy');
+                          //     context.goNamedAuth('RegisterPharmacy', mounted);
+                          //   } else {
+                          //     context.pushNamed('Explorer');
+                          //   }
+                          // }
                         },
-                        child: FFButtonWidget(
-                      onPressed: () async {
-                        if (_model.posteValue == 'Pharmacien(ne) titulaire') {
-                          context.pushNamed('RegisterPharmacy');
-                        } else {
-                          context.pushNamed('Explorer');
-                        }
-                      },
-                      text: 'Créer mon compte',
-                      options: FFButtonOptions(
-                        width: double.infinity,
-                        height: 40.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: Color(0x00FFFFFF),
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
+                        text: 'Créer mon compte',
+                        options: FFButtonOptions(
+                          elevation: 0,
+                          width: double.infinity,
+                          height: 40,
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          iconPadding:
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          color: Color(0x00FFFFFF),
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
                                   ),
                           borderSide: BorderSide(
                             color: Colors.transparent,
