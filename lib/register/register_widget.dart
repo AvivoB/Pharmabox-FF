@@ -1,5 +1,3 @@
-import 'package:pharmabox/constant.dart';
-
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -65,7 +63,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
@@ -333,9 +331,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                            backgroundColor: redColor,
                                             content: Text(
-                                              'Les mots de passent ne correspondent pas',
+                                              'Passwords don\'t match!',
                                             ),
                                           ),
                                         );
@@ -453,6 +450,34 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+                        FFButtonWidget(
+                          onPressed: () async {
+                            context.pushNamed('Login');
+                          },
+                          text: 'Avez-vous déjà un compte? Me connecter',
+                          options: FFButtonOptions(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: Color(0x004B39EF),
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color:
+                                      FlutterFlowTheme.of(context).focusColor,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                            elevation: 0.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
                       ],
