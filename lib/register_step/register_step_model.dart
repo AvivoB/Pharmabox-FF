@@ -99,32 +99,6 @@ class RegisterStepModel extends FlutterFlowModel {
     listSkillWithSliderModel2.dispose();
   }
 
-// Recupere les specialisations depuis le popup specialisation
-  List<String> listeSpecialisation = [];
-
-  void addSpecialisation(String newSpecialisation) {
-    listeSpecialisation.add(newSpecialisation);
-    // notifyListeners(); // Notify listeners to update connected widgets
-    print('from class en question');
-    print('addSpecialisation ' + newSpecialisation);
-    print(listeSpecialisation);
-  }
-
-  deleteSpecialisation(specialisation) {
-    listeSpecialisation.remove(specialisation);
-  }
-
-// Recupere les lgo depuis le popup
-  List<Map> listeLGO = [];
-
-  deleteLGO(lgo) {
-    listeLGO.remove(lgo);
-  }
-
-  updateLevelLgo() {}
-
-// Recupere les langues selectionnées
-  List<Map> listeLangues = [];
 
 // Recuperer la photo utilisateur
   Future getUserProfilePicture() async {

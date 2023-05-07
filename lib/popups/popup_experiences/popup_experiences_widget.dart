@@ -326,7 +326,9 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                     ),
                     child: FFButtonWidget(
                       onPressed: () {
-                        print('Button pressed ...');
+                        // var experience = context.read<ProviderUserRegister>();
+                        // experience.addSelectedSpecialisation(filtered[index]);
+                        // Navigator.pop(context);
                       },
                       text: 'Ajouter',
                       options: FFButtonOptions(

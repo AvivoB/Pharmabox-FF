@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '../../register/register_provider.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -153,13 +154,7 @@ class _MultiSelectLangState extends State<MultiSelectLang> {
                   title: Text(language),
                   value: selectedLanguages.contains(language),
                   onChanged: (bool? value) {
-                    setState(() {
-                      if (value!) {
-                        selectedLanguages.add(language);
-                      } else {
-                        selectedLanguages.remove(language);
-                      }
-                    });
+                    
                   },
                 );
               },

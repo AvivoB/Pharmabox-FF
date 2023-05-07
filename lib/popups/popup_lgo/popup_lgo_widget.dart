@@ -207,7 +207,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                           ),
                           onTap: () {
                             var lgo = context.read<ProviderUserRegister>();
-                            lgo.updateSelectedLgo(item[index]);
+                            lgo.addSelectedLgo(item[index]);
                             Navigator.pop(context);
                           },
                         ),

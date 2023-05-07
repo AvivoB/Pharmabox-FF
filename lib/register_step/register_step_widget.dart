@@ -67,7 +67,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List listeSpecialisation = RegisterStepModel().listeSpecialisation;
     File? _image;
     bool _isUploading = false;
 
@@ -860,12 +859,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                       ),
-                                      child: ListView(
+                                      child: ListView.builder(
                                         padding: EdgeInsets.zero,
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
-                                        children: [
-                                          Padding(
+                                        itemCount: providerUserRegister
+                                            .selectedSpecialisation.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 10, 0, 0),
@@ -888,8 +889,9 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                     size: 20,
                                                   ),
                                                   onPressed: () {
-                                                    print(
-                                                        'IconButton pressed ...');
+                                                    userRegisterSate
+                                                        .deleteSelectedSpecialisation(
+                                                            index);
                                                   },
                                                 ),
                                                 Icon(
@@ -915,7 +917,9 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                             .fromSTEB(
                                                                 5, 0, 0, 0),
                                                     child: Text(
-                                                      'Tiers Payant',
+                                                      userRegisterSate
+                                                              .selectedSpecialisation[
+                                                          index],
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -925,8 +929,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                        ],
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
@@ -1066,12 +1070,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
                               ),
-                              child: ListView(
+                              child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
-                                children: [
-                                  Row(
+                                itemCount: userRegisterSate.selectedLgo.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -1079,7 +1084,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.5,
+                                                0.42,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryBackground,
@@ -1102,23 +1107,34 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                 size: 20,
                                               ),
                                               onPressed: () {
-                                                print('IconButton pressed ...');
+                                                userRegisterSate
+                                                    .deleteSelectedLgo(index);
                                               },
                                             ),
                                             Image.asset(
-                                              'assets/images/Group_18.png',
-                                              width: 60,
-                                              height: 40,
+                                              'assets/lgo/' +
+                                                  userRegisterSate
+                                                          .selectedLgo[index]
+                                                      ['image'],
+                                              width: 30,
+                                              height: 20,
                                               fit: BoxFit.cover,
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(5, 0, 0, 0),
                                               child: Text(
-                                                'Hello LGO',
+                                                userRegisterSate
+                                                    .selectedLgo[index]['name'],
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyMedium,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize: 13,
+                                                          color:
+                                                              Color(0xFF595A71),
+                                                        ),
                                               ),
                                             ),
                                           ],
@@ -1127,7 +1143,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.3,
+                                                0.4,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryBackground,
@@ -1135,15 +1151,24 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         child: wrapWithModel(
                                           model:
                                               _model.listSkillWithSliderModel1,
-                                          updateCallback: () => setState(() {}),
+                                          updateCallback: () {
+                                            print(_model
+                                                .listSkillWithSliderModel1);
+                                          },
                                           child: ListSkillWithSliderWidget(
                                             slider: 1.0,
+                                            onChanged: (value) {
+                                              userRegisterSate
+                                                  .updateSelectedLgo(
+                                                      index, value);
+                                              print(value);
+                                            },
                                           ),
                                         ),
                                       ),
                                     ],
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -1543,12 +1568,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
                               ),
-                              child: ListView(
+                              child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
-                                children: [
-                                  Row(
+                                itemCount:
+                                    userRegisterSate.selectedLangues.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -1591,7 +1618,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(5, 0, 0, 0),
                                               child: Text(
-                                                'Hello Langue',
+                                                userRegisterSate.selectedLangues[index],
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium,
@@ -1618,8 +1645,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         ),
                                       ),
                                     ],
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
                             ),
                           ),

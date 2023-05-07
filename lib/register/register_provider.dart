@@ -15,22 +15,15 @@ class ProviderUserRegister extends ChangeNotifier {
   List get selectedExperiences => _selectedExperiences;
 
 /* Options Specialisations */
-void addSelectedSpecialisation(specialisation) {
-    _selectedSpecialisation.add(specialisation);
-    notifyListeners();
-  }
-
-
-  void updateSelectedSpecialisation(specialisation) {
+  void addSelectedSpecialisation(specialisation) {
     _selectedSpecialisation.add(specialisation);
     notifyListeners();
   }
 
   void deleteSelectedSpecialisation(specialisation) {
-    _selectedSpecialisation.remove(specialisation);
+    _selectedSpecialisation.removeAt(specialisation);
     notifyListeners();
   }
-
 
 /* Option LGO */
   void addSelectedLgo(lgo) {
@@ -38,17 +31,30 @@ void addSelectedSpecialisation(specialisation) {
     notifyListeners();
   }
 
-
-  void updateSelectedLgo(lgo) {
-    _selectedLgo.add(lgo);
+  void updateSelectedLgo(index, niveau) {
+    _selectedLgo[index]['niveau'] = niveau;
     notifyListeners();
   }
 
   void deleteSelectedLgo(lgo) {
-    _selectedLgo.remove(lgo);
+    _selectedLgo.removeAt(lgo);
     notifyListeners();
   }
 
 
+  /* Option langues */
+  void addLangues(langue) {
+    _selectedLangues.add(langue);
+    notifyListeners();
+  }
 
+  void updateLangues(index, niveau) {
+    _selectedLangues[index]['niveau'] = niveau;
+    notifyListeners();
+  }
+
+  void deleteLangues(langue) {
+    _selectedLangues.removeAt(langue);
+    notifyListeners();
+  }
 }

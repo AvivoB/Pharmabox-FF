@@ -69,9 +69,4 @@ class PopupSpecialisationModel extends FlutterFlowModel {
 
     return listSpecialisation;
   }
-
-  upadteWidgetSpecialisationRegister(value) {
-    RegisterStepModel().listeSpecialisation.add(value);
-    print('heeloo');
-  }
 }
