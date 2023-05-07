@@ -172,47 +172,54 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                       ),
                     ],
                   ),
-                  ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: listLGO.length,
-                    itemBuilder: (context, index) {
-                      final item = listLGO;
-                      return Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-                        child: GestureDetector(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Image.asset(
-                                'assets/lgo/' + item[index]['image'],
-                                width: 120.0,
-                                height: 60.0,
-                                fit: BoxFit.cover,
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    25.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  item[index]['name'],
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.23,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: listLGO.length,
+                      itemBuilder: (context, index) {
+                        final item = listLGO;
+                        return Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                          child: GestureDetector(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  'assets/lgo/' + item[index]['image'],
+                                  width: 120.0,
+                                  height: 60.0,
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      25.0, 0.0, 0.0, 0.0),
+                                  child: Text(
+                                    item[index]['name'],
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              var lgo = context.read<ProviderUserRegister>();
+                              lgo.addSelectedLgo(item[index]);
+                              Navigator.pop(context);
+                            },
                           ),
-                          onTap: () {
-                            var lgo = context.read<ProviderUserRegister>();
-                            lgo.addSelectedLgo(item[index]);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

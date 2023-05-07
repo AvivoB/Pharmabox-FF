@@ -78,9 +78,6 @@ class PopupLgoModel extends FlutterFlowModel {
       {"image": "Winpharma.jpg", "name": "Winpharma"}
     ];
 
-
-     final sorted = listLGO.toList()..sort((a, b)=> a['name'].compareTo(b['name']));
-
     return listLGO.toList();
   }
 }

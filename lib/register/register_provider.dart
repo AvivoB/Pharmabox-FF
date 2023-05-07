@@ -41,20 +41,36 @@ class ProviderUserRegister extends ChangeNotifier {
     notifyListeners();
   }
 
-
   /* Option langues */
   void addLangues(langue) {
     _selectedLangues.add(langue);
+    print(_selectedLangues);
     notifyListeners();
   }
 
   void updateLangues(index, niveau) {
     _selectedLangues[index]['niveau'] = niveau;
+    print(_selectedLangues);
     notifyListeners();
   }
 
   void deleteLangues(langue) {
     _selectedLangues.removeAt(langue);
+    notifyListeners();
+  }
+
+  /* Option langues */
+  void addExperiences(nom_pharmacie, annee_debut, annee_fin) {
+    _selectedExperiences.add({
+      "nom_pharmacie": nom_pharmacie,
+      "annee_debut": annee_debut,
+      "annee_fin": annee_fin
+    });
+    notifyListeners();
+  }
+
+  void deleteExperience(expercienceID) {
+    _selectedExperiences.removeAt(expercienceID);
     notifyListeners();
   }
 }

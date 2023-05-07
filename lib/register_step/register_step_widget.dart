@@ -1161,7 +1161,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               userRegisterSate
                                                   .updateSelectedLgo(
                                                       index, value);
-                                              print(value);
                                             },
                                           ),
                                         ),
@@ -1606,7 +1605,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                 size: 20,
                                               ),
                                               onPressed: () {
-                                                print('IconButton pressed ...');
+                                                userRegisterSate
+                                                    .deleteLangues(index);
                                               },
                                             ),
                                             Icon(
@@ -1618,7 +1618,9 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(5, 0, 0, 0),
                                               child: Text(
-                                                userRegisterSate.selectedLangues[index],
+                                                userRegisterSate
+                                                        .selectedLangues[index]
+                                                    ['name'],
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium,
@@ -1640,7 +1642,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               _model.listSkillWithSliderModel2,
                                           updateCallback: () => setState(() {}),
                                           child: ListSkillWithSliderWidget(
-                                            slider: 50.0,
+                                            slider: 0.0,
+                                            onChanged: (value) {
+                                              userRegisterSate.updateLangues(
+                                                  index, value);
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1762,12 +1768,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   ),
                                 ],
                               ),
-                              ListView(
+                              ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
-                                children: [
-                                  Padding(
+                                itemCount:
+                                    userRegisterSate.selectedExperiences.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 10, 0, 0),
                                     child: Row(
@@ -1787,7 +1795,10 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                             size: 20,
                                           ),
                                           onPressed: () {
-                                            print('IconButton pressed ...');
+                                            userRegisterSate
+                                                .deleteExperience(index);
+                                            print(userRegisterSate
+                                                .selectedExperiences[index]);
                                           },
                                         ),
                                         Padding(
@@ -1810,15 +1821,25 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                 .secondaryBackground,
                                           ),
                                           child: Text(
-                                            'Pharmacie de la gare',
+                                            userRegisterSate
+                                                        .selectedExperiences[
+                                                    index]['nom_pharmacie'] +
+                                                ', ' +
+                                                userRegisterSate
+                                                        .selectedExperiences[
+                                                    index]['annee_debut'] +
+                                                '-' +
+                                                userRegisterSate
+                                                        .selectedExperiences[
+                                                    index]['annee_fin'],
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -1972,6 +1993,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         },
                         text: 'Créer mon compte',
                         options: FFButtonOptions(
+                          elevation: 0,
                           width: double.infinity,
                           height: 40,
                           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
