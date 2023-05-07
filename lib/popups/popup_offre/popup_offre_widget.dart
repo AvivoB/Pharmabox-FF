@@ -870,7 +870,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                               ChipData('Déplacements pris en charge',
                                   Icons.directions_bus),
                               ChipData('Tickets cadeau', Icons.card_giftcard),
-                              ChipData('Logement possible', FFIcons.kvillage),
+                              ChipData('Logement possible', Icons.house_siding),
                               ChipData('Tickets Restaurants ',
                                   Icons.credit_card_outlined)
                             ],
