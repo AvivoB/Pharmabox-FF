@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +27,8 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PopupLanguesModel());
+
+    _model.lgoFilterController ??= TextEditingController();
   }
 
   @override
@@ -90,13 +91,83 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    height: 200.0,
-                    child: custom_widgets.MultiSelectLang(
-                      width: MediaQuery.of(context).size.width * 1.0,
-                      height: 200.0,
-                      action: () async {},
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(
+                            'Langue 1',
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                    child: TextFormField(
+                      controller: _model.lgoFilterController,
+                      autofocus: true,
+                      readOnly: true,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        labelText: 'LGO',
+                        hintText: 'Recherchez vos LGO dans cette liste',
+                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFFD0D1DE),
+                            width: 1.0,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(4.0),
+                            topRight: Radius.circular(4.0),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).focusColor,
+                            width: 1.0,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(4.0),
+                            topRight: Radius.circular(4.0),
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 1.0,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(4.0),
+                            topRight: Radius.circular(4.0),
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 1.0,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(4.0),
+                            topRight: Radius.circular(4.0),
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.computer,
+                        ),
+                      ),
+                      style: FlutterFlowTheme.of(context).bodyMedium,
+                      validator: _model.lgoFilterControllerValidator
+                          .asValidator(context),
                     ),
                   ),
                 ),

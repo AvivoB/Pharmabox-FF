@@ -1443,7 +1443,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 10.0, 0.0),
                                         child: Icon(
-                                          FFIcons.kh24,
+                                          Icons.access_time_rounded,
                                           color: Color(0xFF595A71),
                                           size: 32.0,
                                         ),
@@ -5793,7 +5793,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 10.0, 0.0),
                                         child: Icon(
-                                          FFIcons.kvillage,
+                                          FFIcons.kgroup,
                                           color: Color(0xFF595A71),
                                           size: 20.0,
                                         ),
@@ -6157,7 +6157,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         ),
                                       ),
                                       Text(
-                                        'Borne télé-médecine',
+                                        'Borne de télé-médecine',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                       ),
@@ -6198,6 +6198,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ),
                                       Text(
                                         'Préparation ',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                      ),
+                                      Text(
+                                        _model.missionPreparationValue1!
+                                            ? 'externalisé'
+                                            : 'par l\'équipe',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                       ),
@@ -6286,7 +6293,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 10.0, 0.0),
                                         child: Icon(
-                                          FFIcons.kgroup17,
+                                          FFIcons.kzen,
                                           color: Color(0xFF595A71),
                                           size: 28.0,
                                         ),
@@ -6327,7 +6334,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 10.0, 0.0),
                                         child: Icon(
-                                          FFIcons.kbot,
+                                          FFIcons.krobot,
                                           color: Color(0xFF595A71),
                                           size: 28.0,
                                         ),
@@ -6572,7 +6579,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 10.0, 0.0),
                                         child: Icon(
-                                          FFIcons.kgroups,
+                                          FFIcons.kgroup,
                                           color: Color(0xFF595A71),
                                           size: 28.0,
                                         ),
@@ -6830,7 +6837,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 10.0, 0.0),
                                         child: Icon(
-                                          FFIcons.kquestion,
+                                          FFIcons.klike,
                                           color: Color(0xFF595A71),
                                           size: 28.0,
                                         ),
@@ -6955,7 +6962,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
                                   prefixIcon: Icon(
-                                    FFIcons.kgroups,
+                                    FFIcons.kgroup,
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                   ),
@@ -7008,7 +7015,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
                                   prefixIcon: Icon(
-                                    FFIcons.kgroups,
+                                    FFIcons.kgroup,
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                   ),
@@ -7061,7 +7068,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
                                   prefixIcon: Icon(
-                                    FFIcons.kgroups,
+                                    FFIcons.kgroup,
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                   ),
@@ -7114,7 +7121,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
                                   prefixIcon: Icon(
-                                    FFIcons.kgroups,
+                                    FFIcons.kgroup,
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                   ),
@@ -7167,7 +7174,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
                                   prefixIcon: Icon(
-                                    FFIcons.kgroups,
+                                    FFIcons.kgroup,
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                   ),
@@ -7220,7 +7227,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
                                   prefixIcon: Icon(
-                                    FFIcons.kgroups,
+                                    FFIcons.kgroup,
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                   ),
@@ -7273,7 +7280,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
                                   prefixIcon: Icon(
-                                    FFIcons.kgroups,
+                                    FFIcons.kgroup,
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
                                   ),

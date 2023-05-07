@@ -177,12 +177,6 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Image.network(
-                              'https://picsum.photos/seed/218/600',
-                              width: 100.0,
-                              height: 50.0,
-                              fit: BoxFit.cover,
-                            ),
                             Text(
                               'Hello World',
                               style: FlutterFlowTheme.of(context).bodyMedium,

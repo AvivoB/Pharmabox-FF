@@ -141,21 +141,9 @@ flutter:
 
 
   fonts:
-    - family: Icomoon
-      fonts:
-        - asset: assets/fonts/icomoon.ttf
-    - family: CustomIcon
-      fonts:
-        - asset: assets/fonts/icomoon.ttf
-    - family: Village
-      fonts:
-        - asset: assets/fonts/icomoon.ttf
     - family: Pharmabox
       fonts:
-        - asset: assets/fonts/icomoon.ttf
-    - family: LikeCardUser
-      fonts:
-        - asset: assets/fonts/icomoon.ttf
+        - asset: assets/fonts/Pharmabox.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

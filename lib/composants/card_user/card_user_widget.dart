@@ -239,7 +239,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               fillColor:
                                   FlutterFlowTheme.of(context).primaryBtnText,
                               icon: Icon(
-                                FFIcons.kmessage,
+                                Icons.message_sharp,
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 size: 22.0,
                               ),

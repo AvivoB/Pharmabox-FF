@@ -234,7 +234,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                               fillColor:
                                   FlutterFlowTheme.of(context).primaryBtnText,
                               icon: Icon(
-                                FFIcons.kmessage,
+                                Icons.message,
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 size: 22.0,
                               ),

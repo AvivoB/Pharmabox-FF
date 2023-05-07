@@ -189,7 +189,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   controller: _model.nomFamilleController,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: 'Nom de famille',
+                                    labelText: 'Nom de famille *',
                                     hintStyle:
                                         FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
@@ -337,7 +337,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               fontFamily: 'Poppins',
                                               color: Colors.black,
                                             ),
-                                        hintText: 'Poste',
+                                        hintText: 'Poste *',
                                         fillColor: Colors.white,
                                         elevation: 2.0,
                                         borderColor: Colors.transparent,
@@ -536,7 +536,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   controller: _model.postcodeController,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: 'Code postal',
+                                    labelText: 'Code postal *',
                                     hintStyle:
                                         FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
@@ -589,7 +589,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   controller: _model.cityController,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: 'Ville',
+                                    labelText: 'Ville *',
                                     hintStyle:
                                         FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
@@ -1320,7 +1320,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 10.0, 0.0),
                                         child: Icon(
-                                          FFIcons.klabsFILL0Wght400GRAD0Opsz48,
+                                          FFIcons.klabs,
                                           color: Color(0xFF595A71),
                                           size: 28.0,
                                         ),
@@ -1868,8 +1868,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
+                      onPressed: () async {
+                        if (_model.posteValue == 'Pharmacien(ne) titulaire') {
+                          context.pushNamed('RegisterPharmacy');
+                        } else {
+                          context.pushNamed('Explorer');
+                        }
                       },
                       text: 'Créer mon compte',
                       options: FFButtonOptions(
