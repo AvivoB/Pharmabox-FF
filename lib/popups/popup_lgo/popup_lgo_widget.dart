@@ -1,3 +1,5 @@
+import 'package:pharmabox/register/register_provider.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -38,8 +40,17 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
     super.dispose();
   }
 
+  String _searchText = '';
+
   @override
   Widget build(BuildContext context) {
+    List<Map> listLGO = PopupLgoModel.selectLGO();
+    listLGO = listLGO
+        .where((element) => element['name']
+            .toString()
+            .toLowerCase()
+            .contains(_searchText!.toLowerCase()))
+        .toList();
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -96,8 +107,8 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                               0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
                             controller: _model.lgoFilterController,
-                            autofocus: true,
-                            readOnly: true,
+                            autofocus: false,
+                            readOnly: false,
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'LGO',
@@ -148,6 +159,11 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                                 Icons.computer,
                               ),
                             ),
+                            onChanged: (value) => {
+                              setState(() {
+                                _searchText = value;
+                              })
+                            },
                             style: FlutterFlowTheme.of(context).bodyMedium,
                             validator: _model.lgoFilterControllerValidator
                                 .asValidator(context),
@@ -156,36 +172,54 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                       ),
                     ],
                   ),
-                  ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.network(
-                              'https://picsum.photos/seed/555/600',
-                              width: 120.0,
-                              height: 60.0,
-                              fit: BoxFit.cover,
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.23,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: listLGO.length,
+                      itemBuilder: (context, index) {
+                        final item = listLGO;
+                        return Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                          child: GestureDetector(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  'assets/lgo/' + item[index]['image'],
+                                  width: 120.0,
+                                  height: 60.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      25.0, 0.0, 0.0, 0.0),
+                                  child: Text(
+                                    item[index]['name'],
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  25.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                'Winpharma',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                            onTap: () {
+                              var lgo = context.read<ProviderUserRegister>();
+                              lgo.addSelectedLgo(item[index]);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

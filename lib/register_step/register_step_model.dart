@@ -1,4 +1,5 @@
-import '/auth/firebase_auth/auth_util.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -16,6 +17,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pharmabox/constant.dart';
 
 class RegisterStepModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
@@ -93,6 +99,19 @@ class RegisterStepModel extends FlutterFlowModel {
     listSkillWithSliderModel2.dispose();
   }
 
-  /// Additional helper methods are added here.
+
+// Recuperer la photo utilisateur
+  Future getUserProfilePicture() async {
+    final ImagePicker picker = ImagePicker();
+    // Pick an image.
+    try {
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      return image;
+    } catch (e) {}
+  }
+
+
+// Envoyer les données dans firebase
+
 
 }
