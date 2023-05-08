@@ -57,29 +57,66 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: Color(0xFFEFF6F7),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF7F7FD5),
-                        Color(0xFF86A8E7),
-                        Color(0xFF91EAE4)
-                      ],
-                      stops: [0.0, 0.5, 1.0],
-                      begin: AlignmentDirectional(1.0, 0.34),
-                      end: AlignmentDirectional(-1.0, -0.34),
+    File? _image;
+    bool _isUploading = false;
+
+    Future<void> _pickImage() async {
+      final pickedFile =
+          await ImagePicker().getImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+          _isUploading = true;
+        });
+
+        final Reference storageRef = FirebaseStorage.instance
+            .ref()
+            .child('profile_pictures/${DateTime.now()}.png');
+        final UploadTask uploadTask = storageRef.putFile(_image!);
+        final TaskSnapshot downloadUrl = (await uploadTask);
+
+        String url = (await downloadUrl.ref.getDownloadURL());
+
+        // TODO : Enregistrer l'url de l'image en tant que photo de profil
+
+        setState(() {
+          _isUploading = false;
+          _imageURL = url;
+        });
+      }
+    }
+
+    var widget_context_provider = context;
+
+    final providerUserRegister = Provider.of<ProviderUserRegister>(context);
+
+    return Consumer<ProviderUserRegister>(
+        builder: (context, userRegisterSate, child) {
+      return GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: Color(0xFFEFF6F7),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF7F7FD5),
+                          Color(0xFF86A8E7),
+                          Color(0xFF91EAE4)
+                        ],
+                        stops: [0, 0.5, 1],
+                        begin: AlignmentDirectional(1, 0.34),
+                        end: AlignmentDirectional(-1, -0.34),
+                      ),
                     ),
                   ),
                   child: Padding(
@@ -163,39 +200,48 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       ],
                     ),
                   ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(25.0, 20.0, 25.0, 0.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Form(
-                          key: _model.formKey,
-                          autovalidateMode: AutovalidateMode.disabled,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.nomFamilleController,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Nom de famille *',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(25, 20, 25, 0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Form(
+                            key: _model.formKey,
+                            autovalidateMode: AutovalidateMode.disabled,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 10),
+                                  child: TextFormField(
+                                    controller: _model.nomFamilleController,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Nom de famille *',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFD0D1DE),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .focusColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
@@ -233,21 +279,44 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       .nomFamilleControllerValidator
                                       .asValidator(context),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.prenomController,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Prénom',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 10),
+                                  child: TextFormField(
+                                    controller: _model.prenomController,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Prénom *',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFD0D1DE),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .focusColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
@@ -311,42 +380,19 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           size: 24.0,
                                         ),
                                       ),
-                                      FlutterFlowDropDown<String>(
-                                        controller: _model
-                                                .posteValueController ??=
-                                            FormFieldController<String>(null),
-                                        options: [
-                                          'Rayonniste',
-                                          'Conseiller',
-                                          'Préparateur',
-                                          'Apprenti',
-                                          'Etudiant pharmacie',
-                                          'Etudiant pharmacie 6ème année validée',
-                                          'Pharmacien(ne)',
-                                          'Pharmacien(ne) titulaire'
-                                        ],
-                                        onChanged: (val) => setState(
-                                            () => _model.posteValue = val),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.78,
-                                        height: 50.0,
-                                        textStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: Colors.black,
-                                            ),
-                                        hintText: 'Poste *',
-                                        fillColor: Colors.white,
-                                        elevation: 2.0,
-                                        borderColor: Colors.transparent,
-                                        borderWidth: 0.0,
-                                        borderRadius: 0.0,
-                                        margin: EdgeInsetsDirectional.fromSTEB(
-                                            12.0, 4.0, 12.0, 4.0),
-                                        hidesUnderline: true,
-                                        isSearchable: false,
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                     ],
                                   ),
@@ -402,21 +448,22 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   validator: _model.emailControllerValidator
                                       .asValidator(context),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.telephoneController,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Téléphone',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 10),
+                                  child: TextFormField(
+                                    controller: _model.postcodeController,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Code postal *',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFD0D1DE),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
@@ -455,41 +502,22 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       .asValidator(context),
                                   inputFormatters: [_model.telephoneMask],
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.birthDateController,
-                                  onFieldSubmitted: (_) async {
-                                    final _datePickedDate =
-                                        await showDatePicker(
-                                      context: context,
-                                      initialDate: getCurrentTimestamp,
-                                      firstDate: DateTime(1900),
-                                      lastDate: getCurrentTimestamp,
-                                    );
-
-                                    if (_datePickedDate != null) {
-                                      setState(() {
-                                        _model.datePicked = DateTime(
-                                          _datePickedDate.year,
-                                          _datePickedDate.month,
-                                          _datePickedDate.day,
-                                        );
-                                      });
-                                    }
-                                  },
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Date de naissance',
-                                    hintText: '01/01/1970',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 10),
+                                  child: TextFormField(
+                                    controller: _model.cityController,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Ville *',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFD0D1DE),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
@@ -1163,10 +1191,80 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           size: 28.0,
                                         ),
                                       ),
-                                      Text(
-                                        'Test COVID',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
+                                      child: ListView.builder(
+                                        padding: EdgeInsets.zero,
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: providerUserRegister
+                                            .selectedSpecialisation.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 10, 0, 0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                FlutterFlowIconButton(
+                                                  borderColor:
+                                                      Colors.transparent,
+                                                  borderRadius: 30,
+                                                  borderWidth: 1,
+                                                  buttonSize: 40,
+                                                  icon: Icon(
+                                                    Icons.delete_outline_sharp,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .alternate,
+                                                    size: 20,
+                                                  ),
+                                                  onPressed: () {
+                                                    userRegisterSate
+                                                        .deleteSelectedSpecialisation(
+                                                            index);
+                                                  },
+                                                ),
+                                                Icon(
+                                                  Icons.verified,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryText,
+                                                  size: 24,
+                                                ),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.6,
+                                                  decoration: BoxDecoration(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryBackground,
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                5, 0, 0, 0),
+                                                    child: Text(
+                                                      userRegisterSate
+                                                              .selectedSpecialisation[
+                                                          index],
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),
@@ -1224,25 +1322,82 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemCount: userRegisterSate.selectedLgo.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
-                                        child: Icon(
-                                          Icons.payments_outlined,
-                                          color: Color(0xFF595A71),
-                                          size: 28.0,
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.42,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            FlutterFlowIconButton(
+                                              borderColor: Colors.transparent,
+                                              borderRadius: 30,
+                                              borderWidth: 1,
+                                              buttonSize: 40,
+                                              icon: Icon(
+                                                Icons.delete_outline_sharp,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .alternate,
+                                                size: 20,
+                                              ),
+                                              onPressed: () {
+                                                userRegisterSate
+                                                    .deleteSelectedLgo(index);
+                                              },
+                                            ),
+                                            Image.asset(
+                                              'assets/lgo/' +
+                                                  userRegisterSate
+                                                          .selectedLgo[index]
+                                                      ['image'],
+                                              width: 120,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            // Padding(
+                                            //   padding: EdgeInsetsDirectional
+                                            //       .fromSTEB(5, 0, 0, 0),
+                                            //   child: Text(
+                                            //     userRegisterSate
+                                            //         .selectedLgo[index]['name'],
+                                            //     style:
+                                            //         FlutterFlowTheme.of(context)
+                                            //             .bodyMedium
+                                            //             .override(
+                                            //               fontFamily: 'Poppins',
+                                            //               fontSize: 13,
+                                            //               color:
+                                            //                   Color(0xFF595A71),
+                                            //             ),
+                                            //   ),
+                                            // ),
+                                          ],
                                         ),
                                       ),
                                       Text(
@@ -1303,26 +1458,27 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   ),
                                 ],
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
-                                        child: Icon(
-                                          FFIcons.klabs,
-                                          color: Color(0xFF595A71),
-                                          size: 28.0,
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 10, 0),
+                                          child: Icon(
+                                            Icons.coronavirus,
+                                            color: Color(0xFF595A71),
+                                            size: 28,
+                                          ),
                                         ),
                                       ),
                                       Text(
@@ -1486,36 +1642,15 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          FlutterFlowIconButton(
-                                            borderColor: Colors.transparent,
-                                            borderRadius: 30.0,
-                                            borderWidth: 1.0,
-                                            buttonSize: 40.0,
-                                            icon: Icon(
-                                              Icons.delete_outline_sharp,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                              size: 20.0,
-                                            ),
-                                            onPressed: () {
-                                              print('IconButton pressed ...');
-                                            },
-                                          ),
-                                          Icon(
-                                            Icons.language_sharp,
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 10, 0),
+                                          child: Icon(
+                                            FFIcons.klabs,
                                             color: Color(0xFF595A71),
                                             size: 24.0,
                                           ),
@@ -1664,15 +1799,24 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ),
                               ],
                             ),
-                            ListView(
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 10.0, 0.0, 0.0),
-                                  child: Row(
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemCount:
+                                    userRegisterSate.selectedLangues.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
                                     mainAxisSize: MainAxisSize.max,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -1688,17 +1832,47 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               .alternate,
                                           size: 20.0,
                                         ),
-                                        onPressed: () {
-                                          print('IconButton pressed ...');
-                                        },
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
-                                        child: Icon(
-                                          Icons.work_outline,
-                                          color: Color(0xFF595A71),
-                                          size: 24.0,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            FlutterFlowIconButton(
+                                              borderColor: Colors.transparent,
+                                              borderRadius: 30,
+                                              borderWidth: 1,
+                                              buttonSize: 40,
+                                              icon: Icon(
+                                                Icons.delete_outline_sharp,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .alternate,
+                                                size: 20,
+                                              ),
+                                              onPressed: () {
+                                                userRegisterSate
+                                                    .deleteLangues(index);
+                                              },
+                                            ),
+                                            Icon(
+                                              Icons.language_sharp,
+                                              color: Color(0xFF595A71),
+                                              size: 24,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 0, 0, 0),
+                                              child: Text(
+                                                userRegisterSate
+                                                        .selectedLangues[index]
+                                                    ['name'],
+                                                overflow: TextOverflow.ellipsis,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       Container(
@@ -1797,22 +1971,154 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   ),
                                 ],
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.65,
-                                    constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width *
-                                              0.8,
+                              ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount:
+                                    userRegisterSate.selectedExperiences.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 10, 0, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlutterFlowIconButton(
+                                          borderColor: Colors.transparent,
+                                          borderRadius: 30,
+                                          borderWidth: 1,
+                                          buttonSize: 40,
+                                          icon: Icon(
+                                            Icons.delete_outline_sharp,
+                                            color: FlutterFlowTheme.of(context)
+                                                .alternate,
+                                            size: 20,
+                                          ),
+                                          onPressed: () {
+                                            userRegisterSate
+                                                .deleteExperience(index);
+                                            print(userRegisterSate
+                                                .selectedExperiences[index]);
+                                          },
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 10, 0),
+                                          child: Icon(
+                                            Icons.work_outline,
+                                            color: Color(0xFF595A71),
+                                            size: 24,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.6,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                          ),
+                                          child: Text(
+                                            userRegisterSate
+                                                        .selectedExperiences[
+                                                    index]['nom_pharmacie'] +
+                                                ', ' +
+                                                userRegisterSate
+                                                        .selectedExperiences[
+                                                    index]['annee_debut'] +
+                                                '-' +
+                                                userRegisterSate
+                                                        .selectedExperiences[
+                                                    index]['annee_fin'],
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 12,
+                            color: Color(0x2B1F5C67),
+                            offset: Offset(10, 10),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(15),
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.65,
+                                      constraints: BoxConstraints(
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width *
+                                                0.8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: Text(
+                                        'Je donne à PharmaBox le droit de m\'envoyer des notifications.',
+                                        textAlign: TextAlign.start,
+                                        maxLines: 2,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 12,
+                                            ),
+                                      ),
+                                    ),
+                                    Switch.adaptive(
+                                      value: _model.allowNotifsValue ??= false,
+                                      onChanged: (newValue) async {
+                                        setState(() => _model.allowNotifsValue =
+                                            newValue!);
+                                      },
+                                      activeColor: Color(0xFF7CEDAC),
                                     ),
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
@@ -1865,35 +2171,57 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         begin: AlignmentDirectional(1.0, -1.0),
                         end: AlignmentDirectional(-1.0, 1.0),
                       ),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: FFButtonWidget(
-                      onPressed: () async {
-                        if (_model.posteValue == 'Pharmacien(ne) titulaire') {
-                          context.pushNamed('RegisterPharmacy');
-                        } else {
-                          context.pushNamed('Explorer');
-                        }
-                      },
-                      text: 'Créer mon compte',
-                      options: FFButtonOptions(
-                        width: double.infinity,
-                        height: 40.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: Color(0x00FFFFFF),
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
+                      child: FFButtonWidget(
+                        onPressed: () async{
+                          var send_data = RegisterStepModel().createUserToFirebase(
+                            widget_context_provider,
+                            _model.nomFamilleController.text,
+                            _model.prenomController.text,
+                            _model.posteValue,
+                            _model.emailController.text,
+                            _model.telephoneController.text,
+                            _model.birthDateController.text,
+                            _model.postcodeController.text,
+                            _model.cityController.text,
+                            _model.presentationController.text,
+                            _model.comptencesTestCovidValue,
+                            _model.comptencesVaccinationValue,
+                            _model.comptencesTiersPayantValue,
+                            _model.comptencesLaboValue,
+                            _model.comptencesTRODValue,
+                            _model.allowNotifsValue,
+                            _model.allowCGUValue,
+                            _imageURL!
+                          );
+                          
+                          if (_model.posteValue == 'Pharmacien(ne) titulaire') {
+                            context.pushNamed('RegisterPharmacy');
+                          } else {
+                            context.pushNamed('Explorer');
+                          }
+                          
+                        },
+                        text: 'Créer mon compte',
+                        options: FFButtonOptions(
+                          elevation: 0,
+                          width: double.infinity,
+                          height: 40,
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          iconPadding:
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          color: Color(0x00FFFFFF),
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
