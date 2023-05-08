@@ -35,8 +35,9 @@ class _GradientTextCustomState extends State<GradientTextCustom> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.center,
-      child: GradientText(
+      alignment: Alignment.centerRight,
+      child: ElevatedButton(
+        child: GradientText(
           this.widget.text,
           radius: this.widget.radius,
           style: TextStyle(
@@ -45,20 +46,13 @@ class _GradientTextCustomState extends State<GradientTextCustom> {
           ),
           colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
         ),
-      decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0.0, 1.0), //(x,y)
-                    blurRadius: 2.0,
-                  ),
-                ],
-              ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll<Color>(Colors.white),
+        ),
+        onPressed: () {
+          this.widget.action;
+        },
+      ),
     );
   }
 }
-
-
-

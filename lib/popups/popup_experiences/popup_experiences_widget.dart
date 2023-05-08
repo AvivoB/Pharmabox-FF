@@ -1,4 +1,3 @@
-import '../../register/register_provider.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -179,7 +178,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                             controller: _model.experienceDebutController,
                             obscureText: false,
                             decoration: InputDecoration(
-                              labelText: 'Année de début',
+                              labelText: 'Date de début',
                               labelStyle:
                                   FlutterFlowTheme.of(context).bodyMedium,
                               hintText: 'Année',
@@ -244,7 +243,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                             controller: _model.experienceFinController,
                             obscureText: false,
                             decoration: InputDecoration(
-                              labelText: 'Année de fin',
+                              labelText: 'Date de fin',
                               labelStyle:
                                   FlutterFlowTheme.of(context).bodyMedium,
                               hintText: 'Année',
@@ -327,12 +326,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                     ),
                     child: FFButtonWidget(
                       onPressed: () {
-                        var experience = context.read<ProviderUserRegister>();
-                        experience.addExperiences(
-                            _model.lgoFilterController.text,
-                            _model.experienceDebutController.text,
-                            _model.experienceFinController.text);
-                        Navigator.pop(context);
+                        print('Button pressed ...');
                       },
                       text: 'Ajouter',
                       options: FFButtonOptions(
