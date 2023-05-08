@@ -2017,14 +2017,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                             _imageURL!
                           );
                           
-                          // if(send_data) {
-                          //    if (_model.posteValue == 'Pharmacien(ne) titulaire') {
-                          //     context.pushNamed('RegisterPharmacy');
-                          //     context.goNamedAuth('RegisterPharmacy', mounted);
-                          //   } else {
-                          //     context.pushNamed('Explorer');
-                          //   }
-                          // }
                         },
                         text: 'Créer mon compte',
                         options: FFButtonOptions(
