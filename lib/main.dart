@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pharmabox/register/register_provider.dart';
+import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 import 'package:provider/provider.dart';
@@ -69,17 +70,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // return MultiBlocProvider(
-    //   providers: [
-    //     ChangeNotifierUserRegister(create: (context) => ProviderUserRegister))
-    //   ],
-    //   child: ,
-    // )
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProviderUserRegister()),
-        
+        ChangeNotifierProvider(create: (_) => ProviderPharmacieRegister()),
       ],
       child: MaterialApp.router(
           title: 'Pharmabox',
