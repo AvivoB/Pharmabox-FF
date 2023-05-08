@@ -147,15 +147,23 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.15,
-                        height: 50.0,
+                        height: MediaQuery.of(context).size.width * 0.15,
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 12.0,
+                              color: Color(0x33000000),
+                              offset: Offset(0.0, 12.0),
+                            )
+                          ],
+                          shape: BoxShape.circle,
                         ),
                         child: FlutterFlowIconButton(
-                          borderColor: FlutterFlowTheme.of(context).focusColor,
+                          borderColor: Color(0x0042D2FF),
                           borderRadius: 100.0,
-                          borderWidth: 1.0,
+                          borderWidth: 0.0,
                           buttonSize: 40.0,
                           icon: Icon(
                             Icons.delete_outline_sharp,

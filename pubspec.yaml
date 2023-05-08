@@ -32,8 +32,10 @@ dependencies:
   cloud_firestore: 4.2.0
   cloud_firestore_platform_interface: 5.9.1
   cloud_firestore_web: 3.1.1
+  dash_chat: 1.1.16
   dropdown_button2: 2.0.0
   easy_debounce: 2.0.1
+  expandable: 5.0.1
   file_picker: 5.2.6
   firebase_auth: 4.2.0
   firebase_auth_platform_interface: 6.11.4
@@ -145,6 +147,9 @@ flutter:
       fonts:
         - asset: assets/fonts/Pharmabox.ttf
     - family: PharmaboxAdd
+      fonts:
+        - asset: assets/fonts/Pharmabox.ttf
+    - family: PharmaboxMess
       fonts:
         - asset: assets/fonts/Pharmabox.ttf
 

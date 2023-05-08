@@ -1,8 +1,8 @@
+import '/composants/header_app/header_app_widget.dart';
 import '/flutter_flow/flutter_flow_google_map.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/popups/popup_notifications/popup_notifications_widget.dart';
 import '/popups/popup_offre/popup_offre_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,7 +27,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     super.initState();
     _model = createModel(context, () => PharmaJobModel());
 
-    _model.textController ??= TextEditingController();
+    _model.searchJobController ??= TextEditingController();
   }
 
   @override
@@ -47,73 +47,10 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.1,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Pharma-Box',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Poppins',
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              await showModalBottomSheet(
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                enableDrag: false,
-                                context: context,
-                                builder: (bottomSheetContext) {
-                                  return Padding(
-                                    padding: MediaQuery.of(bottomSheetContext)
-                                        .viewInsets,
-                                    child: PopupNotificationsWidget(),
-                                  );
-                                },
-                              ).then((value) => setState(() {}));
-                            },
-                            child: Image.asset(
-                              'assets/images/Frame_88.png',
-                              width: 50.0,
-                              height: 50.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Image.asset(
-                            'assets/images/Message_Button.png',
-                            width: 50.0,
-                            height: 50.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            wrapWithModel(
+              model: _model.headerAppModel,
+              updateCallback: () => setState(() {}),
+              child: HeaderAppWidget(),
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
@@ -125,8 +62,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                 child: Stack(
                   children: [
                     TextFormField(
-                      controller: _model.textController,
-                      autofocus: true,
+                      controller: _model.searchJobController,
                       obscureText: false,
                       decoration: InputDecoration(
                         hintText: 'Rechercher...',
@@ -169,8 +105,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                         ),
                       ),
                       style: FlutterFlowTheme.of(context).bodyMedium,
-                      validator:
-                          _model.textControllerValidator.asValidator(context),
+                      validator: _model.searchJobControllerValidator
+                          .asValidator(context),
                     ),
                     Align(
                       alignment: AlignmentDirectional(0.94, -0.07),

@@ -42,6 +42,8 @@ class _MyAppState extends State<MyApp> {
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
 
+  final authUserSub = authenticatedUserStream.listen((_) {});
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +56,13 @@ class _MyAppState extends State<MyApp> {
       Duration(seconds: 1),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
+  }
+
+  @override
+  void dispose() {
+    authUserSub.cancel();
+
+    super.dispose();
   }
 
   void setLocale(String language) {
@@ -114,6 +123,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'Explorer': ExplorerWidget(),
       'PharmaJob': PharmaJobWidget(),
       'Reseau': ReseauWidget(),
+      'Profil': ProfilWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
@@ -131,7 +141,8 @@ class _NavBarPageState extends State<NavBarPage> {
         selectedBackgroundColor: Color(0x00000000),
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
-        margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+        margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
         width: double.infinity,
         elevation: 0.0,
         items: [
@@ -186,17 +197,41 @@ class _NavBarPageState extends State<NavBarPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.campaign_outlined,
+                  Icons.people_alt_outlined,
                   color:
                       currentIndex == 2 ? Color(0xFF7CEDAC) : Color(0x00000000),
                   size: 24.0,
                 ),
                 Text(
-                  'PharmaJob',
+                  'Réseau',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: currentIndex == 2
-                        ? Color(0xFF7CEDAC)                        : Color(0x00000000),
+                        ? Color(0xFF7CEDAC)
+                        : Color(0x00000000),
+                    fontSize: 11.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FloatingNavbarItem(
+            customWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.account_circle_outlined,
+                  color:
+                      currentIndex == 3 ? Color(0xFF7CEDAC) : Color(0x00000000),
+                  size: 24.0,
+                ),
+                Text(
+                  'Profil',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: currentIndex == 3
+                        ? Color(0xFF7CEDAC)
+                        : Color(0x00000000),
                     fontSize: 11.0,
                   ),
                 ),

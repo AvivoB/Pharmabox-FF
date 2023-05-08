@@ -128,6 +128,39 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   initialPage: 'Reseau',
                   page: ReseauWidget(),
                 ),
+        ),
+        FFRoute(
+          name: 'Profil',
+          path: '/profil',
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Profil')
+              : ProfilWidget(
+                  tyeRedirect: params.getParam('tyeRedirect', ParamType.String),
+                ),
+        ),
+        FFRoute(
+          name: 'ProfilView',
+          path: '/profilView',
+          builder: (context, params) => ProfilViewWidget(
+            tyeRedirect: params.getParam('tyeRedirect', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'DiscussionUser',
+          path: '/discussionUser',
+          asyncParams: {
+            'chatUser': getDoc(['users'], UsersRecord.serializer),
+          },
+          builder: (context, params) => DiscussionUserWidget(
+            chatUser: params.getParam('chatUser', ParamType.Document),
+            chatRef: params.getParam(
+                'chatRef', ParamType.DocumentReference, false, ['chats']),
+          ),
+        ),
+        FFRoute(
+          name: 'Disucssions',
+          path: '/disucssions',
+          builder: (context, params) => DisucssionsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       urlPathStrategy: UrlPathStrategy.path,

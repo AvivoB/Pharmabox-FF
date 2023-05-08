@@ -1,7 +1,10 @@
-import '/flutter_flow/flutter_flow_google_map.dart';
+import '/composants/card_pharmacie/card_pharmacie_widget.dart';
+import '/composants/card_user/card_user_widget.dart';
+import '/composants/header_app/header_app_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +27,6 @@ class _ReseauWidgetState extends State<ReseauWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ReseauModel());
-
-    _model.textController ??= TextEditingController();
   }
 
   @override
@@ -39,171 +40,236 @@ class _ReseauWidgetState extends State<ReseauWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      resizeToAvoidBottomInset: false,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.1,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Pharma-Box',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Poppins',
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                    Container(
-                      width: 100.0,
-                      height: 100.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 60.0,
-                            icon: Icon(
-                              Icons.notifications_none,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 30.0,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
-                          ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 60.0,
-                            icon: Icon(
-                              Icons.send_outlined,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 30.0,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            wrapWithModel(
+              model: _model.headerAppModel,
+              updateCallback: () => setState(() {}),
+              child: HeaderAppWidget(),
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.1,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      controller: _model.textController,
-                      autofocus: true,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        hintText: 'Rechercher...',
-                        hintStyle:
-                            FlutterFlowTheme.of(context).bodySmall.override(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 16.0,
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Mon réseau',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 22.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 4.0,
+                                color: Color(0x33000000),
+                                offset: Offset(0.0, 2.0),
+                              )
+                            ],
+                            gradient: LinearGradient(
+                              colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                              stops: [0.0, 1.0],
+                              begin: AlignmentDirectional(1.0, -1.0),
+                              end: AlignmentDirectional(-1.0, 1.0),
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: FlutterFlowIconButton(
+                            borderColor: Colors.transparent,
+                            borderRadius: 30.0,
+                            borderWidth: 1.0,
+                            buttonSize: 40.0,
+                            icon: Icon(
+                              Icons.add,
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              size: 20.0,
+                            ),
+                            onPressed: () {
+                              print('IconButton pressed ...');
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    decoration: BoxDecoration(
+                      color: Color(0x00FFFFFF),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                      child: Container(
+                        width: double.infinity,
+                        color: Color(0x009E2020),
+                        child: ExpandableNotifier(
+                          initialExpanded: false,
+                          child: ExpandablePanel(
+                            header: Text(
+                              'Membres titulaires (1)',
+                              style: FlutterFlowTheme.of(context)
+                                  .displaySmall
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.black,
+                                  ),
+                            ),
+                            collapsed: Container(),
+                            expanded: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 0.0),
+                              child: ListView(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                children: [
+                                  wrapWithModel(
+                                    model: _model.cardUserModel1,
+                                    updateCallback: () => setState(() {}),
+                                    child: CardUserWidget(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            theme: ExpandableThemeData(
+                              tapHeaderToExpand: true,
+                              tapBodyToExpand: false,
+                              tapBodyToCollapse: false,
+                              headerAlignment:
+                                  ExpandablePanelHeaderAlignment.center,
+                              hasIcon: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    decoration: BoxDecoration(
+                      color: Color(0x00FFFFFF),
+                    ),
+                    child: Container(
+                      height: 200.0,
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            15.0, 15.0, 15.0, 0.0),
+                        child: Container(
+                          width: double.infinity,
+                          color: Color(0x009E2020),
+                          child: ExpandableNotifier(
+                            initialExpanded: false,
+                            child: ExpandablePanel(
+                              header: Text(
+                                'Membres (1)',
+                                style: FlutterFlowTheme.of(context)
+                                    .displaySmall
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black,
+                                    ),
+                              ),
+                              collapsed: Container(),
+                              expanded: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 10.0, 0.0, 0.0),
+                                child: ListView(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  children: [
+                                    wrapWithModel(
+                                      model: _model.cardUserModel2,
+                                      updateCallback: () => setState(() {}),
+                                      child: CardUserWidget(),
+                                    ),
+                                  ],
                                 ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            width: 0.5,
+                              ),
+                              theme: ExpandableThemeData(
+                                tapHeaderToExpand: true,
+                                tapBodyToExpand: false,
+                                tapBodyToCollapse: false,
+                                headerAlignment:
+                                    ExpandablePanelHeaderAlignment.center,
+                                hasIcon: true,
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(28.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 0.5,
-                          ),
-                          borderRadius: BorderRadius.circular(28.0),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 0.5,
-                          ),
-                          borderRadius: BorderRadius.circular(28.0),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 0.5,
-                          ),
-                          borderRadius: BorderRadius.circular(28.0),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          size: 16.0,
                         ),
                       ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
-                      validator:
-                          _model.textControllerValidator.asValidator(context),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 1.0,
-              height: MediaQuery.of(context).size.height * 0.7,
-              decoration: BoxDecoration(
-                color: FlutterFlowTheme.of(context).secondaryBackground,
-              ),
-              child: FlutterFlowGoogleMap(
-                controller: _model.googleMapsController,
-                onCameraIdle: (latLng) => _model.googleMapsCenter = latLng,
-                initialLocation: _model.googleMapsCenter ??=
-                    LatLng(13.106061, -59.613158),
-                markerColor: GoogleMarkerColor.violet,
-                mapType: MapType.normal,
-                style: GoogleMapStyle.standard,
-                initialZoom: 14.0,
-                allowInteraction: true,
-                allowZoom: true,
-                showZoomControls: true,
-                showLocation: true,
-                showCompass: false,
-                showMapToolbar: false,
-                showTraffic: false,
-                centerMapOnMarkerTap: true,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 1.0,
-              height: MediaQuery.of(context).size.height * 0.1,
-              decoration: BoxDecoration(
-                color: Color(0xFFEFF6F7),
-                borderRadius: BorderRadius.circular(56.0),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    decoration: BoxDecoration(
+                      color: Color(0x00FFFFFF),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                      child: Container(
+                        width: double.infinity,
+                        color: Color(0x009E2020),
+                        child: ExpandableNotifier(
+                          initialExpanded: false,
+                          child: ExpandablePanel(
+                            header: Text(
+                              'Pharmacies (1)',
+                              style: FlutterFlowTheme.of(context)
+                                  .displaySmall
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.black,
+                                  ),
+                            ),
+                            collapsed: Container(),
+                            expanded: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 0.0),
+                              child: ListView(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                children: [
+                                  wrapWithModel(
+                                    model: _model.cardPharmacieModel,
+                                    updateCallback: () => setState(() {}),
+                                    child: CardPharmacieWidget(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            theme: ExpandableThemeData(
+                              tapHeaderToExpand: true,
+                              tapBodyToExpand: false,
+                              tapBodyToCollapse: false,
+                              headerAlignment:
+                                  ExpandablePanelHeaderAlignment.center,
+                              hasIcon: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

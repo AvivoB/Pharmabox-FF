@@ -1,8 +1,4 @@
-
 import '/auth/firebase_auth/auth_util.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:pharmabox/register/register_provider.dart';
-
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -97,90 +93,6 @@ class RegisterStepModel extends FlutterFlowModel {
     listSkillWithSliderModel2.dispose();
   }
 
-// Envoyer les données dans firebase
-  createUserToFirebase(
-      context,
-      nomFamille,
-      prenom,
-      poste,
-      email,
-      telephone,
-      birthDate,
-      postcode,
-      city,
-      presentation,
-      comptencesTestCovid,
-      comptencesVaccination,
-      comptencesTiersPayant,
-      comptencesLabo,
-      comptencesTROD,
-      allowNotifs,
-      allowCGU,
-      imageURL) {
-    final providerUserRegister =
-        Provider.of<ProviderUserRegister>(context, listen: false);
+  /// Additional helper methods are added here.
 
-    final firestore = FirebaseFirestore.instance;
-    final currentUser = FirebaseAuth.instance.currentUser;
-
-    final CollectionReference<Map<String, dynamic>> usersRef =
-        FirebaseFirestore.instance.collection('users');
-
-    List competences = [];
-
-    if (comptencesTestCovid) {
-      competences.add('Test COVID');
-    }
-    if (comptencesVaccination) {
-      competences.add('Vaccination');
-    }
-    if (comptencesTiersPayant) {
-      competences.add('Gestion des tiers payant');
-    }
-    if (comptencesLabo) {
-      competences.add('Gestion de laboratoire');
-    }
-    if (comptencesTROD) {
-      competences.add('TROD');
-    }
-
-
-    if (nomFamille != '' &&
-        prenom != '' &&
-        postcode != '' &&
-        city != '' &&
-        poste != null &&
-        allowCGU &&
-        allowNotifs) {
-      usersRef.doc(currentUser?.uid).set({
-        'id': currentUser?.uid,
-        'nom': nomFamille,
-        'prenom': prenom,
-        'poste': poste,
-        'email': email,
-        'telephone': telephone,
-        'date_naissance': birthDate,
-        'code_postal': postcode,
-        'city': city,
-        'presentation': presentation,
-        'specialisations': providerUserRegister.selectedSpecialisation,
-        'lgo': providerUserRegister.selectedLgo,
-        'competences': competences,
-        'langues': providerUserRegister.selectedLangues,
-        'experiences': providerUserRegister.selectedExperiences,
-        'photoUrl': imageURL,
-      });
-
-      return true;
-      
-    } else {
-      return ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Pour continuer, vous devez compléter votre compte et vous devez accepter les CGU'),
-          backgroundColor: redColor,
-        ),
-      );
-    }
-  }
 }
