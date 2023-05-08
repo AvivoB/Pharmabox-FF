@@ -5,9 +5,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pharmabox/register/register_provider.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
+import 'package:provider/provider.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
-import 'package:provider/provider.dart';
+
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
@@ -15,7 +16,6 @@ import 'flutter_flow/internationalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'flutter_flow/nav/nav.dart';
-
 import 'index.dart';
 
 void main() async {
@@ -45,6 +45,8 @@ class _MyAppState extends State<MyApp> {
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
 
+  final authUserSub = authenticatedUserStream.listen((_) {});
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +61,13 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  @override
+  void dispose() {
+    authUserSub.cancel();
+
+    super.dispose();
+  }
+
   void setLocale(String language) {
     setState(() => _locale = createLocale(language));
   }
@@ -70,28 +79,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProviderUserRegister()),
         ChangeNotifierProvider(create: (_) => ProviderPharmacieRegister()),
       ],
       child: MaterialApp.router(
-          title: 'Pharmabox',
-          localizationsDelegates: [
-            FFLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          locale: _locale,
-          supportedLocales: const [Locale('fr', 'FR')],
-          theme: ThemeData(brightness: Brightness.light),
-          // darkTheme: ThemeData(brightness: Brightness.dark),
-          themeMode: _themeMode,
-          routeInformationParser: _router.routeInformationParser,
-          routerDelegate: _router.routerDelegate,
-        )
+        title: 'Pharmabox',
+        localizationsDelegates: [
+          FFLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        locale: _locale,
+        supportedLocales: const [Locale('en', '')],
+        theme: ThemeData(brightness: Brightness.light),
+        darkTheme: ThemeData(brightness: Brightness.dark),
+        themeMode: _themeMode,
+        routeInformationParser: _router.routeInformationParser,
+        routerDelegate: _router.routerDelegate,
+      ),
     );
   }
 }
@@ -124,6 +132,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'Explorer': ExplorerWidget(),
       'PharmaJob': PharmaJobWidget(),
       'Reseau': ReseauWidget(),
+      'Profil': ProfilWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
@@ -141,7 +150,8 @@ class _NavBarPageState extends State<NavBarPage> {
         selectedBackgroundColor: Color(0x00000000),
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
-        margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+        margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
         width: double.infinity,
         elevation: 0.0,
         items: [
@@ -196,17 +206,41 @@ class _NavBarPageState extends State<NavBarPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.campaign_outlined,
+                  Icons.people_alt_outlined,
                   color:
                       currentIndex == 2 ? Color(0xFF7CEDAC) : Color(0x00000000),
                   size: 24.0,
                 ),
                 Text(
-                  'PharmaJob',
+                  'Réseau',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: currentIndex == 2
-                        ? Color(0xFF7CEDAC)                        : Color(0x00000000),
+                        ? Color(0xFF7CEDAC)
+                        : Color(0x00000000),
+                    fontSize: 11.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FloatingNavbarItem(
+            customWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.account_circle_outlined,
+                  color:
+                      currentIndex == 3 ? Color(0xFF7CEDAC) : Color(0x00000000),
+                  size: 24.0,
+                ),
+                Text(
+                  'Profil',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: currentIndex == 3
+                        ? Color(0xFF7CEDAC)
+                        : Color(0x00000000),
                     fontSize: 11.0,
                   ),
                 ),

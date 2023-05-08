@@ -2,22 +2,23 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'card_user_model.dart';
-export 'card_user_model.dart';
+import 'card_pharmacie_offre_recherche_model.dart';
+export 'card_pharmacie_offre_recherche_model.dart';
 
-class CardUserWidget extends StatefulWidget {
-  const CardUserWidget({Key? key}) : super(key: key);
+class CardPharmacieOffreRechercheWidget extends StatefulWidget {
+  const CardPharmacieOffreRechercheWidget({Key? key}) : super(key: key);
 
   @override
-  _CardUserWidgetState createState() => _CardUserWidgetState();
+  _CardPharmacieOffreRechercheWidgetState createState() =>
+      _CardPharmacieOffreRechercheWidgetState();
 }
 
-class _CardUserWidgetState extends State<CardUserWidget> {
-  late CardUserModel _model;
+class _CardPharmacieOffreRechercheWidgetState
+    extends State<CardPharmacieOffreRechercheWidget> {
+  late CardPharmacieOffreRechercheModel _model;
 
   @override
   void setState(VoidCallback callback) {
@@ -28,7 +29,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => CardUserModel());
+    _model = createModel(context, () => CardPharmacieOffreRechercheModel());
   }
 
   @override
@@ -42,7 +43,6 @@ class _CardUserWidgetState extends State<CardUserWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 1.0,
-      height: MediaQuery.of(context).size.height * 0.65,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.circular(15.0),
@@ -52,6 +52,80 @@ class _CardUserWidgetState extends State<CardUserWidget> {
         children: [
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 1.0,
+              height: 120.0,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: Image.network(
+                    'https://www.pharmanity.com/assets/img/pharmacies/cover/20479/head_image_20479_0.png',
+                  ).image,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
+                    child: Image.asset(
+                      'assets/images/Badge.png',
+                      width: 40.0,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
+                    child: Image.asset(
+                      'assets/images/Badge2.png',
+                      width: 40.0,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Grande Pharmacie d’Aulnay',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF161730),
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 0.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,69 +135,46 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                      child: Container(
-                        width: 40.0,
-                        height: 40.0,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.asset(
-                          'assets/images/Group_18.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Isabel Rettig',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF595A71),
-                                    fontSize: 14.0,
-                                  ),
-                        ),
-                        Text(
-                          'Poste',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF8D8D97),
-                                    fontSize: 13.0,
-                                  ),
-                        ),
-                      ],
+                    Icon(
+                      Icons.location_on_outlined,
+                      color: Color(0xFF595A71),
+                      size: 35.0,
                     ),
                     Padding(
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
-                      child: Icon(
-                        FFIcons.kbadgeOr,
-                        color: Color(0xFFFFF492),
-                        size: 24.0,
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                      child: Text(
+                        '95200, Paris',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Poppins',
+                              color: Color(0xFF595A71),
+                            ),
                       ),
                     ),
                   ],
                 ),
-                Container(
-                  width: 30.0,
-                  height: 10.0,
-                  child: custom_widgets.GradientTextCustom(
-                    width: 30.0,
-                    height: 10.0,
-                    text: 'Ajouter',
-                    radius: 10.0,
-                    fontSize: 14.0,
-                    action: () async {},
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Image.network(
+                      'https://picsum.photos/seed/113/600',
+                      width: 80.0,
+                      height: 40.0,
+                      fit: BoxFit.cover,
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                      child: Text(
+                        'Groupement',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Poppins',
+                              color: Color(0xFF595A71),
+                              fontSize: 14.0,
+                            ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -132,22 +183,29 @@ class _CardUserWidgetState extends State<CardUserWidget> {
             padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  color: Color(0xFF595A71),
-                  size: 35.0,
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                  child: Text(
-                    '95200, Paris',
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Poppins',
-                          color: Color(0xFF595A71),
-                        ),
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Icon(
+                      Icons.work_outline_outlined,
+                      color: Color(0xFF595A71),
+                      size: 35.0,
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                      child: Text(
+                        'Assistant Pharmacien',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Poppins',
+                              color: Color(0xFF595A71),
+                            ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

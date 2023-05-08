@@ -8,7 +8,6 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'popup_recherche_model.dart';
 export 'popup_recherche_model.dart';
@@ -34,13 +33,12 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
     super.initState();
     _model = createModel(context, () => PopupRechercheModel());
 
-    _model.localisationController1 ??= TextEditingController();
-    _model.localisationController2 ??= TextEditingController();
-    _model.textController3 ??= TextEditingController();
-    _model.lgoFilterController ??=
+    _model.localisationController ??= TextEditingController();
+    _model.dureMoisController ??= TextEditingController();
+    _model.debutContratController ??=
         TextEditingController(text: dateTimeFormat('d/M/y', _model.datePicked));
-    _model.salairenetmensuelController ??= TextEditingController();
-    _model.nomRechercheController ??= TextEditingController();
+    _model.salaireMensuelNetController ??= TextEditingController();
+    _model.nomOffreController ??= TextEditingController();
   }
 
   @override
@@ -81,7 +79,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Filtres',
+                        'Filtrer',
                         style: FlutterFlowTheme.of(context).displaySmall,
                       ),
                       FlutterFlowIconButton(
@@ -99,50 +97,13 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                    child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(4.0),
-                        border: Border.all(
-                          color: Color(0xFFD0D1DE),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
-                            child: Icon(
-                              Icons.work_outline,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 24.0,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              'Poste actuel',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                   Container(
                     decoration: BoxDecoration(),
                     child: Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: TextFormField(
-                        controller: _model.localisationController1,
-                        autofocus: true,
+                        controller: _model.localisationController,
                         obscureText: false,
                         decoration: InputDecoration(
                           labelText: 'Localisation',
@@ -194,72 +155,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                           ),
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium,
-                        validator: _model.localisationController1Validator
-                            .asValidator(context),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                      child: TextFormField(
-                        controller: _model.localisationController2,
-                        autofocus: true,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          labelText: 'Localisation',
-                          hintText: 'Recherchez une adresse',
-                          hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFD0D1DE),
-                              width: 1.0,
-                            ),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              topRight: Radius.circular(4.0),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).focusColor,
-                              width: 1.0,
-                            ),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              topRight: Radius.circular(4.0),
-                            ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1.0,
-                            ),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              topRight: Radius.circular(4.0),
-                            ),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0x00000000),
-                              width: 1.0,
-                            ),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              topRight: Radius.circular(4.0),
-                            ),
-                          ),
-                          prefixIcon: Icon(
-                            Icons.place_outlined,
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                          ),
-                        ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
-                        keyboardType: TextInputType.number,
-                        validator: _model.localisationController2Validator
+                        validator: _model.localisationControllerValidator
                             .asValidator(context),
                       ),
                     ),
@@ -300,13 +196,13 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                             ),
                           ),
                           FlutterFlowDropDown<String>(
-                            controller: _model.posteValueController ??=
+                            controller: _model.contratValueController ??=
                                 FormFieldController<String>(null),
                             options: ['CDI', 'CDD', 'Stage', 'Alternance'],
                             onChanged: (val) async {
-                              setState(() => _model.posteValue = val);
+                              setState(() => _model.contratValue = val);
                               setState(() {
-                                _model.addToContratType(_model.posteValue!);
+                                _model.addToContratType(_model.contratValue!);
                               });
                             },
                             width: MediaQuery.of(context).size.width * 0.6,
@@ -317,7 +213,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                   fontFamily: 'Poppins',
                                   color: Colors.black,
                                 ),
-                            hintText: '  ',
+                            hintText: ' ',
                             fillColor: Colors.white,
                             elevation: 2.0,
                             borderColor: Colors.transparent,
@@ -332,73 +228,74 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                    child: Builder(
-                      builder: (context) {
-                        final selectedContrats =
-                            _model.contratType.toList().take(4).toList();
-                        return Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: List.generate(selectedContrats.length,
-                              (selectedContratsIndex) {
-                            final selectedContratsItem =
-                                selectedContrats[selectedContratsIndex];
-                            return Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  5.0, 0.0, 5.0, 0.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFEFF6F7),
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5.0, 5.0, 5.0, 5.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
-                                        child: Text(
-                                          selectedContratsItem,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Poppins',
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                        ),
+                  Builder(
+                    builder: (context) {
+                      final selectedContrats =
+                          _model.contratType.toList().take(4).toList();
+                      return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: selectedContrats.length,
+                        itemBuilder: (context, selectedContratsIndex) {
+                          final selectedContratsItem =
+                              selectedContrats[selectedContratsIndex];
+                          return Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                5.0, 0.0, 5.0, 0.0),
+                            child: Container(
+                              width: 35.0,
+                              decoration: BoxDecoration(
+                                color: Color(0xFFEFF6F7),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    5.0, 5.0, 5.0, 5.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 10.0, 0.0),
+                                      child: Text(
+                                        selectedContratsItem,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                       ),
-                                      FlutterFlowIconButton(
-                                        borderColor: Colors.transparent,
-                                        borderRadius: 20.0,
-                                        borderWidth: 1.0,
-                                        buttonSize: 25.0,
-                                        fillColor: Color(0xFF7CEDAC),
-                                        icon: Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 10.0,
-                                        ),
-                                        onPressed: () async {
-                                          setState(() {
-                                            _model.removeFromContratType(
-                                                selectedContratsItem);
-                                          });
-                                        },
+                                    ),
+                                    FlutterFlowIconButton(
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 20.0,
+                                      borderWidth: 1.0,
+                                      buttonSize: 25.0,
+                                      fillColor: Color(0xFF7CEDAC),
+                                      icon: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 10.0,
                                       ),
-                                    ],
-                                  ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          _model.removeFromContratType(
+                                              selectedContratsItem);
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          }),
-                        );
-                      },
-                    ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                   Padding(
                     padding:
@@ -424,13 +321,17 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                               size: 24.0,
                             ),
                           ),
-                          Expanded(
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
                             child: Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   10.0, 0.0, 0.0, 0.0),
                               child: TextFormField(
-                                controller: _model.textController3,
-                                autofocus: true,
+                                controller: _model.dureMoisController,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText: 'Durée',
@@ -479,11 +380,14 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                 ),
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                                 keyboardType: TextInputType.number,
-                                validator: _model.textController3Validator
+                                validator: _model.dureMoisControllerValidator
                                     .asValidator(context),
-                                inputFormatters: [_model.textFieldMask],
                               ),
                             ),
+                          ),
+                          Text(
+                            'mois',
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                           ),
                         ],
                       ),
@@ -593,9 +497,9 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
-                          controller: _model.lgoFilterController,
+                          controller: _model.debutContratController,
                           onChanged: (_) => EasyDebounce.debounce(
-                            '_model.lgoFilterController',
+                            '_model.debutContratController',
                             Duration(milliseconds: 2000),
                             () async {
                               final _datePickedDate = await showDatePicker(
@@ -616,7 +520,6 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                               }
                             },
                           ),
-                          autofocus: true,
                           readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
@@ -669,26 +572,33 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyMedium,
-                          validator: _model.lgoFilterControllerValidator
+                          validator: _model.debutContratControllerValidator
                               .asValidator(context),
                         ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
+                  if (_model.pairImpaireValue == false)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      child: Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(4.0),
+                          border: Border.all(
+                            color: Color(0xFFD0D1DE),
+                          ),
+                        ),
+                        child: Row(
                           mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 10.0, 0.0),
+                                  5.0, 0.0, 0.0, 0.0),
                               child: Icon(
                                 Icons.payments_outlined,
                                 color:
@@ -696,90 +606,92 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                 size: 24.0,
                               ),
                             ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 0.0, 0.0, 0.0),
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 1.0,
+                                  child: TextFormField(
+                                    controller:
+                                        _model.salaireMensuelNetController,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Salaire mensuel net',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                    ),
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    keyboardType: TextInputType.number,
+                                    validator: _model
+                                        .salaireMensuelNetControllerValidator
+                                        .asValidator(context),
+                                  ),
+                                ),
+                              ),
+                            ),
                             Text(
-                              'Salaire à négocier ensemble',
+                              '€ / mois',
                               style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
                           ],
                         ),
-                        Switch.adaptive(
-                          value: _model.salaireNegocierSwitcValue1 ??= false,
-                          onChanged: (newValue) async {
-                            setState(() =>
-                                _model.salaireNegocierSwitcValue1 = newValue!);
-                          },
-                          activeColor: Color(0xFF7CEDAC),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
                   Container(
                     decoration: BoxDecoration(),
-                    child: Visibility(
-                      visible: _model.salaireNegocierSwitcValue1 == false,
-                      child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                        child: TextFormField(
-                          controller: _model.salairenetmensuelController,
-                          autofocus: true,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            labelText: 'Salaire net mensuel avant impôts',
-                            hintText: 'Salaire',
-                            hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFD0D1DE),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).focusColor,
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            prefixIcon: Icon(
-                              Icons.payments_outlined,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                            ),
-                          ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
-                          keyboardType: TextInputType.number,
-                          validator: _model.salairenetmensuelControllerValidator
-                              .asValidator(context),
-                          inputFormatters: [_model.salairenetmensuelMask],
-                        ),
-                      ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
                     ),
                   ),
                   Container(
@@ -814,11 +726,10 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                 ],
                               ),
                               Switch.adaptive(
-                                value: _model.salaireNegocierSwitcValue2 ??=
-                                    false,
+                                value: _model.pairImpaireValue ??= false,
                                 onChanged: (newValue) async {
-                                  setState(() => _model
-                                      .salaireNegocierSwitcValue2 = newValue!);
+                                  setState(() =>
+                                      _model.pairImpaireValue = newValue!);
                                 },
                                 activeColor: Color(0xFF7CEDAC),
                               ),
@@ -847,11 +758,10 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                     child: TextFormField(
-                      controller: _model.nomRechercheController,
-                      autofocus: true,
+                      controller: _model.nomOffreController,
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Nom de la recherche',
+                        labelText: 'Nom de ma recherche',
                         hintStyle: FlutterFlowTheme.of(context).bodySmall,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -885,33 +795,60 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       style: FlutterFlowTheme.of(context).bodyMedium,
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
-                      validator: _model.nomRechercheControllerValidator
+                      validator: _model.nomOffreControllerValidator
                           .asValidator(context),
                     ),
                   ),
-                  FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
-                    },
-                    text: 'Enregistrer l\'offre',
-                    options: FFButtonOptions(
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                    child: Container(
                       width: double.infinity,
-                      height: 40.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).primary,
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                              ),
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                        width: 1.0,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 4.0,
+                            color: Color(0x301F5C67),
+                            offset: Offset(0.0, 4.0),
+                          )
+                        ],
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                          stops: [0.0, 1.0],
+                          begin: AlignmentDirectional(1.0, -1.0),
+                          end: AlignmentDirectional(-1.0, 1.0),
+                        ),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        text: 'Enregistrer ma recherche',
+                        options: FFButtonOptions(
+                          width: double.infinity,
+                          height: 40.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: Color(0x00FFFFFF),
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                          elevation: 0.0,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
                     ),
                   ),
                 ],

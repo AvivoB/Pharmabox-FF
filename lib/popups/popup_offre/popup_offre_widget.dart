@@ -34,11 +34,11 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
     super.initState();
     _model = createModel(context, () => PopupOffreModel());
 
-    _model.lgoFilterController1 ??= TextEditingController();
-    _model.textController2 ??= TextEditingController();
-    _model.lgoFilterController2 ??=
+    _model.localisationController ??= TextEditingController();
+    _model.dureMoisController ??= TextEditingController();
+    _model.debutContratController ??=
         TextEditingController(text: dateTimeFormat('d/M/y', _model.datePicked));
-    _model.textController4 ??= TextEditingController();
+    _model.salaireMensuelNetController ??= TextEditingController();
     _model.descriptionOffreController ??= TextEditingController();
     _model.nomOffreController ??= TextEditingController();
   }
@@ -166,7 +166,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: TextFormField(
-                        controller: _model.lgoFilterController1,
+                        controller: _model.localisationController,
                         obscureText: false,
                         decoration: InputDecoration(
                           labelText: 'Localisation',
@@ -218,7 +218,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                           ),
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium,
-                        validator: _model.lgoFilterController1Validator
+                        validator: _model.localisationControllerValidator
                             .asValidator(context),
                       ),
                     ),
@@ -307,7 +307,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 5.0, 0.0, 5.0, 0.0),
                             child: Container(
-                              width: MediaQuery.of(context).size.width * 0.25,
+                              width: 35.0,
                               decoration: BoxDecoration(
                                 color: Color(0xFFEFF6F7),
                                 borderRadius: BorderRadius.circular(15.0),
@@ -394,7 +394,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   10.0, 0.0, 0.0, 0.0),
                               child: TextFormField(
-                                controller: _model.textController2,
+                                controller: _model.dureMoisController,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText: 'Durée',
@@ -443,7 +443,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                 ),
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                                 keyboardType: TextInputType.number,
-                                validator: _model.textController2Validator
+                                validator: _model.dureMoisControllerValidator
                                     .asValidator(context),
                               ),
                             ),
@@ -560,9 +560,9 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
-                          controller: _model.lgoFilterController2,
+                          controller: _model.debutContratController,
                           onChanged: (_) => EasyDebounce.debounce(
-                            '_model.lgoFilterController2',
+                            '_model.debutContratController',
                             Duration(milliseconds: 2000),
                             () async {
                               final _datePickedDate = await showDatePicker(
@@ -635,7 +635,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyMedium,
-                          validator: _model.lgoFilterController2Validator
+                          validator: _model.debutContratControllerValidator
                               .asValidator(context),
                         ),
                       ),
@@ -669,17 +669,17 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                           ],
                         ),
                         Switch.adaptive(
-                          value: _model.salaireNegocierSwitcValue1 ??= false,
+                          value: _model.salaireNegocierSwitcValue ??= false,
                           onChanged: (newValue) async {
                             setState(() =>
-                                _model.salaireNegocierSwitcValue1 = newValue!);
+                                _model.salaireNegocierSwitcValue = newValue!);
                           },
                           activeColor: Color(0xFF7CEDAC),
                         ),
                       ],
                     ),
                   ),
-                  if (_model.salaireNegocierSwitcValue2 == false)
+                  if (_model.pairImpaireValue == false)
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -720,10 +720,11 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   width:
                                       MediaQuery.of(context).size.width * 1.0,
                                   child: TextFormField(
-                                    controller: _model.textController4,
+                                    controller:
+                                        _model.salaireMensuelNetController,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Salaire mensuel',
+                                      labelText: 'Salaire mensuel net',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodySmall,
                                       enabledBorder: UnderlineInputBorder(
@@ -770,7 +771,8 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                     style:
                                         FlutterFlowTheme.of(context).bodyMedium,
                                     keyboardType: TextInputType.number,
-                                    validator: _model.textController4Validator
+                                    validator: _model
+                                        .salaireMensuelNetControllerValidator
                                         .asValidator(context),
                                   ),
                                 ),
@@ -806,7 +808,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                           FlutterFlowChoiceChips(
                             options: [ChipData('Oui'), ChipData('Non')],
                             onChanged: (val) => setState(
-                                () => _model.choiceChipsValue1 = val?.first),
+                                () => _model.posteAresponsaValue = val?.first),
                             selectedChipStyle: ChipStyle(
                               backgroundColor: Color(0xFF7CEDAC),
                               textStyle: FlutterFlowTheme.of(context)
@@ -817,8 +819,8 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   ),
                               iconColor:
                                   FlutterFlowTheme.of(context).primaryText,
-                              iconSize: 18.0,
-                              elevation: 4.0,
+                              iconSize: 1.0,
+                              elevation: 0.0,
                             ),
                             unselectedChipStyle: ChipStyle(
                               backgroundColor: FlutterFlowTheme.of(context)
@@ -829,16 +831,17 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                     fontFamily: 'Poppins',
                                     color: FlutterFlowTheme.of(context)
                                         .primaryText,
+                                    fontSize: 16.0,
                                   ),
                               iconColor:
                                   FlutterFlowTheme.of(context).primaryText,
                               iconSize: 18.0,
-                              elevation: 4.0,
+                              elevation: 0.0,
                             ),
                             chipSpacing: 20.0,
                             multiselect: false,
                             alignment: WrapAlignment.start,
-                            controller: _model.choiceChipsValueController1 ??=
+                            controller: _model.posteAresponsaValueController ??=
                                 FormFieldController<List<String>>(
                               [],
                             ),
@@ -875,7 +878,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   Icons.credit_card_outlined)
                             ],
                             onChanged: (val) =>
-                                setState(() => _model.choiceChipsValues2 = val),
+                                setState(() => _model.avantagesValues = val),
                             selectedChipStyle: ChipStyle(
                               backgroundColor: Color(0xFF7CEDAC),
                               textStyle: FlutterFlowTheme.of(context)
@@ -886,7 +889,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   ),
                               iconColor: Colors.white,
                               iconSize: 18.0,
-                              elevation: 4.0,
+                              elevation: 0.0,
                             ),
                             unselectedChipStyle: ChipStyle(
                               backgroundColor: FlutterFlowTheme.of(context)
@@ -897,17 +900,19 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                     fontFamily: 'Poppins',
                                     color: FlutterFlowTheme.of(context)
                                         .primaryText,
+                                    fontSize: 16.0,
                                   ),
                               iconColor:
                                   FlutterFlowTheme.of(context).primaryText,
-                              iconSize: 18.0,
-                              elevation: 4.0,
+                              iconSize: 16.0,
+                              elevation: 0.0,
                             ),
-                            chipSpacing: 20.0,
+                            chipSpacing: 5.0,
+                            rowSpacing: 5.0,
                             multiselect: true,
-                            initialized: _model.choiceChipsValues2 != null,
-                            alignment: WrapAlignment.start,
-                            controller: _model.choiceChipsValueController2 ??=
+                            initialized: _model.avantagesValues != null,
+                            alignment: WrapAlignment.spaceBetween,
+                            controller: _model.avantagesValueController ??=
                                 FormFieldController<List<String>>(
                               [],
                             ),
@@ -948,11 +953,10 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                 ],
                               ),
                               Switch.adaptive(
-                                value: _model.salaireNegocierSwitcValue2 ??=
-                                    false,
+                                value: _model.pairImpaireValue ??= false,
                                 onChanged: (newValue) async {
-                                  setState(() => _model
-                                      .salaireNegocierSwitcValue2 = newValue!);
+                                  setState(() =>
+                                      _model.pairImpaireValue = newValue!);
                                 },
                                 activeColor: Color(0xFF7CEDAC),
                               ),
@@ -1090,8 +1094,8 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
+                        onPressed: () async {
+                          Navigator.pop(context);
                         },
                         text: 'Enregistrer mon offre',
                         options: FFButtonOptions(

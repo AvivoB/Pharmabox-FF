@@ -24,37 +24,37 @@ class PopupOffreModel extends FlutterFlowModel {
   // State field(s) for Poste widget.
   String? posteValue;
   FormFieldController<String>? posteValueController;
-  // State field(s) for LgoFilter widget.
-  TextEditingController? lgoFilterController1;
-  String? Function(BuildContext, String?)? lgoFilterController1Validator;
+  // State field(s) for Localisation widget.
+  TextEditingController? localisationController;
+  String? Function(BuildContext, String?)? localisationControllerValidator;
   // State field(s) for Contrat widget.
   String? contratValue;
   FormFieldController<String>? contratValueController;
-  // State field(s) for TextField widget.
-  TextEditingController? textController2;
-  String? Function(BuildContext, String?)? textController2Validator;
+  // State field(s) for DureMois widget.
+  TextEditingController? dureMoisController;
+  String? Function(BuildContext, String?)? dureMoisControllerValidator;
   // State field(s) for Tempspleinpartiel widget.
   String? tempspleinpartielValue;
   FormFieldController<String>? tempspleinpartielValueController;
   // State field(s) for DebutImmediate widget.
   bool? debutImmediateValue;
-  // State field(s) for LgoFilter widget.
-  TextEditingController? lgoFilterController2;
-  String? Function(BuildContext, String?)? lgoFilterController2Validator;
+  // State field(s) for DebutContrat widget.
+  TextEditingController? debutContratController;
+  String? Function(BuildContext, String?)? debutContratControllerValidator;
   DateTime? datePicked;
   // State field(s) for SalaireNegocierSwitc widget.
-  bool? salaireNegocierSwitcValue1;
-  // State field(s) for TextField widget.
-  TextEditingController? textController4;
-  String? Function(BuildContext, String?)? textController4Validator;
-  // State field(s) for ChoiceChips widget.
-  String? choiceChipsValue1;
-  FormFieldController<List<String>>? choiceChipsValueController1;
-  // State field(s) for ChoiceChips widget.
-  List<String>? choiceChipsValues2;
-  FormFieldController<List<String>>? choiceChipsValueController2;
-  // State field(s) for SalaireNegocierSwitc widget.
-  bool? salaireNegocierSwitcValue2;
+  bool? salaireNegocierSwitcValue;
+  // State field(s) for SalaireMensuelNet widget.
+  TextEditingController? salaireMensuelNetController;
+  String? Function(BuildContext, String?)? salaireMensuelNetControllerValidator;
+  // State field(s) for PosteAresponsa widget.
+  String? posteAresponsaValue;
+  FormFieldController<List<String>>? posteAresponsaValueController;
+  // State field(s) for Avantages widget.
+  List<String>? avantagesValues;
+  FormFieldController<List<String>>? avantagesValueController;
+  // State field(s) for PairImpaire widget.
+  bool? pairImpaireValue;
   // State field(s) for DescriptionOffre widget.
   TextEditingController? descriptionOffreController;
   String? Function(BuildContext, String?)? descriptionOffreControllerValidator;
@@ -67,10 +67,10 @@ class PopupOffreModel extends FlutterFlowModel {
   void initState(BuildContext context) {}
 
   void dispose() {
-    lgoFilterController1?.dispose();
-    textController2?.dispose();
-    lgoFilterController2?.dispose();
-    textController4?.dispose();
+    localisationController?.dispose();
+    dureMoisController?.dispose();
+    debutContratController?.dispose();
+    salaireMensuelNetController?.dispose();
     descriptionOffreController?.dispose();
     nomOffreController?.dispose();
   }

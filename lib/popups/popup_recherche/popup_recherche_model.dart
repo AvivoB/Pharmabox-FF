@@ -8,7 +8,6 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class PopupRechercheModel extends FlutterFlowModel {
@@ -22,51 +21,42 @@ class PopupRechercheModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this component.
 
   // State field(s) for Localisation widget.
-  TextEditingController? localisationController1;
-  String? Function(BuildContext, String?)? localisationController1Validator;
-  // State field(s) for Localisation widget.
-  TextEditingController? localisationController2;
-  String? Function(BuildContext, String?)? localisationController2Validator;
-  // State field(s) for Poste widget.
-  String? posteValue;
-  FormFieldController<String>? posteValueController;
-  // State field(s) for TextField widget.
-  TextEditingController? textController3;
-  final textFieldMask = MaskTextInputFormatter(mask: '## mois');
-  String? Function(BuildContext, String?)? textController3Validator;
+  TextEditingController? localisationController;
+  String? Function(BuildContext, String?)? localisationControllerValidator;
+  // State field(s) for Contrat widget.
+  String? contratValue;
+  FormFieldController<String>? contratValueController;
+  // State field(s) for DureMois widget.
+  TextEditingController? dureMoisController;
+  String? Function(BuildContext, String?)? dureMoisControllerValidator;
   // State field(s) for Tempspleinpartiel widget.
   String? tempspleinpartielValue;
   FormFieldController<String>? tempspleinpartielValueController;
   // State field(s) for DebutImmediate widget.
   bool? debutImmediateValue;
-  // State field(s) for LgoFilter widget.
-  TextEditingController? lgoFilterController;
-  String? Function(BuildContext, String?)? lgoFilterControllerValidator;
+  // State field(s) for DebutContrat widget.
+  TextEditingController? debutContratController;
+  String? Function(BuildContext, String?)? debutContratControllerValidator;
   DateTime? datePicked;
-  // State field(s) for SalaireNegocierSwitc widget.
-  bool? salaireNegocierSwitcValue1;
-  // State field(s) for Salairenetmensuel widget.
-  TextEditingController? salairenetmensuelController;
-  final salairenetmensuelMask =
-      MaskTextInputFormatter(mask: '# ### €  net/mois');
-  String? Function(BuildContext, String?)? salairenetmensuelControllerValidator;
-  // State field(s) for SalaireNegocierSwitc widget.
-  bool? salaireNegocierSwitcValue2;
-  // State field(s) for NomRecherche widget.
-  TextEditingController? nomRechercheController;
-  String? Function(BuildContext, String?)? nomRechercheControllerValidator;
+  // State field(s) for SalaireMensuelNet widget.
+  TextEditingController? salaireMensuelNetController;
+  String? Function(BuildContext, String?)? salaireMensuelNetControllerValidator;
+  // State field(s) for PairImpaire widget.
+  bool? pairImpaireValue;
+  // State field(s) for NomOffre widget.
+  TextEditingController? nomOffreController;
+  String? Function(BuildContext, String?)? nomOffreControllerValidator;
 
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}
 
   void dispose() {
-    localisationController1?.dispose();
-    localisationController2?.dispose();
-    textController3?.dispose();
-    lgoFilterController?.dispose();
-    salairenetmensuelController?.dispose();
-    nomRechercheController?.dispose();
+    localisationController?.dispose();
+    dureMoisController?.dispose();
+    debutContratController?.dispose();
+    salaireMensuelNetController?.dispose();
+    nomOffreController?.dispose();
   }
 
   /// Additional helper methods are added here.
