@@ -13,16 +13,12 @@ class PopupLanguesModel extends FlutterFlowModel {
   String? Function(BuildContext, String?)? lgoFilterControllerValidator;
 
   /// Initialization and disposal methods.
-  TextEditingController? langueFilterController;
-  String? Function(BuildContext, String?)? langueFilterControllerValidator;
-
 
   void initState(BuildContext context) {}
 
   void dispose() {
     lgoFilterController?.dispose();
   }
-
 
   static selectLangues() {
 

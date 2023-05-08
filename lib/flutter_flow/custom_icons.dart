@@ -4,6 +4,7 @@ class FFIcons {
   FFIcons._();
 
   static const String _pharmaboxFamily = 'Pharmabox';
+  static const String _pharmaboxAddFamily = 'PharmaboxAdd';
 
   // Pharmabox
   static const IconData klabs = IconData(0xe9001, fontFamily: _pharmaboxFamily);
@@ -37,4 +38,8 @@ class FFIcons {
       IconData(0xe9018, fontFamily: _pharmaboxFamily);
   static const IconData kvaccines =
       IconData(0xe900, fontFamily: _pharmaboxFamily);
+
+  // Pharmabox-add
+  static const IconData k24h =
+      IconData(0xf5005, fontFamily: _pharmaboxAddFamily);
 }
