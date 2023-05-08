@@ -1,3 +1,4 @@
+import '../../register_pharmacy/register_pharmacie_provider.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -38,8 +39,18 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
     super.dispose();
   }
 
+  String _searchText = '';
+
   @override
   Widget build(BuildContext context) {
+    List<Map> listGroupement = PopupGroupementModel.selectGroupemen();
+    listGroupement = listGroupement
+        .where((element) => element['name']
+            .toString()
+            .toLowerCase()
+            .contains(_searchText!.toLowerCase()))
+        .toList();
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -146,6 +157,11 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                               Icons.workspaces_outline,
                             ),
                           ),
+                          onChanged: (value) => {
+                              setState(() {
+                                _searchText = value;
+                              })
+                            },
                           style: FlutterFlowTheme.of(context).bodyMedium,
                           validator: _model.groupementFilterControllerValidator
                               .asValidator(context),
@@ -154,36 +170,54 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                     ),
                   ],
                 ),
-                ListView(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.network(
-                            'https://picsum.photos/seed/854/600',
-                            width: 120.0,
-                            height: 60.0,
-                            fit: BoxFit.cover,
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                25.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              'Groupement texte',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
+                Container(
+                   width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.23,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                  ),
+                  child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: listGroupement.length,
+                      itemBuilder: (context, index) {
+                        final item = listGroupement;
+                        return Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                          child: GestureDetector(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  'assets/groupements/' + item[index]['image'],
+                                  width: 120.0,
+                                  height: 60.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      25.0, 0.0, 0.0, 0.0),
+                                  child: Text(
+                                    item[index]['name'],
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                ),
+                              ],
                             ),
+                            onTap: () {
+                              var groupement = context.read<ProviderPharmacieRegister>();
+                              groupement.selectGroupement(item[index]);
+                              Navigator.pop(context);
+                            },
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  ],
                 ),
               ],
             ),
