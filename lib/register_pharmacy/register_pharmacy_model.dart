@@ -9,6 +9,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/upload_data.dart';
 import '/popups/popup_groupement/popup_groupement_widget.dart';
+import '/popups/popup_lgo/popup_lgo_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   TextEditingController? presentationController;
   String? Function(BuildContext, String?)? presentationControllerValidator;
   // State field(s) for ComptencesTestCovid widget.
-  bool? comptencesTestCovidValue1;
+  bool? comptencesTestCovidValue;
   // State field(s) for EmailPharmacie widget.
   TextEditingController? emailPharmacieController;
   String? Function(BuildContext, String?)? emailPharmacieControllerValidator;
@@ -154,63 +155,63 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   // State field(s) for PatientParJour widget.
   String? patientParJourValue;
   FormFieldController<String>? patientParJourValueController;
-  // State field(s) for ComptencesTestCovid widget.
-  bool? comptencesTestCovidValue2;
-  // State field(s) for ComptencesVaccination widget.
-  bool? comptencesVaccinationValue1;
-  // State field(s) for ComptencesTiersPayant widget.
-  bool? comptencesTiersPayantValue1;
-  // State field(s) for ComptencesLabo widget.
-  bool? comptencesLaboValue4;
+  // State field(s) for MissioTestCovid widget.
+  bool? missioTestCovidValue;
+  // State field(s) for MissionVaccination widget.
+  bool? missionVaccinationValue;
+  // State field(s) for MissionEnretienPharma widget.
+  bool? missionEnretienPharmaValue;
+  // State field(s) for MissionsBorne widget.
+  bool? missionsBorneValue;
   // State field(s) for MissionPreparation widget.
-  bool? missionPreparationValue1;
-  // State field(s) for ComptencesTestCovid widget.
-  bool? comptencesTestCovidValue3;
-  // State field(s) for ComptencesVaccination widget.
-  bool? comptencesVaccinationValue2;
-  // State field(s) for ComptencesTiersPayant widget.
-  bool? comptencesTiersPayantValue2;
-  // State field(s) for ComptencesLabo widget.
-  bool? comptencesLaboValue5;
-  // State field(s) for MissionPreparation widget.
-  bool? missionPreparationValue2;
-  // State field(s) for MissionPreparation widget.
-  bool? missionPreparationValue3;
-  // State field(s) for MissionPreparation widget.
-  bool? missionPreparationValue4;
-  // State field(s) for MissionPreparation widget.
-  bool? missionPreparationValue5;
-  // State field(s) for ComptencesTestCovid widget.
-  bool? comptencesTestCovidValue4;
-  // State field(s) for ComptencesVaccination widget.
-  bool? comptencesVaccinationValue3;
-  // State field(s) for ComptencesTiersPayant widget.
-  bool? comptencesTiersPayantValue3;
-  // State field(s) for ComptencesLabo widget.
-  bool? comptencesLaboValue6;
-  // State field(s) for MissionPreparation widget.
-  bool? missionPreparationValue6;
+  bool? missionPreparationValue;
+  // State field(s) for ConfortSallePause widget.
+  bool? confortSallePauseValue;
+  // State field(s) for ConfortRobot widget.
+  bool? confortRobotValue;
+  // State field(s) for ConfortEtiquette widget.
+  bool? confortEtiquetteValue;
+  // State field(s) for ConfortMonayeur widget.
+  bool? confortMonayeurValue;
+  // State field(s) for ConfortCim widget.
+  bool? confortCimValue;
+  // State field(s) for ConfortChauffage widget.
+  bool? confortChauffageValue;
+  // State field(s) for ConfortVigile widget.
+  bool? confortVigileValue;
+  // State field(s) for ConfortComiteEntreprise widget.
+  bool? confortComiteEntrepriseValue;
+  // State field(s) for Slider widget.
+  double? sliderValue1;
+  // State field(s) for Slider widget.
+  double? sliderValue2;
+  // State field(s) for Slider widget.
+  double? sliderValue3;
+  // State field(s) for Slider widget.
+  double? sliderValue4;
+  // State field(s) for Slider widget.
+  double? sliderValue5;
   // State field(s) for PhonePharmacie widget.
   TextEditingController? phonePharmacieController2;
   String? Function(BuildContext, String?)? phonePharmacieController2Validator;
-  // State field(s) for PhonePharmacie widget.
-  TextEditingController? phonePharmacieController3;
-  String? Function(BuildContext, String?)? phonePharmacieController3Validator;
-  // State field(s) for PhonePharmacie widget.
-  TextEditingController? phonePharmacieController4;
-  String? Function(BuildContext, String?)? phonePharmacieController4Validator;
-  // State field(s) for PhonePharmacie widget.
-  TextEditingController? phonePharmacieController5;
-  String? Function(BuildContext, String?)? phonePharmacieController5Validator;
-  // State field(s) for PhonePharmacie widget.
-  TextEditingController? phonePharmacieController6;
-  String? Function(BuildContext, String?)? phonePharmacieController6Validator;
-  // State field(s) for PhonePharmacie widget.
-  TextEditingController? phonePharmacieController7;
-  String? Function(BuildContext, String?)? phonePharmacieController7Validator;
-  // State field(s) for PhonePharmacie widget.
-  TextEditingController? phonePharmacieController8;
-  String? Function(BuildContext, String?)? phonePharmacieController8Validator;
+  // State field(s) for NbPreparateur widget.
+  TextEditingController? nbPreparateurController;
+  String? Function(BuildContext, String?)? nbPreparateurControllerValidator;
+  // State field(s) for NbRayonnistes widget.
+  TextEditingController? nbRayonnistesController;
+  String? Function(BuildContext, String?)? nbRayonnistesControllerValidator;
+  // State field(s) for NbConseillers widget.
+  TextEditingController? nbConseillersController;
+  String? Function(BuildContext, String?)? nbConseillersControllerValidator;
+  // State field(s) for NbApprenti widget.
+  TextEditingController? nbApprentiController;
+  String? Function(BuildContext, String?)? nbApprentiControllerValidator;
+  // State field(s) for NbEtudiants widget.
+  TextEditingController? nbEtudiantsController;
+  String? Function(BuildContext, String?)? nbEtudiantsControllerValidator;
+  // State field(s) for NbEtudiants6eme widget.
+  TextEditingController? nbEtudiants6emeController;
+  String? Function(BuildContext, String?)? nbEtudiants6emeControllerValidator;
 
   /// Initialization and disposal methods.
 
@@ -235,12 +236,12 @@ class RegisterPharmacyModel extends FlutterFlowModel {
     tramwayController1?.dispose();
     tramwayController2?.dispose();
     phonePharmacieController2?.dispose();
-    phonePharmacieController3?.dispose();
-    phonePharmacieController4?.dispose();
-    phonePharmacieController5?.dispose();
-    phonePharmacieController6?.dispose();
-    phonePharmacieController7?.dispose();
-    phonePharmacieController8?.dispose();
+    nbPreparateurController?.dispose();
+    nbRayonnistesController?.dispose();
+    nbConseillersController?.dispose();
+    nbApprentiController?.dispose();
+    nbEtudiantsController?.dispose();
+    nbEtudiants6emeController?.dispose();
   }
 
   /// Additional helper methods are added here.
