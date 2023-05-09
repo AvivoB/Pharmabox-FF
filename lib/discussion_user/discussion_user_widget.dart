@@ -86,7 +86,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
         ),
         title: Stack(
           children: [
-            if (!_chatInfo!.otherUsersList)
+            // if (!_chatInfo!.otherUsersList)
               Text(
                 widget.chatUser!.email!,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -96,16 +96,16 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                       fontWeight: FontWeight.bold,
                     ),
               ),
-            if (_chatInfo!.otherUsersList)
-              Text(
-                'Group Chat',
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      fontFamily: 'Lexend Deca',
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
+            // if (_chatInfo!.otherUsersList)
+            //   Text(
+            //     'Group Chat',
+            //     style: FlutterFlowTheme.of(context).bodyMedium.override(
+            //           fontFamily: 'Lexend Deca',
+            //           color: Colors.black,
+            //           fontSize: 16.0,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //   ),
           ],
         ),
         actions: [],

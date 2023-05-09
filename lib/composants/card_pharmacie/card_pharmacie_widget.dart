@@ -176,6 +176,9 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                 Container(
                   height: 15.0,
                   child: custom_widgets.GradientTextCustom(
+                    radius: 12.0,
+                    fontSize: 18,
+                    text: 'Ajouter',
                     height: 15.0,
                     action: () async {},
                   ),

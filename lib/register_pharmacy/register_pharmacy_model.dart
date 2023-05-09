@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '/backend/firebase_storage/storage.dart';
 import '/composants/maps_widget_adresse_pharmacie/maps_widget_adresse_pharmacie_widget.dart';
 import '/composants/repeater_field/repeater_field_widget.dart';
@@ -81,7 +84,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   String? parkingValue;
   FormFieldController<String>? parkingValueController;
   // State field(s) for nonSTOP widget.
-  bool? nonSTOPValue;
+  bool? nonSTOPValue;                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
   DateTime? datePicked1;
   DateTime? datePicked2;
   // State field(s) for lundiMat widget.
@@ -246,4 +249,129 @@ class RegisterPharmacyModel extends FlutterFlowModel {
 
   /// Additional helper methods are added here.
 
+  // Enregistrement dans la base
+  createPharmacie() {
+    final firestore = FirebaseFirestore.instance;
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    final CollectionReference<Map<String, dynamic>> pharmaciesRef =
+        FirebaseFirestore.instance.collection('pharmacies');
+
+  String typologie = '';
+  // Typologie :
+  if(typologieCentrecommercialValue!) {
+    typologie = 'Centre commercial';
+  }
+  if(typologieCentrevilleValue!) {
+    typologie = 'Centre ville';
+  }
+  if(typologieAeroportValue!) {
+    typologie = 'Aéroport';
+  }
+  if(comptencesLaboValue1!) {
+    typologie = 'Gare';
+  }
+  if(comptencesLaboValue2!) {
+    typologie = 'Quartier';
+  }
+  if(comptencesLaboValue3!) {
+    typologie = 'Lieu touristique';
+  }
+  if(comptencesTRODValue!) {
+    typologie = 'Zone rurale';
+  }
+
+
+  List missions = [];
+  if(missioTestCovidValue!) {
+    missions.add('Test COVID');
+  }
+  if(missionVaccinationValue!) {
+    missions.add('Vaccination');
+  }
+  if(missionEnretienPharmaValue!) {
+    missions.add('Entretien pharmaceutique');
+  }
+  if(missionsBorneValue!) {
+    missions.add('Borne de télé-médecine');
+  }
+  if(missionPreparationValue!) {
+    missions.add('externalisé');
+  } else {
+    missions.add('par l\'équipe');
+  }
+
+
+    pharmaciesRef.doc().set({
+      'user_id' : currentUser!.uid,
+      'name': nomdelapharmacieController1.text,
+      'presentation': presentationController.text,
+      'titulaire_principal': nomdelapharmacieController2.text,
+      'titulaires_autres': titulaires,
+      'maitre_stage': '',
+      'contact_pharma': {
+        'email': emailPharmacieController.text,
+        'telephone': phonePharmacieController1.text,
+        'preference_contact': preferenceContactValue,
+      },
+      'situation_geographique': {
+        'adresse': pharmacieAdresseController.text,
+        'lat_long': LatLng(255, 255)
+      },
+      'accessibilite': {
+        'rer': rerController.text,
+        'metro': metroController.text,
+        'bus': busController.text,
+        'tram': tramwayController1.text,
+        'gare': tramwayController2.text,
+        'stationnement': parkingValue
+      },
+      'horaires': {
+        'Lundi': {
+          'matin': datePicked3,
+          'aprem': datePicked4
+        },
+        'Mardi': {
+          'matin': datePicked5,
+          'aprem': datePicked6
+        },
+        'Mercredi': {
+          'matin': datePicked7,
+          'aprem': datePicked8
+        },
+        'Jeudi': {
+          'matin': datePicked9,
+          'aprem': datePicked10
+        },
+        'vendredi': {
+          'matin': datePicked11,
+          'aprem': datePicked12
+        },
+        'Samedi': {
+          'matin': datePicked13,
+          'aprem': datePicked14
+        },
+        'Dimanche': {
+          'matin': datePicked15,
+          'aprem': datePicked16
+        },
+        // '24H/24': (nonSTOPValue) ? true : false,
+      },
+      'typologie': typologie,
+      'nb_patient_jour': patientParJourValue,
+      // 'lgo': lgo,
+      'missions': missions,
+      // 'confort': confort,
+      // 'tendances': tendances,
+      'equipe': {
+        'nb_pharmaciens': (phonePharmacieController2.text != '') ? phonePharmacieController2.text : 0,
+        'nb_preparateurs': (nbPreparateurController.text != '') ? phonePharmacieController2.text : 0,
+        'nb_rayonnistes': (nbRayonnistesController.text != '') ? nbRayonnistesController.text : 0,
+        'nb_conseillers': (nbConseillersController.text != '') ? nbConseillersController.text : 0,
+        'nb_apprentis': (nbApprentiController.text != '') ? nbApprentiController.text : 0,
+        'nb_etudiants': (nbEtudiantsController.text != '') ? nbEtudiantsController.text : 0,
+        'nb_etudiants_6eme_annee': (nbEtudiants6emeController.text != '') ? nbEtudiants6emeController.text : 0,
+      }
+    });
+  }
 }

@@ -17,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
+import 'constant.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -93,9 +94,9 @@ class _MyAppState extends State<MyApp> {
           GlobalCupertinoLocalizations.delegate,
         ],
         locale: _locale,
-        supportedLocales: const [Locale('en', '')],
+        supportedLocales: const [Locale('fr', 'FR')],
         theme: ThemeData(brightness: Brightness.light),
-        darkTheme: ThemeData(brightness: Brightness.dark),
+        // darkTheme: ThemeData(brightness: Brightness.dark),
         themeMode: _themeMode,
         routeInformationParser: _router.routeInformationParser,
         routerDelegate: _router.routerDelegate,
@@ -146,8 +147,7 @@ class _NavBarPageState extends State<NavBarPage> {
         }),
         backgroundColor: Colors.white,
         selectedItemColor: Color(0xFF7CEDAC),
-        unselectedItemColor: Color(0x00000000),
-        selectedBackgroundColor: Color(0x00000000),
+        unselectedItemColor: greyColor,
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
         margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
@@ -162,7 +162,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 Icon(
                   Icons.search,
                   color:
-                      currentIndex == 0 ? Color(0xFF7CEDAC) : Color(0x00000000),
+                      currentIndex == 0 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
@@ -171,7 +171,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   style: TextStyle(
                     color: currentIndex == 0
                         ? Color(0xFF7CEDAC)
-                        : Color(0x00000000),
+                        : greyColor,
                     fontSize: 11.0,
                   ),
                 ),
@@ -185,7 +185,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 Icon(
                   Icons.campaign_outlined,
                   color:
-                      currentIndex == 1 ? Color(0xFF7CEDAC) : Color(0x00000000),
+                      currentIndex == 1 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
@@ -194,7 +194,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   style: TextStyle(
                     color: currentIndex == 1
                         ? Color(0xFF7CEDAC)
-                        : Color(0x00000000),
+                        : greyColor,
                     fontSize: 11.0,
                   ),
                 ),
@@ -208,7 +208,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 Icon(
                   Icons.people_alt_outlined,
                   color:
-                      currentIndex == 2 ? Color(0xFF7CEDAC) : Color(0x00000000),
+                      currentIndex == 2 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
@@ -217,7 +217,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   style: TextStyle(
                     color: currentIndex == 2
                         ? Color(0xFF7CEDAC)
-                        : Color(0x00000000),
+                        : greyColor,
                     fontSize: 11.0,
                   ),
                 ),
@@ -231,7 +231,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 Icon(
                   Icons.account_circle_outlined,
                   color:
-                      currentIndex == 3 ? Color(0xFF7CEDAC) : Color(0x00000000),
+                      currentIndex == 3 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
@@ -240,7 +240,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   style: TextStyle(
                     color: currentIndex == 3
                         ? Color(0xFF7CEDAC)
-                        : Color(0x00000000),
+                        : greyColor,
                     fontSize: 11.0,
                   ),
                 ),

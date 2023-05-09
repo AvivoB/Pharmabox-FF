@@ -1,6 +1,4 @@
 import '/backend/firebase_storage/storage.dart';
-import '/composants/maps_widget_adresse_pharmacie/maps_widget_adresse_pharmacie_widget.dart';
-import '/composants/repeater_field/repeater_field_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -16,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
+
 import 'register_pharmacy_model.dart';
 export 'register_pharmacy_model.dart';
 
@@ -79,7 +78,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
+                  width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.3,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -88,49 +87,46 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                         Color(0xFF86A8E7),
                         Color(0xFF91EAE4)
                       ],
-                      stops: [0.0, 0.5, 1.0],
-                      begin: AlignmentDirectional(1.0, 0.0),
-                      end: AlignmentDirectional(-1.0, 0),
+                      stops: [0, 0.5, 1],
+                      begin: AlignmentDirectional(1, 0),
+                      end: AlignmentDirectional(-1, 0),
                     ),
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(50.0, 0.0, 50.0, 0.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(50, 0, 50, 0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              50.0, 0.0, 50.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(50, 0, 50, 0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                width: 250.0,
-                                height: 150.0,
+                                width: 250,
+                                height: 150,
                                 child: Stack(
-                                  alignment: AlignmentDirectional(0.0, 1.0),
+                                  alignment: AlignmentDirectional(0, 1),
                                   children: [
                                     Container(
-                                      width: 150.0,
-                                      height: 150.0,
+                                      width: 150,
+                                      height: 150,
                                       decoration: BoxDecoration(
                                         color: Color(0x00FFFFFF),
-                                        borderRadius:
-                                            BorderRadius.circular(95.0),
+                                        borderRadius: BorderRadius.circular(95),
                                         border: Border.all(
                                           color: Colors.white,
-                                          width: 2.0,
+                                          width: 2,
                                         ),
                                       ),
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            7.0, 7.0, 7.0, 7.0),
+                                            7, 7, 7, 7),
                                         child: Container(
-                                          width: 150.0,
-                                          height: 150.0,
+                                          width: 150,
+                                          height: 150,
                                           clipBehavior: Clip.antiAlias,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
@@ -143,19 +139,18 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ),
                                     ),
                                     Align(
-                                      alignment:
-                                          AlignmentDirectional(0.65, 1.0),
+                                      alignment: AlignmentDirectional(0.65, 1),
                                       child: FlutterFlowIconButton(
                                         borderColor: Colors.transparent,
-                                        borderRadius: 30.0,
-                                        borderWidth: 1.0,
-                                        buttonSize: 60.0,
+                                        borderRadius: 30,
+                                        borderWidth: 1,
+                                        buttonSize: 60,
                                         fillColor: Colors.white,
                                         icon: Icon(
                                           Icons.add_a_photo_outlined,
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
-                                          size: 30.0,
+                                          size: 30,
                                         ),
                                         onPressed: () async {
                                           final selectedMedia =
@@ -236,13 +231,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
+                  width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -254,8 +248,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller:
                                       _model.nomdelapharmacieController1,
@@ -268,31 +262,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: FlutterFlowTheme.of(context)
                                             .focusColor,
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedErrorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
                                       Icons.local_hospital,
@@ -308,8 +302,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller:
                                       _model.nomdelapharmacieController2,
@@ -322,31 +316,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: FlutterFlowTheme.of(context)
                                             .focusColor,
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedErrorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
                                       Icons.person,
@@ -361,99 +355,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       .asValidator(context),
                                 ),
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.75,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: wrapWithModel(
-                                          model: _model.repeaterFieldModel,
-                                          updateCallback: () => setState(() {}),
-                                          child: RepeaterFieldWidget(
-                                            icone: Icon(
-                                              Icons.person,
-                                            ),
-                                            label: 'Titulaire',
-                                          ),
-                                        ),
-                                      ),
-                                      FlutterFlowIconButton(
-                                        borderColor: Colors.transparent,
-                                        borderRadius: 30.0,
-                                        borderWidth: 1.0,
-                                        buttonSize: 40.0,
-                                        icon: Icon(
-                                          Icons.delete_outline_sharp,
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
-                                          size: 20.0,
-                                        ),
-                                        onPressed: () async {
-                                          setState(() {
-                                            _model.removeFromTitulaires(1);
-                                          });
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  setState(() {
-                                    _model.addToTitulaires(1);
-                                  });
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 10.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Icon(
-                                            Icons.add,
-                                            color: FlutterFlowTheme.of(context)
-                                                .focusColor,
-                                            size: 24.0,
-                                          ),
-                                          Text(
-                                            'Ajouter un autre titulaire',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .focusColor,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
@@ -461,12 +365,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   children: [
                                     Image.network(
                                       'https://picsum.photos/seed/483/600',
-                                      width: 80.0,
-                                      height: 50.0,
+                                      width: 80,
+                                      height: 50,
                                       fit: BoxFit.cover,
                                     ),
                                     Container(
-                                      width: 100.0,
+                                      width: 100,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
@@ -482,7 +386,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                 .bodyMedium
                                                 .override(
                                                   fontFamily: 'Poppins',
-                                                  fontSize: 14.0,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                           ),
@@ -492,7 +396,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                 .bodyMedium
                                                 .override(
                                                   fontFamily: 'Poppins',
-                                                  fontSize: 11.0,
+                                                  fontSize: 11,
                                                 ),
                                           ),
                                         ],
@@ -500,7 +404,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 5.0, 0.0),
+                                          0, 0, 5, 0),
                                       child: InkWell(
                                         splashColor: Colors.transparent,
                                         focusColor: Colors.transparent,
@@ -533,14 +437,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   .size
                                                   .width *
                                               0.35,
-                                          height: 50.0,
+                                          height: 50,
                                           child:
                                               custom_widgets.GradientTextCustom(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
                                                 0.35,
-                                            height: 50.0,
+                                            height: 50,
                                             text: 'Modifier',
                                             radius: 0.0,
                                             fontSize: 14.0,
@@ -577,8 +481,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.presentationController,
                                   autofocus: true,
@@ -590,31 +494,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: FlutterFlowTheme.of(context)
                                             .focusColor,
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedErrorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
-                                        width: 1.0,
+                                        width: 1,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
                                   style:
@@ -627,8 +531,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 10.0, 0.0, 0.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
@@ -641,11 +545,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 10.0, 0.0),
+                                                  0, 0, 10, 0),
                                           child: Icon(
                                             Icons.school_sharp,
                                             color: Color(0xFF595A71),
-                                            size: 28.0,
+                                            size: 28,
                                           ),
                                         ),
                                         Text(
@@ -676,37 +580,35 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Color(0xFFEFF6F7),
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
-                      width: 100.0,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 15.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -721,7 +623,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           fontFamily: 'Poppins',
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
-                                          fontSize: 18.0,
+                                          fontSize: 18,
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
@@ -729,8 +631,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.emailPharmacieController,
                                 autofocus: true,
@@ -742,31 +644,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     Icons.mail_outlined,
@@ -782,8 +684,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.phonePharmacieController1,
                                 autofocus: true,
@@ -795,31 +697,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     Icons.local_phone,
@@ -836,14 +738,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: Container(
-                                height: 50.0,
+                                height: 50,
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
                                     color: Color(0xFFD0D1DE),
                                   ),
@@ -853,12 +755,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          5.0, 0.0, 0.0, 0.0),
+                                          5, 0, 0, 0),
                                       child: Icon(
                                         Icons.settings_outlined,
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryText,
-                                        size: 24.0,
+                                        size: 24,
                                       ),
                                     ),
                                     FlutterFlowDropDown<String>(
@@ -870,7 +772,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           _model.preferenceContactValue = val),
                                       width: MediaQuery.of(context).size.width *
                                           0.75,
-                                      height: 50.0,
+                                      height: 50,
                                       textStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -879,12 +781,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           ),
                                       hintText: 'Préférences de contact',
                                       fillColor: Colors.white,
-                                      elevation: 2.0,
+                                      elevation: 2,
                                       borderColor: Colors.transparent,
-                                      borderWidth: 0.0,
-                                      borderRadius: 0.0,
+                                      borderWidth: 0,
+                                      borderRadius: 0,
                                       margin: EdgeInsetsDirectional.fromSTEB(
-                                          12.0, 4.0, 12.0, 4.0),
+                                          12, 4, 12, 4),
                                       hidesUnderline: true,
                                       isSearchable: false,
                                     ),
@@ -899,36 +801,34 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 15.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -943,7 +843,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           fontFamily: 'Poppins',
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
-                                          fontSize: 18.0,
+                                          fontSize: 18,
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
@@ -951,8 +851,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.pharmacieAdresseController,
                                 autofocus: true,
@@ -964,31 +864,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     Icons.place_outlined,
@@ -1004,11 +904,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 inputFormatters: [_model.pharmacieAdresseMask],
                               ),
                             ),
-                            wrapWithModel(
-                              model: _model.mapsWidgetAdressePharmacieModel,
-                              updateCallback: () => setState(() {}),
-                              child: MapsWidgetAdressePharmacieWidget(),
-                            ),
                           ],
                         ),
                       ),
@@ -1016,31 +911,29 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
-                      width: 100.0,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -1051,7 +944,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               children: [
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 15.0),
+                                      0, 0, 0, 15),
                                   child: Text(
                                     'Accessibilité',
                                     style: FlutterFlowTheme.of(context)
@@ -1060,7 +953,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           fontFamily: 'Poppins',
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
-                                          fontSize: 18.0,
+                                          fontSize: 18,
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
@@ -1068,8 +961,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.rerController,
                                 autofocus: true,
@@ -1081,31 +974,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     Icons.train,
@@ -1119,8 +1012,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.metroController,
                                 autofocus: true,
@@ -1132,31 +1025,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     Icons.subway_outlined,
@@ -1170,8 +1063,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.busController,
                                 autofocus: true,
@@ -1183,31 +1076,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     Icons.directions_bus_outlined,
@@ -1221,8 +1114,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.tramwayController1,
                                 autofocus: true,
@@ -1234,31 +1127,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     Icons.tram_outlined,
@@ -1272,8 +1165,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.tramwayController2,
                                 autofocus: true,
@@ -1285,31 +1178,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     Icons.directions_bus_sharp,
@@ -1323,14 +1216,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: Container(
-                                height: 50.0,
+                                height: 50,
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
                                     color: Color(0xFFD0D1DE),
                                   ),
@@ -1340,12 +1233,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          5.0, 0.0, 0.0, 0.0),
+                                          5, 0, 0, 0),
                                       child: Icon(
                                         Icons.local_parking,
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryText,
-                                        size: 24.0,
+                                        size: 24,
                                       ),
                                     ),
                                     FlutterFlowDropDown<String>(
@@ -1357,7 +1250,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           () => _model.parkingValue = val),
                                       width: MediaQuery.of(context).size.width *
                                           0.75,
-                                      height: 50.0,
+                                      height: 50,
                                       textStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -1366,12 +1259,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           ),
                                       hintText: 'Stationnement',
                                       fillColor: Colors.white,
-                                      elevation: 2.0,
+                                      elevation: 2,
                                       borderColor: Colors.transparent,
-                                      borderWidth: 0.0,
-                                      borderRadius: 0.0,
+                                      borderWidth: 0,
+                                      borderRadius: 0,
                                       margin: EdgeInsetsDirectional.fromSTEB(
-                                          12.0, 4.0, 12.0, 4.0),
+                                          12, 4, 12, 4),
                                       hidesUnderline: true,
                                       isSearchable: false,
                                     ),
@@ -1386,31 +1279,29 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
-                      width: 100.0,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -1427,15 +1318,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
-                                        fontSize: 18.0,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -1447,11 +1338,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.k24h,
                                           color: Color(0xFF595A71),
-                                          size: 32.0,
+                                          size: 32,
                                         ),
                                       ),
                                       Text(
@@ -1478,14 +1369,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 5.0, 0.0, 5.0),
+                                        0, 5, 0, 5),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          1.0,
+                                      width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         color: Color(0x00EFF6F7),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
+                                        borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
                                           color: Color(0xD2E8E8E8),
                                           width: 1.3,
@@ -1501,8 +1390,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 5.0, 0.0, 5.0),
+                                                    .fromSTEB(0, 5, 0, 5),
                                                 child: Text(
                                                   'Lundi',
                                                   style: FlutterFlowTheme.of(
@@ -1525,20 +1413,18 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          0.0),
+                                                      BorderRadius.circular(0),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          3.0, 0.0, 3.0, 0.0),
+                                                      .fromSTEB(3, 0, 3, 0),
                                                   child: Text(
                                                     'Après -midi',
                                                     textAlign: TextAlign.start,
@@ -1547,7 +1433,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          fontSize: 14.0,
+                                                          fontSize: 14,
                                                         ),
                                                   ),
                                                 ),
@@ -1570,10 +1456,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -1603,7 +1486,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -1620,11 +1503,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -1670,7 +1554,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -1693,7 +1577,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -1755,7 +1639,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -1793,24 +1677,23 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
                                                       BorderRadius.only(
                                                     bottomLeft:
-                                                        Radius.circular(15.0),
+                                                        Radius.circular(15),
                                                     bottomRight:
-                                                        Radius.circular(0.0),
-                                                    topLeft:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
+                                                    topLeft: Radius.circular(0),
                                                     topRight:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
                                                   ),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Matin',
                                                   textAlign: TextAlign.start,
@@ -1819,7 +1702,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Poppins',
-                                                        fontSize: 14.0,
+                                                        fontSize: 14,
                                                       ),
                                                 ),
                                               ),
@@ -1841,10 +1724,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -1874,7 +1754,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -1891,11 +1771,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -1941,7 +1822,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -1964,7 +1845,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -2026,7 +1907,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -2062,14 +1943,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 5.0, 0.0, 5.0),
+                                        0, 5, 0, 5),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          1.0,
+                                      width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         color: Color(0x00EFF6F7),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
+                                        borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
                                           color: Color(0xD2E8E8E8),
                                           width: 1.3,
@@ -2085,8 +1964,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 5.0, 0.0, 5.0),
+                                                    .fromSTEB(0, 5, 0, 5),
                                                 child: Text(
                                                   'Mardi',
                                                   style: FlutterFlowTheme.of(
@@ -2109,20 +1987,18 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          0.0),
+                                                      BorderRadius.circular(0),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          3.0, 0.0, 3.0, 0.0),
+                                                      .fromSTEB(3, 0, 3, 0),
                                                   child: Text(
                                                     'Après -midi',
                                                     textAlign: TextAlign.start,
@@ -2131,7 +2007,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          fontSize: 14.0,
+                                                          fontSize: 14,
                                                         ),
                                                   ),
                                                 ),
@@ -2154,10 +2030,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -2187,7 +2060,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -2204,11 +2077,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -2254,7 +2128,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -2277,7 +2151,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -2339,7 +2213,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -2377,24 +2251,23 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
                                                       BorderRadius.only(
                                                     bottomLeft:
-                                                        Radius.circular(15.0),
+                                                        Radius.circular(15),
                                                     bottomRight:
-                                                        Radius.circular(0.0),
-                                                    topLeft:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
+                                                    topLeft: Radius.circular(0),
                                                     topRight:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
                                                   ),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Matin',
                                                   textAlign: TextAlign.start,
@@ -2403,7 +2276,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Poppins',
-                                                        fontSize: 14.0,
+                                                        fontSize: 14,
                                                       ),
                                                 ),
                                               ),
@@ -2425,10 +2298,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -2458,7 +2328,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -2475,11 +2345,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -2525,7 +2396,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -2548,7 +2419,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -2610,7 +2481,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -2646,14 +2517,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 5.0, 0.0, 5.0),
+                                        0, 5, 0, 5),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          1.0,
+                                      width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         color: Color(0x00EFF6F7),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
+                                        borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
                                           color: Color(0xD2E8E8E8),
                                           width: 1.3,
@@ -2669,8 +2538,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 5.0, 0.0, 5.0),
+                                                    .fromSTEB(0, 5, 0, 5),
                                                 child: Text(
                                                   'Mercredi',
                                                   style: FlutterFlowTheme.of(
@@ -2693,20 +2561,18 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          0.0),
+                                                      BorderRadius.circular(0),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          3.0, 0.0, 3.0, 0.0),
+                                                      .fromSTEB(3, 0, 3, 0),
                                                   child: Text(
                                                     'Après -midi',
                                                     textAlign: TextAlign.start,
@@ -2715,7 +2581,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          fontSize: 14.0,
+                                                          fontSize: 14,
                                                         ),
                                                   ),
                                                 ),
@@ -2738,10 +2604,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -2771,7 +2634,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -2788,11 +2651,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -2838,7 +2702,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -2861,7 +2725,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -2923,7 +2787,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -2961,24 +2825,23 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
                                                       BorderRadius.only(
                                                     bottomLeft:
-                                                        Radius.circular(15.0),
+                                                        Radius.circular(15),
                                                     bottomRight:
-                                                        Radius.circular(0.0),
-                                                    topLeft:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
+                                                    topLeft: Radius.circular(0),
                                                     topRight:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
                                                   ),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Matin',
                                                   textAlign: TextAlign.start,
@@ -2987,7 +2850,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Poppins',
-                                                        fontSize: 14.0,
+                                                        fontSize: 14,
                                                       ),
                                                 ),
                                               ),
@@ -3009,10 +2872,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -3042,7 +2902,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -3059,11 +2919,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -3109,7 +2970,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -3132,7 +2993,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -3194,7 +3055,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -3230,14 +3091,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 5.0, 0.0, 5.0),
+                                        0, 5, 0, 5),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          1.0,
+                                      width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         color: Color(0x00EFF6F7),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
+                                        borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
                                           color: Color(0xD2E8E8E8),
                                           width: 1.3,
@@ -3253,8 +3112,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 5.0, 0.0, 5.0),
+                                                    .fromSTEB(0, 5, 0, 5),
                                                 child: Text(
                                                   'Jeudi',
                                                   style: FlutterFlowTheme.of(
@@ -3277,20 +3135,18 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          0.0),
+                                                      BorderRadius.circular(0),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          3.0, 0.0, 3.0, 0.0),
+                                                      .fromSTEB(3, 0, 3, 0),
                                                   child: Text(
                                                     'Après -midi',
                                                     textAlign: TextAlign.start,
@@ -3299,7 +3155,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          fontSize: 14.0,
+                                                          fontSize: 14,
                                                         ),
                                                   ),
                                                 ),
@@ -3322,10 +3178,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -3355,7 +3208,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -3372,11 +3225,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -3422,7 +3276,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -3445,7 +3299,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -3507,7 +3361,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -3545,24 +3399,23 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
                                                       BorderRadius.only(
                                                     bottomLeft:
-                                                        Radius.circular(15.0),
+                                                        Radius.circular(15),
                                                     bottomRight:
-                                                        Radius.circular(0.0),
-                                                    topLeft:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
+                                                    topLeft: Radius.circular(0),
                                                     topRight:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
                                                   ),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Matin',
                                                   textAlign: TextAlign.start,
@@ -3571,7 +3424,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Poppins',
-                                                        fontSize: 14.0,
+                                                        fontSize: 14,
                                                       ),
                                                 ),
                                               ),
@@ -3593,10 +3446,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -3626,7 +3476,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -3643,11 +3493,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -3693,7 +3544,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -3716,7 +3567,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -3778,7 +3629,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -3814,14 +3665,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 5.0, 0.0, 5.0),
+                                        0, 5, 0, 5),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          1.0,
+                                      width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         color: Color(0x00EFF6F7),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
+                                        borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
                                           color: Color(0xD2E8E8E8),
                                           width: 1.3,
@@ -3837,8 +3686,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 5.0, 0.0, 5.0),
+                                                    .fromSTEB(0, 5, 0, 5),
                                                 child: Text(
                                                   'Vendredi',
                                                   style: FlutterFlowTheme.of(
@@ -3861,20 +3709,18 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          0.0),
+                                                      BorderRadius.circular(0),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          3.0, 0.0, 3.0, 0.0),
+                                                      .fromSTEB(3, 0, 3, 0),
                                                   child: Text(
                                                     'Après -midi',
                                                     textAlign: TextAlign.start,
@@ -3883,7 +3729,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          fontSize: 14.0,
+                                                          fontSize: 14,
                                                         ),
                                                   ),
                                                 ),
@@ -3906,10 +3752,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -3939,7 +3782,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -3956,11 +3799,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -4006,7 +3850,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -4029,7 +3873,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -4091,7 +3935,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -4129,24 +3973,23 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
                                                       BorderRadius.only(
                                                     bottomLeft:
-                                                        Radius.circular(15.0),
+                                                        Radius.circular(15),
                                                     bottomRight:
-                                                        Radius.circular(0.0),
-                                                    topLeft:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
+                                                    topLeft: Radius.circular(0),
                                                     topRight:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
                                                   ),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Matin',
                                                   textAlign: TextAlign.start,
@@ -4155,7 +3998,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Poppins',
-                                                        fontSize: 14.0,
+                                                        fontSize: 14,
                                                       ),
                                                 ),
                                               ),
@@ -4177,10 +4020,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -4210,7 +4050,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -4227,11 +4067,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -4277,7 +4118,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -4300,7 +4141,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -4362,7 +4203,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -4398,14 +4239,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 5.0, 0.0, 5.0),
+                                        0, 5, 0, 5),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          1.0,
+                                      width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         color: Color(0x00EFF6F7),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
+                                        borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
                                           color: Color(0xD2E8E8E8),
                                           width: 1.3,
@@ -4421,8 +4260,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 5.0, 0.0, 5.0),
+                                                    .fromSTEB(0, 5, 0, 5),
                                                 child: Text(
                                                   'Samedi',
                                                   style: FlutterFlowTheme.of(
@@ -4445,20 +4283,18 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          0.0),
+                                                      BorderRadius.circular(0),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          3.0, 0.0, 3.0, 0.0),
+                                                      .fromSTEB(3, 0, 3, 0),
                                                   child: Text(
                                                     'Après -midi',
                                                     textAlign: TextAlign.start,
@@ -4467,7 +4303,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          fontSize: 14.0,
+                                                          fontSize: 14,
                                                         ),
                                                   ),
                                                 ),
@@ -4490,10 +4326,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -4523,7 +4356,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -4540,11 +4373,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -4590,7 +4424,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -4613,7 +4447,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -4675,7 +4509,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -4713,24 +4547,23 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
                                                       BorderRadius.only(
                                                     bottomLeft:
-                                                        Radius.circular(15.0),
+                                                        Radius.circular(15),
                                                     bottomRight:
-                                                        Radius.circular(0.0),
-                                                    topLeft:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
+                                                    topLeft: Radius.circular(0),
                                                     topRight:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
                                                   ),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Matin',
                                                   textAlign: TextAlign.start,
@@ -4739,7 +4572,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Poppins',
-                                                        fontSize: 14.0,
+                                                        fontSize: 14,
                                                       ),
                                                 ),
                                               ),
@@ -4761,10 +4594,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -4794,7 +4624,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -4811,11 +4641,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -4861,7 +4692,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -4884,7 +4715,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -4946,7 +4777,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -4982,14 +4813,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 5.0, 0.0, 5.0),
+                                        0, 5, 0, 5),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          1.0,
+                                      width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
                                         color: Color(0x00EFF6F7),
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
+                                        borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
                                           color: Color(0xD2E8E8E8),
                                           width: 1.3,
@@ -5005,8 +4834,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 5.0, 0.0, 5.0),
+                                                    .fromSTEB(0, 5, 0, 5),
                                                 child: Text(
                                                   'Dimanche',
                                                   style: FlutterFlowTheme.of(
@@ -5029,20 +4857,18 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          0.0),
+                                                      BorderRadius.circular(0),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          3.0, 0.0, 3.0, 0.0),
+                                                      .fromSTEB(3, 0, 3, 0),
                                                   child: Text(
                                                     'Après -midi',
                                                     textAlign: TextAlign.start,
@@ -5051,7 +4877,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          fontSize: 14.0,
+                                                          fontSize: 14,
                                                         ),
                                                   ),
                                                 ),
@@ -5074,10 +4900,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -5107,7 +4930,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -5124,11 +4947,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -5174,7 +4998,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -5197,7 +5021,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -5259,7 +5083,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -5297,24 +5121,23 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                         .size
                                                         .width *
                                                     0.25,
-                                                height: 50.0,
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xFFEFF6F7),
                                                   borderRadius:
                                                       BorderRadius.only(
                                                     bottomLeft:
-                                                        Radius.circular(15.0),
+                                                        Radius.circular(15),
                                                     bottomRight:
-                                                        Radius.circular(0.0),
-                                                    topLeft:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
+                                                    topLeft: Radius.circular(0),
                                                     topRight:
-                                                        Radius.circular(0.0),
+                                                        Radius.circular(0),
                                                   ),
                                                   shape: BoxShape.rectangle,
                                                 ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
+                                                alignment:
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Matin',
                                                   textAlign: TextAlign.start,
@@ -5323,7 +5146,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Poppins',
-                                                        fontSize: 14.0,
+                                                        fontSize: 14,
                                                       ),
                                                 ),
                                               ),
@@ -5345,10 +5168,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
+                                                                  5, 0, 0, 0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -5378,7 +5198,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .alternate,
                                                                         fontSize:
-                                                                            14.0,
+                                                                            14,
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                       ),
@@ -5395,11 +5215,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                     false,
                                                                   ))
                                                                     Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          3.0,
-                                                                          0.0),
+                                                                      padding: EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              3,
+                                                                              0),
                                                                       child:
                                                                           InkWell(
                                                                         splashColor:
@@ -5445,7 +5266,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                               .override(
                                                                                 fontFamily: 'Poppins',
                                                                                 color: FlutterFlowTheme.of(context).primaryText,
-                                                                                fontSize: 14.0,
+                                                                                fontSize: 14,
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
@@ -5468,7 +5289,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primaryText,
                                                                             fontSize:
-                                                                                14.0,
+                                                                                14,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
@@ -5530,7 +5351,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                             .override(
                                                                               fontFamily: 'Poppins',
                                                                               color: FlutterFlowTheme.of(context).primaryText,
-                                                                              fontSize: 14.0,
+                                                                              fontSize: 14,
                                                                               fontWeight: FontWeight.w500,
                                                                             ),
                                                                       ),
@@ -5573,31 +5394,29 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
-                      width: 100.0,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -5614,15 +5433,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
-                                        fontSize: 18.0,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 10.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -5634,11 +5453,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.store_outlined,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -5663,8 +5482,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -5676,11 +5495,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.apartment,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -5704,8 +5523,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -5717,11 +5536,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.flight_takeoff,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -5744,8 +5563,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -5757,11 +5576,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.directions_bus,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -5784,8 +5603,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -5797,11 +5616,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kgroup,
                                           color: Color(0xFF595A71),
-                                          size: 20.0,
+                                          size: 20,
                                         ),
                                       ),
                                       Text(
@@ -5824,8 +5643,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -5837,11 +5656,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.landscape_outlined,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -5864,8 +5683,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -5877,11 +5696,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.nature_people_outlined,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -5903,14 +5722,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: Container(
-                                height: 50.0,
+                                height: 50,
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
                                     color: Color(0xFFD0D1DE),
                                   ),
@@ -5920,12 +5739,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          5.0, 0.0, 0.0, 0.0),
+                                          5, 0, 0, 0),
                                       child: Icon(
                                         Icons.group,
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryText,
-                                        size: 24.0,
+                                        size: 24,
                                       ),
                                     ),
                                     FlutterFlowDropDown<String>(
@@ -5942,7 +5761,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           _model.patientParJourValue = val),
                                       width: MediaQuery.of(context).size.width *
                                           0.72,
-                                      height: 50.0,
+                                      height: 50,
                                       textStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -5951,12 +5770,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           ),
                                       hintText: 'Nombre de patients par jour',
                                       fillColor: Colors.white,
-                                      elevation: 2.0,
+                                      elevation: 2,
                                       borderColor: Colors.transparent,
-                                      borderWidth: 0.0,
-                                      borderRadius: 0.0,
+                                      borderWidth: 0,
+                                      borderRadius: 0,
                                       margin: EdgeInsetsDirectional.fromSTEB(
-                                          12.0, 4.0, 12.0, 4.0),
+                                          12, 4, 12, 4),
                                       hidesUnderline: true,
                                       isSearchable: false,
                                     ),
@@ -5971,32 +5790,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              10.0, 10.0, 10.0, 10.0),
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                           child: Container(
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              borderRadius: BorderRadius.circular(15.0),
+                              borderRadius: BorderRadius.circular(15),
                               shape: BoxShape.rectangle,
                             ),
                             child: Column(
@@ -6016,7 +5834,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             fontFamily: 'Poppins',
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
-                                            fontSize: 18.0,
+                                            fontSize: 18,
                                             fontWeight: FontWeight.w600,
                                           ),
                                     ),
@@ -6047,12 +5865,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         ).then((value) => setState(() {}));
                                       },
                                       child: Container(
-                                        width: 100.0,
-                                        height: 30.0,
+                                        width: 100,
+                                        height: 30,
                                         child:
                                             custom_widgets.GradientTextCustom(
-                                          width: 100.0,
-                                          height: 30.0,
+                                          width: 100,
+                                          height: 30,
                                           text: 'Ajouter',
                                           radius: 0.0,
                                           fontSize: 12.0,
@@ -6089,10 +5907,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 5.0, 5.0, 5.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                           child: Container(
-                            width: MediaQuery.of(context).size.width * 1.0,
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
@@ -6121,15 +5938,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         children: [
                                           FlutterFlowIconButton(
                                             borderColor: Colors.transparent,
-                                            borderRadius: 30.0,
-                                            borderWidth: 1.0,
-                                            buttonSize: 40.0,
+                                            borderRadius: 30,
+                                            borderWidth: 1,
+                                            buttonSize: 40,
                                             icon: Icon(
                                               Icons.delete_outline_sharp,
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .alternate,
-                                              size: 20.0,
+                                              size: 20,
                                             ),
                                             onPressed: () {
                                               print('IconButton pressed ...');
@@ -6137,14 +5954,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           ),
                                           Image.asset(
                                             'assets/images/Group_18.png',
-                                            width: 60.0,
-                                            height: 40.0,
+                                            width: 60,
+                                            height: 40,
                                             fit: BoxFit.cover,
                                           ),
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    5.0, 0.0, 0.0, 0.0),
+                                                    5, 0, 0, 0),
                                             child: Text(
                                               'Hello LGO',
                                               style:
@@ -6166,31 +5983,29 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
-                      width: 100.0,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -6207,15 +6022,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
-                                        fontSize: 18.0,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 10.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6227,11 +6042,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.coronavirus,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6254,8 +6069,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6267,11 +6082,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kvaccines,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6294,8 +6109,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6307,11 +6122,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kvigile,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6335,8 +6150,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6348,11 +6163,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.videocam_outlined,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6374,8 +6189,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6387,11 +6202,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           Icons.local_pharmacy_outlined,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6427,31 +6242,29 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
-                      width: 100.0,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -6468,15 +6281,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
-                                        fontSize: 18.0,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 10.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6488,11 +6301,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kzen,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6515,8 +6328,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6528,11 +6341,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.krobot,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6554,8 +6367,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6567,11 +6380,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kqrcode,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6594,8 +6407,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6607,11 +6420,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kmoneyeur,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6636,8 +6449,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6649,11 +6462,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kclim,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6675,8 +6488,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6688,11 +6501,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kchauffage,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6715,8 +6528,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6728,11 +6541,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kvigile,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6754,8 +6567,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6767,11 +6580,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kgroup,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6801,31 +6614,29 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
-                      width: 100.0,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -6842,15 +6653,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         fontFamily: 'Poppins',
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
-                                        fontSize: 18.0,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 10.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6862,11 +6673,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kordonances,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6888,9 +6699,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           FlutterFlowTheme.of(context).primary,
                                       inactiveColor:
                                           FlutterFlowTheme.of(context).accent2,
-                                      min: 0.0,
-                                      max: 10.0,
-                                      value: _model.sliderValue1 ??= 0.0,
+                                      min: 0,
+                                      max: 10,
+                                      value: _model.sliderValue1 ??= 0,
                                       onChanged: (newValue) {
                                         newValue = double.parse(
                                             newValue.toStringAsFixed(4));
@@ -6903,8 +6714,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6916,11 +6727,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kbebe,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6942,9 +6753,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           FlutterFlowTheme.of(context).primary,
                                       inactiveColor:
                                           FlutterFlowTheme.of(context).accent2,
-                                      min: 0.0,
-                                      max: 10.0,
-                                      value: _model.sliderValue2 ??= 0.0,
+                                      min: 0,
+                                      max: 10,
+                                      value: _model.sliderValue2 ??= 0,
                                       onChanged: (newValue) {
                                         newValue = double.parse(
                                             newValue.toStringAsFixed(4));
@@ -6957,8 +6768,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -6970,11 +6781,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kphyto,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -6996,9 +6807,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           FlutterFlowTheme.of(context).primary,
                                       inactiveColor:
                                           FlutterFlowTheme.of(context).accent2,
-                                      min: 0.0,
-                                      max: 10.0,
-                                      value: _model.sliderValue3 ??= 0.0,
+                                      min: 0,
+                                      max: 10,
+                                      value: _model.sliderValue3 ??= 0,
                                       onChanged: (newValue) {
                                         newValue = double.parse(
                                             newValue.toStringAsFixed(4));
@@ -7011,8 +6822,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -7024,11 +6835,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.knutrition,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -7050,9 +6861,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           FlutterFlowTheme.of(context).primary,
                                       inactiveColor:
                                           FlutterFlowTheme.of(context).accent2,
-                                      min: 0.0,
-                                      max: 10.0,
-                                      value: _model.sliderValue4 ??= 0.0,
+                                      min: 0,
+                                      max: 10,
+                                      value: _model.sliderValue4 ??= 0,
                                       onChanged: (newValue) {
                                         newValue = double.parse(
                                             newValue.toStringAsFixed(4));
@@ -7065,8 +6876,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -7078,11 +6889,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 10.0, 0.0),
+                                            0, 0, 10, 0),
                                         child: Icon(
                                           FFIcons.kquestion,
                                           color: Color(0xFF595A71),
-                                          size: 28.0,
+                                          size: 28,
                                         ),
                                       ),
                                       Text(
@@ -7104,9 +6915,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           FlutterFlowTheme.of(context).primary,
                                       inactiveColor:
                                           FlutterFlowTheme.of(context).accent2,
-                                      min: 0.0,
-                                      max: 10.0,
-                                      value: _model.sliderValue5 ??= 0.0,
+                                      min: 0,
+                                      max: 10,
+                                      value: _model.sliderValue5 ??= 0,
                                       onChanged: (newValue) {
                                         newValue = double.parse(
                                             newValue.toStringAsFixed(4));
@@ -7125,37 +6936,35 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Color(0xFFEFF6F7),
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 12.0,
+                          blurRadius: 12,
                           color: Color(0x2B1F5C67),
-                          offset: Offset(10.0, 10.0),
+                          offset: Offset(10, 10),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: Container(
-                      width: 100.0,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(15),
                         shape: BoxShape.rectangle,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 15.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -7170,7 +6979,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           fontFamily: 'Poppins',
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
-                                          fontSize: 18.0,
+                                          fontSize: 18,
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
@@ -7178,8 +6987,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.phonePharmacieController2,
                                 obscureText: false,
@@ -7190,31 +6999,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     FFIcons.kgroup,
@@ -7230,8 +7039,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.nbPreparateurController,
                                 obscureText: false,
@@ -7242,31 +7051,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     FFIcons.kgroup,
@@ -7282,8 +7091,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.nbRayonnistesController,
                                 obscureText: false,
@@ -7294,31 +7103,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     FFIcons.kgroup,
@@ -7334,8 +7143,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.nbConseillersController,
                                 autofocus: true,
@@ -7347,31 +7156,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     FFIcons.kgroup,
@@ -7387,8 +7196,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.nbApprentiController,
                                 autofocus: true,
@@ -7400,31 +7209,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     FFIcons.kgroup,
@@ -7439,8 +7248,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.nbEtudiantsController,
                                 autofocus: true,
@@ -7452,31 +7261,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     FFIcons.kgroup,
@@ -7491,8 +7300,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: TextFormField(
                                 controller: _model.nbEtudiants6emeController,
                                 autofocus: true,
@@ -7504,31 +7313,31 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xFFD0D1DE),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: FlutterFlowTheme.of(context)
                                           .focusColor,
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
-                                      width: 1.0,
+                                      width: 1,
                                     ),
-                                    borderRadius: BorderRadius.circular(4.0),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   prefixIcon: Icon(
                                     FFIcons.kgroup,
@@ -7550,26 +7359,25 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 25.0, 10.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                   child: Container(
                     width: double.infinity,
-                    height: 50.0,
+                    height: 50,
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                          blurRadius: 4.0,
+                          blurRadius: 4,
                           color: Color(0x301F5C67),
-                          offset: Offset(0.0, 4.0),
+                          offset: Offset(0, 4),
                         )
                       ],
                       gradient: LinearGradient(
                         colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                        stops: [0.0, 1.0],
-                        begin: AlignmentDirectional(1.0, -1.0),
-                        end: AlignmentDirectional(-1.0, 1.0),
+                        stops: [0, 1],
+                        begin: AlignmentDirectional(1, -1),
+                        end: AlignmentDirectional(-1, 1),
                       ),
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: FFButtonWidget(
                       onPressed: () async {
@@ -7578,24 +7386,22 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       text: 'Créer la pharmacie',
                       options: FFButtonOptions(
                         width: double.infinity,
-                        height: 40.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        height: 40,
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                        iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                         color: Color(0x00FFFFFF),
                         textStyle:
                             FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Poppins',
                                   color: Colors.white,
-                                  fontSize: 18.0,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                 ),
                         borderSide: BorderSide(
                           color: Colors.transparent,
-                          width: 1.0,
+                          width: 1,
                         ),
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ),

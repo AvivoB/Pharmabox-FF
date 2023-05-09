@@ -120,13 +120,13 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
                         color: Color(0xFFEEF0F5),
                         unreadColor: FlutterFlowTheme.of(context).alternate,
                         titleTextStyle: GoogleFonts.getFont(
-                          'DM Sans',
+                          'Poppins',
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 14.0,
                         ),
                         dateTextStyle: GoogleFonts.getFont(
-                          'DM Sans',
+                          'Poppins',
                           color: Color(0x73000000),
                           fontWeight: FontWeight.normal,
                           fontSize: 14.0,

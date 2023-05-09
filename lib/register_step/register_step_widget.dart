@@ -1996,27 +1996,32 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () {
-                          var send_data = RegisterStepModel().createUserToFirebase(
-                            widget_context_provider,
-                            _model.nomFamilleController.text,
-                            _model.prenomController.text,
-                            _model.posteValue,
-                            _model.emailController.text,
-                            _model.telephoneController.text,
-                            _model.birthDateController.text,
-                            _model.postcodeController.text,
-                            _model.cityController.text,
-                            _model.presentationController.text,
-                            _model.comptencesTestCovidValue,
-                            _model.comptencesVaccinationValue,
-                            _model.comptencesTiersPayantValue,
-                            _model.comptencesLaboValue,
-                            _model.comptencesTRODValue,
-                            _model.allowNotifsValue,
-                            _model.allowCGUValue,
-                            _imageURL!
-                          );
-                          
+                          var send_data = RegisterStepModel()
+                              .createUserToFirebase(
+                                  widget_context_provider,
+                                  _model.nomFamilleController.text,
+                                  _model.prenomController.text,
+                                  _model.posteValue,
+                                  _model.emailController.text,
+                                  _model.telephoneController.text,
+                                  _model.birthDateController.text,
+                                  _model.postcodeController.text,
+                                  _model.cityController.text,
+                                  _model.presentationController.text,
+                                  _model.comptencesTestCovidValue,
+                                  _model.comptencesVaccinationValue,
+                                  _model.comptencesTiersPayantValue,
+                                  _model.comptencesLaboValue,
+                                  _model.comptencesTRODValue,
+                                  _model.allowNotifsValue,
+                                  _model.allowCGUValue,
+                                  _imageURL!);
+
+                          if(_model.posteValue == 'Pharmacien(ne) titulaire') {
+                            context.pushNamed('RegisterPharmacy');
+                          } else {
+                            context.pushNamed('Explorer');
+                          }
                         },
                         text: 'Créer mon compte',
                         options: FFButtonOptions(
