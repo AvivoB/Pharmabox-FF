@@ -203,55 +203,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 10),
-                                  child: TextFormField(
-                                    controller:
-                                        _model.nomdelapharmacieController1,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Nom de la pharmacie',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.local_hospital,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    validator: _model
-                                        .nomdelapharmacieController1Validator
-                                        .asValidator(context),
-                                  ),
+                                  child: custom_widgets.PredictionNomPhamracie()
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -5938,8 +5890,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             size: 28,
                                           ),
                                         ),
+                                        if (_model.missionPreparationValue == true)
                                         Text(
-                                          'Préparation ',
+                                          'Préparation externalisé',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                        if (_model.missionPreparationValue == false)
+                                        Text(
+                                          'Préparation par l\'équipe',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium,
                                         ),
@@ -6158,8 +6117,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             size: 28,
                                           ),
                                         ),
+                                        if (_model.confortMonayeurValue == false)
                                         Text(
-                                          'Monnayeur/caisse classique',
+                                          'Caisse classique',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                        if (_model.confortMonayeurValue == true)
+                                         Text(
+                                          'Monnayeur',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium,
                                         ),
@@ -6433,23 +6399,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                       ),
-                                      child: Slider(
-                                        activeColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                        inactiveColor:
-                                            FlutterFlowTheme.of(context)
-                                                .accent2,
-                                        min: 0,
-                                        max: 10,
-                                        value: _model.sliderValue1 ??= 0,
-                                        onChanged: (newValue) {
-                                          newValue = double.parse(
-                                              newValue.toStringAsFixed(4));
-                                          setState(() =>
-                                              _model.sliderValue1 = newValue);
-                                        },
-                                      ),
+                                      child: custom_widgets.SliderSimple( slider: 1.0)
                                     ),
                                   ],
                                 ),
@@ -6490,23 +6440,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                       ),
-                                      child: Slider(
-                                        activeColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                        inactiveColor:
-                                            FlutterFlowTheme.of(context)
-                                                .accent2,
-                                        min: 0,
-                                        max: 10,
-                                        value: _model.sliderValue2 ??= 0,
-                                        onChanged: (newValue) {
-                                          newValue = double.parse(
-                                              newValue.toStringAsFixed(4));
-                                          setState(() =>
-                                              _model.sliderValue2 = newValue);
-                                        },
-                                      ),
+                                      child: custom_widgets.SliderSimple( slider: 1.0)
                                     ),
                                   ],
                                 ),
@@ -6547,23 +6481,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                       ),
-                                      child: Slider(
-                                        activeColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                        inactiveColor:
-                                            FlutterFlowTheme.of(context)
-                                                .accent2,
-                                        min: 0,
-                                        max: 10,
-                                        value: _model.sliderValue3 ??= 0,
-                                        onChanged: (newValue) {
-                                          newValue = double.parse(
-                                              newValue.toStringAsFixed(4));
-                                          setState(() =>
-                                              _model.sliderValue3 = newValue);
-                                        },
-                                      ),
+                                      child: custom_widgets.SliderSimple( slider: 1.0)
                                     ),
                                   ],
                                 ),
@@ -6604,23 +6522,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                       ),
-                                      child: Slider(
-                                        activeColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                        inactiveColor:
-                                            FlutterFlowTheme.of(context)
-                                                .accent2,
-                                        min: 0,
-                                        max: 10,
-                                        value: _model.sliderValue4 ??= 0,
-                                        onChanged: (newValue) {
-                                          newValue = double.parse(
-                                              newValue.toStringAsFixed(4));
-                                          setState(() =>
-                                              _model.sliderValue4 = newValue);
-                                        },
-                                      ),
+                                      child: custom_widgets.SliderSimple( slider: 1.0)
                                     ),
                                   ],
                                 ),
@@ -6648,7 +6550,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           ),
                                         ),
                                         Text(
-                                          'Conseil',
+                                          'Conseils',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium,
                                         ),
@@ -6661,23 +6563,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                       ),
-                                      child: Slider(
-                                        activeColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                        inactiveColor:
-                                            FlutterFlowTheme.of(context)
-                                                .accent2,
-                                        min: 0,
-                                        max: 10,
-                                        value: _model.sliderValue5 ??= 0,
-                                        onChanged: (newValue) {
-                                          newValue = double.parse(
-                                              newValue.toStringAsFixed(4));
-                                          setState(() =>
-                                              _model.sliderValue5 = newValue);
-                                        },
-                                      ),
+                                      child: custom_widgets.SliderSimple( slider: 1.0)
                                     ),
                                   ],
                                 ),
@@ -7141,9 +7027,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          // context.goNamed('Explorer');
-                          print(
-                              pharmacieRegisterSate.selectedPharmacieLocation);
+                          context.goNamed('Explorer');
                         },
                         text: 'Créer la pharmacie',
                         options: FFButtonOptions(

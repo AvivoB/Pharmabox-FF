@@ -8,14 +8,14 @@ import '../../constant.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
-class MapAdressePharmacie extends StatefulWidget {
-  const MapAdressePharmacie({Key? key}) : super(key: key);
+class PredictionNomPhamracie extends StatefulWidget {
+  const PredictionNomPhamracie({Key? key}) : super(key: key);
 
   @override
-  _MapAdressePharmacieState createState() => _MapAdressePharmacieState();
+  _PredictionNomPhamracieState createState() => _PredictionNomPhamracieState();
 }
 
-class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
+class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
   late GoogleMapController _mapController;
   final TextEditingController _searchController = TextEditingController();
   Set<Marker> _markers = {};
@@ -28,7 +28,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
       final response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=geocode&key=$googleMapsApi'));
+          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&key=$googleMapsApi'));
       final json = jsonDecode(response.body);
 
       if (json['status'] == 'OK') {
@@ -51,7 +51,6 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
     setState(() {
       _searchController.text = prediction;
       _predictions = [];
-      _searchAddress(prediction);
     });
   }
 
@@ -64,7 +63,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
           obscureText: false,
           onChanged: _onSearchChanged,
           decoration: InputDecoration(
-            labelText: 'Adresse',
+            labelText: 'Nom de la pharmacie',
             hintStyle: FlutterFlowTheme.of(context).bodySmall,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
@@ -95,7 +94,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
               borderRadius: BorderRadius.circular(4),
             ),
             prefixIcon: Icon(
-              Icons.place_outlined,
+              Icons.local_hospital,
               color: FlutterFlowTheme.of(context).secondaryText,
             ),
           ),
@@ -112,76 +111,17 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
               itemCount: _predictions.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(_predictions[index]['description'], style: FlutterFlowTheme.of(context).bodyMedium),
+                  title: Text(_predictions[index]['description'],
+                      style: FlutterFlowTheme.of(context).bodyMedium),
                   onTap: () {
-                    _onPredictionSelected(_predictions[index]['description']);
+                    _onPredictionSelected(_predictions[index]['terms'][0]['value']);
+                    print(_predictions[index]);
                   },
                 );
               },
             ),
           ),
-        SizedBox(height: 5),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15))),
-          height: 150,
-          child: GoogleMap(
-            scrollGesturesEnabled: false,
-            zoomControlsEnabled: false,
-            zoomGesturesEnabled: false,
-            onMapCreated: _onMapCreated,
-            markers: _markers,
-            initialCameraPosition: CameraPosition(
-              target: LatLng(48.8534, 2.3488), // Paris
-              zoom: 16,
-            ),
-          ),
-        ),
       ],
     );
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-  }
-
-  Future<void> _searchAddress(selectedAdress) async {
-    // Clear previous markers
-    _markers.clear();
-
-    // Get predictions for the search query
-    List<Location> locations = await locationFromAddress(selectedAdress);
-
-    // Get the first prediction
-    Location location = locations.first;
-
-    // Set the camera position to the selected location
-    _mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        target: LatLng(location.latitude, location.longitude),
-        zoom: 16,
-      ),
-    ));
-
-    // final providerPharmacieRegister =
-    //     Provider.of<ProviderPharmacieRegister>(context, listen: false);
-
-    // providerPharmacieRegister.setPharmacieLocation(22, location.longitude);
-
-    // Add a marker for the selected location
-    _markers.add(Marker(
-      markerId: MarkerId('selected-location'),
-      position: LatLng(location.latitude, location.longitude),
-    ));
-
-    // // Set the selected address
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(location.latitude, location.longitude);
-    Placemark placemark = placemarks.first;
-    setState(() {
-      _selectedAddress = placemark.street ?? '';
-      _selectedPostalCode = placemark.postalCode ?? '';
-      _selectedCity = placemark.locality ?? '';
-    });
   }
 }
