@@ -254,6 +254,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
+  
 
   // Enregistrement dans la base
   createPharmacie(context) {
@@ -324,7 +325,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
       },
       'situation_geographique': {
         'adresse': pharmacieAdresseController.text,
-        'lat_long': LatLng(255, 255)
+        'lat_long': GeoPoint(providerPharmacieRegister.selectedPharmacieLocation[0], providerPharmacieRegister.selectedPharmacieLocation[1])
       },
       'accessibilite': {
         'rer': rerController.text,

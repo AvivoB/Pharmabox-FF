@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
-
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import '../../constant.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
+import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class MapAdressePharmacie extends StatefulWidget {
   const MapAdressePharmacie({Key? key}) : super(key: key);
@@ -19,7 +23,37 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
   late String _selectedAddress;
   late String _selectedPostalCode;
   late String _selectedCity;
-  List<String> predictions = [];
+  List<dynamic> _predictions = [];
+
+  void _onSearchChanged(String query) async {
+    if (query.isNotEmpty) {
+      final response = await http.get(Uri.parse(
+          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=geocode&key=$googleMapsApi'));
+      final json = jsonDecode(response.body);
+
+      if (json['status'] == 'OK') {
+        setState(() {
+          _predictions = json['predictions'];
+        });
+      } else {
+        setState(() {
+          _predictions = [];
+        });
+      }
+    } else {
+      setState(() {
+        _predictions = [];
+      });
+    }
+  }
+
+  void _onPredictionSelected(String prediction) {
+    setState(() {
+      _searchController.text = prediction;
+      _predictions = [];
+      _searchAddress(prediction);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +62,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
         TextFormField(
           controller: _searchController,
           obscureText: false,
-          onTap: _searchAddress,
+          onChanged: _onSearchChanged,
           decoration: InputDecoration(
             labelText: 'Adresse',
             hintStyle: FlutterFlowTheme.of(context).bodySmall,
@@ -67,6 +101,25 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
           ),
           style: FlutterFlowTheme.of(context).bodyMedium,
         ),
+        if (_predictions.isNotEmpty)
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _predictions.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_predictions[index]['description']),
+                  onTap: () {
+                    _onPredictionSelected(_predictions[index]['description']);
+                  },
+                );
+              },
+            ),
+          ),
         SizedBox(height: 5),
         Container(
           decoration: BoxDecoration(
@@ -92,13 +145,12 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
     _mapController = controller;
   }
 
-  Future<void> _searchAddress() async {
+  Future<void> _searchAddress(selectedAdress) async {
     // Clear previous markers
     _markers.clear();
 
     // Get predictions for the search query
-    List<Location> locations =
-        await locationFromAddress(_searchController.text);
+    List<Location> locations = await locationFromAddress(selectedAdress);
 
     // If there are no predictions, display an error message
     // if (locations.isEmpty) {
@@ -119,6 +171,11 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
       ),
     ));
 
+    // final providerPharmacieRegister =
+    //     Provider.of<ProviderPharmacieRegister>(context, listen: false);
+
+    // providerPharmacieRegister.setPharmacieLocation(22, location.longitude);
+
     // Add a marker for the selected location
     _markers.add(Marker(
       markerId: MarkerId('selected-location'),
@@ -134,9 +191,6 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
       _selectedPostalCode = placemark.postalCode ?? '';
       _selectedCity = placemark.locality ?? '';
     });
-
-    // Update the text field
-    _searchController.text = _selectedAddress;
 
     // Display a message with the selected address
     // ScaffoldMessenger.of(context).showSnackBar(

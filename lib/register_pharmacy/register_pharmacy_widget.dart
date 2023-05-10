@@ -78,7 +78,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
         Provider.of<ProviderPharmacieRegister>(context);
 
     return Consumer<ProviderPharmacieRegister>(
-        builder: (context, userRegisterSate, child) {
+        builder: (context, pharmacieRegisterSate, child) {
       return GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Scaffold(
@@ -206,7 +206,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   child: TextFormField(
                                     controller:
                                         _model.nomdelapharmacieController1,
-                                    
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Nom de la pharmacie',
@@ -260,7 +259,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   child: TextFormField(
                                     controller:
                                         _model.nomdelapharmacieController2,
-                                    
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Titulaire',
@@ -317,7 +315,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Image.asset(
-                                        'assets/groupements/'+providerPharmacieRegister.selectedGroupement[0]['image'],
+                                        'assets/groupements/' +
+                                            providerPharmacieRegister
+                                                .selectedGroupement[0]['image'],
                                         width: 120,
                                         height: 60,
                                         fit: BoxFit.cover,
@@ -346,7 +346,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       ),
                                             ),
                                             Text(
-                                              providerPharmacieRegister.selectedGroupement[0]['name'],
+                                              providerPharmacieRegister
+                                                      .selectedGroupement[0]
+                                                  ['name'],
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -431,7 +433,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.presentationController,
-                                    
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Présentation',
@@ -584,7 +585,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.emailPharmacieController,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
@@ -638,7 +638,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.phonePharmacieController1,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Téléphone',
@@ -809,7 +808,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ],
                                 ),
                               ),
-                               custom_widgets.MapAdressePharmacie(),
+                              custom_widgets.MapAdressePharmacie(),
                             ],
                           ),
                         ),
@@ -874,7 +873,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.rerController,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'RER',
@@ -926,7 +924,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.metroController,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Métro',
@@ -978,7 +975,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.busController,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Bus',
@@ -1030,7 +1026,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.tramwayController1,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Tramway',
@@ -1082,7 +1077,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.tramwayController2,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Gare',
@@ -5603,7 +5597,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   padding: MediaQuery.of(
                                                           bottomSheetContext)
                                                       .viewInsets,
-                                                  child: PopupLgoPharmacieWidget(),
+                                                  child:
+                                                      PopupLgoPharmacieWidget(),
                                                 ),
                                               );
                                             },
@@ -5684,12 +5679,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               MainAxisAlignment.start,
                                           children: [
                                             Image.asset(
-                                              'assets/lgo/'+providerPharmacieRegister.selectedLgo[0]['image'],
+                                              'assets/lgo/' +
+                                                  providerPharmacieRegister
+                                                      .selectedLgo[0]['image'],
                                               width: 120,
                                               height: 60,
                                               fit: BoxFit.cover,
                                             ),
-                                            Text(providerPharmacieRegister.selectedLgo[0]['name'])
+                                            Text(providerPharmacieRegister
+                                                .selectedLgo[0]['name'])
                                           ],
                                         ),
                                       ),
@@ -6907,7 +6905,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbConseillersController,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre de conseillers',
@@ -6961,7 +6958,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbApprentiController,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'apprentis',
@@ -7015,7 +7011,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbEtudiantsController,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'étudiants pharmacie',
@@ -7069,7 +7064,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbEtudiants6emeController,
-                                  
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'étudiants 6ème année',
@@ -7147,7 +7141,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          context.goNamed('Explorer');
+                          // context.goNamed('Explorer');
+                          print(
+                              pharmacieRegisterSate.selectedPharmacieLocation);
                         },
                         text: 'Créer la pharmacie',
                         options: FFButtonOptions(

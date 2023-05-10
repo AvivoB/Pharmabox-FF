@@ -113,6 +113,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   google_maps_cluster_manager: ^3.0.0+1
   geocoding: ^2.1.0
+  google_maps_webservice: ^0.0.19
 
 dev_dependencies:
   analyzer: 5.10.0
