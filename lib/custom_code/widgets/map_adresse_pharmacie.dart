@@ -19,6 +19,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
   late String _selectedAddress;
   late String _selectedPostalCode;
   late String _selectedCity;
+  List<String> predictions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -98,14 +99,14 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
     // Get predictions for the search query
     List<Location> locations =
         await locationFromAddress(_searchController.text);
- 
+
     // If there are no predictions, display an error message
-    if (locations.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No address found')),
-      );
-      return;
-    }
+    // if (locations.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(content: Text('No address found')),
+    //   );
+    //   return;
+    // }
 
     // Get the first prediction
     Location location = locations.first;
@@ -138,8 +139,8 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
     _searchController.text = _selectedAddress;
 
     // Display a message with the selected address
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Selected address: $_selectedAddress')),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(content: Text('Selected address: $_selectedAddress')),
+    // );
   }
 }
