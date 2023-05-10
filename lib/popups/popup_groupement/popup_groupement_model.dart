@@ -22,8 +22,8 @@ class PopupGroupementModel extends FlutterFlowModel {
 
   /// Additional helper methods are added here.
 
-  static selectGroupemen() {
-    List<Map> listLGO = [
+  static selectGroupement() {
+    List<Map> listGroupement = [
       {"name": "Aelia", "image": "Aelia.jpg"},
       {"name": "Agir Pharma", "image": "Agir Pharma.jpg"},
       {"name": "AGPF", "image": "AGPF.jpg"},
@@ -167,5 +167,7 @@ class PopupGroupementModel extends FlutterFlowModel {
       },
       {"name": "Wellpharma", "image": "Wellpharma.jpg"}
     ];
+
+    return listGroupement;
   }
 }

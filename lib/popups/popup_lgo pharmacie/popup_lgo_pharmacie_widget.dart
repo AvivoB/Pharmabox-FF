@@ -10,15 +10,15 @@ import 'package:provider/provider.dart';
 import 'popup_lgo_pharmacie_model.dart';
 export 'popup_lgo_pharmacie_model.dart';
 
-class PopupLgoWidget extends StatefulWidget {
-  const PopupLgoWidget({Key? key}) : super(key: key);
+class PopupLgoPharmacieWidget extends StatefulWidget {
+  const PopupLgoPharmacieWidget({Key? key}) : super(key: key);
 
   @override
-  _PopupLgoWidgetState createState() => _PopupLgoWidgetState();
+  _PopupLgoPharmacieWidgetState createState() => _PopupLgoPharmacieWidgetState();
 }
 
-class _PopupLgoWidgetState extends State<PopupLgoWidget> {
-  late PopupLgoModel _model;
+class _PopupLgoPharmacieWidgetState extends State<PopupLgoPharmacieWidget> {
+  late PopupLgoPharmacieModel _model;
 
   @override
   void setState(VoidCallback callback) {
@@ -29,7 +29,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => PopupLgoModel());
+    _model = createModel(context, () => PopupLgoPharmacieModel());
 
     _model.lgoFilterController ??= TextEditingController();
   }
@@ -45,7 +45,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map> listLGO = PopupLgoModel.selectLGO();
+    List<Map> listLGO = PopupLgoPharmacieModel.selectLGO();
     listLGO = listLGO
         .where((element) => element['name']
             .toString()

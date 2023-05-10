@@ -10,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:core';
 import 'dart:async';
 
-class PopupLgoModel extends FlutterFlowModel {
+class PopupLgoPharmacieModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this component.
 
   // State field(s) for LgoFilter widget.

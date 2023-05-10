@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 class ProviderPharmacieRegister extends ChangeNotifier {
-  List _selectedGroupement = [];
-  List _selectedLgo = [];
+  List _selectedGroupement = [{"name": "Aelia", "image": "Aelia.jpg"}];
+  List _selectedLgo = [{"image": "ActiPharm.jpg", "name": "ActiPharm"}];
 
   // Getters qui permettent de recuperer les données dans les vues
+  List get selectedGroupement => _selectedGroupement;
   List get selectedLgo => _selectedLgo;
-  List get selectedGroupemnt => _selectedGroupement;
 
 /* Options Groupement */
   void selectGroupement(groupement) {
-    _selectedGroupement = groupement;
+    _selectedGroupement[0] = groupement;
     notifyListeners();
   }
 
 /* Option LGO */
   void selectLGO(lgo) {
-    _selectedLgo = lgo;
+    _selectedLgo[0] = lgo;
     notifyListeners();
   }
 }

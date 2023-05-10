@@ -1,3 +1,5 @@
+import 'package:pharmabox/constant.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';
 import '/flutter_flow/flutter_flow_google_map.dart';
@@ -9,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'explorer_model.dart';
 export 'explorer_model.dart';
+import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 
 class ExplorerWidget extends StatefulWidget {
   const ExplorerWidget({Key? key}) : super(key: key);
@@ -117,36 +120,41 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                     ),
                   ),
                 ),
-                Stack(
-                  children: [
-                    Container(
+                Container(
                       width: MediaQuery.of(context).size.width * 1.0,
                       height: MediaQuery.of(context).size.height * 0.73,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                       ),
-                      child: FlutterFlowGoogleMap(
-                        controller: _model.googleMapsController,
-                        onCameraIdle: (latLng) =>
-                            _model.googleMapsCenter = latLng,
-                        initialLocation: _model.googleMapsCenter ??=
-                            LatLng(13.106061, -59.613158),
-                        markerColor: GoogleMarkerColor.violet,
-                        mapType: MapType.normal,
-                        style: GoogleMapStyle.standard,
-                        initialZoom: 14.0,
-                        allowInteraction: true,
-                        allowZoom: true,
-                        showZoomControls: true,
-                        showLocation: true,
-                        showCompass: false,
-                        showMapToolbar: false,
-                        showTraffic: false,
-                        centerMapOnMarkerTap: true,
-                      ),
+                      child: Stack(
+                        
+                        children: [
+                        Container(
+                          decoration: BoxDecoration(color: redColor),
+                        ),
+
+
+                        // Afficher les resulats
+                        DraggableScrollableSheet(
+                          minChildSize: 0.12,
+                          initialChildSize: 0.12,
+                          builder: (BuildContext context, ScrollController scrollController){
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 219, 219, 227),
+                                borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))
+                              ),
+                              // color: Color.fromARGB(255, 238, 238, 244),
+                              child: ListView.builder(
+                                controller: scrollController,
+                                itemBuilder: (BuildContext context, int index){
+                                  // 
+                                }),
+                            );
+                          },
+                        )
+                      ]),
                     ),
-                  ],
-                ),
               ],
             ),
           ),

@@ -43,7 +43,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map> listGroupement = PopupGroupementModel.selectGroupemen();
+    List<Map> listGroupement = PopupGroupementModel.selectGroupement();
     listGroupement = listGroupement
         .where((element) => element['name']
             .toString()
@@ -57,7 +57,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.4,
+          height: MediaQuery.of(context).size.height * 0.6,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -106,8 +106,6 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
                           controller: _model.groupementFilterController,
-                          autofocus: true,
-                          readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Groupement',
@@ -172,7 +170,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                 ),
                 Container(
                    width: MediaQuery.of(context).size.width * 1.0,
-                    height: MediaQuery.of(context).size.height * 0.23,
+                    height: MediaQuery.of(context).size.height * 0.4,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
