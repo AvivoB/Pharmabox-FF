@@ -22,12 +22,6 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPharmacyModel extends FlutterFlowModel {
-  ///  Local state fields for this page.
-
-  List<int> titulaires = [];
-  void addToTitulaires(int item) => titulaires.add(item);
-  void removeFromTitulaires(int item) => titulaires.remove(item);
-  void removeAtIndexFromTitulaires(int index) => titulaires.removeAt(index);
 
   ///  State fields for stateful widgets in this page.
 
@@ -62,6 +56,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   FormFieldController<String>? preferenceContactValueController;
   // State field(s) for PharmacieAdresse widget.
   TextEditingController? pharmacieAdresseController;
+  List? pharmacieAdresseLocation;
 
 // State field for pharmacieLaLng get location  
   TextEditingController? pharmacieLat;
@@ -268,43 +263,43 @@ class RegisterPharmacyModel extends FlutterFlowModel {
 
   String typologie = '';
   // Typologie :
-  if(typologieCentrecommercialValue!) {
+  if(this.typologieCentrecommercialValue ?? false) {
     typologie = 'Centre commercial';
   }
-  if(typologieCentrevilleValue!) {
+  if(this.typologieCentrevilleValue ?? false) {
     typologie = 'Centre ville';
   }
-  if(typologieAeroportValue!) {
+  if(this.typologieAeroportValue ?? false) {
     typologie = 'Aéroport';
   }
-  if(comptencesLaboValue1!) {
+  if(this.comptencesLaboValue1 ?? false) {
     typologie = 'Gare';
   }
-  if(comptencesLaboValue2!) {
+  if(this.comptencesLaboValue2 ?? false) {
     typologie = 'Quartier';
   }
-  if(comptencesLaboValue3!) {
+  if(this.comptencesLaboValue3 ?? false) {
     typologie = 'Lieu touristique';
   }
-  if(comptencesTRODValue!) {
+  if(this.comptencesTRODValue ?? false) {
     typologie = 'Zone rurale';
   }
 
 
   List missions = [];
-  if(missioTestCovidValue!) {
+  if(this.missioTestCovidValue ?? false) {
     missions.add('Test COVID');
   }
-  if(missionVaccinationValue!) {
+  if(this.missionVaccinationValue ?? false) {
     missions.add('Vaccination');
   }
-  if(missionEnretienPharmaValue!) {
+  if(this.missionEnretienPharmaValue?? false) {
     missions.add('Entretien pharmaceutique');
   }
-  if(missionsBorneValue!) {
+  if(this.missionsBorneValue ?? false) {
     missions.add('Borne de télé-médecine');
   }
-  if(missionPreparationValue!) {
+  if(this.missionPreparationValue ?? false) {
     missions.add('externalisé');
   } else {
     missions.add('par l\'équipe');
@@ -316,7 +311,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
       'name': nomdelapharmacieController1.text,
       'presentation': presentationController.text,
       'titulaire_principal': nomdelapharmacieController2.text,
-      'titulaires_autres': titulaires,
+      // 'titulaires_autres': titulaires,
       'maitre_stage': '',
       'contact_pharma': {
         'email': emailPharmacieController.text,
@@ -325,7 +320,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
       },
       'situation_geographique': {
         'adresse': pharmacieAdresseController.text,
-        'lat_long': GeoPoint(providerPharmacieRegister.selectedPharmacieLocation[0], providerPharmacieRegister.selectedPharmacieLocation[1])
+        'lat_long': this.pharmacieAdresseLocation
       },
       'accessibilite': {
         'rer': rerController.text,
@@ -383,5 +378,6 @@ class RegisterPharmacyModel extends FlutterFlowModel {
         'nb_etudiants_6eme_annee': (nbEtudiants6emeController.text != '') ? nbEtudiants6emeController.text : 0,
       }
     });
+  
   }
 }

@@ -9,7 +9,9 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class MapAdressePharmacie extends StatefulWidget {
-  const MapAdressePharmacie({Key? key}) : super(key: key);
+  const MapAdressePharmacie({Key? key, required this.onAdressSelected}) : super(key: key);
+
+  final Function(List, String) onAdressSelected;
 
   @override
   _MapAdressePharmacieState createState() => _MapAdressePharmacieState();
@@ -154,6 +156,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
 
     // Get the first prediction
     Location location = locations.first;
+    widget.onAdressSelected(locations, selectedAdress);
 
     // Set the camera position to the selected location
     _mapController.animateCamera(CameraUpdate.newCameraPosition(

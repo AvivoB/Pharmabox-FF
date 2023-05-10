@@ -9,8 +9,9 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class PredictionNomPhamracie extends StatefulWidget {
-  const PredictionNomPhamracie({Key? key}) : super(key: key);
+  const PredictionNomPhamracie({Key? key, required this.onPlaceSelected}) : super(key: key);
 
+   final Function(String) onPlaceSelected;
   @override
   _PredictionNomPhamracieState createState() => _PredictionNomPhamracieState();
 }
@@ -52,6 +53,9 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
       _searchController.text = prediction;
       _predictions = [];
     });
+    if (widget.onPlaceSelected != null) {
+      widget.onPlaceSelected(prediction);
+    }
   }
 
   @override
@@ -115,7 +119,6 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
                       style: FlutterFlowTheme.of(context).bodyMedium),
                   onTap: () {
                     _onPredictionSelected(_predictions[index]['terms'][0]['value']);
-                    print(_predictions[index]);
                   },
                 );
               },

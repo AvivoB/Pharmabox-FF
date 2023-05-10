@@ -45,4 +45,6 @@ class ProviderPharmacieRegister extends ChangeNotifier {
     _selectedPharmacieVille = ville;
     _selectedPharmacieCodePostal = codePostal;
   }
+
+
 }

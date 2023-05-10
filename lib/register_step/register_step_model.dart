@@ -173,12 +173,7 @@ class RegisterStepModel extends FlutterFlowModel {
         'photoUrl': imageURL,
       });
 
-      // if (poste == 'Pharmacien(ne) titulaire') {
-      //   context.pushNamed('RegisterPharmacy');
-      // } else {
-      //   context.pushNamed('Explorer');
-      // }
-      
+      return true;
     } else {
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
