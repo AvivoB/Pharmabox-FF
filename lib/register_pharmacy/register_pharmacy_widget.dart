@@ -45,6 +45,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
     _model.emailPharmacieController ??= TextEditingController();
     _model.phonePharmacieController1 ??= TextEditingController();
     _model.pharmacieAdresseController ??= TextEditingController();
+    _model.pharmacieLat ??= TextEditingController();
+    _model.pharmacieLong ??= TextEditingController();
     _model.rerController ??= TextEditingController();
     _model.metroController ??= TextEditingController();
     _model.busController ??= TextEditingController();

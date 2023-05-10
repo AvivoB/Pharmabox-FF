@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 
 import '/backend/firebase_storage/storage.dart';
 import '/composants/maps_widget_adresse_pharmacie/maps_widget_adresse_pharmacie_widget.dart';
@@ -61,7 +62,12 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   FormFieldController<String>? preferenceContactValueController;
   // State field(s) for PharmacieAdresse widget.
   TextEditingController? pharmacieAdresseController;
-  final pharmacieAdresseMask = MaskTextInputFormatter(mask: '## ## ## ## ##');
+
+// State field for pharmacieLaLng get location  
+  TextEditingController? pharmacieLat;
+// State field for pharmacieLaLng get location  
+  TextEditingController? pharmacieLong;
+
   String? Function(BuildContext, String?)? pharmacieAdresseControllerValidator;
   // Model for MapsWidgetAdressePharmacie component.
   late MapsWidgetAdressePharmacieModel mapsWidgetAdressePharmacieModel;
@@ -250,12 +256,14 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   /// Additional helper methods are added here.
 
   // Enregistrement dans la base
-  createPharmacie() {
+  createPharmacie(context) {
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
 
     final CollectionReference<Map<String, dynamic>> pharmaciesRef =
         FirebaseFirestore.instance.collection('pharmacies');
+    final providerPharmacieRegister =
+        Provider.of<ProviderPharmacieRegister>(context, listen: false);
 
   String typologie = '';
   // Typologie :
@@ -355,11 +363,12 @@ class RegisterPharmacyModel extends FlutterFlowModel {
           'matin': datePicked15,
           'aprem': datePicked16
         },
-        // '24H/24': (nonSTOPValue) ? true : false,
+        'Non-stop': (nonSTOPValue == true) ? true : false,
       },
       'typologie': typologie,
       'nb_patient_jour': patientParJourValue,
-      // 'lgo': lgo,
+      'lgo': providerPharmacieRegister.selectedLgo,
+      'groupement': providerPharmacieRegister.selectedGroupement,
       'missions': missions,
       // 'confort': confort,
       // 'tendances': tendances,

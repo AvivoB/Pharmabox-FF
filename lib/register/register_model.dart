@@ -20,7 +20,7 @@ class RegisterModel extends FlutterFlowModel {
     }
 
     if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
-      return 'Has to be a valid email address.';
+      return 'L\'adresse E-mail doit être valide';
     }
     return null;
   }
@@ -31,7 +31,7 @@ class RegisterModel extends FlutterFlowModel {
   String? Function(BuildContext, String?)? motdepasseControllerValidator;
   String? _motdepasseControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
-      return 'Lemot de passe est obligatoire';
+      return 'Le mot de passe est obligatoire';
     }
 
     return null;
