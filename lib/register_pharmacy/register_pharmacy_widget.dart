@@ -90,7 +90,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                 children: [
                   custom_widgets.CarouselPharmacieSliderSelect(
                     onImagesSelected: (urls) {
-
+                      
                     },
                   ),
                   
@@ -1220,7 +1220,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                             .fromSTEB(
                                                                 3, 0, 3, 0),
                                                     child: Text(
-                                                      'Après -midi',
+                                                      'Matin',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -1475,7 +1475,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       AlignmentDirectional(
                                                           0, 0),
                                                   child: Text(
-                                                    'Matin',
+                                                    'Après-midi',
                                                     textAlign: TextAlign.start,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -1767,7 +1767,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                             .fromSTEB(
                                                                 3, 0, 3, 0),
                                                     child: Text(
-                                                      'Après -midi',
+                                                      'Matin',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -2022,7 +2022,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       AlignmentDirectional(
                                                           0, 0),
                                                   child: Text(
-                                                    'Matin',
+                                                    'Après-midi',
                                                     textAlign: TextAlign.start,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -2314,7 +2314,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                             .fromSTEB(
                                                                 3, 0, 3, 0),
                                                     child: Text(
-                                                      'Après -midi',
+                                                      'Matin',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -2569,7 +2569,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       AlignmentDirectional(
                                                           0, 0),
                                                   child: Text(
-                                                    'Matin',
+                                                    'Après-midi',
                                                     textAlign: TextAlign.start,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -2861,7 +2861,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                             .fromSTEB(
                                                                 3, 0, 3, 0),
                                                     child: Text(
-                                                      'Après -midi',
+                                                      'Matin',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -3116,7 +3116,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       AlignmentDirectional(
                                                           0, 0),
                                                   child: Text(
-                                                    'Matin',
+                                                    'Après-midi',
                                                     textAlign: TextAlign.start,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -3408,7 +3408,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                             .fromSTEB(
                                                                 3, 0, 3, 0),
                                                     child: Text(
-                                                      'Après -midi',
+                                                      'Matin',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -3663,7 +3663,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       AlignmentDirectional(
                                                           0, 0),
                                                   child: Text(
-                                                    'Matin',
+                                                    'Après-midi',
                                                     textAlign: TextAlign.start,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -3955,7 +3955,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                             .fromSTEB(
                                                                 3, 0, 3, 0),
                                                     child: Text(
-                                                      'Après -midi',
+                                                      'Matin',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -4210,7 +4210,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       AlignmentDirectional(
                                                           0, 0),
                                                   child: Text(
-                                                    'Matin',
+                                                    'Après-midi',
                                                     textAlign: TextAlign.start,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -4502,7 +4502,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                             .fromSTEB(
                                                                 3, 0, 3, 0),
                                                     child: Text(
-                                                      'Après -midi',
+                                                      'Matin',
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
@@ -4757,7 +4757,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       AlignmentDirectional(
                                                           0, 0),
                                                   child: Text(
-                                                    'Matin',
+                                                    'Après-midi',
                                                     textAlign: TextAlign.start,
                                                     style: FlutterFlowTheme.of(
                                                             context)
