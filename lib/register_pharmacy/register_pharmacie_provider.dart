@@ -11,16 +11,22 @@ class ProviderPharmacieRegister extends ChangeNotifier {
 
   List _selectedPharmacieLocation = [];
   String _selectedPharmacieAdresse = '';
-  String _selectedPharmacieVille = '';
-  String _selectedPharmacieCodePostal = '';
+  String _selectedPharmacieAdresseRue = '';
+  List _tendences = [
+    {'Ordonances': ''},
+    {'Cosmétiques': ''},
+    {'Phyto / aroma': ''},
+    {'Nutrition': ''},
+    {'Conseil': ''},
+  ];
 
   // Getters qui permettent de recuperer les données dans les vues
   List get selectedGroupement => _selectedGroupement;
   List get selectedLgo => _selectedLgo;
   List get selectedPharmacieLocation => _selectedPharmacieLocation;
+  List get tendences => _tendences;
   String get selectedPharmacieAdresse => _selectedPharmacieAdresse;
-  String get selectedPharmacieVille => _selectedPharmacieVille;
-  String get selectedPharmacieCodePostal => _selectedPharmacieCodePostal;
+  String get selectedPharmacieAdresseRue => _selectedPharmacieAdresseRue;
 
 /* Options Groupement */
   void selectGroupement(groupement) {
@@ -36,15 +42,22 @@ class ProviderPharmacieRegister extends ChangeNotifier {
 
   /* Localisation de la pharmacie */
   void setPharmacieLocation(latitude, longitude) {
-    _selectedPharmacieLocation[0] = latitude;
-    _selectedPharmacieLocation[1] = longitude;
+    _selectedPharmacieLocation = [latitude, longitude];
+    notifyListeners();
   }
 
-  void setAdressePharmacie(adresse, ville, codePostal) {
+  void setAdressePharmacie(adresse) {
     _selectedPharmacieAdresse = adresse;
-    _selectedPharmacieVille = ville;
-    _selectedPharmacieCodePostal = codePostal;
+    notifyListeners();
   }
 
+  void setAdresseRue(adresse) {
+    _selectedPharmacieAdresseRue = adresse;
+  }
 
+  void setTendences(index, type, value) {
+    _tendences[index][type] = value;
+    print(value);
+    notifyListeners();
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 
 import '../popups/popup_lgo pharmacie/popup_lgo_pharmacie_widget.dart';
@@ -21,7 +23,6 @@ import 'register_pharmacy_model.dart';
 export 'register_pharmacy_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class RegisterPharmacyWidget extends StatefulWidget {
   const RegisterPharmacyWidget({Key? key}) : super(key: key);
 
@@ -34,6 +35,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+  String typologie = '';
 
   @override
   void initState() {
@@ -59,6 +61,152 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
     _model.nbEtudiantsController ??= TextEditingController();
     _model.nbEtudiants6emeController ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  // Enregistrement dans la base
+  createPharmacie(context) {
+    final firestore = FirebaseFirestore.instance;
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    final CollectionReference<Map<String, dynamic>> pharmaciesRef =
+        FirebaseFirestore.instance.collection('pharmacies');
+    final providerPharmacieRegister =
+        Provider.of<ProviderPharmacieRegister>(context, listen: false);
+
+    List missions = [];
+    if (_model.missioTestCovidValue) {
+      missions.add('Test COVID');
+    }
+    if (_model.missionVaccinationValue) {
+      missions.add('Vaccination');
+    }
+    if (_model.missionEnretienPharmaValue) {
+      missions.add('Entretien pharmaceutique');
+    }
+    if (_model.missionsBorneValue) {
+      missions.add('Borne de télé-médecine');
+    }
+    if (_model.missionPreparationValue) {
+      missions.add('externalisé');
+    } else {
+      missions.add('par l\'équipe');
+    }
+
+    List confort = [];
+    if (_model.confortSallePauseValue) {
+      confort.add('Salle de pause');
+    }
+    if (_model.confortRobotValue) {
+      confort.add('Robot');
+    }
+    if (_model.confortEtiquetteValue) {
+      confort.add('Etiquettes éléctroniques');
+    }
+    if (_model.confortMonayeurValue) {
+      confort.add('Monnayeur');
+    } else {
+      confort.add('Caisse classique');
+    }
+    if (_model.confortCimValue) {
+      confort.add('Climatisation');
+    }
+    if (_model.confortChauffageValue) {
+      confort.add('Chauffage');
+    }
+    if (_model.confortVigileValue) {
+      confort.add('Vigile');
+    }
+    if (_model.confortComiteEntrepriseValue) {
+      confort.add('Comité d\'entreprise');
+    }
+
+    pharmaciesRef.doc().set({
+      'user_id': currentUser!.uid,
+      'photo_url': _model.imagePharmacie,
+      'name': providerPharmacieRegister.selectedPharmacieAdresse,
+      'presentation': _model.presentationController.text,
+      'titulaire_principal': _model.nomdelapharmacieController2.text,
+      // 'titulaires_autres': titulaires,
+      'maitre_stage': _model.comptencesTestCovidValue,
+      'contact_pharma': {
+        'email': _model.emailPharmacieController.text,
+        'telephone': _model.phonePharmacieController1.text,
+        'preference_contact': _model.preferenceContactValue,
+      },
+      'situation_geographique': {
+        'adresse': providerPharmacieRegister.selectedPharmacieAdresseRue,
+        'lat_lng': providerPharmacieRegister.selectedPharmacieLocation,
+      },
+      'accessibilite': {
+        'rer': _model.rerController.text,
+        'metro': _model.metroController.text,
+        'bus': _model.busController.text,
+        'tram': _model.tramwayController1.text,
+        'gare': _model.tramwayController2.text,
+        'stationnement': _model.parkingValue
+      },
+      'horaires': {
+        'Lundi': {
+          'matin': {'debut': _model.datePicked1, 'fin': _model.datePicked2},
+          'aprem': {'debut': _model.datePicked3, 'fin': _model.datePicked4}
+        },
+        'Mardi': {
+          'matin': {'debut': _model.datePicked5, 'fin': _model.datePicked6},
+          'aprem': {'debut': _model.datePicked7, 'fin': _model.datePicked8}
+        },
+        'Mercredi': {
+          'matin': {'debut': _model.datePicked9, 'fin': _model.datePicked10},
+          'aprem': {'debut': _model.datePicked11, 'fin': _model.datePicked12}
+        },
+        'Jeudi': {
+          'matin': {'debut': _model.datePicked13, 'fin': _model.datePicked14},
+          'aprem': {'debut': _model.datePicked15, 'fin': _model.datePicked16}
+        },
+        'Vendredi': {
+          'matin': {'debut': _model.datePicked17, 'fin': _model.datePicked18},
+          'aprem': {'debut': _model.datePicked19, 'fin': _model.datePicked20}
+        },
+        'Samedi': {
+          'matin': {'debut': _model.datePicked21, 'fin': _model.datePicked22},
+          'aprem': {'debut': _model.datePicked23, 'fin': _model.datePicked24}
+        },
+        'Dimanche': {
+          'matin': {'debut': _model.datePicked25, 'fin': _model.datePicked26},
+          'aprem': {'debut': _model.datePicked27, 'fin': _model.datePicked28}
+        }
+      },
+      'Non-stop': (_model.nonSTOPValue) ? true : false,
+      'typologie': typologie,
+      'nb_patient_jour': _model.patientParJourValue,
+      'lgo': providerPharmacieRegister.selectedLgo,
+      'groupement': providerPharmacieRegister.selectedGroupement,
+      'missions': missions,
+      'confort': confort,
+      'tendances': providerPharmacieRegister.tendences,
+      'equipe': {
+        'nb_pharmaciens': (_model.phonePharmacieController2.text != '')
+            ? _model.phonePharmacieController2.text
+            : 0,
+        'nb_preparateurs': (_model.nbPreparateurController.text != '')
+            ? _model.phonePharmacieController2.text
+            : 0,
+        'nb_rayonnistes': (_model.nbRayonnistesController.text != '')
+            ? _model.nbRayonnistesController.text
+            : 0,
+        'nb_conseillers': (_model.nbConseillersController.text != '')
+            ? _model.nbConseillersController.text
+            : 0,
+        'nb_apprentis': (_model.nbApprentiController.text != '')
+            ? _model.nbApprentiController.text
+            : 0,
+        'nb_etudiants': (_model.nbEtudiantsController.text != '')
+            ? _model.nbEtudiantsController.text
+            : 0,
+        'nb_etudiants_6eme_annee': (_model.nbEtudiants6emeController.text != '')
+            ? _model.nbEtudiants6emeController.text
+            : 0,
+      }
+    });
   }
 
   @override
@@ -90,10 +238,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                 children: [
                   custom_widgets.CarouselPharmacieSliderSelect(
                     onImagesSelected: (urls) {
-                      
+                      _model.imagePharmacie = urls;
                     },
                   ),
-                  
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
@@ -116,14 +263,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         0, 0, 0, 10),
                                     child:
                                         custom_widgets.PredictionNomPhamracie(
-                                            onPlaceSelected: (adresse) {})),
+                                            onPlaceSelected: (adresse) {
+                                      providerPharmacieRegister
+                                          .setAdresseRue(adresse);
+                                    })),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 10),
                                   child: TextFormField(
                                     controller:
                                         _model.nomdelapharmacieController2,
-                                    autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Titulaire',
@@ -180,7 +329,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Image.asset(
-                                        'assets/groupements/'+providerPharmacieRegister.selectedGroupement[0]['image'],
+                                        'assets/groupements/' +
+                                            providerPharmacieRegister
+                                                .selectedGroupement[0]['image'],
                                         width: 120,
                                         height: 60,
                                         fit: BoxFit.cover,
@@ -209,7 +360,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       ),
                                             ),
                                             Text(
-                                              providerPharmacieRegister.selectedGroupement[0]['name'],
+                                              providerPharmacieRegister
+                                                      .selectedGroupement[0]
+                                                  ['name'],
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -294,7 +447,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.presentationController,
-                                    autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Présentation',
@@ -447,7 +599,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.emailPharmacieController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
@@ -501,7 +652,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.phonePharmacieController1,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Téléphone',
@@ -673,11 +823,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 ),
                               ),
                               custom_widgets.MapAdressePharmacie(
-                                onAdressSelected: 
-                                  (location, adresse) {
-
-                                  }
-                                )
+                                  onAdressSelected:
+                                      (latitude, longitude, adresse) {
+                                _model.pharmacieAdresseController.text =
+                                    adresse;
+                              })
                             ],
                           ),
                         ),
@@ -742,7 +892,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.rerController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'RER',
@@ -794,7 +943,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.metroController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Métro',
@@ -846,7 +994,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.busController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Bus',
@@ -898,7 +1045,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.tramwayController1,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Tramway',
@@ -950,7 +1096,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.tramwayController2,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Gare',
@@ -1123,16 +1268,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                            
-                                        'assets/icons/24H.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/24H.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Non stop',
                                           style: FlutterFlowTheme.of(context)
@@ -5071,13 +5216,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model
-                                              .typologieCentrecommercialValue ??=
-                                          false,
+                                      value: typologie == 'Centre commercial'
+                                          ? true
+                                          : false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
                                                 .typologieCentrecommercialValue =
                                             newValue);
+                                        typologie = 'Centre commercial';
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5114,12 +5260,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model
-                                          .typologieCentrevilleValue ??= false,
+                                      value: typologie == 'Centre ville'
+                                          ? true
+                                          : false,
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.typologieCentrevilleValue =
                                                 newValue);
+                                        typologie = 'Centre ville';
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5156,12 +5304,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.typologieAeroportValue ??=
-                                          false,
+                                      value: typologie == 'Aéroport'
+                                          ? true
+                                          : false,
                                       onChanged: (newValue) async {
-                                        setState(() =>
-                                            _model.typologieAeroportValue =
-                                                newValue);
+                                        setState(() => _model
+                                            .typologieAeroportValue = newValue);
+                                        typologie = 'Aéroport';
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5198,11 +5347,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.comptencesLaboValue1 ??=
-                                          false,
+                                      value: typologie == 'Gare' ? true : false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
                                             .comptencesLaboValue1 = newValue);
+                                        typologie = 'Gare';
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5222,14 +5371,15 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                        child: SvgPicture.asset(
-                                        'assets/icons/quartier.svg',
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/quartier.svg',
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Quartier',
                                           style: FlutterFlowTheme.of(context)
@@ -5238,11 +5388,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.comptencesLaboValue2 ??=
-                                          false,
+                                      value: typologie == 'Quartier'
+                                          ? true
+                                          : false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
                                             .comptencesLaboValue2 = newValue);
+                                        typologie = 'Quartier';
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5279,11 +5431,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.comptencesLaboValue3 ??=
-                                          false,
+                                      value: typologie == 'Lieu touristique'
+                                          ? true
+                                          : false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
                                             .comptencesLaboValue3 = newValue);
+                                        typologie = 'Lieu touristique';
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5320,11 +5474,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.comptencesTRODValue ??=
-                                          false,
+                                      value: typologie == 'Zone rurale'
+                                          ? true
+                                          : false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
                                             .comptencesTRODValue = newValue);
+                                        typologie = 'Zone rurale';
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5471,7 +5627,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   padding: MediaQuery.of(
                                                           bottomSheetContext)
                                                       .viewInsets,
-                                                  child: PopupLgoPharmacieWidget(),
+                                                  child:
+                                                      PopupLgoPharmacieWidget(),
                                                 ),
                                               );
                                             },
@@ -5504,7 +5661,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding: MediaQuery.of(
                                                               bottomSheetContext)
                                                           .viewInsets,
-                                                      child: PopupLgoPharmacieWidget(),
+                                                      child:
+                                                          PopupLgoPharmacieWidget(),
                                                     ),
                                                   );
                                                 },
@@ -5552,7 +5710,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               MainAxisAlignment.start,
                                           children: [
                                             Image.asset(
-                                              'assets/lgo/'+providerPharmacieRegister.selectedLgo[0]['image'],
+                                              'assets/lgo/' +
+                                                  providerPharmacieRegister
+                                                      .selectedLgo[0]['image'],
                                               width: 120,
                                               height: 60,
                                               fit: BoxFit.cover,
@@ -5561,7 +5721,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(5, 0, 0, 0),
                                               child: Text(
-                                                providerPharmacieRegister.selectedLgo[0]['name'],
+                                                providerPharmacieRegister
+                                                    .selectedLgo[0]['name'],
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium,
@@ -5683,16 +5844,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                            
-                                        'assets/icons/Vaccines.svg',
-                                        width: 20,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/Vaccines.svg',
+                                              width: 20,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Vaccination',
                                           style: FlutterFlowTheme.of(context)
@@ -5726,15 +5887,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/Entretien.svg',
-                                        width: 20,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/Entretien.svg',
+                                              width: 20,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           ' Entretien pharmaceutique',
                                           style: FlutterFlowTheme.of(context)
@@ -5818,17 +5980,19 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             size: 28,
                                           ),
                                         ),
-                                        _model.missionPreparationValue?
-                                        Text(
-                                          'Préparation externalisé',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ) :
-                                         Text(
-                                          'Préparation par l\'équipe',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        )
+                                        _model.missionPreparationValue
+                                            ? Text(
+                                                'Préparation externalisé',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              )
+                                            : Text(
+                                                'Préparation par l\'équipe',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              )
                                       ],
                                     ),
                                     Switch.adaptive(
@@ -5911,15 +6075,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/Pause.svg',
-                                        width: 20,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/Pause.svg',
+                                              width: 20,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Salle de pause',
                                           style: FlutterFlowTheme.of(context)
@@ -5931,9 +6096,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       value: _model.confortSallePauseValue ??=
                                           false,
                                       onChanged: (newValue) async {
-                                        setState(() =>
-                                            _model.confortSallePauseValue =
-                                                newValue);
+                                        setState(() => _model
+                                            .confortSallePauseValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5953,15 +6117,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child:SvgPicture.asset(
-                                        'assets/icons/Bot.svg',
-                                        width: 22,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/Bot.svg',
+                                              width: 22,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Robot',
                                           style: FlutterFlowTheme.of(context)
@@ -5993,15 +6158,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/qrcode.svg',
-                                        width: 20,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/qrcode.svg',
+                                              width: 20,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Étiquettes électroniques',
                                           style: FlutterFlowTheme.of(context)
@@ -6034,26 +6200,29 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/moneyeur.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
-                                        _model.confortMonayeurValue?
-                                        Text(
-                                          'Monnayeur',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ) :
-                                        Text(
-                                          'Caisse classique',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        )
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/moneyeur.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
+                                        _model.confortMonayeurValue
+                                            ? Text(
+                                                'Monnayeur',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              )
+                                            : Text(
+                                                'Caisse classique',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              )
                                       ],
                                     ),
                                     Switch.adaptive(
@@ -6080,15 +6249,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/clim.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/clim.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Climatisation',
                                           style: FlutterFlowTheme.of(context)
@@ -6120,15 +6290,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/chauffage.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/chauffage.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Chauffage',
                                           style: FlutterFlowTheme.of(context)
@@ -6161,15 +6332,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/vigile.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/vigile.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Vigile',
                                           style: FlutterFlowTheme.of(context)
@@ -6202,15 +6374,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/Groups.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/Groups.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Comité d’entreprise',
                                           style: FlutterFlowTheme.of(context)
@@ -6300,15 +6473,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/ordonances.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/ordonances.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Ordonances',
                                           style: FlutterFlowTheme.of(context)
@@ -6317,14 +6491,20 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                      ),
-                                      child: custom_widgets.SliderSimple(slider: 1.0)
-                                    ),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: custom_widgets.SliderSimple(
+                                            slider: 1.0,
+                                            onChanged: (value) {
+                                              providerPharmacieRegister
+                                                  .setTendences(
+                                                      0, 'Ordonances', value);
+                                            })),
                                   ],
                                 ),
                               ),
@@ -6341,15 +6521,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/bebe.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/bebe.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Cosmétiques',
                                           style: FlutterFlowTheme.of(context)
@@ -6358,14 +6539,21 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                      ),
-                                      child: custom_widgets.SliderSimple(slider: 1.0)
-                                    ),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: custom_widgets.SliderSimple(
+                                          slider: 1.0,
+                                          onChanged: (value) {
+                                            providerPharmacieRegister
+                                                .setTendences(
+                                                    1, 'Cosmétiques', value);
+                                          },
+                                        )),
                                   ],
                                 ),
                               ),
@@ -6382,15 +6570,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/phyto.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/phyto.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Phyto / aroma',
                                           style: FlutterFlowTheme.of(context)
@@ -6399,14 +6588,20 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                      ),
-                                      child: custom_widgets.SliderSimple(slider: 1.0)
-                                    ),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: custom_widgets.SliderSimple(
+                                            slider: 1.0,
+                                            onChanged: (value) {
+                                              providerPharmacieRegister
+                                                  .setTendences(2,
+                                                      'Phyto / aroma', value);
+                                            })),
                                   ],
                                 ),
                               ),
@@ -6423,15 +6618,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/nutrition.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/nutrition.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Nutrition',
                                           style: FlutterFlowTheme.of(context)
@@ -6440,14 +6636,20 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                      ),
-                                      child: custom_widgets.SliderSimple(slider: 1.0)
-                                    ),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: custom_widgets.SliderSimple(
+                                            slider: 1.0,
+                                            onChanged: (value) {
+                                              providerPharmacieRegister
+                                                  .setTendences(
+                                                      3, 'Nutrition', value);
+                                            })),
                                   ],
                                 ),
                               ),
@@ -6464,15 +6666,16 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/question.svg',
-                                        width: 22,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/question.svg',
+                                              width: 22,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Conseil',
                                           style: FlutterFlowTheme.of(context)
@@ -6481,14 +6684,21 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.4,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                      ),
-                                      child: custom_widgets.SliderSimple(slider: 1.0)
-                                    ),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: custom_widgets.SliderSimple(
+                                            slider: 1.0,
+                                            onChanged: (value) {
+                                              providerPharmacieRegister
+                                                  .setTendences(
+                                                      4, 'Conseil', value);
+                                              print(value);
+                                            })),
                                   ],
                                 ),
                               ),
@@ -6715,7 +6925,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbConseillersController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre de conseillers',
@@ -6769,7 +6978,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbApprentiController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'apprentis',
@@ -6823,7 +7031,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbEtudiantsController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'étudiants pharmacie',
@@ -6877,7 +7084,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbEtudiants6emeController,
-                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'étudiants 6ème année',
@@ -6955,6 +7161,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () async {
+                          
+                          createPharmacie(context);
                           context.goNamed('Explorer');
                         },
                         text: 'Créer la pharmacie',

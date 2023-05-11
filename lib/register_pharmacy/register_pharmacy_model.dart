@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 
 import '/backend/firebase_storage/storage.dart';
@@ -22,14 +23,12 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPharmacyModel extends FlutterFlowModel {
-
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
   bool isDataUploading = false;
-  FFUploadedFile uploadedLocalFile =
-      FFUploadedFile(bytes: Uint8List.fromList([]));
-  String uploadedFileUrl = '';
+
+  List<String> imagePharmacie = [];
 
   // State field(s) for Nomdelapharmacie widget.
   TextEditingController? nomdelapharmacieController1;
@@ -56,11 +55,11 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   FormFieldController<String>? preferenceContactValueController;
   // State field(s) for PharmacieAdresse widget.
   TextEditingController? pharmacieAdresseController;
-  List? pharmacieAdresseLocation;
 
-// State field for pharmacieLaLng get location  
+
+// State field for pharmacieLaLng get location
   TextEditingController? pharmacieLat;
-// State field for pharmacieLaLng get location  
+// State field for pharmacieLaLng get location
   TextEditingController? pharmacieLong;
 
   String? Function(BuildContext, String?)? pharmacieAdresseControllerValidator;
@@ -85,63 +84,72 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   String? parkingValue;
   FormFieldController<String>? parkingValueController;
   // State field(s) for nonSTOP widget.
-  bool nonSTOPValue = false;                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+  bool nonSTOPValue = false;
+
+
+  // Lundi
+  bool lundiMatValue1 = false;
   DateTime? datePicked1;
   DateTime? datePicked2;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue1 = false;
+ 
+  bool lundiMatValue2 = false;
   DateTime? datePicked3;
   DateTime? datePicked4;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue2 = false;
+
+// Mardi
+  bool lundiMatValue3 = false;
   DateTime? datePicked5;
   DateTime? datePicked6;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue3 = false;
+
+  bool lundiMatValue4 = false;
   DateTime? datePicked7;
   DateTime? datePicked8;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue4 = false;
+
+  // Mercredi
+  bool lundiMatValue5 = false;
   DateTime? datePicked9;
   DateTime? datePicked10;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue5 = false;
+
+  bool lundiMatValue6 = false;
   DateTime? datePicked11;
   DateTime? datePicked12;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue6 = false;
+
+  // Jeudi
+  bool lundiMatValue7 = false;
   DateTime? datePicked13;
   DateTime? datePicked14;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue7 = false;
+
+  bool lundiMatValue8 = false;
   DateTime? datePicked15;
   DateTime? datePicked16;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue8 = false;
+ 
+  // Vendredi
+  bool lundiMatValue9 = false;
   DateTime? datePicked17;
   DateTime? datePicked18;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue9 = false;
+
+  bool lundiMatValue10 = false;
   DateTime? datePicked19;
   DateTime? datePicked20;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue10 = false;
+  
+  // Samedi
+  bool lundiMatValue11 = false;
   DateTime? datePicked21;
   DateTime? datePicked22;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue11 = false;
+
+  bool lundiMatValue12 = false;
   DateTime? datePicked23;
   DateTime? datePicked24;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue12 = false;
+
+  // Dimanche
+  bool lundiMatValue13 = false;
   DateTime? datePicked25;
   DateTime? datePicked26;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue13 = false;
+  bool lundiMatValue14 = false;
   DateTime? datePicked27;
   DateTime? datePicked28;
-  // State field(s) for lundiMat widget.
-  bool lundiMatValue14 = false;
+
+
   // State field(s) for TypologieCentrecommercial widget.
   bool typologieCentrecommercialValue = false;
   // State field(s) for TypologieCentreville widget.
@@ -186,15 +194,15 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   // State field(s) for ConfortComiteEntreprise widget.
   bool confortComiteEntrepriseValue = false;
   // State field(s) for Slider widget.
-  double? sliderValue1 ;
+  double? sliderValue1;
   // State field(s) for Slider widget.
-  double? sliderValue2 ;
+  double? sliderValue2;
   // State field(s) for Slider widget.
-  double? sliderValue3 ;
+  double? sliderValue3;
   // State field(s) for Slider widget.
-  double? sliderValue4 ;
+  double? sliderValue4;
   // State field(s) for Slider widget.
-  double? sliderValue5 ;
+  double? sliderValue5;
   // State field(s) for PhonePharmacie widget.
   TextEditingController? phonePharmacieController2;
   String? Function(BuildContext, String?)? phonePharmacieController2Validator;
@@ -249,134 +257,4 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
-  
-
-  // Enregistrement dans la base
-  // createPharmacie(context) {
-  //   final firestore = FirebaseFirestore.instance;
-  //   final currentUser = FirebaseAuth.instance.currentUser;
-
-  //   final CollectionReference<Map<String, dynamic>> pharmaciesRef =
-  //       FirebaseFirestore.instance.collection('pharmacies');
-  //   final providerPharmacieRegister =
-  //       Provider.of<ProviderPharmacieRegister>(context, listen: false);
-
-  // String typologie = '';
-  // // // Typologie :
-  // // if(this.typologieCentrecommercialValue ?? false) {
-  // //   typologie = 'Centre commercial';
-  // // }
-  // // if(this.typologieCentrevilleValue ?? false) {
-  // //   typologie = 'Centre ville';
-  // // }
-  // // if(this.typologieAeroportValue ?? false) {
-  // //   typologie = 'Aéroport';
-  // // }
-  // // if(this.comptencesLaboValue1 ?? false) {
-  // //   typologie = 'Gare';
-  // // }
-  // // if(this.comptencesLaboValue2 ?? false) {
-  // //   typologie = 'Quartier';
-  // // }
-  // // if(this.comptencesLaboValue3 ?? false) {
-  // //   typologie = 'Lieu touristique';
-  // // }
-  // // if(this.comptencesTRODValue ?? false) {
-  // //   typologie = 'Zone rurale';
-  // // }
-
-
-  // List missions = [];
-  // if(this.missioTestCovidValue ?? false) {
-  //   missions.add('Test COVID');
-  // }
-  // if(this.missionVaccinationValue ?? false) {
-  //   missions.add('Vaccination');
-  // }
-  // if(this.missionEnretienPharmaValue?? false) {
-  //   missions.add('Entretien pharmaceutique');
-  // }
-  // if(this.missionsBorneValue ?? false) {
-  //   missions.add('Borne de télé-médecine');
-  // }
-  // if(this.missionPreparationValue ?? false) {
-  //   missions.add('externalisé');
-  // } else {
-  //   missions.add('par l\'équipe');
-  // }
-
-
-  //   pharmaciesRef.doc().set({
-  //     'user_id' : currentUser!.uid,
-  //     'name': nomdelapharmacieController1.text,
-  //     'presentation': presentationController.text,
-  //     'titulaire_principal': nomdelapharmacieController2.text,
-  //     // 'titulaires_autres': titulaires,
-  //     'maitre_stage': '',
-  //     'contact_pharma': {
-  //       'email': emailPharmacieController.text,
-  //       'telephone': phonePharmacieController1.text,
-  //       'preference_contact': preferenceContactValue,
-  //     },
-  //     'situation_geographique': {
-  //       'adresse': pharmacieAdresseController.text,
-  //       'lat_long': this.pharmacieAdresseLocation
-  //     },
-  //     'accessibilite': {
-  //       'rer': rerController.text,
-  //       'metro': metroController.text,
-  //       'bus': busController.text,
-  //       'tram': tramwayController1.text,
-  //       'gare': tramwayController2.text,
-  //       'stationnement': parkingValue
-  //     },
-  //     'horaires': {
-  //       'Lundi': {
-  //         'matin': datePicked3,
-  //         'aprem': datePicked4
-  //       },
-  //       'Mardi': {
-  //         'matin': datePicked5,
-  //         'aprem': datePicked6
-  //       },
-  //       'Mercredi': {
-  //         'matin': datePicked7,
-  //         'aprem': datePicked8
-  //       },
-  //       'Jeudi': {
-  //         'matin': datePicked9,
-  //         'aprem': datePicked10
-  //       },
-  //       'vendredi': {
-  //         'matin': datePicked11,
-  //         'aprem': datePicked12
-  //       },
-  //       'Samedi': {
-  //         'matin': datePicked13,
-  //         'aprem': datePicked14
-  //       },
-  //       'Dimanche': {
-  //         'matin': datePicked15,
-  //         'aprem': datePicked16
-  //       },
-  //       // 'Non-stop': (nonSTOPValue == true) ? true : false,
-  //     },
-  //     'typologie': typologie,
-  //     'nb_patient_jour': patientParJourValue,
-  //     'lgo': providerPharmacieRegister.selectedLgo,
-  //     'groupement': providerPharmacieRegister.selectedGroupement,
-  //     'missions': missions,
-  //     // 'confort': confort,
-  //     // 'tendances': tendances,
-  //     'equipe': {
-  //       'nb_pharmaciens': (phonePharmacieController2.text != '') ? phonePharmacieController2.text : 0,
-  //       'nb_preparateurs': (nbPreparateurController.text != '') ? phonePharmacieController2.text : 0,
-  //       'nb_rayonnistes': (nbRayonnistesController.text != '') ? nbRayonnistesController.text : 0,
-  //       'nb_conseillers': (nbConseillersController.text != '') ? nbConseillersController.text : 0,
-  //       'nb_apprentis': (nbApprentiController.text != '') ? nbApprentiController.text : 0,
-  //       'nb_etudiants': (nbEtudiantsController.text != '') ? nbEtudiantsController.text : 0,
-  //       'nb_etudiants_6eme_annee': (nbEtudiants6emeController.text != '') ? nbEtudiants6emeController.text : 0,
-  //     }
-  //   });
-  // }
 }

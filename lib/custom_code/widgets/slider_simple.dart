@@ -7,11 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class SliderSimple extends StatefulWidget {
-  const SliderSimple({
-    Key? key, 
-    required this.slider, 
-    this.onChanged
-  }): super(key: key);
+  const SliderSimple({Key? key, required this.slider, this.onChanged})
+      : super(key: key);
 
   final double? slider;
   final Function(int)? onChanged;
@@ -19,12 +16,10 @@ class SliderSimple extends StatefulWidget {
   static void emptyFunction() {}
 
   @override
-  _SliderSimpleState createState() =>
-      _SliderSimpleState();
+  _SliderSimpleState createState() => _SliderSimpleState();
 }
 
 class _SliderSimpleState extends State<SliderSimple> {
-
   int _currentStep = 0;
 
   @override
@@ -37,12 +32,13 @@ class _SliderSimpleState extends State<SliderSimple> {
                 value: _currentStep.toDouble(),
                 min: 0,
                 max: 2,
-                divisions: 2,
+                // divisions: 2,
                 onChanged: (double value) {
                   setState(() {
                     _currentStep = value.toInt();
                   });
                   widget.onChanged?.call(value.toInt());
+                  
                 },
                 activeColor: _currentStep == 0
                     ? redColor

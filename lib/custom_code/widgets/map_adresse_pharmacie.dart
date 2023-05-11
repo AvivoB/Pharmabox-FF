@@ -11,7 +11,7 @@ import '../../register_pharmacy/register_pharmacie_provider.dart';
 class MapAdressePharmacie extends StatefulWidget {
   const MapAdressePharmacie({Key? key, required this.onAdressSelected}) : super(key: key);
 
-  final Function(List, String) onAdressSelected;
+  final Function(double, double, String) onAdressSelected;
 
   @override
   _MapAdressePharmacieState createState() => _MapAdressePharmacieState();
@@ -156,7 +156,8 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
 
     // Get the first prediction
     Location location = locations.first;
-    widget.onAdressSelected(locations, selectedAdress);
+
+    widget.onAdressSelected(location.latitude, location.longitude, selectedAdress);
 
     // Set the camera position to the selected location
     _mapController.animateCamera(CameraUpdate.newCameraPosition(
@@ -166,10 +167,10 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
       ),
     ));
 
-    // final providerPharmacieRegister =
-    //     Provider.of<ProviderPharmacieRegister>(context, listen: false);
+    final providerPharmacieRegister = Provider.of<ProviderPharmacieRegister>(context, listen: false);
 
-    // providerPharmacieRegister.setPharmacieLocation(22, location.longitude);
+    providerPharmacieRegister.setPharmacieLocation(location.latitude, location.longitude);
+
 
     // Add a marker for the selected location
     _markers.add(Marker(

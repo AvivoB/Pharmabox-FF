@@ -54,6 +54,9 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
       _predictions = [];
     });
     if (widget.onPlaceSelected != null) {
+          final providerPharmacieRegister = Provider.of<ProviderPharmacieRegister>(context, listen: false);
+
+        providerPharmacieRegister.setAdressePharmacie(prediction);
       widget.onPlaceSelected(prediction);
     }
   }
