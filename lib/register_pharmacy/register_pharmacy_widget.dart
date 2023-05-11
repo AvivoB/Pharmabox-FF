@@ -88,100 +88,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF7F7FD5),
-                          Color(0xFF86A8E7),
-                          Color(0xFF91EAE4)
-                        ],
-                        stops: [0, 0.5, 1],
-                        begin: AlignmentDirectional(1, 0),
-                        end: AlignmentDirectional(-1, 0),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(50, 0, 50, 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(50, 0, 50, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 250,
-                                  height: 150,
-                                  child: Stack(
-                                    alignment: AlignmentDirectional(0, 1),
-                                    children: [
-                                      Container(
-                                        width: 150,
-                                        height: 150,
-                                        decoration: BoxDecoration(
-                                          color: Color(0x00FFFFFF),
-                                          borderRadius:
-                                              BorderRadius.circular(95),
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 2,
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  7, 7, 7, 7),
-                                          child: Container(
-                                            width: 150,
-                                            height: 150,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Image.asset(
-                                              'assets/images/Group_19.png',
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(0.65, 1),
-                                        child: FlutterFlowIconButton(
-                                          borderColor: Colors.transparent,
-                                          borderRadius: 30,
-                                          borderWidth: 1,
-                                          buttonSize: 60,
-                                          fillColor: Colors.white,
-                                          icon: Icon(
-                                            Icons.add_a_photo_outlined,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            size: 30,
-                                          ),
-                                          onPressed: () {
-                                            print('IconButton pressed ...');
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  custom_widgets.CarouselPharmacieSliderSelect(
+                    onImagesSelected: (urls) {
+
+                    },
                   ),
+                  
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
