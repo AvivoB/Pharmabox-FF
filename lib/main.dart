@@ -96,6 +96,7 @@ class _MyAppState extends State<MyApp> {
         locale: _locale,
         supportedLocales: const [Locale('fr', 'FR')],
         theme: ThemeData(brightness: Brightness.light),
+        debugShowCheckedModeBanner: false,
         // darkTheme: ThemeData(brightness: Brightness.dark),
         themeMode: _themeMode,
         routeInformationParser: _router.routeInformationParser,

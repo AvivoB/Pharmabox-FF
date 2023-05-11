@@ -62,21 +62,21 @@ class RegisterStepModel extends FlutterFlowModel {
   // Model for ListSkillWithSlider component.
   late ListSkillWithSliderModel listSkillWithSliderModel1;
   // State field(s) for ComptencesTestCovid widget.
-  bool? comptencesTestCovidValue;
+  bool comptencesTestCovidValue = false;
   // State field(s) for ComptencesVaccination widget.
-  bool? comptencesVaccinationValue;
+  bool comptencesVaccinationValue = false;
   // State field(s) for ComptencesTiersPayant widget.
-  bool? comptencesTiersPayantValue;
+  bool comptencesTiersPayantValue = false;
   // State field(s) for ComptencesLabo widget.
-  bool? comptencesLaboValue;
+  bool comptencesLaboValue = false;
   // State field(s) for ComptencesTROD widget.
-  bool? comptencesTRODValue;
+  bool comptencesTRODValue = false;
   // Model for ListSkillWithSlider component.
   late ListSkillWithSliderModel listSkillWithSliderModel2;
   // State field(s) for AllowNotifs widget.
-  bool? allowNotifsValue;
+  bool allowNotifsValue = false;
   // State field(s) for AllowCGU widget.
-  bool? allowCGUValue;
+  bool allowCGUValue = false;
 
   /// Initialization and disposal methods.
 

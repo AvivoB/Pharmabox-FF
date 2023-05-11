@@ -19,6 +19,8 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'register_pharmacy_model.dart';
 export 'register_pharmacy_model.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class RegisterPharmacyWidget extends StatefulWidget {
   const RegisterPharmacyWidget({Key? key}) : super(key: key);
@@ -1212,11 +1214,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.k24h,
-                                            color: Color(0xFF595A71),
-                                            size: 32,
-                                          ),
+                                          child: SvgPicture.asset(
+                                            
+                                        'assets/icons/24H.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Non stop',
@@ -5310,11 +5313,10 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kgroup,
-                                            color: Color(0xFF595A71),
-                                            size: 20,
-                                          ),
+                                        child: SvgPicture.asset(
+                                        'assets/icons/quartier.svg',
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Quartier',
@@ -5557,7 +5559,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   padding: MediaQuery.of(
                                                           bottomSheetContext)
                                                       .viewInsets,
-                                                  child: PopupLgoWidget(),
+                                                  child: PopupLgoPharmacieWidget(),
                                                 ),
                                               );
                                             },
@@ -5772,11 +5774,12 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kvaccines,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                            
+                                        'assets/icons/Vaccines.svg',
+                                        width: 20,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Vaccination',
@@ -5814,11 +5817,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kvigile,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/Entretien.svg',
+                                        width: 20,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           ' Entretien pharmaceutique',
@@ -5999,11 +6002,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kzen,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/Pause.svg',
+                                        width: 20,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Salle de pause',
@@ -6041,11 +6044,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.krobot,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child:SvgPicture.asset(
+                                        'assets/icons/Bot.svg',
+                                        width: 22,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Robot',
@@ -6081,11 +6084,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kqrcode,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/qrcode.svg',
+                                        width: 20,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Étiquettes électroniques',
@@ -6122,11 +6125,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kmoneyeur,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/moneyeur.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         _model.confortMonayeurValue?
                                         Text(
@@ -6168,11 +6171,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kclim,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/clim.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Climatisation',
@@ -6208,11 +6211,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kchauffage,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/chauffage.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Chauffage',
@@ -6249,11 +6252,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kvigile,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/vigile.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Vigile',
@@ -6290,11 +6293,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kgroup,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/Groups.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Comité d’entreprise',
@@ -6388,11 +6391,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kordonances,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/ordonances.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Ordonances',
@@ -6429,11 +6432,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kbebe,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/bebe.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Cosmétiques',
@@ -6470,11 +6473,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kphyto,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/phyto.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Phyto / aroma',
@@ -6511,11 +6514,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.knutrition,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/nutrition.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Nutrition',
@@ -6552,11 +6555,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kquestion,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/question.svg',
+                                        width: 22,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Conseil',
@@ -6676,7 +6679,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
-                                      FFIcons.kgroup,
+                                      Icons.groups_2,
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryText,
                                     ),
@@ -6729,7 +6732,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
-                                      FFIcons.kgroup,
+                                      Icons.groups_2,
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryText,
                                     ),
@@ -6782,7 +6785,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
-                                      FFIcons.kgroup,
+                                      Icons.groups_2,
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryText,
                                     ),
@@ -6836,7 +6839,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
-                                      FFIcons.kgroup,
+                                      Icons.groups_2,
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryText,
                                     ),
@@ -6890,7 +6893,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
-                                      FFIcons.kgroup,
+                                      Icons.groups_2,
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryText,
                                     ),
@@ -6944,7 +6947,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
-                                      FFIcons.kgroup,
+                                      Icons.groups_2,
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryText,
                                     ),
@@ -6998,7 +7001,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     prefixIcon: Icon(
-                                      FFIcons.kgroup,
+                                      Icons.groups_2,
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryText,
                                     ),

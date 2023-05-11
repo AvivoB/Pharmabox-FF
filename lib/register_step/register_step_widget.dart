@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/register/register_provider.dart';
 
@@ -1287,11 +1288,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.kvaccines,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/Vaccines.svg',
+                                        width: 24,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'Vaccination',
@@ -1412,11 +1413,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 10, 0),
-                                          child: Icon(
-                                            FFIcons.klabs,
-                                            color: Color(0xFF595A71),
-                                            size: 28,
-                                          ),
+                                          child: SvgPicture.asset(
+                                        'assets/icons/labs.svg',
+                                        width: 27,
+                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                      )
                                         ),
                                         Text(
                                           'TROD',
