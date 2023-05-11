@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-
 import 'register_pharmacy_model.dart';
 export 'register_pharmacy_model.dart';
 
@@ -45,9 +44,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
     _model.emailPharmacieController ??= TextEditingController();
     _model.phonePharmacieController1 ??= TextEditingController();
     _model.pharmacieAdresseController ??= TextEditingController();
-    _model.pharmacieAdresseLocation!;
-    _model.pharmacieLat ??= TextEditingController();
-    _model.pharmacieLong ??= TextEditingController();
     _model.rerController ??= TextEditingController();
     _model.metroController ??= TextEditingController();
     _model.busController ??= TextEditingController();
@@ -79,7 +75,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
         Provider.of<ProviderPharmacieRegister>(context);
 
     return Consumer<ProviderPharmacieRegister>(
-        builder: (context, pharmacieRegisterSate, child) {
+        builder: (context, userRegisterSate, child) {
       return GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Scaffold(
@@ -184,7 +180,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                   ),
-                  // custom_widgets.CarouselPharmacieSliderSelect(),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
@@ -207,17 +202,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         0, 0, 0, 10),
                                     child:
                                         custom_widgets.PredictionNomPhamracie(
-                                      onPlaceSelected: (address) {
-                                        _model.nomdelapharmacieController1
-                                            .text = address;
-                                      },
-                                    )),
+                                            onPlaceSelected: (adresse) {})),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 10),
                                   child: TextFormField(
                                     controller:
                                         _model.nomdelapharmacieController2,
+                                    autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Titulaire',
@@ -274,9 +266,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Image.asset(
-                                        'assets/groupements/' +
-                                            providerPharmacieRegister
-                                                .selectedGroupement[0]['image'],
+                                        'assets/groupements/'+providerPharmacieRegister.selectedGroupement[0]['image'],
                                         width: 120,
                                         height: 60,
                                         fit: BoxFit.cover,
@@ -305,9 +295,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       ),
                                             ),
                                             Text(
-                                              providerPharmacieRegister
-                                                      .selectedGroupement[0]
-                                                  ['name'],
+                                              providerPharmacieRegister.selectedGroupement[0]['name'],
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -392,6 +380,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.presentationController,
+                                    autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Présentation',
@@ -472,7 +461,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                         onChanged: (newValue) async {
                                           setState(() =>
                                               _model.comptencesTestCovidValue =
-                                                  newValue!);
+                                                  newValue);
                                         },
                                         activeColor: Color(0xFF7CEDAC),
                                       ),
@@ -544,6 +533,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.emailPharmacieController,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
@@ -597,6 +587,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.phonePharmacieController1,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Téléphone',
@@ -768,11 +759,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 ),
                               ),
                               custom_widgets.MapAdressePharmacie(
-                                  onAdressSelected: (locations, adresse) {
-                                _model.pharmacieAdresseLocation = locations;
-                                _model.pharmacieAdresseController.text =
-                                    adresse;
-                              }),
+                                onAdressSelected: 
+                                  (location, adresse) {
+
+                                  }
+                                )
                             ],
                           ),
                         ),
@@ -837,6 +828,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.rerController,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'RER',
@@ -888,6 +880,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.metroController,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Métro',
@@ -939,6 +932,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.busController,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Bus',
@@ -990,6 +984,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.tramwayController1,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Tramway',
@@ -1041,6 +1036,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.tramwayController2,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Gare',
@@ -1233,7 +1229,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       value: _model.nonSTOPValue ??= false,
                                       onChanged: (newValue) async {
                                         setState(() =>
-                                            _model.nonSTOPValue = newValue!);
+                                            _model.nonSTOPValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1523,7 +1519,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue1 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -1774,7 +1770,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue2 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -2070,7 +2066,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue3 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -2321,7 +2317,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue4 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -2617,7 +2613,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue5 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -2868,7 +2864,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue6 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -3164,7 +3160,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue7 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -3415,7 +3411,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue8 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -3711,7 +3707,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue9 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -3962,7 +3958,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue10 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -4258,7 +4254,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue11 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -4509,7 +4505,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue12 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -4805,7 +4801,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue13 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -5056,7 +5052,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                                   (newValue) async {
                                                                 setState(() =>
                                                                     _model.lundiMatValue14 =
-                                                                        newValue!);
+                                                                        newValue);
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -5166,7 +5162,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       onChanged: (newValue) async {
                                         setState(() => _model
                                                 .typologieCentrecommercialValue =
-                                            newValue!);
+                                            newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5208,7 +5204,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.typologieCentrevilleValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5250,7 +5246,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.typologieAeroportValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5291,7 +5287,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .comptencesLaboValue1 = newValue!);
+                                            .comptencesLaboValue1 = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5332,7 +5328,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .comptencesLaboValue2 = newValue!);
+                                            .comptencesLaboValue2 = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5373,7 +5369,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .comptencesLaboValue3 = newValue!);
+                                            .comptencesLaboValue3 = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5414,7 +5410,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .comptencesTRODValue = newValue!);
+                                            .comptencesTRODValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5561,8 +5557,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   padding: MediaQuery.of(
                                                           bottomSheetContext)
                                                       .viewInsets,
-                                                  child:
-                                                      PopupLgoPharmacieWidget(),
+                                                  child: PopupLgoWidget(),
                                                 ),
                                               );
                                             },
@@ -5575,7 +5570,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               custom_widgets.GradientTextCustom(
                                             width: 100,
                                             height: 30,
-                                            text: 'Modifier',
+                                            text: 'Ajouter',
                                             radius: 0.0,
                                             fontSize: 12.0,
                                             action: () async {
@@ -5595,7 +5590,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                       padding: MediaQuery.of(
                                                               bottomSheetContext)
                                                           .viewInsets,
-                                                      child: PopupLgoWidget(),
+                                                      child: PopupLgoPharmacieWidget(),
                                                     ),
                                                   );
                                                 },
@@ -5632,7 +5627,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.5,
+                                                0.8,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryBackground,
@@ -5643,15 +5638,21 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               MainAxisAlignment.start,
                                           children: [
                                             Image.asset(
-                                              'assets/lgo/' +
-                                                  providerPharmacieRegister
-                                                      .selectedLgo[0]['image'],
+                                              'assets/lgo/'+providerPharmacieRegister.selectedLgo[0]['image'],
                                               width: 120,
                                               height: 60,
                                               fit: BoxFit.cover,
                                             ),
-                                            Text(providerPharmacieRegister
-                                                .selectedLgo[0]['name'])
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 0, 0, 0),
+                                              child: Text(
+                                                providerPharmacieRegister.selectedLgo[0]['name'],
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -5748,7 +5749,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .missioTestCovidValue = newValue!);
+                                            .missioTestCovidValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5790,7 +5791,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.missionVaccinationValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5832,7 +5833,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.missionEnretienPharmaValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5873,7 +5874,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .missionsBorneValue = newValue!);
+                                            .missionsBorneValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -5902,29 +5903,25 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             size: 28,
                                           ),
                                         ),
-                                        if (_model.missionPreparationValue ==
-                                            true)
-                                          Text(
-                                            'Préparation externalisé',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                          ),
-                                        if (_model.missionPreparationValue ==
-                                            false)
-                                          Text(
-                                            'Préparation par l\'équipe',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                          ),
+                                        _model.missionPreparationValue?
+                                        Text(
+                                          'Préparation externalisé',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ) :
+                                         Text(
+                                          'Préparation par l\'équipe',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        )
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.missionPreparationValue ??=
-                                          false,
+                                      value: _model.missionPreparationValue,
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.missionPreparationValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6021,7 +6018,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.confortSallePauseValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6061,7 +6058,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       value: _model.confortRobotValue ??= false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .confortRobotValue = newValue!);
+                                            .confortRobotValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6102,7 +6099,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .confortEtiquetteValue = newValue!);
+                                            .confortEtiquetteValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6131,27 +6128,24 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             size: 28,
                                           ),
                                         ),
-                                        if (_model.confortMonayeurValue ==
-                                            false)
-                                          Text(
-                                            'Caisse classique',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                          ),
-                                        if (_model.confortMonayeurValue == true)
-                                          Text(
-                                            'Monnayeur',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                          ),
+                                        _model.confortMonayeurValue?
+                                        Text(
+                                          'Monnayeur',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ) :
+                                        Text(
+                                          'Caisse classique',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        )
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.confortMonayeurValue ??=
-                                          false,
+                                      value: _model.confortMonayeurValue,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .confortMonayeurValue = newValue!);
+                                            .confortMonayeurValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6191,7 +6185,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       value: _model.confortCimValue ??= false,
                                       onChanged: (newValue) async {
                                         setState(() =>
-                                            _model.confortCimValue = newValue!);
+                                            _model.confortCimValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6232,7 +6226,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .confortChauffageValue = newValue!);
+                                            .confortChauffageValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6273,7 +6267,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .confortVigileValue = newValue!);
+                                            .confortVigileValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6316,7 +6310,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       onChanged: (newValue) async {
                                         setState(() => _model
                                                 .confortComiteEntrepriseValue =
-                                            newValue!);
+                                            newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -6408,15 +6402,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: custom_widgets.SliderSimple(
-                                            slider: 1.0)),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: custom_widgets.SliderSimple(slider: 1.0)
+                                    ),
                                   ],
                                 ),
                               ),
@@ -6450,15 +6443,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: custom_widgets.SliderSimple(
-                                            slider: 1.0)),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: custom_widgets.SliderSimple(slider: 1.0)
+                                    ),
                                   ],
                                 ),
                               ),
@@ -6492,15 +6484,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: custom_widgets.SliderSimple(
-                                            slider: 1.0)),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: custom_widgets.SliderSimple(slider: 1.0)
+                                    ),
                                   ],
                                 ),
                               ),
@@ -6534,15 +6525,14 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       ],
                                     ),
                                     Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: custom_widgets.SliderSimple(
-                                            slider: 1.0)),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: custom_widgets.SliderSimple(slider: 1.0)
+                                    ),
                                   ],
                                 ),
                               ),
@@ -6569,22 +6559,21 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           ),
                                         ),
                                         Text(
-                                          'Conseils',
+                                          'Conseil',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium,
                                         ),
                                       ],
                                     ),
                                     Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: custom_widgets.SliderSimple(
-                                            slider: 1.0)),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: custom_widgets.SliderSimple(slider: 1.0)
+                                    ),
                                   ],
                                 ),
                               ),
@@ -6811,6 +6800,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbConseillersController,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre de conseillers',
@@ -6864,6 +6854,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbApprentiController,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'apprentis',
@@ -6917,6 +6908,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbEtudiantsController,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'étudiants pharmacie',
@@ -6970,6 +6962,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: TextFormField(
                                   controller: _model.nbEtudiants6emeController,
+                                  autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Nombre d\'étudiants 6ème année',
@@ -7047,8 +7040,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          // context.goNamed('Explorer');
-                          RegisterPharmacyModel().createPharmacie(context);
+                          context.goNamed('Explorer');
                         },
                         text: 'Créer la pharmacie',
                         options: FFButtonOptions(

@@ -1264,7 +1264,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.comptencesTestCovidValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1306,7 +1306,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.comptencesVaccinationValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1348,7 +1348,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       onChanged: (newValue) async {
                                         setState(() =>
                                             _model.comptencesTiersPayantValue =
-                                                newValue!);
+                                                newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1389,7 +1389,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .comptencesLaboValue = newValue!);
+                                            .comptencesLaboValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1430,7 +1430,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           false,
                                       onChanged: (newValue) async {
                                         setState(() => _model
-                                            .comptencesTRODValue = newValue!);
+                                            .comptencesTRODValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1919,7 +1919,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       value: _model.allowNotifsValue ??= false,
                                       onChanged: (newValue) async {
                                         setState(() => _model.allowNotifsValue =
-                                            newValue!);
+                                            newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1960,7 +1960,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       value: _model.allowCGUValue ??= false,
                                       onChanged: (newValue) async {
                                         setState(() =>
-                                            _model.allowCGUValue = newValue!);
+                                            _model.allowCGUValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),

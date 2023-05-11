@@ -43,7 +43,7 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   TextEditingController? presentationController;
   String? Function(BuildContext, String?)? presentationControllerValidator;
   // State field(s) for ComptencesTestCovid widget.
-  bool? comptencesTestCovidValue;
+  bool comptencesTestCovidValue = false;
   // State field(s) for EmailPharmacie widget.
   TextEditingController? emailPharmacieController;
   String? Function(BuildContext, String?)? emailPharmacieControllerValidator;
@@ -85,116 +85,116 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   String? parkingValue;
   FormFieldController<String>? parkingValueController;
   // State field(s) for nonSTOP widget.
-  bool? nonSTOPValue;                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+  bool nonSTOPValue = false;                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
   DateTime? datePicked1;
   DateTime? datePicked2;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue1;
+  bool lundiMatValue1 = false;
   DateTime? datePicked3;
   DateTime? datePicked4;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue2;
+  bool lundiMatValue2 = false;
   DateTime? datePicked5;
   DateTime? datePicked6;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue3;
+  bool lundiMatValue3 = false;
   DateTime? datePicked7;
   DateTime? datePicked8;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue4;
+  bool lundiMatValue4 = false;
   DateTime? datePicked9;
   DateTime? datePicked10;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue5;
+  bool lundiMatValue5 = false;
   DateTime? datePicked11;
   DateTime? datePicked12;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue6;
+  bool lundiMatValue6 = false;
   DateTime? datePicked13;
   DateTime? datePicked14;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue7;
+  bool lundiMatValue7 = false;
   DateTime? datePicked15;
   DateTime? datePicked16;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue8;
+  bool lundiMatValue8 = false;
   DateTime? datePicked17;
   DateTime? datePicked18;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue9;
+  bool lundiMatValue9 = false;
   DateTime? datePicked19;
   DateTime? datePicked20;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue10;
+  bool lundiMatValue10 = false;
   DateTime? datePicked21;
   DateTime? datePicked22;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue11;
+  bool lundiMatValue11 = false;
   DateTime? datePicked23;
   DateTime? datePicked24;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue12;
+  bool lundiMatValue12 = false;
   DateTime? datePicked25;
   DateTime? datePicked26;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue13;
+  bool lundiMatValue13 = false;
   DateTime? datePicked27;
   DateTime? datePicked28;
   // State field(s) for lundiMat widget.
-  bool? lundiMatValue14;
+  bool lundiMatValue14 = false;
   // State field(s) for TypologieCentrecommercial widget.
-  bool? typologieCentrecommercialValue;
+  bool typologieCentrecommercialValue = false;
   // State field(s) for TypologieCentreville widget.
-  bool? typologieCentrevilleValue;
+  bool typologieCentrevilleValue = false;
   // State field(s) for TypologieAeroport widget.
-  bool? typologieAeroportValue;
+  bool typologieAeroportValue = false;
   // State field(s) for ComptencesLabo widget.
-  bool? comptencesLaboValue1;
+  bool comptencesLaboValue1 = false;
   // State field(s) for ComptencesLabo widget.
-  bool? comptencesLaboValue2;
+  bool comptencesLaboValue2 = false;
   // State field(s) for ComptencesLabo widget.
-  bool? comptencesLaboValue3;
+  bool comptencesLaboValue3 = false;
   // State field(s) for ComptencesTROD widget.
-  bool? comptencesTRODValue;
+  bool comptencesTRODValue = false;
   // State field(s) for PatientParJour widget.
   String? patientParJourValue;
   FormFieldController<String>? patientParJourValueController;
   // State field(s) for MissioTestCovid widget.
-  bool? missioTestCovidValue;
+  bool missioTestCovidValue = false;
   // State field(s) for MissionVaccination widget.
-  bool? missionVaccinationValue;
+  bool missionVaccinationValue = false;
   // State field(s) for MissionEnretienPharma widget.
-  bool? missionEnretienPharmaValue;
+  bool missionEnretienPharmaValue = false;
   // State field(s) for MissionsBorne widget.
-  bool? missionsBorneValue;
+  bool missionsBorneValue = false;
   // State field(s) for MissionPreparation widget.
-  bool? missionPreparationValue;
+  bool missionPreparationValue = false;
   // State field(s) for ConfortSallePause widget.
-  bool? confortSallePauseValue;
+  bool confortSallePauseValue = false;
   // State field(s) for ConfortRobot widget.
-  bool? confortRobotValue;
+  bool confortRobotValue = false;
   // State field(s) for ConfortEtiquette widget.
-  bool? confortEtiquetteValue;
+  bool confortEtiquetteValue = false;
   // State field(s) for ConfortMonayeur widget.
-  bool? confortMonayeurValue;
+  bool confortMonayeurValue = false;
   // State field(s) for ConfortCim widget.
-  bool? confortCimValue;
+  bool confortCimValue = false;
   // State field(s) for ConfortChauffage widget.
-  bool? confortChauffageValue;
+  bool confortChauffageValue = false;
   // State field(s) for ConfortVigile widget.
-  bool? confortVigileValue;
+  bool confortVigileValue = false;
   // State field(s) for ConfortComiteEntreprise widget.
-  bool? confortComiteEntrepriseValue;
+  bool confortComiteEntrepriseValue = false;
   // State field(s) for Slider widget.
-  double? sliderValue1;
+  double? sliderValue1 ;
   // State field(s) for Slider widget.
-  double? sliderValue2;
+  double? sliderValue2 ;
   // State field(s) for Slider widget.
-  double? sliderValue3;
+  double? sliderValue3 ;
   // State field(s) for Slider widget.
-  double? sliderValue4;
+  double? sliderValue4 ;
   // State field(s) for Slider widget.
-  double? sliderValue5;
+  double? sliderValue5 ;
   // State field(s) for PhonePharmacie widget.
   TextEditingController? phonePharmacieController2;
   String? Function(BuildContext, String?)? phonePharmacieController2Validator;
@@ -252,132 +252,131 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   
 
   // Enregistrement dans la base
-  createPharmacie(context) {
-    final firestore = FirebaseFirestore.instance;
-    final currentUser = FirebaseAuth.instance.currentUser;
+  // createPharmacie(context) {
+  //   final firestore = FirebaseFirestore.instance;
+  //   final currentUser = FirebaseAuth.instance.currentUser;
 
-    final CollectionReference<Map<String, dynamic>> pharmaciesRef =
-        FirebaseFirestore.instance.collection('pharmacies');
-    final providerPharmacieRegister =
-        Provider.of<ProviderPharmacieRegister>(context, listen: false);
+  //   final CollectionReference<Map<String, dynamic>> pharmaciesRef =
+  //       FirebaseFirestore.instance.collection('pharmacies');
+  //   final providerPharmacieRegister =
+  //       Provider.of<ProviderPharmacieRegister>(context, listen: false);
 
-  String typologie = '';
-  // Typologie :
-  if(this.typologieCentrecommercialValue ?? false) {
-    typologie = 'Centre commercial';
-  }
-  if(this.typologieCentrevilleValue ?? false) {
-    typologie = 'Centre ville';
-  }
-  if(this.typologieAeroportValue ?? false) {
-    typologie = 'Aéroport';
-  }
-  if(this.comptencesLaboValue1 ?? false) {
-    typologie = 'Gare';
-  }
-  if(this.comptencesLaboValue2 ?? false) {
-    typologie = 'Quartier';
-  }
-  if(this.comptencesLaboValue3 ?? false) {
-    typologie = 'Lieu touristique';
-  }
-  if(this.comptencesTRODValue ?? false) {
-    typologie = 'Zone rurale';
-  }
-
-
-  List missions = [];
-  if(this.missioTestCovidValue ?? false) {
-    missions.add('Test COVID');
-  }
-  if(this.missionVaccinationValue ?? false) {
-    missions.add('Vaccination');
-  }
-  if(this.missionEnretienPharmaValue?? false) {
-    missions.add('Entretien pharmaceutique');
-  }
-  if(this.missionsBorneValue ?? false) {
-    missions.add('Borne de télé-médecine');
-  }
-  if(this.missionPreparationValue ?? false) {
-    missions.add('externalisé');
-  } else {
-    missions.add('par l\'équipe');
-  }
+  // String typologie = '';
+  // // // Typologie :
+  // // if(this.typologieCentrecommercialValue ?? false) {
+  // //   typologie = 'Centre commercial';
+  // // }
+  // // if(this.typologieCentrevilleValue ?? false) {
+  // //   typologie = 'Centre ville';
+  // // }
+  // // if(this.typologieAeroportValue ?? false) {
+  // //   typologie = 'Aéroport';
+  // // }
+  // // if(this.comptencesLaboValue1 ?? false) {
+  // //   typologie = 'Gare';
+  // // }
+  // // if(this.comptencesLaboValue2 ?? false) {
+  // //   typologie = 'Quartier';
+  // // }
+  // // if(this.comptencesLaboValue3 ?? false) {
+  // //   typologie = 'Lieu touristique';
+  // // }
+  // // if(this.comptencesTRODValue ?? false) {
+  // //   typologie = 'Zone rurale';
+  // // }
 
 
-    pharmaciesRef.doc().set({
-      'user_id' : currentUser!.uid,
-      'name': nomdelapharmacieController1.text,
-      'presentation': presentationController.text,
-      'titulaire_principal': nomdelapharmacieController2.text,
-      // 'titulaires_autres': titulaires,
-      'maitre_stage': '',
-      'contact_pharma': {
-        'email': emailPharmacieController.text,
-        'telephone': phonePharmacieController1.text,
-        'preference_contact': preferenceContactValue,
-      },
-      'situation_geographique': {
-        'adresse': pharmacieAdresseController.text,
-        'lat_long': this.pharmacieAdresseLocation
-      },
-      'accessibilite': {
-        'rer': rerController.text,
-        'metro': metroController.text,
-        'bus': busController.text,
-        'tram': tramwayController1.text,
-        'gare': tramwayController2.text,
-        'stationnement': parkingValue
-      },
-      'horaires': {
-        'Lundi': {
-          'matin': datePicked3,
-          'aprem': datePicked4
-        },
-        'Mardi': {
-          'matin': datePicked5,
-          'aprem': datePicked6
-        },
-        'Mercredi': {
-          'matin': datePicked7,
-          'aprem': datePicked8
-        },
-        'Jeudi': {
-          'matin': datePicked9,
-          'aprem': datePicked10
-        },
-        'vendredi': {
-          'matin': datePicked11,
-          'aprem': datePicked12
-        },
-        'Samedi': {
-          'matin': datePicked13,
-          'aprem': datePicked14
-        },
-        'Dimanche': {
-          'matin': datePicked15,
-          'aprem': datePicked16
-        },
-        'Non-stop': (nonSTOPValue == true) ? true : false,
-      },
-      'typologie': typologie,
-      'nb_patient_jour': patientParJourValue,
-      'lgo': providerPharmacieRegister.selectedLgo,
-      'groupement': providerPharmacieRegister.selectedGroupement,
-      'missions': missions,
-      // 'confort': confort,
-      // 'tendances': tendances,
-      'equipe': {
-        'nb_pharmaciens': (phonePharmacieController2.text != '') ? phonePharmacieController2.text : 0,
-        'nb_preparateurs': (nbPreparateurController.text != '') ? phonePharmacieController2.text : 0,
-        'nb_rayonnistes': (nbRayonnistesController.text != '') ? nbRayonnistesController.text : 0,
-        'nb_conseillers': (nbConseillersController.text != '') ? nbConseillersController.text : 0,
-        'nb_apprentis': (nbApprentiController.text != '') ? nbApprentiController.text : 0,
-        'nb_etudiants': (nbEtudiantsController.text != '') ? nbEtudiantsController.text : 0,
-        'nb_etudiants_6eme_annee': (nbEtudiants6emeController.text != '') ? nbEtudiants6emeController.text : 0,
-      }
-    });
-  
-  }
+  // List missions = [];
+  // if(this.missioTestCovidValue ?? false) {
+  //   missions.add('Test COVID');
+  // }
+  // if(this.missionVaccinationValue ?? false) {
+  //   missions.add('Vaccination');
+  // }
+  // if(this.missionEnretienPharmaValue?? false) {
+  //   missions.add('Entretien pharmaceutique');
+  // }
+  // if(this.missionsBorneValue ?? false) {
+  //   missions.add('Borne de télé-médecine');
+  // }
+  // if(this.missionPreparationValue ?? false) {
+  //   missions.add('externalisé');
+  // } else {
+  //   missions.add('par l\'équipe');
+  // }
+
+
+  //   pharmaciesRef.doc().set({
+  //     'user_id' : currentUser!.uid,
+  //     'name': nomdelapharmacieController1.text,
+  //     'presentation': presentationController.text,
+  //     'titulaire_principal': nomdelapharmacieController2.text,
+  //     // 'titulaires_autres': titulaires,
+  //     'maitre_stage': '',
+  //     'contact_pharma': {
+  //       'email': emailPharmacieController.text,
+  //       'telephone': phonePharmacieController1.text,
+  //       'preference_contact': preferenceContactValue,
+  //     },
+  //     'situation_geographique': {
+  //       'adresse': pharmacieAdresseController.text,
+  //       'lat_long': this.pharmacieAdresseLocation
+  //     },
+  //     'accessibilite': {
+  //       'rer': rerController.text,
+  //       'metro': metroController.text,
+  //       'bus': busController.text,
+  //       'tram': tramwayController1.text,
+  //       'gare': tramwayController2.text,
+  //       'stationnement': parkingValue
+  //     },
+  //     'horaires': {
+  //       'Lundi': {
+  //         'matin': datePicked3,
+  //         'aprem': datePicked4
+  //       },
+  //       'Mardi': {
+  //         'matin': datePicked5,
+  //         'aprem': datePicked6
+  //       },
+  //       'Mercredi': {
+  //         'matin': datePicked7,
+  //         'aprem': datePicked8
+  //       },
+  //       'Jeudi': {
+  //         'matin': datePicked9,
+  //         'aprem': datePicked10
+  //       },
+  //       'vendredi': {
+  //         'matin': datePicked11,
+  //         'aprem': datePicked12
+  //       },
+  //       'Samedi': {
+  //         'matin': datePicked13,
+  //         'aprem': datePicked14
+  //       },
+  //       'Dimanche': {
+  //         'matin': datePicked15,
+  //         'aprem': datePicked16
+  //       },
+  //       // 'Non-stop': (nonSTOPValue == true) ? true : false,
+  //     },
+  //     'typologie': typologie,
+  //     'nb_patient_jour': patientParJourValue,
+  //     'lgo': providerPharmacieRegister.selectedLgo,
+  //     'groupement': providerPharmacieRegister.selectedGroupement,
+  //     'missions': missions,
+  //     // 'confort': confort,
+  //     // 'tendances': tendances,
+  //     'equipe': {
+  //       'nb_pharmaciens': (phonePharmacieController2.text != '') ? phonePharmacieController2.text : 0,
+  //       'nb_preparateurs': (nbPreparateurController.text != '') ? phonePharmacieController2.text : 0,
+  //       'nb_rayonnistes': (nbRayonnistesController.text != '') ? nbRayonnistesController.text : 0,
+  //       'nb_conseillers': (nbConseillersController.text != '') ? nbConseillersController.text : 0,
+  //       'nb_apprentis': (nbApprentiController.text != '') ? nbApprentiController.text : 0,
+  //       'nb_etudiants': (nbEtudiantsController.text != '') ? nbEtudiantsController.text : 0,
+  //       'nb_etudiants_6eme_annee': (nbEtudiants6emeController.text != '') ? nbEtudiants6emeController.text : 0,
+  //     }
+  //   });
+  // }
 }
