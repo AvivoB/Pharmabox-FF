@@ -511,7 +511,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.birthDateController,
-                                    onFieldSubmitted: (_) async {
+                                    readOnly: true,
+                                    onTap: () async {
                                       final _datePickedDate =
                                           await showDatePicker(
                                         context: context,
@@ -527,6 +528,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                             _datePickedDate.month,
                                             _datePickedDate.day,
                                           );
+
+                                          _model.birthDateController
+                                              .text = _datePickedDate.day
+                                                  .toString() +
+                                              '/' +
+                                              _datePickedDate.month.toString() +
+                                              '/' +
+                                              _datePickedDate.year.toString();
                                         });
                                       }
                                     },
@@ -1285,15 +1294,16 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/Vaccines.svg',
-                                        width: 24,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/Vaccines.svg',
+                                              width: 24,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'Vaccination',
                                           style: FlutterFlowTheme.of(context)
@@ -1410,15 +1420,16 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
-                                          child: SvgPicture.asset(
-                                        'assets/icons/labs.svg',
-                                        width: 27,
-                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                      )
-                                        ),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 10, 0),
+                                            child: SvgPicture.asset(
+                                              'assets/icons/labs.svg',
+                                              width: 27,
+                                              colorFilter: ColorFilter.mode(
+                                                  Color(0xFF595A71),
+                                                  BlendMode.srcIn),
+                                            )),
                                         Text(
                                           'TROD',
                                           style: FlutterFlowTheme.of(context)
@@ -1919,8 +1930,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     Switch.adaptive(
                                       value: _model.allowNotifsValue ??= false,
                                       onChanged: (newValue) async {
-                                        setState(() => _model.allowNotifsValue =
-                                            newValue);
+                                        setState(() =>
+                                            _model.allowNotifsValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -2018,8 +2029,9 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   _model.allowCGUValue,
                                   _imageURL!);
 
-                          if(send_data) {
-                              if(_model.posteValue == 'Pharmacien(ne) titulaire') {
+                          if (send_data) {
+                            if (_model.posteValue ==
+                                'Pharmacien(ne) titulaire') {
                               context.pushNamed('RegisterPharmacy');
                             } else {
                               context.pushNamed('Explorer');

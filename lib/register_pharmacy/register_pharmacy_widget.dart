@@ -6503,7 +6503,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             onChanged: (value) {
                                               providerPharmacieRegister
                                                   .setTendences(
-                                                      0, 'Ordonances', value);
+                                                      0, 'Ordonances', value.toString());
                                             })),
                                   ],
                                 ),
@@ -6551,7 +6551,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           onChanged: (value) {
                                             providerPharmacieRegister
                                                 .setTendences(
-                                                    1, 'Cosmétiques', value);
+                                                    1, 'Cosmétiques', value.toString());
                                           },
                                         )),
                                   ],
@@ -6600,7 +6600,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             onChanged: (value) {
                                               providerPharmacieRegister
                                                   .setTendences(2,
-                                                      'Phyto / aroma', value);
+                                                      'Phyto / aroma', value.toString());
                                             })),
                                   ],
                                 ),
@@ -6648,7 +6648,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             onChanged: (value) {
                                               providerPharmacieRegister
                                                   .setTendences(
-                                                      3, 'Nutrition', value);
+                                                      3, 'Nutrition', value.toString());
                                             })),
                                   ],
                                 ),
@@ -6696,7 +6696,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             onChanged: (value) {
                                               providerPharmacieRegister
                                                   .setTendences(
-                                                      4, 'Conseil', value);
+                                                      4, 'Conseil', value.toString());
                                               print(value);
                                             })),
                                   ],

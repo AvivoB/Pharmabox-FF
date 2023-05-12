@@ -73,7 +73,7 @@ class _ListSkillWithSliderWidgetState extends State<ListSkillWithSliderWidget> {
                 value: _currentStep.toDouble(),
                 min: 0,
                 max: 2,
-                divisions: 2,
+                // divisions: 2,
                 onChanged: (double value) {
                   setState(() {
                     _currentStep = value.toInt();
