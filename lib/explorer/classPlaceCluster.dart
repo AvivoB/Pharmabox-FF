@@ -6,19 +6,12 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import 'package:latlong2/latlong.dart' as latlong;
 
 
-// class Marker extends ClusterItem {
-//   final LatLng location;
-//   final String title;
-//   final String snippet;
+class Place with ClusterItem {
+  final String name;
+  final LatLng latLng;
 
-//   Marker(this.location, this.title, this.snippet);
+  Place({required this.name, required this.latLng});
 
-//   @override
-//   LatLng get location => location;
-
-//   @override
-//   String get title => title;
-
-//   @override
-//   String get snippet => snippet;
-// }
+  @override
+  LatLng get location => latLng;
+}

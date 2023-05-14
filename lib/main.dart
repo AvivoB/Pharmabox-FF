@@ -169,10 +169,8 @@ class _NavBarPageState extends State<NavBarPage> {
                 Text(
                   'Explorer',
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 0
-                        ? Color(0xFF7CEDAC)
-                        : greyColor,
+                  style: TextStyle(fontWeight: currentIndex == 0 ? FontWeight.w600: FontWeight.w400,
+                    color: greyColor,
                     fontSize: 11.0,
                   ),
                 ),
@@ -193,9 +191,8 @@ class _NavBarPageState extends State<NavBarPage> {
                   'PharmaJob',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: currentIndex == 1
-                        ? Color(0xFF7CEDAC)
-                        : greyColor,
+                    fontWeight: currentIndex == 1 ? FontWeight.w600: FontWeight.w400,
+                    color: greyColor,
                     fontSize: 11.0,
                   ),
                 ),
@@ -216,9 +213,8 @@ class _NavBarPageState extends State<NavBarPage> {
                   'Réseau',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: currentIndex == 2
-                        ? Color(0xFF7CEDAC)
-                        : greyColor,
+                    fontWeight: currentIndex == 2 ? FontWeight.w600: FontWeight.w400,
+                    color: greyColor,
                     fontSize: 11.0,
                   ),
                 ),
@@ -239,9 +235,8 @@ class _NavBarPageState extends State<NavBarPage> {
                   'Profil',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: currentIndex == 3
-                        ? Color(0xFF7CEDAC)
-                        : greyColor,
+                    fontWeight: currentIndex == 3 ? FontWeight.w600: FontWeight.w400,
+                    color: greyColor,
                     fontSize: 11.0,
                   ),
                 ),
