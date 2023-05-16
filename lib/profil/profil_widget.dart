@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -30,7 +33,17 @@ class ProfilWidget extends StatefulWidget {
 }
 
 class _ProfilWidgetState extends State<ProfilWidget> {
+  Future getCurrentUser() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user?.uid);
+    DocumentSnapshot userSnapshot = await userDoc.get();
+
+    return userSnapshot.data();
+  }
+
   late ProfilModel _model;
+  var currentUser;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -39,13 +52,14 @@ class _ProfilWidgetState extends State<ProfilWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ProfilModel());
+    getCurrentUser();
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await showModalBottomSheet(
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
-        enableDrag: false,
+        enableDrag: true,
         context: context,
         builder: (bottomSheetContext) {
           return GestureDetector(
@@ -193,7 +207,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  'Jimmy Azoulay',
+                                  'Jimmy',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(

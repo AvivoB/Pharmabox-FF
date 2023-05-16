@@ -70,7 +70,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
         items.add(place);
         pharmacieInPlace.add(data);
       });
-      print(place.latLng);
     }
   }
 
@@ -221,9 +220,13 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                                               fontSize: 14.0,
                                             )),
                                   ),
-                                  BoxDraggableSheet(type: 'Membres',),
-                                  BoxDraggableSheet(type: 'Pharmacies', nbResultats: pharmacieInPlace.length, componentWidget: CardPharmacieWidget),
-                                  BoxDraggableSheet(type: 'Jobs'),
+                                  BoxDraggableSheet(type: 'Membres', nbResultats: [1, 2, 3],),
+                                  BoxDraggableSheet(
+                                    type: 'Pharmacies', 
+                                    nbResultats: pharmacieInPlace,
+                                    data: pharmacieInPlace
+                                  ),
+                                  BoxDraggableSheet(type: 'Jobs',  nbResultats: [5,8,8,8,8]),
                                 ],
                               ),
                             ),

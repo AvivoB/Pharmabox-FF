@@ -1,3 +1,6 @@
+import 'package:flutter_svg/svg.dart';
+
+import '../../constant.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -42,7 +45,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 1.0,
-      height: MediaQuery.of(context).size.height * 0.65,
+      // height: MediaQuery.of(context).size.height * 0.65,     
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.circular(15.0),
@@ -114,11 +117,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                   ],
                 ),
                 Container(
-                  width: 30.0,
-                  height: 10.0,
                   child: custom_widgets.GradientTextCustom(
-                    width: 30.0,
-                    height: 10.0,
                     text: 'Ajouter',
                     radius: 10.0,
                     fontSize: 14.0,
@@ -170,41 +169,21 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 100.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                    child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
-                      },
-                      text: '55',
-                      icon: Icon(
-                        FFIcons.klike,
-                        size: 18.0,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white, // background color
+                          foregroundColor: greyColor, // foreground color
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15))
+                          // elevation of button
+                          ),
+                      onPressed: () {},
+                      icon:  SvgPicture.asset(
+                        'assets/icons/Like.svg',
+                        semanticsLabel: 'Label'
                       ),
-                      options: FFButtonOptions(
-                        height: 40.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: Color(0x00F1F4F8),
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Poppins',
-                                  color: Color(0xFF595A71),
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                      label: Text('555'), // <-- Text
                     ),
                   ),
                   Container(
@@ -240,7 +219,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                 icon: Icon(
                                   Icons.phone,
                                   color: Color(0xFF42D2FF),
-                                  size: 16.0,
+                                  size: 24.0,
                                 ),
                                 onPressed: () {
                                   print('IconButton pressed ...');
@@ -274,7 +253,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                 icon: Icon(
                                   Icons.mail_outline_rounded,
                                   color: Color(0xFF42D2FF),
-                                  size: 22.0,
+                                  size: 24.0,
                                 ),
                                 onPressed: () {
                                   print('IconButton pressed ...');
@@ -305,7 +284,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               icon: Icon(
                                 Icons.message_outlined,
                                 color: Color(0xFF42D2FF),
-                                size: 22.0,
+                                size: 24.0,
                               ),
                               onPressed: () {
                                 print('IconButton pressed ...');

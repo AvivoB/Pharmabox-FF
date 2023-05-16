@@ -1,3 +1,6 @@
+import 'package:flutter_svg/svg.dart';
+import 'package:pharmabox/constant.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -8,16 +11,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'card_pharmacie_model.dart';
 export 'card_pharmacie_model.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CardPharmacieWidget extends StatefulWidget {
-  const CardPharmacieWidget({Key? key}) : super(key: key);
+  const CardPharmacieWidget(
+      {Key? key, this.data, this.profilUid, this.dataKey = 0})
+      : super(key: key);
 
+  final data;
+  final profilUid;
+  final dataKey;
   @override
   _CardPharmacieWidgetState createState() => _CardPharmacieWidgetState();
 }
 
 class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   late CardPharmacieModel _model;
+  String _postcodeAdresse = '';
+  String _imageProfilPharma = '';
 
   @override
   void setState(VoidCallback callback) {
@@ -29,6 +41,11 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CardPharmacieModel());
+    getCityAndPostalCode(
+        widget.data[widget.dataKey]['situation_geographique']['lat_lng'][0],
+        widget.data[widget.dataKey]['situation_geographique']['lat_lng'][1]);
+
+    setImageProfile();
   }
 
   @override
@@ -36,6 +53,51 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
     _model.maybeDispose();
 
     super.dispose();
+  }
+
+  getCityAndPostalCode(double latitude, double longitude) async {
+    final url =
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$googleMapsApi';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['status'] == 'OK') {
+        final results = data['results'] as List<dynamic>;
+        if (results.isNotEmpty) {
+          final addressComponents =
+              results[0]['address_components'] as List<dynamic>;
+
+          String postalCode = '';
+          String city = '';
+
+          for (var component in addressComponents) {
+            final types = component['types'] as List<dynamic>;
+            if (types.contains('postal_code')) {
+              postalCode = component['long_name'] as String;
+            }
+            if (types.contains('locality')) {
+              city = component['long_name'] as String;
+            }
+          }
+
+          if (postalCode.isNotEmpty && city.isNotEmpty) {
+            setState(() {
+              _postcodeAdresse = '$postalCode, $city';
+            });
+          }
+        }
+      }
+    }
+
+    return '';
+  }
+
+  setImageProfile() {
+    if(widget.data[widget.dataKey]['photo_url'] != '') {
+      _imageProfilPharma = widget.data[widget.dataKey]['photo_url'][0].toString();
+    }
   }
 
   @override
@@ -59,7 +121,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: Image.network(
-                    'https://www.pharmanity.com/assets/img/pharmacies/cover/20479/head_image_20479_0.png',
+                    _imageProfilPharma,
                   ).image,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
@@ -106,15 +168,21 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Citypharma',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF161730),
-                                    fontSize: 18.0,
-                                  ),
-                        ),
+                        Container(
+                          width: 120,
+                          child: Text(
+                            widget.data[widget.dataKey]
+                                    ['situation_geographique']['adresse']
+                                .toString(),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF161730),
+                                  fontSize: 16.0,
+                                ),
+                          ),
+                        )
                       ],
                     ),
                   ],
@@ -122,24 +190,31 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Image.network(
-                      'https://picsum.photos/seed/113/600',
+                    Image.asset(
+                      'assets/groupements/' +
+                          widget.data[widget.dataKey]['groupement'][0]['image']
+                              .toString(),
                       width: 80.0,
-                      height: 40.0,
+                      height: 50.0,
                       fit: BoxFit.cover,
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                      child: Text(
-                        'Groupement',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Poppins',
-                              color: Color(0xFF595A71),
-                              fontSize: 14.0,
-                            ),
-                      ),
-                    ),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                        child: Container(
+                          width: 120,
+                          child: Text(
+                            widget.data[widget.dataKey]['groupement'][0]['name']
+                                .toString(),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF595A71),
+                                  fontSize: 14.0,
+                                ),
+                          ),
+                        )),
                   ],
                 ),
               ],
@@ -164,7 +239,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                       child: Text(
-                        '95200, Paris',
+                        _postcodeAdresse,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Poppins',
                               color: Color(0xFF595A71),
@@ -174,12 +249,12 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                   ],
                 ),
                 Container(
-                  height: 15.0,
                   child: custom_widgets.GradientTextCustom(
+                    width: 30,
                     radius: 12.0,
-                    fontSize: 18,
+                    fontSize: 14,
                     text: 'Ajouter',
-                    height: 15.0,
+                    height: 25.0,
                     action: () async {},
                   ),
                 ),
@@ -204,41 +279,19 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 100.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                    child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
-                      },
-                      text: '55',
-                      icon: Icon(
-                        FFIcons.klike,
-                        size: 18.0,
-                      ),
-                      options: FFButtonOptions(
-                        height: 40.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: Color(0x00F1F4F8),
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Poppins',
-                                  color: Color(0xFF595A71),
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white, // background color
+                          foregroundColor: greyColor, // foreground color
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15))
+                          // elevation of button
+                          ),
+                      onPressed: () {},
+                      icon: SvgPicture.asset('assets/icons/Like.svg',
+                          semanticsLabel: 'Label'),
+                      label: Text('555'), // <-- Text
                     ),
                   ),
                   Container(
@@ -274,7 +327,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                                 icon: Icon(
                                   Icons.phone,
                                   color: Color(0xFF42D2FF),
-                                  size: 16.0,
+                                  size: 24.0,
                                 ),
                                 onPressed: () {
                                   print('IconButton pressed ...');
@@ -308,7 +361,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                                 icon: Icon(
                                   Icons.mail_outline_rounded,
                                   color: Color(0xFF42D2FF),
-                                  size: 22.0,
+                                  size: 24.0,
                                 ),
                                 onPressed: () {
                                   print('IconButton pressed ...');
@@ -339,7 +392,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                               icon: Icon(
                                 Icons.message_outlined,
                                 color: Color(0xFF42D2FF),
-                                size: 22.0,
+                                size: 24.0,
                               ),
                               onPressed: () {
                                 print('IconButton pressed ...');

@@ -1,3 +1,4 @@
+import '../../constant.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -6,8 +7,11 @@ import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class CardPharmacieModel extends FlutterFlowModel {
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}
@@ -15,5 +19,10 @@ class CardPharmacieModel extends FlutterFlowModel {
   void dispose() {}
 
   /// Additional helper methods are added here.
+  /// 
+  /// import 'package:http/http.dart' as http;
+
+
+
 
 }
