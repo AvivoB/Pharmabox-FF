@@ -56,11 +56,16 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
     // Boucle à travers les documents
     for (DocumentSnapshot doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      String documentId = doc.reference.id.toString();
+
+      data['documentId'] = documentId;
 
       // Récupération du nom de la pharmacie
       String name = data['situation_geographique']['adresse'];
 
       List location = data['situation_geographique']['lat_lng'];
+
+
 
       // Création d'un objet Place
       Place place = Place(name: name, latLng: LatLng(location[0], location[1]));

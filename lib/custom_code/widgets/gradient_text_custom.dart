@@ -36,15 +36,18 @@ class _GradientTextCustomState extends State<GradientTextCustom> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      child: GradientText(
-          this.widget.text,
-          radius: this.widget.radius,
-          style: TextStyle(
-            fontSize: this.widget.fontSize,
-            fontWeight: FontWeight.w400,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GradientText(
+            this.widget.text,
+            radius: this.widget.radius,
+            style: TextStyle(
+              fontSize: this.widget.fontSize,
+              fontWeight: FontWeight.w400,
+            ),
+            colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
           ),
-          colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
-        ),
+      ),
       decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 color: Colors.white,

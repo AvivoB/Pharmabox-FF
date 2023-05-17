@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/constant.dart';
 
@@ -13,6 +15,7 @@ import 'card_pharmacie_model.dart';
 export 'card_pharmacie_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:like_button/like_button.dart';
 
 class CardPharmacieWidget extends StatefulWidget {
   const CardPharmacieWidget(
@@ -30,6 +33,8 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   late CardPharmacieModel _model;
   String _postcodeAdresse = '';
   String _imageProfilPharma = '';
+  late bool isLiked;
+  late int likeCount;
 
   @override
   void setState(VoidCallback callback) {
@@ -46,6 +51,9 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
         widget.data[widget.dataKey]['situation_geographique']['lat_lng'][1]);
 
     setImageProfile();
+    likeCount = widget.data['likeCount'] ?? 0;
+    List<dynamic> likedBy = widget.data['likedBy'] ?? [];
+    isLiked = likedBy.contains(getCurrentUserId());
   }
 
   @override
@@ -95,10 +103,36 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   }
 
   setImageProfile() {
-    if(widget.data[widget.dataKey]['photo_url'] != '') {
-      _imageProfilPharma = widget.data[widget.dataKey]['photo_url'][0].toString();
-    }
+    // if (widget.data[widget.dataKey]['photo_url'] != '') {
+    //   _imageProfilPharma = widget.data[widget.dataKey]['photo_url'].toString();
+    // }
   }
+
+Future<String> getCurrentUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.uid;
+    }
+    return '';
+  }
+
+void updateLike(bool liked) async {
+  final String currentUserId = await getCurrentUserId();
+  final DocumentReference<Map<String, dynamic>> documentRef =
+      FirebaseFirestore.instance
+          .collection('pharmacies')
+          .doc(widget.data[widget.dataKey]['documentId']);
+
+  final currentLikeCount = liked ? 1 : -1;
+
+  await documentRef.update({
+    'likeCount': FieldValue.increment(currentLikeCount),
+    'isLiked': liked,
+    'likedBy': liked
+        ? FieldValue.arrayUnion([currentUserId])
+        : FieldValue.arrayRemove([currentUserId])
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -288,10 +322,10 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                               borderRadius: BorderRadius.circular(15))
                           // elevation of button
                           ),
-                      onPressed: () {},
+                      onPressed: () => updateLike(!isLiked),
                       icon: SvgPicture.asset('assets/icons/Like.svg',
-                          semanticsLabel: 'Label'),
-                      label: Text('555'), // <-- Text
+                          width: 22.0, semanticsLabel: 'Label'),
+                      label: Text('$likeCount'), // <-- Text
                     ),
                   ),
                   Container(

@@ -181,6 +181,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                       onPressed: () {},
                       icon:  SvgPicture.asset(
                         'assets/icons/Like.svg',
+                        width: 22.0,
                         semanticsLabel: 'Label'
                       ),
                       label: Text('555'), // <-- Text

@@ -20,6 +20,7 @@ class ReseauWidget extends StatefulWidget {
 
 class _ReseauWidgetState extends State<ReseauWidget> {
   late ReseauModel _model;
+  bool isExpanded = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -107,168 +108,51 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                       ],
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    decoration: BoxDecoration(
-                      color: Color(0x00FFFFFF),
-                    ),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
-                      child: Container(
-                        width: double.infinity,
-                        color: Color(0x009E2020),
-                        child: ExpandableNotifier(
-                          initialExpanded: false,
-                          child: ExpandablePanel(
-                            header: Text(
-                              'Membres titulaires (1)',
-                              style: FlutterFlowTheme.of(context)
-                                  .displaySmall
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.black,
-                                  ),
-                            ),
-                            collapsed: Container(),
-                            expanded: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 10.0, 0.0, 0.0),
-                              child: ListView(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.cardUserModel1,
-                                    updateCallback: () => setState(() {}),
-                                    child: CardUserWidget(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            theme: ExpandableThemeData(
-                              tapHeaderToExpand: true,
-                              tapBodyToExpand: false,
-                              tapBodyToCollapse: false,
-                              headerAlignment:
-                                  ExpandablePanelHeaderAlignment.center,
-                              hasIcon: true,
-                            ),
-                          ),
-                        ),
-                      ),
+                  Column(
+      children: [
+        InkWell(
+          onTap: () {
+            setState(() {
+              isExpanded = !isExpanded;
+            });
+          },
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 1.0,
+              height: 67,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color: Color(0xFFF2FDFF),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color(0x2b1e5b67),
+                        blurRadius: 12,
+                        offset: Offset(10, 10))
+                  ]),
+              child: Row(
+                children: [
+                  Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
+                  Text('Membres titulaires (32)',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18.0,
+                      fontFamily: 'Poppins',
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    decoration: BoxDecoration(
-                      color: Color(0x00FFFFFF),
-                    ),
-                    child: Container(
-                      height: 200.0,
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            15.0, 15.0, 15.0, 0.0),
-                        child: Container(
-                          width: double.infinity,
-                          color: Color(0x009E2020),
-                          child: ExpandableNotifier(
-                            initialExpanded: false,
-                            child: ExpandablePanel(
-                              header: Text(
-                                'Membres (1)',
-                                style: FlutterFlowTheme.of(context)
-                                    .displaySmall
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.black,
-                                    ),
-                              ),
-                              collapsed: Container(),
-                              expanded: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 10.0, 0.0, 0.0),
-                                child: ListView(
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  children: [
-                                    wrapWithModel(
-                                      model: _model.cardUserModel2,
-                                      updateCallback: () => setState(() {}),
-                                      child: CardUserWidget(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              theme: ExpandableThemeData(
-                                tapHeaderToExpand: true,
-                                tapBodyToExpand: false,
-                                tapBodyToCollapse: false,
-                                headerAlignment:
-                                    ExpandablePanelHeaderAlignment.center,
-                                hasIcon: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    decoration: BoxDecoration(
-                      color: Color(0x00FFFFFF),
-                    ),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
-                      child: Container(
-                        width: double.infinity,
-                        color: Color(0x009E2020),
-                        child: ExpandableNotifier(
-                          initialExpanded: false,
-                          child: ExpandablePanel(
-                            header: Text(
-                              'Pharmacies (1)',
-                              style: FlutterFlowTheme.of(context)
-                                  .displaySmall
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.black,
-                                  ),
-                            ),
-                            collapsed: Container(),
-                            expanded: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 10.0, 0.0, 0.0),
-                              child: ListView(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.cardPharmacieModel,
-                                    updateCallback: () => setState(() {}),
-                                    child: CardPharmacieWidget(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            theme: ExpandableThemeData(
-                              tapHeaderToExpand: true,
-                              tapBodyToExpand: false,
-                              tapBodyToCollapse: false,
-                              headerAlignment:
-                                  ExpandablePanelHeaderAlignment.center,
-                              hasIcon: true,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // if (isExpanded)
+        //   for (var i in widget.nbResultats) CardPharmacieWidget(data: widget.data, dataKey: widget.nbResultats.indexOf(i),),
+        // if (isExpanded && widget.type == 'Membres')
+        //   for (var i in widget.nbResultats) CardUserWidget(),
+        // if (isExpanded && widget.type == 'Jobs')
+        //   for (var i in widget.nbResultats) CardPharmacieOffreRechercheWidget(),
+      ],
+    )
                 ],
               ),
             ),

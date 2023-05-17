@@ -62,7 +62,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if (isTitulaire)
+                  if(true)
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),

@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../constant.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -21,6 +23,15 @@ class CardPharmacieModel extends FlutterFlowModel {
   /// Additional helper methods are added here.
   /// 
   /// import 'package:http/http.dart' as http;
+  
+  Future<String?> getCurrentUserId() async {
+  final User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    return user.uid;
+  } else {
+    return null;
+  }
+}
 
 
 
