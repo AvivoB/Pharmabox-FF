@@ -51,9 +51,9 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
         widget.data[widget.dataKey]['situation_geographique']['lat_lng'][1]);
 
     setImageProfile();
-    likeCount = widget.data['likeCount'] ?? 0;
-    List<dynamic> likedBy = widget.data['likedBy'] ?? [];
-    isLiked = likedBy.contains(getCurrentUserId());
+    // likeCount = widget.data['likeCount'] ?? 0;
+    // List<dynamic> likedBy = widget.data['likedBy'] ?? [];
+    // isLiked = likedBy.contains(getCurrentUserId());
   }
 
   @override
@@ -313,20 +313,7 @@ void updateLike(bool liked) async {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white, // background color
-                          foregroundColor: greyColor, // foreground color
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15))
-                          // elevation of button
-                          ),
-                      onPressed: () => updateLike(!isLiked),
-                      icon: SvgPicture.asset('assets/icons/Like.svg',
-                          width: 22.0, semanticsLabel: 'Label'),
-                      label: Text('$likeCount'), // <-- Text
-                    ),
+                    
                   ),
                   Container(
                     decoration: BoxDecoration(

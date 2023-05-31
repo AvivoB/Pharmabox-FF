@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pharmabox/explorer/classPlaceCluster.dart';
+import 'package:pharmabox/explorer/classPlaceClusterExplorer.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';

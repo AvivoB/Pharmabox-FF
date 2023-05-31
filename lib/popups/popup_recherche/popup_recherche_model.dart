@@ -14,7 +14,12 @@ class PopupRechercheModel extends FlutterFlowModel {
   ///  Local state fields for this component.
 
   List<String> contratType = [];
-  void addToContratType(String item) => contratType.add(item);
+  void addToContratType(String item) {
+    if (!contratType.contains(item)) {
+      contratType.add(item);
+    }
+  }
+
   void removeFromContratType(String item) => contratType.remove(item);
   void removeAtIndexFromContratType(int index) => contratType.removeAt(index);
 
@@ -43,6 +48,12 @@ class PopupRechercheModel extends FlutterFlowModel {
   String? Function(BuildContext, String?)? salaireMensuelNetControllerValidator;
   // State field(s) for PairImpaire widget.
   bool? pairImpaireValue;
+
+  List grilleHoraire = [];
+  List grilleHoraireImpaire = [];
+
+  TextEditingController? rayonController;
+  String? Function(BuildContext, String?)? rayonControllerValidator;
   // State field(s) for NomOffre widget.
   TextEditingController? nomOffreController;
   String? Function(BuildContext, String?)? nomOffreControllerValidator;
@@ -56,9 +67,9 @@ class PopupRechercheModel extends FlutterFlowModel {
     dureMoisController?.dispose();
     debutContratController?.dispose();
     salaireMensuelNetController?.dispose();
+    rayonController?.dispose();
     nomOffreController?.dispose();
   }
 
   /// Additional helper methods are added here.
-
 }

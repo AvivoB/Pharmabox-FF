@@ -20,7 +20,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'explorer_model.dart';
 export 'explorer_model.dart';
-import 'classPlaceCluster.dart';
+import 'classPlaceClusterExplorer.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -240,6 +240,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                   )
                 ]),
               ),
+            
             ],
           ),
         ),
