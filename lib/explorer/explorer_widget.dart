@@ -215,7 +215,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                                         Color(0xFFD0D1DE), BlendMode.srcIn),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                     child: Text(pharmacieInPlace.length.toString()+' résultats',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium

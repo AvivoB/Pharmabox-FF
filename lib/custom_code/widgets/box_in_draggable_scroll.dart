@@ -32,7 +32,7 @@ class _BoxDraggableSheetState extends State<BoxDraggableSheet> {
             });
           },
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.only(top:10, bottom: 10),
             child: Container(
               width: MediaQuery.of(context).size.width * 1.0,
               height: 67,
