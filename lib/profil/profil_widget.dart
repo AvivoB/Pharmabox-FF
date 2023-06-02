@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pharmabox/constant.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';
@@ -33,15 +34,6 @@ class ProfilWidget extends StatefulWidget {
 }
 
 class _ProfilWidgetState extends State<ProfilWidget> {
-  Future getCurrentUser() async {
-    final user = FirebaseAuth.instance.currentUser;
-    final userDoc =
-        FirebaseFirestore.instance.collection('users').doc(user?.uid);
-    DocumentSnapshot userSnapshot = await userDoc.get();
-
-    return userSnapshot.data();
-  }
-
   late ProfilModel _model;
   var currentUser;
 
@@ -49,10 +41,9 @@ class _ProfilWidgetState extends State<ProfilWidget> {
   final _unfocusNode = FocusNode();
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
     _model = createModel(context, () => ProfilModel());
-    getCurrentUser();
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -81,6 +72,10 @@ class _ProfilWidgetState extends State<ProfilWidget> {
     _model.postcodeController ??= TextEditingController();
     _model.cityController ??= TextEditingController();
     _model.presentationController ??= TextEditingController();
+
+    await getCurrentUserData().then((value) {
+      _model.nomFamilleController.text = value['nom'].toString();
+    });
   }
 
   @override

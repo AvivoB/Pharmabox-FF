@@ -15,7 +15,12 @@ class PopupOffreModel extends FlutterFlowModel {
   ///  Local state fields for this component.
 
   List<String> contratType = [];
-  void addToContratType(String item) => contratType.add(item);
+  void addToContratType(String item) {
+    if (!contratType.contains(item)) {
+      contratType.add(item);
+    }
+  }
+
   void removeFromContratType(String item) => contratType.remove(item);
   void removeAtIndexFromContratType(int index) => contratType.removeAt(index);
 
@@ -55,6 +60,12 @@ class PopupOffreModel extends FlutterFlowModel {
   FormFieldController<List<String>>? avantagesValueController;
   // State field(s) for PairImpaire widget.
   bool? pairImpaireValue;
+
+  bool? enregistrerOffre;
+
+  List grilleHoraire = [];
+  List grilleHoraireImpaire = [];
+
   // State field(s) for DescriptionOffre widget.
   TextEditingController? descriptionOffreController;
   String? Function(BuildContext, String?)? descriptionOffreControllerValidator;
@@ -75,6 +86,51 @@ class PopupOffreModel extends FlutterFlowModel {
     nomOffreController?.dispose();
   }
 
-  /// Additional helper methods are added here.
+  bool validateFormFields() {
+    // Vérification du champ 'poste'
+    if (posteValue == '') {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
 
+    // Vérification du champ 'localisation'
+    if (localisationController.text.isEmpty) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    if (tempspleinpartielValue == '') {
+      return false;
+    }
+
+    // Vérification du champ 'debut_contrat'
+    if (debutContratController.text.isEmpty && debutImmediateValue == false) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Vérification du champ 'salaire_mensuel'
+    if (salaireMensuelNetController.text.isEmpty &&
+        salaireNegocierSwitcValue == false) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Vérification du champ 'description_offre'
+    if (descriptionOffreController.text.isEmpty) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Vérification du champ 'nom'
+    if (nomOffreController.text.isEmpty) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Tous les champs sont valides
+    return true;
+  }
+
+  /// Additional helper methods are added here.
 }

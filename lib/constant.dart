@@ -26,3 +26,37 @@ Future<bool> checkIsTitulaire() async {
     return false;
   }
 }
+
+Future<String> getPharmacyByUserId() async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  String? currentUserId = auth.currentUser?.uid;
+
+  QuerySnapshot querySnapshot = await firestore
+      .collection('pharmacies')
+      .where('user_id', isEqualTo: currentUserId)
+      .limit(1)
+      .get();
+
+  if (querySnapshot.docs.isNotEmpty) {
+    DocumentSnapshot document = querySnapshot.docs.first;
+    return document.id.toString();
+  } else {
+    return '';
+  }
+}
+
+Future<Map<String, dynamic>> getCurrentUserData() async {
+  final user = FirebaseAuth.instance.currentUser;
+  final userDoc = FirebaseFirestore.instance.collection('users').doc(user?.uid);
+  DocumentSnapshot userSnapshot = await userDoc.get();
+
+  // Vérifiez si le document utilisateur existe et contient des données
+  if (userSnapshot.exists && userSnapshot.data() != null) {
+    return userSnapshot.data() as Map<String, dynamic>;
+  }
+
+  return {};
+}
+

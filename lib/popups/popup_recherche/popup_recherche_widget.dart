@@ -331,6 +331,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       }).toList(),
                     ),
                   ),
+                  
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -428,6 +429,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       ),
                     ),
                   ),
+                  
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -616,6 +618,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       ),
                     ),
                   ),
+                  
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -720,6 +723,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       ),
                     ),
                   ),
+                  
                   Container(
                     decoration: BoxDecoration(),
                   ),

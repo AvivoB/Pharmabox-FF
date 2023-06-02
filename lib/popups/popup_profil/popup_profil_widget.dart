@@ -17,6 +17,7 @@ class PopupProfilWidget extends StatefulWidget {
 
 class _PopupProfilWidgetState extends State<PopupProfilWidget> {
   late PopupProfilModel _model;
+  bool isTitulaire = false;
 
   @override
   void setState(VoidCallback callback) {
@@ -28,6 +29,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PopupProfilModel());
+    checkTitulaireStatus();
   }
 
   @override
@@ -35,6 +37,14 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
     _model.maybeDispose();
 
     super.dispose();
+  }
+
+  void checkTitulaireStatus() {
+    checkIsTitulaire().then((isTitulaire) {
+      setState(() {
+        this.isTitulaire = isTitulaire;
+      });
+    });
   }
 
   @override
@@ -62,7 +72,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  if(true)
+                    if(isTitulaire == true)
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
@@ -110,6 +120,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                         ),
                       ),
                     ),
+                  
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
