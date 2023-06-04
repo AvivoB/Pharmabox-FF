@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/constant.dart';
 
+import '../../custom_code/widgets/like_button.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -46,10 +47,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CardPharmacieModel());
-    getCityAndPostalCode(
-        widget.data[widget.dataKey]['situation_geographique']['lat_lng'][0],
-        widget.data[widget.dataKey]['situation_geographique']['lat_lng'][1]);
-
     setImageProfile();
     // likeCount = widget.data['likeCount'] ?? 0;
     // List<dynamic> likedBy = widget.data['likedBy'] ?? [];
@@ -61,45 +58,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
     _model.maybeDispose();
 
     super.dispose();
-  }
-
-  getCityAndPostalCode(double latitude, double longitude) async {
-    final url =
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$googleMapsApi';
-
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data['status'] == 'OK') {
-        final results = data['results'] as List<dynamic>;
-        if (results.isNotEmpty) {
-          final addressComponents =
-              results[0]['address_components'] as List<dynamic>;
-
-          String postalCode = '';
-          String city = '';
-
-          for (var component in addressComponents) {
-            final types = component['types'] as List<dynamic>;
-            if (types.contains('postal_code')) {
-              postalCode = component['long_name'] as String;
-            }
-            if (types.contains('locality')) {
-              city = component['long_name'] as String;
-            }
-          }
-
-          if (postalCode.isNotEmpty && city.isNotEmpty) {
-            setState(() {
-              _postcodeAdresse = '$postalCode, $city';
-            });
-          }
-        }
-      }
-    }
-
-    return '';
   }
 
   setImageProfile() {
@@ -283,7 +241,12 @@ void updateLike(bool liked) async {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          _postcodeAdresse,
+                          widget.data[widget.dataKey]
+                                      ['situation_geographique']['data']['ville']
+                                  .toString()
+                                  
+                                  +', ' + widget.data[widget.dataKey]
+                                      ['situation_geographique']['data']['postcode'].toString(),
                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                 fontFamily: 'Poppins',
                                 color: Color(0xFF595A71),
@@ -323,7 +286,7 @@ void updateLike(bool liked) async {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      
+                      child: LikeButtonWidget(documentId: widget.data[widget.dataKey]['documentId'], userId: 'flflfl',),
                     ),
                     Container(
                       decoration: BoxDecoration(

@@ -7,7 +7,7 @@ import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter/animation.dart';
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../custom_code/widgets/box_in_draggable_scroll.dart';
 import '/auth/firebase_auth/auth_util.dart';
@@ -18,6 +18,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'explorerSearchData.dart';
 import 'explorer_model.dart';
 export 'explorer_model.dart';
 import 'classPlaceClusterExplorer.dart';
@@ -33,15 +34,17 @@ class ExplorerWidget extends StatefulWidget {
   _ExplorerWidgetState createState() => _ExplorerWidgetState();
 }
 
-class _ExplorerWidgetState extends State<ExplorerWidget> {
+class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStateMixin {
   late ExplorerModel _model;
-
+  late AnimationController _animationController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
   late ClusterManager _manager;
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> markers = Set();
   String? searchTerms;
+  List searchResults = [];
+  var selectedItem;
 
   final CameraPosition _parisCameraPosition =
       CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
@@ -49,35 +52,50 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
   List<Place> items = [];
   List pharmacieInPlace = [];
 
-  Future<void> getPharmaciesLocations({searchTerm}) async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection('pharmacies').get();
+  Future<void> getPharmaciesLocations({String searchTerm = ''}) async {
+    // Get the filtered query snapshot based on the search term
+    QuerySnapshot querySnapshot;
 
-    // Boucle à travers les documents
+    if (searchTerm != null && searchTerm.isNotEmpty) {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('pharmacies')
+          .where('situation_geographique.data.ville', isGreaterThanOrEqualTo: searchTerm)
+          .get();
+    } else {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('pharmacies')
+          .get();
+    }
+
+    // Clear the previous data
+    setState(() {
+      items.clear();
+      pharmacieInPlace.clear();
+    });
+
+    // Loop through the documents
     for (DocumentSnapshot doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       String documentId = doc.reference.id.toString();
 
       data['documentId'] = documentId;
 
-      // Récupération du nom de la pharmacie
+      // Retrieve the pharmacy name
       String name = data['situation_geographique']['adresse'];
 
-      List location = data['situation_geographique']['lat_lng'];
+      List<dynamic> location = data['situation_geographique']['lat_lng'];
 
-
-
-      // Création d'un objet Place
+      // Create a Place object
       Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
 
-      // Ajout de l'objet Place à la liste des places
+      // Add the Place object to the list of places
       setState(() {
         items.add(place);
         pharmacieInPlace.add(data);
       });
     }
   }
-
+  
   @override
   void initState() {
     super.initState();
@@ -85,7 +103,17 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
     _model.textController ??= TextEditingController();
     _manager = _initClusterManager();
     getPharmaciesLocations();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
   }
+
+  void _playAnimation() {
+  _animationController.reset();
+  _animationController.forward();
+}
 
   ClusterManager _initClusterManager() {
     return ClusterManager<Place>(items, _updateMarkers,
@@ -165,6 +193,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                         style: FlutterFlowTheme.of(context).bodyMedium,
                         validator:
                             _model.textControllerValidator.asValidator(context),
+                        onChanged: (query) => getPharmaciesLocations(searchTerm: query)
+                        // TODO: faire afficher les resultats sur la carte
                       ),
                     ],
                   ),
@@ -186,8 +216,28 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                           _controller.complete(controller);
                           _manager.setMapId(controller.mapId);
                         },
-                        onCameraMove: _manager.onCameraMove,
+                        onCameraMove: (position) {
+                          setState(() {
+                            selectedItem = null;
+                          });
+                        },
                         onCameraIdle: _manager.updateMap),
+                  ),
+
+                  if (selectedItem != null)
+                  Positioned(
+                    bottom: 60.0,
+                    left: 10.0,
+                    right: 10.0,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(0, 1),
+                        end: Offset.zero,
+                      ).animate(_animationController),
+                      child: CardPharmacieWidget(
+                        data: pharmacieInPlace,
+                      ),
+                    ),
                   ),
 
                   // Afficher les resulats
@@ -215,8 +265,11 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                                         Color(0xFFD0D1DE), BlendMode.srcIn),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                                    child: Text(pharmacieInPlace.length.toString()+' résultats',
+                                    padding: const EdgeInsets.only(
+                                        top: 8.0, bottom: 8.0),
+                                    child: Text(
+                                        pharmacieInPlace.length.toString() +
+                                            ' résultats',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -225,13 +278,17 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                                               fontSize: 14.0,
                                             )),
                                   ),
-                                  BoxDraggableSheet(type: 'Membres', nbResultats: [1, 2, 3],),
                                   BoxDraggableSheet(
-                                    type: 'Pharmacies', 
-                                    nbResultats: pharmacieInPlace,
-                                    data: pharmacieInPlace
+                                    type: 'Membres',
+                                    nbResultats: [],
                                   ),
-                                  BoxDraggableSheet(type: 'Jobs',  nbResultats: [5,8,8,8,8]),
+                                  BoxDraggableSheet(
+                                      type: 'Pharmacies',
+                                      nbResultats: pharmacieInPlace,
+                                      data: pharmacieInPlace),
+                                  BoxDraggableSheet(
+                                      type: 'Jobs',
+                                      nbResultats: [5, 8, 8, 8, 8]),
                                 ],
                               ),
                             ),
@@ -240,7 +297,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
                   )
                 ]),
               ),
-            
             ],
           ),
         ),
@@ -254,8 +310,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget> {
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
           onTap: () {
-            print('---- $cluster');
-            cluster.items.forEach((p) => print(p));
+            // selectedItem = cluster.items.first;
+            cluster.items.forEach((p) => selectedItem = p);
+             _playAnimation();
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
               text: /* cluster.isMultiple ? */

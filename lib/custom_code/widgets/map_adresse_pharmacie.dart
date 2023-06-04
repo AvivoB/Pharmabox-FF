@@ -9,9 +9,11 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class MapAdressePharmacie extends StatefulWidget {
-  const MapAdressePharmacie({Key? key, required this.onAdressSelected}) : super(key: key);
+  const MapAdressePharmacie({Key? key, required this.onAdressSelected})
+      : super(key: key);
 
-  final Function(double, double, String) onAdressSelected;
+  final Function(double, double, String, String, String, String, String)
+      onAdressSelected;
 
   @override
   _MapAdressePharmacieState createState() => _MapAdressePharmacieState();
@@ -114,7 +116,8 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
               itemCount: _predictions.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(_predictions[index]['description'], style: FlutterFlowTheme.of(context).bodyMedium),
+                  title: Text(_predictions[index]['description'],
+                      style: FlutterFlowTheme.of(context).bodyMedium),
                   onTap: () {
                     _onPredictionSelected(_predictions[index]['description']);
                   },
@@ -157,7 +160,17 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
     // Get the first prediction
     Location location = locations.first;
 
-    widget.onAdressSelected(location.latitude, location.longitude, selectedAdress);
+    final aDreplacemark = await placemarkFromCoordinates(location.latitude, location.longitude);
+
+    widget.onAdressSelected(
+        location.latitude, 
+        location.longitude, 
+        aDreplacemark.first.street.toString(), 
+        aDreplacemark.first.postalCode.toString(), 
+        aDreplacemark.first.locality.toString(),
+        aDreplacemark.first.subLocality.toString() ?? '',
+        aDreplacemark.first.administrativeArea.toString() ?? '',
+    );
 
     // Set the camera position to the selected location
     _mapController.animateCamera(CameraUpdate.newCameraPosition(
@@ -167,10 +180,11 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
       ),
     ));
 
-    final providerPharmacieRegister = Provider.of<ProviderPharmacieRegister>(context, listen: false);
+    final providerPharmacieRegister =
+        Provider.of<ProviderPharmacieRegister>(context, listen: false);
 
-    providerPharmacieRegister.setPharmacieLocation(location.latitude, location.longitude);
-
+    providerPharmacieRegister.setPharmacieLocation(
+        location.latitude, location.longitude);
 
     // Add a marker for the selected location
     _markers.add(Marker(

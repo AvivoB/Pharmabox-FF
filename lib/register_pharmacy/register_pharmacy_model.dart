@@ -55,7 +55,10 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   FormFieldController<String>? preferenceContactValueController;
   // State field(s) for PharmacieAdresse widget.
   TextEditingController? pharmacieAdresseController;
-
+  TextEditingController? pharmacieAdressePostCode;
+  TextEditingController? pharmacieAdresseVille;
+  TextEditingController? pharmacieAdresseArrondissement;
+  TextEditingController? pharmacieAdresseRegion;
 
 // State field for pharmacieLaLng get location
   TextEditingController? pharmacieLat;

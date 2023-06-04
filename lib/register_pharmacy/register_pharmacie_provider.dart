@@ -12,7 +12,16 @@ class ProviderPharmacieRegister extends ChangeNotifier {
   List _selectedPharmacieLocation = [];
   String _selectedPharmacieAdresse = '';
   String _selectedPharmacieAdresseRue = '';
-  List _tendences = [{'Ordonances': '', 'Cosmétiques': '', 'Phyto / aroma': '', 'Nutrition': '','Conseil': ''}];
+  List _selectedAdressePharma = [];
+  List _tendences = [
+    {
+      'Ordonances': '',
+      'Cosmétiques': '',
+      'Phyto / aroma': '',
+      'Nutrition': '',
+      'Conseil': ''
+    }
+  ];
 
   // Getters qui permettent de recuperer les données dans les vues
   List get selectedGroupement => _selectedGroupement;
@@ -21,6 +30,7 @@ class ProviderPharmacieRegister extends ChangeNotifier {
   List get tendences => _tendences;
   String get selectedPharmacieAdresse => _selectedPharmacieAdresse;
   String get selectedPharmacieAdresseRue => _selectedPharmacieAdresseRue;
+  List get selectedAdressePharma => _selectedAdressePharma;
 
 /* Options Groupement */
   void selectGroupement(groupement) {
@@ -47,6 +57,17 @@ class ProviderPharmacieRegister extends ChangeNotifier {
 
   void setAdresseRue(adresse) {
     _selectedPharmacieAdresseRue = adresse;
+  }
+
+  void setAdresse(postcode, rue, ville, region, arrondissement) {
+    _selectedAdressePharma = [{
+      'rue': rue,
+      'postcode': postcode,
+      'ville': ville,
+      'region': region,
+      'arrondissement': arrondissement
+    }];
+    notifyListeners();
   }
 
   void setTendences(index, type, value) {

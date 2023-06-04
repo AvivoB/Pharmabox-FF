@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 const redColor = Color(0xFFF89999);
 const greenColor = Color(0xFF7CEDAC);
 const yellowColor = Color(0xFFFDC571);
+const blueColor = Color(0xFF42D2FF);
 const greyColor = Color(0xFF595A71);
 const greyLightColor = Color(0xFFEFF6F7);
 
@@ -59,4 +60,3 @@ Future<Map<String, dynamic>> getCurrentUserData() async {
 
   return {};
 }
-

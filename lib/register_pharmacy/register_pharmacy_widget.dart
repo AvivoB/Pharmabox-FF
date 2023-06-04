@@ -48,6 +48,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
     _model.emailPharmacieController ??= TextEditingController();
     _model.phonePharmacieController1 ??= TextEditingController();
     _model.pharmacieAdresseController ??= TextEditingController();
+    _model.pharmacieAdressePostCode ??= TextEditingController();
+    _model.pharmacieAdresseVille ??= TextEditingController();
+    _model.pharmacieAdresseRegion ??= TextEditingController();
+    _model.pharmacieAdresseArrondissement ??= TextEditingController();
+    _model.pharmacieAdresseController ??= TextEditingController();
     _model.rerController ??= TextEditingController();
     _model.metroController ??= TextEditingController();
     _model.busController ??= TextEditingController();
@@ -136,6 +141,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
       'situation_geographique': {
         'adresse': providerPharmacieRegister.selectedPharmacieAdresseRue,
         'lat_lng': providerPharmacieRegister.selectedPharmacieLocation,
+        "data": providerPharmacieRegister.selectedAdressePharma[0],
       },
       'accessibilite': {
         'rer': _model.rerController.text,
@@ -823,10 +829,17 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 ),
                               ),
                               custom_widgets.MapAdressePharmacie(
-                                  onAdressSelected:
-                                      (latitude, longitude, adresse) {
+                                  onAdressSelected: (latitude,
+                                      longitude,
+                                      adresse,
+                                      postcode,
+                                      ville,
+                                      arrondissement,
+                                      region) {
                                 _model.pharmacieAdresseController.text =
                                     adresse;
+                                providerPharmacieRegister.setAdresse(postcode,
+                                    adresse, ville, region, arrondissement);
                               })
                             ],
                           ),
@@ -6502,8 +6515,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             slider: 1.0,
                                             onChanged: (value) {
                                               providerPharmacieRegister
-                                                  .setTendences(
-                                                      0, 'Ordonances', value.toString());
+                                                  .setTendences(0, 'Ordonances',
+                                                      value.toString());
                                             })),
                                   ],
                                 ),
@@ -6550,8 +6563,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           slider: 1.0,
                                           onChanged: (value) {
                                             providerPharmacieRegister
-                                                .setTendences(
-                                                    1, 'Cosmétiques', value.toString());
+                                                .setTendences(1, 'Cosmétiques',
+                                                    value.toString());
                                           },
                                         )),
                                   ],
@@ -6599,8 +6612,10 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             slider: 1.0,
                                             onChanged: (value) {
                                               providerPharmacieRegister
-                                                  .setTendences(2,
-                                                      'Phyto / aroma', value.toString());
+                                                  .setTendences(
+                                                      2,
+                                                      'Phyto / aroma',
+                                                      value.toString());
                                             })),
                                   ],
                                 ),
@@ -6647,8 +6662,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             slider: 1.0,
                                             onChanged: (value) {
                                               providerPharmacieRegister
-                                                  .setTendences(
-                                                      3, 'Nutrition', value.toString());
+                                                  .setTendences(3, 'Nutrition',
+                                                      value.toString());
                                             })),
                                   ],
                                 ),
@@ -6695,8 +6710,8 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             slider: 1.0,
                                             onChanged: (value) {
                                               providerPharmacieRegister
-                                                  .setTendences(
-                                                      4, 'Conseil', value.toString());
+                                                  .setTendences(4, 'Conseil',
+                                                      value.toString());
                                               print(value);
                                             })),
                                   ],
@@ -7161,7 +7176,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          
                           createPharmacie(context);
                           context.goNamed('Explorer');
                         },
