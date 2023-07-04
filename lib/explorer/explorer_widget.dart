@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/animation.dart';
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
+import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
+import '../composants/card_user/card_user_widget.dart';
 import '../custom_code/widgets/box_in_draggable_scroll.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';
@@ -34,7 +36,10 @@ class ExplorerWidget extends StatefulWidget {
   _ExplorerWidgetState createState() => _ExplorerWidgetState();
 }
 
-class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStateMixin {
+class _ExplorerWidgetState extends State<ExplorerWidget>
+    with TickerProviderStateMixin {
+  TabController? _tabController;
+  int currentTAB = 0;
   late ExplorerModel _model;
   late AnimationController _animationController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -51,6 +56,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
   List<Place> items = [];
   List pharmacieInPlace = [];
+  List userSearch = [];
 
   Future<void> getPharmaciesLocations({String searchTerm = ''}) async {
     // Get the filtered query snapshot based on the search term
@@ -59,12 +65,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     if (searchTerm != null && searchTerm.isNotEmpty) {
       querySnapshot = await FirebaseFirestore.instance
           .collection('pharmacies')
-          .where('situation_geographique.data.ville', isGreaterThanOrEqualTo: searchTerm)
+          .where('situation_geographique.data.ville',
+              isGreaterThanOrEqualTo: searchTerm)
           .get();
     } else {
-      querySnapshot = await FirebaseFirestore.instance
-          .collection('pharmacies')
-          .get();
+      querySnapshot =
+          await FirebaseFirestore.instance.collection('pharmacies').get();
     }
 
     // Clear the previous data
@@ -95,7 +101,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       });
     }
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -103,6 +109,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     _model.textController ??= TextEditingController();
     _manager = _initClusterManager();
     getPharmaciesLocations();
+    _tabController = TabController(length: 2, vsync: this);
 
     _animationController = AnimationController(
       vsync: this,
@@ -111,9 +118,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   }
 
   void _playAnimation() {
-  _animationController.reset();
-  _animationController.forward();
-}
+    _animationController.reset();
+    _animationController.forward();
+  }
 
   ClusterManager _initClusterManager() {
     return ClusterManager<Place>(items, _updateMarkers,
@@ -155,46 +162,93 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                 padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery.of(context).size.height * 0.13,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        controller: _model.textController,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: 'Rechercher...',
-                          hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                          contentPadding: EdgeInsets.all(15.0),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFD0D1DE),
-                              width: 1,
+                          controller: _model.textController,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            hintText: 'Rechercher...',
+                            hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                            contentPadding: EdgeInsets.all(15.0),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFD0D1DE),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(48.0),
                             ),
-                            borderRadius: BorderRadius.circular(48.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFD0D1DE),
-                              width: 1,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFD0D1DE),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(28.0),
                             ),
-                            borderRadius: BorderRadius.circular(28.0),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: 24.0,
+                              color: Color(0xFFD0D1DE),
+                            ),
                           ),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: 24.0,
-                            color: Color(0xFFD0D1DE),
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          validator: _model.textControllerValidator
+                              .asValidator(context),
+                          onChanged: (query) async {                           
+                            if (currentTAB == 0)
+                            setState(() async {
+                              userSearch = await ExplorerSearchData().searchUsers(query);
+                            });
+                            if (currentTAB == 1)
+                            setState(() async {
+                              pharmacieInPlace = await ExplorerSearchData().searchPharmacies(query);
+                            });
+                          }),
+                      TabBar(
+                        labelColor: blackColor,
+                        unselectedLabelColor: blackColor,
+                        indicator: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xFF7CEDAC),
+                              Color(0xFF42D2FF),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
                           ),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
-                        validator:
-                            _model.textControllerValidator.asValidator(context),
-                        onChanged: (query) => getPharmaciesLocations(searchTerm: query)
-                        // TODO: faire afficher les resultats sur la carte
+                        indicatorWeight: 1,
+                        indicatorPadding: EdgeInsets.only(top: 40),
+                        controller: _tabController,
+                        onTap: (value) {
+                          setState(() {
+                            currentTAB = value;
+                          });
+                        },
+                        unselectedLabelStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.override(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF595A71),
+                                  fontSize: 14.0,
+                                ),
+                        labelStyle: FlutterFlowTheme.of(context)
+                            .bodyMedium
+                            .override(
+                                fontFamily: 'Poppins',
+                                color: blackColor,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600),
+                        tabs: [
+                          Tab(text: 'Membres'),
+                          Tab(text: 'Pharmacies'),
+                        ],
                       ),
                     ],
                   ),
@@ -202,7 +256,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.71,
+                height: MediaQuery.of(context).size.height * 0.68,
                 child: Stack(children: [
                   Container(
                     child: GoogleMap(
@@ -225,20 +279,20 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                   ),
 
                   if (selectedItem != null)
-                  Positioned(
-                    bottom: 60.0,
-                    left: 10.0,
-                    right: 10.0,
-                    child: SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(0, 1),
-                        end: Offset.zero,
-                      ).animate(_animationController),
-                      child: CardPharmacieWidget(
-                        data: pharmacieInPlace,
+                    Positioned(
+                      bottom: 60.0,
+                      left: 10.0,
+                      right: 10.0,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(0, 1),
+                          end: Offset.zero,
+                        ).animate(_animationController),
+                        child: CardPharmacieWidget(
+                          data: pharmacieInPlace,
+                        ),
                       ),
                     ),
-                  ),
 
                   // Afficher les resulats
                   DraggableScrollableSheet(
@@ -267,9 +321,18 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         top: 8.0, bottom: 8.0),
-                                    child: Text(
-                                        pharmacieInPlace.length.toString() +
-                                            ' résultats',
+                                    child: 
+                                    currentTAB == 0 ? 
+                                    Text(userSearch.length.toString() +' résultats',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color: Color(0xFF595A71),
+                                              fontSize: 14.0,
+                                            )) 
+                                    :
+                                    Text(pharmacieInPlace.length.toString() +' résultats',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -278,17 +341,17 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                               fontSize: 14.0,
                                             )),
                                   ),
-                                  BoxDraggableSheet(
-                                    type: 'Membres',
-                                    nbResultats: [],
-                                  ),
-                                  BoxDraggableSheet(
-                                      type: 'Pharmacies',
-                                      nbResultats: pharmacieInPlace,
-                                      data: pharmacieInPlace),
-                                  BoxDraggableSheet(
-                                      type: 'Jobs',
-                                      nbResultats: [5, 8, 8, 8, 8]),
+                                  if (currentTAB == 0) 
+                                    for (var user in userSearch)
+                                      CardUserWidget(
+                                        data: user,
+                                      ),
+                                    
+                                  if (currentTAB == 1)
+                                    for (var pharmacie in pharmacieInPlace)
+                                      CardPharmacieWidget(
+                                          data: pharmacie,
+                                      ),
                                 ],
                               ),
                             ),
@@ -312,7 +375,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
           onTap: () {
             // selectedItem = cluster.items.first;
             cluster.items.forEach((p) => selectedItem = p);
-             _playAnimation();
+            _playAnimation();
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
               text: /* cluster.isMultiple ? */

@@ -116,7 +116,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x00000000),
+                                        color: FlutterFlowTheme.of(context)
+                                            .focusColor,
                                         width: 1.0,
                                       ),
                                       borderRadius: const BorderRadius.only(
@@ -174,7 +175,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x00000000),
+                                        color: FlutterFlowTheme.of(context)
+                                            .focusColor,
                                         width: 1.0,
                                       ),
                                       borderRadius: const BorderRadius.only(
@@ -200,20 +202,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(4.0),
                                         topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    suffixIcon: InkWell(
-                                      onTap: () => setState(
-                                        () => _model.motdepasseVisibility =
-                                            !_model.motdepasseVisibility,
-                                      ),
-                                      focusNode: FocusNode(skipTraversal: true),
-                                      child: Icon(
-                                        _model.motdepasseVisibility
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: Color(0xFF757575),
-                                        size: 22.0,
                                       ),
                                     ),
                                   ),
@@ -268,13 +256,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     text: 'Se connecter',
                                     options: FFButtonOptions(
                                       width: double.infinity,
+                                      elevation: 0.0,
                                       height: 40.0,
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 0.0, 0.0, 0.0),
                                       iconPadding:
                                           EdgeInsetsDirectional.fromSTEB(
                                               0.0, 0.0, 0.0, 0.0),
-                                      color: Color(0x00FFFFFF),
+                                      color: Color.fromARGB(0, 255, 255, 255),
                                       textStyle: FlutterFlowTheme.of(context)
                                           .titleSmall
                                           .override(

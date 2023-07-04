@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -71,5 +74,4 @@ class ProfilModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
-
 }

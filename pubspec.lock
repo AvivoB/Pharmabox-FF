@@ -153,6 +153,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  carousel_slider:
+    dependency: "direct main"
+    description:
+      name: carousel_slider
+      sha256: "9c695cc963bf1d04a47bd6021f68befce8970bcd61d24938e1fb0918cf5d9c42"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.1"
   characters:
     dependency: transitive
     description:
@@ -377,6 +385,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      sha256: "5299f2a702b958746941b47edb275272d4305e0fad99a4774b091346293d99c7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "14.1.4"
+  firebase_messaging_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_messaging_platform_interface
+      sha256: "7a8739ad1634767444329e7836249d9dbe3624597ec98dd2af8e1754062190e3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.8"
+  firebase_messaging_web:
+    dependency: transitive
+    description:
+      name: firebase_messaging_web
+      sha256: aeb9958a23efac1ac9035e55bc21c6a365c06d576396ed4dc0b974df790457a5
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.9"
   firebase_storage:
     dependency: "direct main"
     description:

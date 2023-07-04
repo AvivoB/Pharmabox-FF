@@ -62,7 +62,7 @@ class _BoxDraggableSheetState extends State<BoxDraggableSheet> {
           ),
         ),
         if (isExpanded && widget.type == 'Pharmacies')
-          for (var i in widget.nbResultats) CardPharmacieWidget(data: widget.data, dataKey: widget.nbResultats.indexOf(i),),
+          // for (var i in widget.nbResultats) CardPharmacieWidget(data: widget.data, dataKey: widget.nbResultats.indexOf(i),),
         if (isExpanded && widget.type == 'Membres')
           for (var i in widget.nbResultats) CardUserWidget(),
         if (isExpanded && widget.type == 'Jobs')

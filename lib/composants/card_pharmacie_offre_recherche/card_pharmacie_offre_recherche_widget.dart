@@ -1,3 +1,4 @@
+import '../../custom_code/widgets/like_button.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -9,7 +10,11 @@ import 'card_pharmacie_offre_recherche_model.dart';
 export 'card_pharmacie_offre_recherche_model.dart';
 
 class CardPharmacieOffreRechercheWidget extends StatefulWidget {
-  const CardPharmacieOffreRechercheWidget({Key? key}) : super(key: key);
+  const CardPharmacieOffreRechercheWidget({Key? key, this.data, this.profilUid, this.dataKey = 0}) : super(key: key);
+
+  final data;
+  final profilUid;
+  final dataKey;
 
   @override
   _CardPharmacieOffreRechercheWidgetState createState() =>
@@ -244,36 +249,7 @@ class _CardPharmacieOffreRechercheWidgetState
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                         borderRadius: BorderRadius.circular(50.0),
                       ),
-                      child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
-                        },
-                        text: '55',
-                        icon: Icon(
-                          FFIcons.klike,
-                          size: 18.0,
-                        ),
-                        options: FFButtonOptions(
-                          height: 40.0,
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                          iconPadding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                          color: Color(0x00F1F4F8),
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF595A71),
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
+                      child: LikeButtonWidget(documentId: 'fjf', userId: 'flflfl')
                     ),
                     Container(
                       decoration: BoxDecoration(

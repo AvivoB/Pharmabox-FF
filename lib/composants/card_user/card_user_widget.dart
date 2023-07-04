@@ -1,6 +1,7 @@
 import 'package:flutter_svg/svg.dart';
 
 import '../../constant.dart';
+import '../../custom_code/widgets/like_button.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -13,7 +14,9 @@ import 'card_user_model.dart';
 export 'card_user_model.dart';
 
 class CardUserWidget extends StatefulWidget {
-  const CardUserWidget({Key? key}) : super(key: key);
+  const CardUserWidget({Key? key, this.data}) : super(key: key);
+
+  final data;
 
   @override
   _CardUserWidgetState createState() => _CardUserWidgetState();
@@ -32,6 +35,8 @@ class _CardUserWidgetState extends State<CardUserWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CardUserModel());
+
+    print(widget.data);
   }
 
   @override
@@ -47,7 +52,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
       padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
       child: Container(
         width: MediaQuery.of(context).size.width * 1.0,
-        // height: MediaQuery.of(context).size.height * 0.65,     
+        // height: MediaQuery.of(context).size.height * 0.65,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           borderRadius: BorderRadius.circular(15.0),
@@ -96,22 +101,24 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Isabel Rettig',
-                            style:
-                                FlutterFlowTheme.of(context).bodyMedium.override(
-                                      fontFamily: 'Poppins',
-                                      color: Color(0xFF595A71),
-                                      fontSize: 14.0,
-                                    ),
+                            widget.data['nom'] + ' ' + widget.data['prenom'],
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF595A71),
+                                  fontSize: 14.0,
+                                ),
                           ),
                           Text(
-                            'Poste',
-                            style:
-                                FlutterFlowTheme.of(context).bodyMedium.override(
-                                      fontFamily: 'Poppins',
-                                      color: Color(0xFF8D8D97),
-                                      fontSize: 13.0,
-                                    ),
+                            widget.data['poste'],
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF8D8D97),
+                                  fontSize: 13.0,
+                                ),
                           ),
                         ],
                       ),
@@ -149,9 +156,10 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     size: 35.0,
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                     child: Text(
-                      '95200, Paris',
+                      widget.data['code_postal'] + ', ' + widget.data['city'],
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Poppins',
                             color: Color(0xFF595A71),
@@ -179,22 +187,9 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white, // background color
-                            foregroundColor: greyColor, // foreground color
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15))
-                            // elevation of button
-                            ),
-                        onPressed: () {},
-                        icon:  SvgPicture.asset(
-                          'assets/icons/Like.svg',
-                          width: 22.0,
-                          semanticsLabel: 'Label'
-                        ),
-                        label: Text('555'), // <-- Text
+                      child: LikeButtonWidget(
+                        documentId: widget.data['prenom'],
+                        userId: 'flflfl',
                       ),
                     ),
                     Container(
@@ -211,7 +206,10 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                  colors: [
+                                    Color(0xFF42D2FF),
+                                    Color(0xFF7CEDAC)
+                                  ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),
@@ -245,7 +243,10 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                  colors: [
+                                    Color(0xFF42D2FF),
+                                    Color(0xFF7CEDAC)
+                                  ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),

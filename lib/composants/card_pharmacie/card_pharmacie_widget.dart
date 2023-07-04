@@ -20,12 +20,11 @@ import 'package:like_button/like_button.dart';
 
 class CardPharmacieWidget extends StatefulWidget {
   const CardPharmacieWidget(
-      {Key? key, this.data, this.profilUid, this.dataKey = 0})
+      {Key? key, this.data, this.profilUid})
       : super(key: key);
 
   final data;
   final profilUid;
-  final dataKey;
   @override
   _CardPharmacieWidgetState createState() => _CardPharmacieWidgetState();
 }
@@ -48,9 +47,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
     super.initState();
     _model = createModel(context, () => CardPharmacieModel());
     setImageProfile();
-    // likeCount = widget.data['likeCount'] ?? 0;
-    // List<dynamic> likedBy = widget.data['likedBy'] ?? [];
-    // isLiked = likedBy.contains(getCurrentUserId());
   }
 
   @override
@@ -61,36 +57,10 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   }
 
   setImageProfile() {
-    // if (widget.data[widget.dataKey]['photo_url'] != '') {
-    //   _imageProfilPharma = widget.data[widget.dataKey]['photo_url'].toString();
+    // if (widget.data['photo_url'] != '') {
+    //   _imageProfilPharma = widget.data['photo_url'].toString();
     // }
   }
-
-Future<String> getCurrentUserId() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      return user.uid;
-    }
-    return '';
-  }
-
-void updateLike(bool liked) async {
-  final String currentUserId = await getCurrentUserId();
-  final DocumentReference<Map<String, dynamic>> documentRef =
-      FirebaseFirestore.instance
-          .collection('pharmacies')
-          .doc(widget.data[widget.dataKey]['documentId']);
-
-  final currentLikeCount = liked ? 1 : -1;
-
-  await documentRef.update({
-    'likeCount': FieldValue.increment(currentLikeCount),
-    'isLiked': liked,
-    'likedBy': liked
-        ? FieldValue.arrayUnion([currentUserId])
-        : FieldValue.arrayRemove([currentUserId])
-  });
-}
 
   @override
   Widget build(BuildContext context) {
@@ -128,30 +98,34 @@ void updateLike(bool liked) async {
                   ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                child: Stack(
                   children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
-                      child: Image.asset(
-                        'assets/images/Badge.png',
-                        width: 40.0,
-                        fit: BoxFit.fill,
+                    
+                    Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
+                        child: Image.asset(
+                          'assets/images/Badge.png',
+                          width: 40.0,
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
-                      child: Image.asset(
-                        'assets/images/Badge2.png',
-                        width: 40.0,
-                        fit: BoxFit.fill,
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
+                        child: Image.asset(
+                          'assets/images/Badge2.png',
+                          width: 40.0,
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+          ),
+          ]),
               ),
             ),
             Padding(
@@ -173,7 +147,7 @@ void updateLike(bool liked) async {
                           Container(
                             width: 120,
                             child: Text(
-                              widget.data[widget.dataKey]
+                              widget.data
                                       ['situation_geographique']['adresse']
                                   .toString(),
                               style: FlutterFlowTheme.of(context)
@@ -194,29 +168,12 @@ void updateLike(bool liked) async {
                     children: [
                       Image.asset(
                         'assets/groupements/' +
-                            widget.data[widget.dataKey]['groupement'][0]['image']
+                            widget.data['groupement'][0]['image']
                                 .toString(),
-                        width: 80.0,
+                        width: 150.0,
                         height: 50.0,
                         fit: BoxFit.cover,
                       ),
-                      Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                          child: Container(
-                            width: 120,
-                            child: Text(
-                              widget.data[widget.dataKey]['groupement'][0]['name']
-                                  .toString(),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF595A71),
-                                    fontSize: 14.0,
-                                  ),
-                            ),
-                          )),
                     ],
                   ),
                 ],
@@ -241,11 +198,11 @@ void updateLike(bool liked) async {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          widget.data[widget.dataKey]
+                          widget.data
                                       ['situation_geographique']['data']['ville']
                                   .toString()
                                   
-                                  +', ' + widget.data[widget.dataKey]
+                                  +', ' + widget.data
                                       ['situation_geographique']['data']['postcode'].toString(),
                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                 fontFamily: 'Poppins',
@@ -286,7 +243,7 @@ void updateLike(bool liked) async {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      child: LikeButtonWidget(documentId: widget.data[widget.dataKey]['documentId'], userId: 'flflfl',),
+                      child: LikeButtonWidget(documentId: widget.data['documentId'], userId: 'flflfl',),
                     ),
                     Container(
                       decoration: BoxDecoration(

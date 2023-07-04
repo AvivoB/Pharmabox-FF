@@ -5,33 +5,38 @@ import 'package:http/http.dart' as http;
 import '../constant.dart';
 
 class ExplorerSearchData {
-  Future<List<DocumentSnapshot>> searchUsers(String query) async {
-    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  Future<List> searchUsers(String query) async {
+    final QuerySnapshot nomQuery = await FirebaseFirestore.instance
         .collection('users')
-        .where('name', isGreaterThanOrEqualTo: query)
+        .where('nom', isGreaterThanOrEqualTo: query)
         .get();
 
-    final QuerySnapshot firstNameQuerySnapshot = await FirebaseFirestore
-        .instance
+    final QuerySnapshot prenomQuery = await FirebaseFirestore.instance
         .collection('users')
         .where('prenom', isGreaterThanOrEqualTo: query)
         .get();
 
-    final QuerySnapshot cityQuerySnapshot = await FirebaseFirestore.instance
+    final QuerySnapshot villeQuery = await FirebaseFirestore.instance
         .collection('users')
         .where('city', isGreaterThanOrEqualTo: query)
         .get();
 
     final List<DocumentSnapshot> combinedResults = [
-      ...querySnapshot.docs,
-      ...firstNameQuerySnapshot.docs,
-      ...cityQuerySnapshot.docs
+      ...nomQuery.docs,
+      ...prenomQuery.docs,
+      ...villeQuery.docs
     ];
 
-    return combinedResults;
+    List userData = [];
+    for (final user in combinedResults) {
+      print(user);
+      userData.add(user.data());
+    }
+
+    return userData;
   }
 
-  Future<List<DocumentSnapshot>> searchPharmacies(String query) async {
+  Future<List> searchPharmacies(String query) async {
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('pharmacies')
         .where('name', isGreaterThanOrEqualTo: query)
@@ -42,25 +47,24 @@ class ExplorerSearchData {
         .collection('pharmacies')
         .where('situation_geographique.adresse', isGreaterThanOrEqualTo: query)
         .get();
-    final QuerySnapshot adresse = await FirebaseFirestore
-        .instance
+    final QuerySnapshot adresse = await FirebaseFirestore.instance
         .collection('pharmacies')
         .where('situation_geographique.data.rue', isGreaterThanOrEqualTo: query)
         .get();
-    final QuerySnapshot ville = await FirebaseFirestore
-        .instance
+    final QuerySnapshot ville = await FirebaseFirestore.instance
         .collection('pharmacies')
-        .where('situation_geographique.data.ville', isGreaterThanOrEqualTo: query)
+        .where('situation_geographique.data.ville',
+            isGreaterThanOrEqualTo: query)
         .get();
-    final QuerySnapshot postcode = await FirebaseFirestore
-        .instance
+    final QuerySnapshot postcode = await FirebaseFirestore.instance
         .collection('pharmacies')
-        .where('situation_geographique.data.ville', isGreaterThanOrEqualTo: query)
+        .where('situation_geographique.data.ville',
+            isGreaterThanOrEqualTo: query)
         .get();
-    final QuerySnapshot region = await FirebaseFirestore
-        .instance
+    final QuerySnapshot region = await FirebaseFirestore.instance
         .collection('pharmacies')
-        .where('situation_geographique.data.ville', isGreaterThanOrEqualTo: query)
+        .where('situation_geographique.data.ville',
+            isGreaterThanOrEqualTo: query)
         .get();
 
     final List<DocumentSnapshot> combinedResults = [
@@ -70,32 +74,43 @@ class ExplorerSearchData {
       ...ville.docs,
       ...adresse.docs,
       ...postcode.docs,
-
     ];
 
-    return combinedResults;
+    List pharmacieData = [];
+    for (final pharmacie in combinedResults) {
+      pharmacieData.add(pharmacie.data());
+    }
+
+    return pharmacieData;
   }
 
-  Future searchAndListData(String query) async {
-    final List<DocumentSnapshot> users = await searchUsers(query);
-    final List<DocumentSnapshot> pharmacies = await searchPharmacies(query);
-
-    List pharma = [];
-    List utilisateurs = [];
-
-    // // Afficher les utilisateurs trouvés
-    print('Utilisateurs trouvés :');
-    for (final user in users) {
-      utilisateurs.add(user.data());
+  Future<List> searchJobs(String query) async {
+    String collectionType = '';
+    if (await checkIsTitulaire()) {
+      collectionType = 'recherches';
+    } else {
+      collectionType = 'offres';
     }
 
-    // Afficher les pharmacies trouvées
-    print('Pharmacies trouvées :');
-    for (final pharmacy in pharmacies) {
-      pharma.add(pharmacy.data());
+    final QuerySnapshot villeQuery = await FirebaseFirestore.instance
+        .collection(collectionType)
+        .where('localisation', isGreaterThanOrEqualTo: query)
+        .get();
+    final QuerySnapshot contratQuery = await FirebaseFirestore.instance
+        .collection(collectionType)
+        .where('contrats', arrayContains: query)
+        .get();
+
+    final List<DocumentSnapshot> combinedResults = [
+      ...villeQuery.docs,
+      ...contratQuery.docs,
+    ];
+
+    List jobsData = [];
+    for (final jobs in combinedResults) {
+      jobsData.add(jobs.data());
     }
-    
-    return [pharma, utilisateurs];
+
+    return jobsData;
   }
 }
-

@@ -9,6 +9,7 @@ const yellowColor = Color(0xFFFDC571);
 const blueColor = Color(0xFF42D2FF);
 const greyColor = Color(0xFF595A71);
 const greyLightColor = Color(0xFFEFF6F7);
+const blackColor = Color(0xFF161730);
 
 const googleMapsApi = 'AIzaSyBGiDwJv6PfzO6hPQeymoo7tl4NcdiyloQ';
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pharmabox/constant.dart';
 
+import '../custom_code/widgets/like_button.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -35,10 +36,9 @@ class ProfilWidget extends StatefulWidget {
 
 class _ProfilWidgetState extends State<ProfilWidget> {
   late ProfilModel _model;
-  var currentUser;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+  var userData;
 
   @override
   void initState() async {
@@ -64,6 +64,8 @@ class _ProfilWidgetState extends State<ProfilWidget> {
       ).then((value) => setState(() {}));
     });
 
+    getUserData();
+
     _model.nomFamilleController ??= TextEditingController();
     _model.prenomController ??= TextEditingController();
     _model.emailController ??= TextEditingController(text: currentUserEmail);
@@ -72,10 +74,6 @@ class _ProfilWidgetState extends State<ProfilWidget> {
     _model.postcodeController ??= TextEditingController();
     _model.cityController ??= TextEditingController();
     _model.presentationController ??= TextEditingController();
-
-    await getCurrentUserData().then((value) {
-      _model.nomFamilleController.text = value['nom'].toString();
-    });
   }
 
   @override
@@ -84,6 +82,27 @@ class _ProfilWidgetState extends State<ProfilWidget> {
 
     _unfocusNode.dispose();
     super.dispose();
+  }
+
+  getUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      // Handle user not signed in.
+      return;
+    }
+
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+
+    if (docSnapshot.exists) {
+      // Access the data inside the document.
+      var data = docSnapshot.data();
+      setState(() {
+        userData = data;
+      });
+    } else {
+      // Handle the case where the user data does not exist.
+      return;
+    }
   }
 
   @override
@@ -222,42 +241,12 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                       ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 10.0, 0.0, 0.0),
-                                  child: FFButtonWidget(
-                                    onPressed: () {
-                                      print('Button pressed ...');
-                                    },
-                                    text: '55',
-                                    icon: Icon(
-                                      FFIcons.klike,
-                                      size: 18.0,
-                                    ),
-                                    options: FFButtonOptions(
-                                      width: 120.0,
-                                      height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
-                                      color: Colors.white,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            fontFamily: 'Poppins',
-                                            color: Color(0xFF595A71),
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(80.0),
-                                    ),
-                                  ),
-                                ),
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 10.0, 0.0, 0.0),
+                                    child: LikeButtonWidget(
+                                      documentId: 'kkk',
+                                      userId: 'flflfl',
+                                    )),
                               ],
                             ),
                           ],
