@@ -31,52 +31,46 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
   }
 
   Future<void> _checkLikeStatus() async {
-    final userLikesSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
+    final likesRef = await FirebaseFirestore.instance
         .collection('likes')
-        .doc(widget.documentId)
-        .get();
-
-    final pharmacyLikesSnapshot = await FirebaseFirestore.instance
-        .collection('pharmacies')
-        .doc(widget.documentId)
+        .where('liked_by', isEqualTo: widget.userId)
+        .where('document_id', isEqualTo: widget.documentId) // Check for likes of this specific document
         .get();
 
     setState(() {
-      isLiked = userLikesSnapshot.exists && pharmacyLikesSnapshot.exists;
-      likesCount = pharmacyLikesSnapshot.get('likes') ?? 0;
+      isLiked = likesRef.docs.isNotEmpty;
+      likesCount = likesRef.docs.length;
     });
   }
 
   Future<void> _toggleLike() async {
-    final userLikesRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
+  if (isLiked) {
+    // Query for all 'like' documents by the current user for the current item.
+    QuerySnapshot query = await FirebaseFirestore.instance
         .collection('likes')
-        .doc(widget.documentId);
+        .where('liked_by', isEqualTo: widget.userId)
+        .where('document_id', isEqualTo: widget.documentId)
+        .get();
 
-    final pharmacyRef = FirebaseFirestore.instance
-        .collection('pharmacies')
-        .doc(widget.documentId);
-
-    final batch = FirebaseFirestore.instance.batch();
-
-    if (isLiked) {
-      batch.delete(userLikesRef);
-      batch.update(pharmacyRef, {'likes': FieldValue.increment(-1)});
-    } else {
-      batch.set(userLikesRef, <String, dynamic>{});
-      batch.update(pharmacyRef, {'likes': FieldValue.increment(1)});
+    // Delete each 'like' document found by the query.
+    for (var doc in query.docs) {
+      await doc.reference.delete();
     }
-
-    await batch.commit();
-
-    setState(() {
-      isLiked = !isLiked;
-      likesCount += isLiked ? 1 : -1;
+  } else {
+    // Add a 'like' document with fields specifying who liked what.
+    await FirebaseFirestore.instance.collection('likes').add({
+      'liked_by': widget.userId,
+      'document_id': widget.documentId,
+      'like_time': Timestamp.now(),
     });
   }
+
+  // Update the local state to reflect the new like status.
+  setState(() {
+    isLiked = !isLiked;
+    likesCount += isLiked ? 1 : -1;
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +93,7 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
                   'assets/icons/Like.svg',
                   width: 22,
                   colorFilter: ColorFilter.mode(
-                    isLiked ? blueColor : greyColor, BlendMode.srcIn),
+                      isLiked ? blueColor : greyColor, BlendMode.srcIn),
                 ),
                 SizedBox(width: 8),
                 Text(

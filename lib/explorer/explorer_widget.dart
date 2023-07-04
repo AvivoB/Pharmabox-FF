@@ -200,15 +200,17 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           style: FlutterFlowTheme.of(context).bodyMedium,
                           validator: _model.textControllerValidator
                               .asValidator(context),
-                          onChanged: (query) async {                           
+                          onChanged: (query) async {
                             if (currentTAB == 0)
-                            setState(() async {
-                              userSearch = await ExplorerSearchData().searchUsers(query);
-                            });
+                              setState(() async {
+                                userSearch = await ExplorerSearchData()
+                                    .searchUsers(query);
+                              });
                             if (currentTAB == 1)
-                            setState(() async {
-                              pharmacieInPlace = await ExplorerSearchData().searchPharmacies(query);
-                            });
+                              setState(() async {
+                                pharmacieInPlace = await ExplorerSearchData()
+                                    .searchPharmacies(query);
+                              });
                           }),
                       TabBar(
                         labelColor: blackColor,
@@ -289,8 +291,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           end: Offset.zero,
                         ).animate(_animationController),
                         child: CardPharmacieWidget(
-                          data: pharmacieInPlace,
-                        ),
+                                    data: pharmacieInPlace[0],
+                                  ),
                       ),
                     ),
 
@@ -321,36 +323,37 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         top: 8.0, bottom: 8.0),
-                                    child: 
-                                    currentTAB == 0 ? 
-                                    Text(userSearch.length.toString() +' résultats',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: Color(0xFF595A71),
-                                              fontSize: 14.0,
-                                            )) 
-                                    :
-                                    Text(pharmacieInPlace.length.toString() +' résultats',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: Color(0xFF595A71),
-                                              fontSize: 14.0,
-                                            )),
+                                    child: currentTAB == 0
+                                        ? Text(
+                                            userSearch.length.toString() +
+                                                ' résultat',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: Color(0xFF595A71),
+                                                  fontSize: 14.0,
+                                                ))
+                                        : Text(
+                                            pharmacieInPlace.length.toString() +
+                                                ' résultats',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: Color(0xFF595A71),
+                                                  fontSize: 14.0,
+                                                )),
                                   ),
-                                  if (currentTAB == 0) 
+                                  if (currentTAB == 0)
                                     for (var user in userSearch)
                                       CardUserWidget(
                                         data: user,
                                       ),
-                                    
                                   if (currentTAB == 1)
                                     for (var pharmacie in pharmacieInPlace)
                                       CardPharmacieWidget(
-                                          data: pharmacie,
+                                        data: pharmacie,
                                       ),
                                 ],
                               ),

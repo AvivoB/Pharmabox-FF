@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/register/register_provider.dart';
@@ -519,6 +521,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         initialDate: getCurrentTimestamp,
                                         firstDate: DateTime(1900),
                                         lastDate: getCurrentTimestamp,
+                                        keyboardType: TextInputType.url
                                       );
 
                                       if (_datePickedDate != null) {

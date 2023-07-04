@@ -20,6 +20,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'profil_model.dart';
 export 'profil_model.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 
 class ProfilWidget extends StatefulWidget {
   const ProfilWidget({
@@ -41,7 +42,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
   var userData;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     _model = createModel(context, () => ProfilModel());
 
@@ -84,25 +85,25 @@ class _ProfilWidgetState extends State<ProfilWidget> {
     super.dispose();
   }
 
-  getUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      // Handle user not signed in.
-      return;
-    }
+  getUserData() {
+    // User? user = FirebaseAuth.instance.currentUser;
+    // if (user == null) {
+    //   // Handle user not signed in.
+    //   return;
+    // }
 
-    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    // DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
 
-    if (docSnapshot.exists) {
-      // Access the data inside the document.
-      var data = docSnapshot.data();
-      setState(() {
-        userData = data;
-      });
-    } else {
-      // Handle the case where the user data does not exist.
-      return;
-    }
+    // if (docSnapshot.exists) {
+    //   // Access the data inside the document.
+    //   var data = docSnapshot.data();
+    //   setState(() {
+    //     userData = data;
+    //   });
+    // } else {
+    //   // Handle the case where the user data does not exist.
+    //   return;
+    // }
   }
 
   @override

@@ -14,6 +14,7 @@ class CardUserModel extends FlutterFlowModel {
 
   void dispose() {}
 
-  /// Additional helper methods are added here.
+  // Ajouter un membre a son réseau
+  
 
 }

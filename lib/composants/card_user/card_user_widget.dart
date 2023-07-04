@@ -1,6 +1,7 @@
 import 'package:flutter_svg/svg.dart';
 
 import '../../constant.dart';
+import '../../custom_code/widgets/button_network_manager.dart';
 import '../../custom_code/widgets/like_button.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -89,9 +90,13 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           ),
-                          child: Image.asset(
-                            'assets/images/Group_18.png',
+                          child: FadeInImage.assetNetwork(
+                            image: widget.data['photoUrl'],
+                            placeholder: 'assets/images/Group_18.png',
                             fit: BoxFit.cover,
+                            imageErrorBuilder: (context, error, stackTrace) {
+                              return Image.asset('assets/images/Group_18.png');
+                            },
                           ),
                         ),
                       ),
@@ -134,12 +139,15 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     ],
                   ),
                   Container(
-                    child: custom_widgets.GradientTextCustom(
+                    child: ButtonNetworkManager(
+                       width: 30,
+                      radius: 12.0,
+                      fontSize: 14,
                       text: 'Ajouter',
-                      radius: 10.0,
-                      fontSize: 14.0,
-                      action: () async {},
-                    ),
+                      height: 25.0,
+                      typeCollection: 'users',
+                      docId: widget.data['id'],
+                    )
                   ),
                 ],
               ),
@@ -188,8 +196,8 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                   children: [
                     Container(
                       child: LikeButtonWidget(
-                        documentId: widget.data['prenom'],
-                        userId: 'flflfl',
+                        documentId: widget.data['id'],
+                        userId: widget.data['id'],
                       ),
                     ),
                     Container(

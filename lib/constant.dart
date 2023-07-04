@@ -13,6 +13,8 @@ const blackColor = Color(0xFF161730);
 
 const googleMapsApi = 'AIzaSyBGiDwJv6PfzO6hPQeymoo7tl4NcdiyloQ';
 
+String currentUserId = '';
+
 Future<bool> checkIsTitulaire() async {
   final currentUser = FirebaseAuth.instance.currentUser;
 
@@ -60,4 +62,13 @@ Future<Map<String, dynamic>> getCurrentUserData() async {
   }
 
   return {};
+}
+
+Future<String> getCurrentUserId() async {
+  final User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    return user.uid;
+  } else {
+    return '';
+  }
 }

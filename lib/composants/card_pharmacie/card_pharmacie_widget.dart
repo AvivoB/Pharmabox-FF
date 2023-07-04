@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/constant.dart';
 
+import '../../custom_code/widgets/button_network_manager.dart';
+import '../../custom_code/widgets/carousel_widget_pharma.dart';
 import '../../custom_code/widgets/like_button.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -19,8 +21,7 @@ import 'dart:convert';
 import 'package:like_button/like_button.dart';
 
 class CardPharmacieWidget extends StatefulWidget {
-  const CardPharmacieWidget(
-      {Key? key, this.data, this.profilUid})
+  const CardPharmacieWidget({Key? key, this.data, this.profilUid})
       : super(key: key);
 
   final data;
@@ -46,7 +47,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CardPharmacieModel());
-    setImageProfile();
   }
 
   @override
@@ -54,12 +54,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
     _model.maybeDispose();
 
     super.dispose();
-  }
-
-  setImageProfile() {
-    // if (widget.data['photo_url'] != '') {
-    //   _imageProfilPharma = widget.data['photo_url'].toString();
-    // }
   }
 
   @override
@@ -90,42 +84,38 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                 height: 120.0,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: Image.network(
-                      _imageProfilPharma,
-                    ).image,
-                  ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Stack(
-                  children: [
-                    
-                    Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
-                        child: Image.asset(
-                          'assets/images/Badge.png',
-                          width: 40.0,
-                          fit: BoxFit.fill,
+                child: Stack(children: [
+                  ImageSliderWidget(
+                    imageNames: widget.data['photo_url'],
+                  ),
+                  Positioned(
+                    bottom: 5.0,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 0.0, 0.0, 10.0),
+                          child: Image.asset(
+                            'assets/images/Badge.png',
+                            width: 40.0,
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
-                        child: Image.asset(
-                          'assets/images/Badge2.png',
-                          width: 40.0,
-                          fit: BoxFit.fill,
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 0.0, 0.0, 10.0),
+                          child: Image.asset(
+                            'assets/images/Badge2.png',
+                            width: 40.0,
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                      ),
-                    ],
-          ),
-          ]),
+                      ],
+                    ),
+                  ),
+                ]),
               ),
             ),
             Padding(
@@ -145,10 +135,9 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 120,
+                            width: MediaQuery.of(context).size.width * 0.45,
                             child: Text(
-                              widget.data
-                                      ['situation_geographique']['adresse']
+                              widget.data['situation_geographique']['adresse']
                                   .toString(),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -168,8 +157,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                     children: [
                       Image.asset(
                         'assets/groupements/' +
-                            widget.data['groupement'][0]['image']
-                                .toString(),
+                            widget.data['groupement'][0]['image'].toString(),
                         width: 150.0,
                         height: 50.0,
                         fit: BoxFit.cover,
@@ -197,30 +185,37 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                       Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                        child: Text(
-                          widget.data
-                                      ['situation_geographique']['data']['ville']
-                                  .toString()
-                                  
-                                  +', ' + widget.data
-                                      ['situation_geographique']['data']['postcode'].toString(),
-                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF595A71),
-                              ),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Text(
+                            widget.data['situation_geographique']['data']
+                                        ['ville']
+                                    .toString() +
+                                ', ' +
+                                widget.data['situation_geographique']['data']
+                                        ['postcode']
+                                    .toString(),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF595A71),
+                                ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                   Container(
-                    child: custom_widgets.GradientTextCustom(
-                      width: 30,
+                    child: ButtonNetworkManager(
+                       width: 30,
                       radius: 12.0,
                       fontSize: 14,
                       text: 'Ajouter',
                       height: 25.0,
-                      action: () async {},
-                    ),
+                      typeCollection: 'pharmacies',
+                      docId: widget.data['documentId'],
+                    )
                   ),
                 ],
               ),
@@ -243,7 +238,10 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      child: LikeButtonWidget(documentId: widget.data['documentId'], userId: 'flflfl',),
+                      child: LikeButtonWidget(
+                        documentId: widget.data['documentId'],
+                        userId: 'flflfl',
+                      ),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -259,7 +257,10 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                  colors: [
+                                    Color(0xFF42D2FF),
+                                    Color(0xFF7CEDAC)
+                                  ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),
@@ -293,7 +294,10 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                  colors: [
+                                    Color(0xFF42D2FF),
+                                    Color(0xFF7CEDAC)
+                                  ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),

@@ -120,6 +120,7 @@ dependencies:
   like_button: ^2.0.5
   carousel_slider: ^4.2.1
   firebase_messaging: ^14.1.4
+  flutter_rounded_date_picker: ^3.0.4
 
 dev_dependencies:
   analyzer: 5.10.0
@@ -152,6 +153,7 @@ flutter:
     - assets/lgo/
     - assets/groupements/
     - assets/icons/
+    - assets/images/Group_18.png
 
 
   fonts:
