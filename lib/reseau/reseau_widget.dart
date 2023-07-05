@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../constant.dart';
 import '/composants/card_pharmacie/card_pharmacie_widget.dart';
 import '/composants/card_user/card_user_widget.dart';
 import '/composants/header_app/header_app_widget.dart';
@@ -20,14 +23,54 @@ class ReseauWidget extends StatefulWidget {
 
 class _ReseauWidgetState extends State<ReseauWidget> {
   late ReseauModel _model;
-  bool isExpanded = false;
+  bool isExpanded_Titu = false;
+  bool isExpanded_NonTitu = false;
+  bool isExpanded_Pharma = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  List titulairesNetwork = [];
+  List nonTitulairesNetwork = [];
+  List pharmaciesNetwork = [];
+
+  Future<void> getNetworkData() async {
+    String currentUserId = await getCurrentUserId();
+
+    // Use collection group to make query across all collections
+    QuerySnapshot queryUsers = await FirebaseFirestore.instance
+        .collection('users')
+        .where('reseau', arrayContains: currentUserId)
+        .get();
+
+    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance
+        .collection('pharmacies')
+        .where('reseau', arrayContains: currentUserId)
+        .get();
+
+    for (var doc in queryPharmacies.docs) {
+      pharmaciesNetwork.add(doc.data());
+    }
+
+    // Split users based on their 'poste' field
+    for (var doc in queryUsers.docs) {
+      var data = doc.data() as Map<String, dynamic>;
+      if (data != null && data['poste'] == 'Pharmacien(ne) titulaire') {
+        titulairesNetwork.add(data);
+      } else {
+        nonTitulairesNetwork.add(data);
+      }
+    }
+
+    print(pharmaciesNetwork);
+  }
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => ReseauModel());
+
+    Future.delayed(Duration.zero, () async {
+      await getNetworkData();
+    });
   }
 
   @override
@@ -39,6 +82,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print(pharmaciesNetwork);
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -108,51 +152,138 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                       ],
                     ),
                   ),
-                  Column(
-      children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              isExpanded = !isExpanded;
-            });
-          },
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 1.0,
-              height: 67,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  color: Color(0xFFF2FDFF),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color(0x2b1e5b67),
-                        blurRadius: 12,
-                        offset: Offset(10, 10))
-                  ]),
-              child: Row(
-                children: [
-                  Icon(isExpanded ? Icons.expand_less : Icons.expand_more),
-                  Text('Membres titulaires (32)',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18.0,
-                      fontFamily: 'Poppins',
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isExpanded_Titu = !isExpanded_Titu;
+                            });
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 1.0,
+                            height: 67,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                                color: Color(0xFFF2FDFF),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color(0x2b1e5b67),
+                                      blurRadius: 12,
+                                      offset: Offset(10, 10))
+                                ]),
+                            child: Row(
+                              children: [
+                                Icon(isExpanded_Titu
+                                    ? Icons.expand_less
+                                    : Icons.expand_more),
+                                Text(
+                                  'Membres titulaires (' +
+                                      titulairesNetwork.length.toString() +
+                                      ')',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18.0,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (isExpanded_Titu)
+                          for (var i in titulairesNetwork)
+                            CardUserWidget(data: i),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isExpanded_NonTitu = !isExpanded_NonTitu;
+                            });
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 1.0,
+                            height: 67,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                                color: Color(0xFFF2FDFF),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color(0x2b1e5b67),
+                                      blurRadius: 12,
+                                      offset: Offset(10, 10))
+                                ]),
+                            child: Row(
+                              children: [
+                                Icon(isExpanded_NonTitu
+                                    ? Icons.expand_less
+                                    : Icons.expand_more),
+                                Text(
+                                  'Membres (' +
+                                      nonTitulairesNetwork.length.toString() +
+                                      ')',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18.0,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (isExpanded_NonTitu)
+                          for (var i in nonTitulairesNetwork)
+                            CardUserWidget(data: i),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isExpanded_Pharma = !isExpanded_Pharma;
+                            });
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 1.0,
+                            height: 67,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                                color: Color(0xFFF2FDFF),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color(0x2b1e5b67),
+                                      blurRadius: 12,
+                                      offset: Offset(10, 10))
+                                ]),
+                            child: Row(
+                              children: [
+                                Icon(isExpanded_Pharma
+                                    ? Icons.expand_less
+                                    : Icons.expand_more),
+                                Text(
+                                  'Pharmacies (' +
+                                      pharmaciesNetwork.length.toString() +
+                                      ')',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18.0,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // if (isExpanded_Pharma)
+                        //   for (var i in pharmaciesNetwork)
+                            // CardPharmacieWidget(
+                            //   data: i,
+                            // ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        // if (isExpanded)
-        //   for (var i in widget.nbResultats) CardPharmacieWidget(data: widget.data, dataKey: widget.nbResultats.indexOf(i),),
-        // if (isExpanded && widget.type == 'Membres')
-        //   for (var i in widget.nbResultats) CardUserWidget(),
-        // if (isExpanded && widget.type == 'Jobs')
-        //   for (var i in widget.nbResultats) CardPharmacieOffreRechercheWidget(),
-      ],
-    )
+                  )
                 ],
               ),
             ),

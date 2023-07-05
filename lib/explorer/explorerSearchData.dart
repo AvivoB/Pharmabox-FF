@@ -5,36 +5,43 @@ import 'package:http/http.dart' as http;
 import '../constant.dart';
 
 class ExplorerSearchData {
-  Future<List> searchUsers(String query) async {
-    final QuerySnapshot nomQuery = await FirebaseFirestore.instance
-        .collection('users')
-        .where('nom', isGreaterThanOrEqualTo: query)
-        .get();
+Future<List> searchUsers(String query) async {
+  final QuerySnapshot nomQuery = await FirebaseFirestore.instance
+      .collection('users')
+      .where('nom', isGreaterThanOrEqualTo: query)
+      .get();
 
-    final QuerySnapshot prenomQuery = await FirebaseFirestore.instance
-        .collection('users')
-        .where('prenom', isGreaterThanOrEqualTo: query)
-        .get();
+  final QuerySnapshot prenomQuery = await FirebaseFirestore.instance
+      .collection('users')
+      .where('prenom', isGreaterThanOrEqualTo: query)
+      .get();
 
-    final QuerySnapshot villeQuery = await FirebaseFirestore.instance
-        .collection('users')
-        .where('city', isGreaterThanOrEqualTo: query)
-        .get();
+  final QuerySnapshot villeQuery = await FirebaseFirestore.instance
+      .collection('users')
+      .where('city', isGreaterThanOrEqualTo: query)
+      .get();
 
-    final List<DocumentSnapshot> combinedResults = [
-      ...nomQuery.docs,
-      ...prenomQuery.docs,
-      ...villeQuery.docs
-    ];
+  final Set<String> addedUserIds = {}; // Set to keep track of added user IDs
+  final List<Map<String, dynamic>> uniqueUserData = []; // List to store unique user data
 
-    List userData = [];
-    for (final user in combinedResults) {
-      print(user);
-      userData.add(user.data());
+  void addUserIfNotAdded(DocumentSnapshot userDoc) {
+    final String userId = userDoc.id;
+    final Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
+    // If the user ID is not in the set, add the user data to the list and the user ID to the set
+    if (!addedUserIds.contains(userId)) {
+      uniqueUserData.add(userData);
+      addedUserIds.add(userId);
     }
-
-    return userData;
   }
+
+  // Process each query
+  nomQuery.docs.forEach(addUserIfNotAdded);
+  prenomQuery.docs.forEach(addUserIfNotAdded);
+  villeQuery.docs.forEach(addUserIfNotAdded);
+
+  return uniqueUserData;
+}
 
   Future<List> searchPharmacies(String query) async {
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance

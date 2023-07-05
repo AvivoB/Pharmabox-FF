@@ -21,11 +21,10 @@ import 'dart:convert';
 import 'package:like_button/like_button.dart';
 
 class CardPharmacieWidget extends StatefulWidget {
-  const CardPharmacieWidget({Key? key, this.data, this.profilUid})
+  const CardPharmacieWidget({Key? key, this.data})
       : super(key: key);
 
   final data;
-  final profilUid;
   @override
   _CardPharmacieWidgetState createState() => _CardPharmacieWidgetState();
 }
@@ -186,7 +185,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Container(
-                          width: MediaQuery.of(context).size.width * 0.5,
+                          width: MediaQuery.of(context).size.width * 0.45,
                           child: Text(
                             widget.data['situation_geographique']['data']
                                         ['ville']

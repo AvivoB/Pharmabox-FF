@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
+import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
 import '../custom_code/widgets/box_in_draggable_scroll.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../popups/popup_offre/popup_offre_widget.dart';
@@ -264,13 +265,9 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                               fontSize: 14.0,
                                             )),
                                   ),
-                                  BoxDraggableSheet(type: 'Membres', nbResultats: [1, 2, 3],),
-                                  BoxDraggableSheet(
-                                    type: 'Pharmacies', 
-                                    nbResultats: [1,2,3],
-                                    data: []
-                                  ),
-                                  BoxDraggableSheet(type: 'Jobs',  nbResultats: [5,8,8,8,8]),
+
+                                  for(var i in pharmacieInPlace)
+                                    CardPharmacieOffreRechercheWidget(data: i),
                                 ],
                               ),
                             ),

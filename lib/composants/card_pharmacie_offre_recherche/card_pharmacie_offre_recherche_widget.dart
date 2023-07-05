@@ -10,11 +10,9 @@ import 'card_pharmacie_offre_recherche_model.dart';
 export 'card_pharmacie_offre_recherche_model.dart';
 
 class CardPharmacieOffreRechercheWidget extends StatefulWidget {
-  const CardPharmacieOffreRechercheWidget({Key? key, this.data, this.profilUid, this.dataKey = 0}) : super(key: key);
+  const CardPharmacieOffreRechercheWidget({Key? key, this.data}) : super(key: key);
 
   final data;
-  final profilUid;
-  final dataKey;
 
   @override
   _CardPharmacieOffreRechercheWidgetState createState() =>

@@ -30,6 +30,7 @@ class ButtonNetworkManager extends StatefulWidget {
   final String docId;
   final double radius;
   final double fontSize;
+  bool isInNetwork = false;
 
   // Ajoute au réseau
   Future<void> updateNetwork(String typeCollection, String docId) async {
@@ -79,18 +80,44 @@ class ButtonNetworkManager extends StatefulWidget {
     return false;
   }
 
-  bool isInNetwork = false;
-
   @override
   _ButtonNetworkManagerState createState() => _ButtonNetworkManagerState();
 }
 
 class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
-  // checkISInNetwork = await verifyInNetwork(widget.typeCollection, widget.docId);
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await widget.verifyInNetwork(widget.typeCollection, widget.docId);
+      setState(() {
+        
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.isInNetwork) {
-      return Text('Supprimer');
+      return TextButton.icon(
+        onPressed: () async {
+          await widget.deleteNetwork(widget.typeCollection, widget.docId);
+          setState(() {});
+        },
+        icon: Icon(Icons.delete_outline,
+            color: redColor), // Specify the color directly for the icon
+        label: Text(
+          'Supprimer',
+          style: TextStyle(
+            color: redColor,
+            fontSize: this.widget.fontSize,
+          ), // Specify the color directly for the text
+        ),
+        style: ButtonStyle(
+          overlayColor: MaterialStateProperty.all<Color>(
+              Colors.grey.withOpacity(0.1)), // Button pressed overlay color
+        ),
+      );
     } else {
       return Container(
         alignment: Alignment.center,
