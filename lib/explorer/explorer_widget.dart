@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
@@ -51,46 +52,71 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
   Set<Marker> markers = Set();
   String? searchTerms;
   List searchResults = [];
-  var selectedItem;
+  List selectedItem = [];
   late CameraPosition _currentCameraPosition;
 
-Future<void> getCurrentPosition() async {
-  bool isLocationPermissionGranted = await requestLocationPermission();
+  Future<void> getCurrentPosition() async {
+    bool isLocationPermissionGranted = await requestLocationPermission();
 
-  if (isLocationPermissionGranted) {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    setState(() {
-      _currentCameraPosition = CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 16.0,
+    if (isLocationPermissionGranted) {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
       );
-    });
-  } else {
-    // Handle the case when the user denies the location permission
-    // Add your own logic or show a message to the user
+
+      setState(() {
+        _currentCameraPosition = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 16.0,
+        );
+      });
+    } else {
+      // Handle the case when the user denies the location permission
+      // Add your own logic or show a message to the user
+    }
   }
-}
 
-Future<bool> requestLocationPermission() async {
-  PermissionStatus status = await Permission.location.request();
+  Future<bool> requestLocationPermission() async {
+    PermissionStatus status = await Permission.location.request();
 
-  return status == PermissionStatus.granted;
-}
+    return status == PermissionStatus.granted;
+  }
 
   List<Place> items = [];
   List pharmacieInPlace = [];
   List userSearch = [];
 
+  Future<LatLng> getLatLngFromPostalCode(String postalCode) async {
+    List<Location> locations = await locationFromAddress(postalCode);
+    if (locations.isNotEmpty) {
+      Location location = locations.first;
+      return LatLng(location.latitude, location.longitude);
+    } else {
+      return LatLng(0, 0); // Default LatLng if no location found
+    }
+  }
+
   Future<void> getLocation() async {
     // Si nous somme dans la recherche de membres
-    // if (currentTAB == 0) {
-    //   setState(() {
-    //     items.clear();
-    //   });
-    // }
+    if (currentTAB == 0) {
+      setState(() {
+        items.clear();
+      });
+
+      for (var doc in userSearch) {
+        print(doc['nom']);
+
+        // Retrieve the user name
+        String name = doc['nom'] + ' ' + doc['prenom'];
+        LatLng latLng = await getLatLngFromPostalCode(doc['code_postal']);
+
+        // Create a Place object
+        Place place = Place(
+            name: name, latLng: LatLng(latLng.latitude, latLng.longitude));
+        setState(() {
+          items.add(place);
+        });
+      }
+    }
     // Si nous sommes dans la recherche pharmacie
     if (currentTAB == 1) {
       setState(() {
@@ -107,8 +133,6 @@ Future<bool> requestLocationPermission() async {
         // Create a Place object
         Place place =
             Place(name: name, latLng: LatLng(location[0], location[1]));
-
-        print(place);
 
         // Add the Place object to the list of places
         setState(() {
@@ -159,7 +183,7 @@ Future<bool> requestLocationPermission() async {
 
   @override
   Widget build(BuildContext context) {
-    print(pharmacieInPlace);
+    print(selectedItem.length);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -249,9 +273,9 @@ Future<bool> requestLocationPermission() async {
                         indicatorPadding: EdgeInsets.only(top: 40),
                         controller: _tabController,
                         onTap: (value) async {
-                          await getLocation();
-                          setState(() {
+                          setState(() async {
                             currentTAB = value;
+                            await getLocation();
                           });
                         },
                         unselectedLabelStyle:
@@ -294,28 +318,35 @@ Future<bool> requestLocationPermission() async {
                         },
                         onCameraMove: (position) {
                           setState(() {
-                            selectedItem = null;
+                            selectedItem.clear();
                           });
                         },
                         onCameraIdle: _manager.updateMap),
                   ),
 
-                  if (selectedItem != null)
+                  if (selectedItem.isNotEmpty)
+                    for(var i in selectedItem)
+                    
                     Positioned(
                       bottom: 60.0,
                       left: 10.0,
                       right: 10.0,
                       child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(0, 1),
-                          end: Offset.zero,
-                        ).animate(_animationController),
-                        child: CardPharmacieWidget(
-                          data: pharmacieInPlace[0],
-                        ),
-                      ),
+                          position: Tween<Offset>(
+                            begin: Offset(0, 1),
+                            end: Offset.zero,
+                          ).animate(_animationController),
+                          child: Row(
+                            children: [
+                              if (currentTAB == 0)
+                                CardUserWidget(data: userSearch[0]),
+                              if (currentTAB == 1)
+                                CardPharmacieWidget(
+                                  data: pharmacieInPlace[0],
+                                ),
+                            ],
+                          )),
                     ),
-
                   // Afficher les resulats
                   DraggableScrollableSheet(
                     minChildSize: 0.09,
@@ -397,7 +428,7 @@ Future<bool> requestLocationPermission() async {
           position: cluster.location,
           onTap: () {
             // selectedItem = cluster.items.first;
-            cluster.items.forEach((p) => selectedItem = p);
+            cluster.items.forEach((p) => selectedItem.add(1));
             _playAnimation();
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,

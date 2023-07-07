@@ -25,12 +25,14 @@ class DiscussionUserWidget extends StatefulWidget {
   final String? chatUser;
   final String? chatRef;
 
+
   @override
   _DiscussionUserWidgetState createState() => _DiscussionUserWidgetState();
 }
 
 class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
   late DiscussionUserModel _model;
+    String _message = '';
 
   @override
   void initState() {
@@ -236,7 +238,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                     ),
                     onChanged: (value) => {
                       setState(() {
-                        // _searchText = value;
+                        _message = value;
                       })
                     },
                     style: FlutterFlowTheme.of(context).bodyMedium,
@@ -260,7 +262,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          print('send message');
+                          print(_message);
                         },
                         child: Padding(
                           padding: EdgeInsets.all(8),
