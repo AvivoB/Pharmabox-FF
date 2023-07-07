@@ -1,0 +1,47 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Pharmabox-FF-dev-aviel",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "Pharmabox-FF-dev-aviel (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Pharmabox-FF-dev-aviel (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "Android 12 (API 31) (emulator)",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5554"
+        },
+        {
+            "name": "SM A515F",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "R58N864QH9W"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "All Devices",
+            "configurations": [
+                "Android 12 (API 31) (emulator)",
+                "SM A515F",
+           ]
+        }
+    ]
+}

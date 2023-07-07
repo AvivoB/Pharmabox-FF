@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ export 'explorer_model.dart';
 import 'classPlaceClusterExplorer.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'explorer_provider.dart';
 
@@ -50,67 +52,81 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
   String? searchTerms;
   List searchResults = [];
   var selectedItem;
+  late CameraPosition _currentCameraPosition;
 
-  final CameraPosition _parisCameraPosition =
-      CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
+Future<void> getCurrentPosition() async {
+  bool isLocationPermissionGranted = await requestLocationPermission();
+
+  if (isLocationPermissionGranted) {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    setState(() {
+      _currentCameraPosition = CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 16.0,
+      );
+    });
+  } else {
+    // Handle the case when the user denies the location permission
+    // Add your own logic or show a message to the user
+  }
+}
+
+Future<bool> requestLocationPermission() async {
+  PermissionStatus status = await Permission.location.request();
+
+  return status == PermissionStatus.granted;
+}
 
   List<Place> items = [];
   List pharmacieInPlace = [];
   List userSearch = [];
 
-  Future<void> getPharmaciesLocations({String searchTerm = ''}) async {
-    // Get the filtered query snapshot based on the search term
-    QuerySnapshot querySnapshot;
-
-    if (searchTerm != null && searchTerm.isNotEmpty) {
-      querySnapshot = await FirebaseFirestore.instance
-          .collection('pharmacies')
-          .where('situation_geographique.data.ville',
-              isGreaterThanOrEqualTo: searchTerm)
-          .get();
-    } else {
-      querySnapshot =
-          await FirebaseFirestore.instance.collection('pharmacies').get();
-    }
-
-    // Clear the previous data
-    setState(() {
-      items.clear();
-      pharmacieInPlace.clear();
-    });
-
-    // Loop through the documents
-    for (DocumentSnapshot doc in querySnapshot.docs) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      String documentId = doc.reference.id.toString();
-
-      data['documentId'] = documentId;
-
-      // Retrieve the pharmacy name
-      String name = data['situation_geographique']['adresse'];
-
-      List<dynamic> location = data['situation_geographique']['lat_lng'];
-
-      // Create a Place object
-      Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
-
-      // Add the Place object to the list of places
+  Future<void> getLocation() async {
+    // Si nous somme dans la recherche de membres
+    // if (currentTAB == 0) {
+    //   setState(() {
+    //     items.clear();
+    //   });
+    // }
+    // Si nous sommes dans la recherche pharmacie
+    if (currentTAB == 1) {
       setState(() {
-        items.add(place);
-        pharmacieInPlace.add(data);
+        items.clear();
       });
+
+      // Loop through the documents
+      for (var doc in pharmacieInPlace) {
+        // Retrieve the pharmacy name
+        String name = doc['situation_geographique']['adresse'];
+
+        List<dynamic> location = doc['situation_geographique']['lat_lng'];
+
+        // Create a Place object
+        Place place =
+            Place(name: name, latLng: LatLng(location[0], location[1]));
+
+        print(place);
+
+        // Add the Place object to the list of places
+        setState(() {
+          items.add(place);
+        });
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
+    getCurrentPosition();
     _model = createModel(context, () => ExplorerModel());
     _model.textController ??= TextEditingController();
     _manager = _initClusterManager();
-    getPharmaciesLocations();
     _tabController = TabController(length: 2, vsync: this);
-
+    getCurrentPosition();
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -143,6 +159,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
 
   @override
   Widget build(BuildContext context) {
+    print(pharmacieInPlace);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -205,11 +222,13 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                               setState(() async {
                                 userSearch = await ExplorerSearchData()
                                     .searchUsers(query);
+                                await getLocation();
                               });
                             if (currentTAB == 1)
                               setState(() async {
                                 pharmacieInPlace = await ExplorerSearchData()
                                     .searchPharmacies(query);
+                                await getLocation();
                               });
                           }),
                       TabBar(
@@ -229,7 +248,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                         indicatorWeight: 1,
                         indicatorPadding: EdgeInsets.only(top: 40),
                         controller: _tabController,
-                        onTap: (value) {
+                        onTap: (value) async {
+                          await getLocation();
                           setState(() {
                             currentTAB = value;
                           });
@@ -263,7 +283,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                   Container(
                     child: GoogleMap(
                         mapType: MapType.normal,
-                        initialCameraPosition: _parisCameraPosition,
+                        initialCameraPosition: _currentCameraPosition,
                         markers: markers,
                         myLocationEnabled: true,
                         zoomGesturesEnabled: true,
@@ -291,8 +311,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           end: Offset.zero,
                         ).animate(_animationController),
                         child: CardPharmacieWidget(
-                                    data: pharmacieInPlace[0],
-                                  ),
+                          data: pharmacieInPlace[0],
+                        ),
                       ),
                     ),
 

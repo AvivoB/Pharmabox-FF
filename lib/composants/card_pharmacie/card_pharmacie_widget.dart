@@ -31,10 +31,6 @@ class CardPharmacieWidget extends StatefulWidget {
 
 class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   late CardPharmacieModel _model;
-  String _postcodeAdresse = '';
-  String _imageProfilPharma = '';
-  late bool isLiked;
-  late int likeCount;
 
   @override
   void setState(VoidCallback callback) {
@@ -239,7 +235,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                     Container(
                       child: LikeButtonWidget(
                         documentId: widget.data['documentId'],
-                        userId: 'flflfl',
                       ),
                     ),
                     Container(

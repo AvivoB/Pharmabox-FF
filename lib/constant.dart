@@ -13,8 +13,6 @@ const blackColor = Color(0xFF161730);
 
 const googleMapsApi = 'AIzaSyBGiDwJv6PfzO6hPQeymoo7tl4NcdiyloQ';
 
-String currentUserId = '';
-
 Future<bool> checkIsTitulaire() async {
   final currentUser = FirebaseAuth.instance.currentUser;
 

@@ -1,4 +1,7 @@
 import '../constant.dart';
+import '../custom_code/widgets/button_network_manager.dart';
+import '../custom_code/widgets/like_button.dart';
+import '../discussion_user/discussion_user_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
@@ -101,7 +104,7 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
                 size: 24.0,
               ),
               onPressed: () async {
-                context.pushNamed('Disucssions');
+                Navigator.pop(context);
               },
             ),
           ),
@@ -110,35 +113,144 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 120.0,
-              width: MediaQuery.of(context).size.width * 1.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 4.0,
-                    color: Color(0x33000000),
-                    offset: Offset(0.0, 5.0),
-                  )
-                ]
+           GestureDetector(
+            onTap:() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DiscussionUserWidget(chatUser: 'dd', chatRef: 'hehe'),
+                ),
+              );
+            },
+             child: Padding(
+                 padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
+                 child: Container(
+                   width: MediaQuery.of(context).size.width * 1.0,
+                   // height: MediaQuery.of(context).size.height * 0.65,
+                   decoration: BoxDecoration(
+                     color: FlutterFlowTheme.of(context).secondaryBackground,
+                     borderRadius: BorderRadius.circular(15.0),
+                     boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(31, 92, 103, 0.17),
+                offset: Offset(10.0, 10.0),
+                blurRadius: 12.0,
+                spreadRadius: -6.0,
               ),
-              child: Row(
-                children: [
-                  Container(),
-                  Column(
-                    children: [
-                      Text('Isabelle'),
-                      Text('Pharmacien'),
-                    ],
-                  )
-                ],
+                     ],
+                   ),
+                   child: Column(
+                     mainAxisSize: MainAxisSize.max,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                            child: Container(
+                              width: 50.0,
+                              height: 50.0,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: FadeInImage.assetNetwork(
+                                image: 'photoUrl',
+                                placeholder: 'assets/images/Group_18.png',
+                                fit: BoxFit.cover,
+                                imageErrorBuilder: (context, error, stackTrace) {
+                                  return Image.asset('assets/images/Group_18.png');
+                                },
+                              ),
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.30,
+                                child: Text(
+                                  'nom' + ' ' + 'prenom',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF595A71),
+                                        fontSize: 15.0,
+                                      ),
+                                ),
+                              ),
+                              Container(
+                                width: 135,
+                                child: Text(
+                                 'poste',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF8D8D97),
+                                        fontSize: 13.0,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                                  color: redColor,
+                                  shape: BoxShape.circle,
+                                ),
+                      child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      8.0, 8.0, 8.0, 8.0),
+                                  child: Text(
+                                    '5',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Poppins',
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                          fontSize: 14.0,
+                                        ),
+                                  ),
+                                ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 15.0),
+                child: Text(
+                  'Salut comment ca va ...',
+                  textAlign: TextAlign.left,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Poppins',
+                        color: Color(0xFF595A71),
+                      ),
+                ),
+              ),
+                     ],
+                   ),
+                 ),
+               ),
+           )
           ]
         ),
       )

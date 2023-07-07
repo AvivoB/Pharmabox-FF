@@ -245,8 +245,8 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 10.0, 0.0, 0.0),
                                     child: LikeButtonWidget(
-                                      documentId: 'kkk',
-                                      userId: 'flflfl',
+                                      documentId: 'oDQZ5FG8ZEeo7mMdbMnkacC7Egm2',
+                                      isActive: false,
                                     )),
                               ],
                             ),

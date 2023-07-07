@@ -85,8 +85,8 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                           padding:
                               EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
                           child: Container(
-                            width: 40.0,
-                            height: 40.0,
+                            width: 50.0,
+                            height: 50.0,
                             clipBehavior: Clip.antiAlias,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
@@ -205,7 +205,6 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     Container(
                       child: LikeButtonWidget(
                         documentId: widget.data['id'],
-                        userId: widget.data['id'],
                       ),
                     ),
                     Container(

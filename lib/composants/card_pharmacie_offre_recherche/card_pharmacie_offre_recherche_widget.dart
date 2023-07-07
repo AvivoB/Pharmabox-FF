@@ -247,7 +247,7 @@ class _CardPharmacieOffreRechercheWidgetState
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                         borderRadius: BorderRadius.circular(50.0),
                       ),
-                      child: LikeButtonWidget(documentId: 'fjf', userId: 'flflfl', )
+                      child: LikeButtonWidget(documentId: 'fjf')
                     ),
                     Container(
                       decoration: BoxDecoration(

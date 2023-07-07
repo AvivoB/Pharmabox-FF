@@ -1,3 +1,6 @@
+import 'package:flutter_svg/svg.dart';
+import 'package:pharmabox/constant.dart';
+
 import '/backend/backend.dart';
 import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -17,8 +20,10 @@ class DiscussionUserWidget extends StatefulWidget {
     this.chatRef,
   }) : super(key: key);
 
-  final UsersRecord? chatUser;
-  final DocumentReference? chatRef;
+  // final UsersRecord? chatUser;
+  // final DocumentReference? chatRef;
+  final String? chatUser;
+  final String? chatRef;
 
   @override
   _DiscussionUserWidgetState createState() => _DiscussionUserWidgetState();
@@ -27,33 +32,10 @@ class DiscussionUserWidget extends StatefulWidget {
 class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
   late DiscussionUserModel _model;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  FFChatInfo? _chatInfo;
-  bool isGroupChat() {
-    if (widget.chatUser == null) {
-      return true;
-    }
-    if (widget.chatRef == null) {
-      return false;
-    }
-    return _chatInfo?.isGroupChat ?? false;
-  }
-
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => DiscussionUserModel());
-
-    FFChatManager.instance
-        .getChatInfo(
-      otherUserRecord: widget.chatUser,
-      chatReference: widget.chatRef,
-    )
-        .listen((info) {
-      if (mounted) {
-        setState(() => _chatInfo = info);
-      }
-    });
   }
 
   @override
@@ -66,118 +48,237 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        toolbarHeight: 80,
+        elevation: 0,
         automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30.0,
-          borderWidth: 1.0,
-          buttonSize: 60.0,
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black,
-            size: 24.0,
+        backgroundColor: Colors
+            .transparent, // Définissez la couleur de fond de l'AppBar sur transparent
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft,
+              colors: [
+                Color(0xFF7F7FD5), // Couleur de départ du dégradé
+                Color(0xFF86A8E7), // Couleur de fin du dégradé
+                Color(0xFF91EAE4), // Couleur de fin du dégradé
+              ],
+            ),
           ),
-          onPressed: () async {
-            context.pop();
-          },
-        ),
-        title: Stack(
-          children: [
-            // if (!_chatInfo!.otherUsersList)
-              Text(
-                widget.chatUser!.email!,
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      fontFamily: 'Lexend Deca',
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
+          child: SafeArea(
+            child: Container(
+              padding: EdgeInsets.only(right: 16),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipOval(
+                      child: Material(
+                        elevation: 2,
+                        color: Colors.white, // Couleur de l'arrière-plan
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.chevron_left, color: blackColor),
+                        ),
+                      ),
                     ),
+                  ),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        "https://randomuser.me/api/portraits/men/5.jpg"),
+                    maxRadius: 20,
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Isabelle Retig",
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          "Pharmacien(ne)",
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ClipOval(
+                    child: Material(
+                      elevation: 2,
+                      color: greenColor, // Couleur de l'arrière-plan
+                      child: IconButton(
+                        onPressed: () {
+                          // Logique de l'appel téléphonique
+                        },
+                        icon: Icon(Icons.phone, color: Colors.white),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            // if (_chatInfo!.otherUsersList)
-            //   Text(
-            //     'Group Chat',
-            //     style: FlutterFlowTheme.of(context).bodyMedium.override(
-            //           fontFamily: 'Lexend Deca',
-            //           color: Colors.black,
-            //           fontSize: 16.0,
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //   ),
-          ],
-        ),
-        actions: [],
-        centerTitle: false,
-        elevation: 2.0,
-      ),
-      body: SafeArea(
-        child: StreamBuilder<FFChatInfo>(
-          stream: FFChatManager.instance.getChatInfo(
-            otherUserRecord: widget.chatUser,
-            chatReference: widget.chatRef,
+            ),
           ),
-          builder: (context, snapshot) => snapshot.hasData
-              ? FFChatPage(
-                  chatInfo: snapshot.data!,
-                  allowImages: true,
-                  backgroundColor: Color(0xFFF2F4F8),
-                  timeDisplaySetting: TimeDisplaySetting.visibleOnTap,
-                  currentUserBoxDecoration: BoxDecoration(
-                    color: Color(0xFF7CEDAC),
-                    border: Border.all(
-                      color: Colors.transparent,
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  // .collection('chats')
+                  // .doc(memberId)
+                  .collection('messages')
+                  .orderBy('timestamp', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return Center(child: Text('Une erreur s\'est produite'));
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Center(child: Text('Aucun message à afficher'));
+                }
+
+                return ListView(
+                  reverse: true,
+                  padding: EdgeInsets.all(16.0),
+                  children: snapshot.data!.docs.map((doc) {
+                    final message = doc['message'] as String;
+
+                    return ListTile(
+                      title: Text(message),
+                      // Personnalisez l'affichage des messages ici
+                    );
+                  }).toList(),
+                );
+              },
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                color: Colors.white),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    // controller: _model.groupementFilterController,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Message',
+                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFD0D1DE),
+                          width: 1.0,
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(4.0),
+                          topRight: Radius.circular(4.0),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).focusColor,
+                          width: 1.0,
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(4.0),
+                          topRight: Radius.circular(4.0),
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1.0,
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(4.0),
+                          topRight: Radius.circular(4.0),
+                        ),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0x00000000),
+                          width: 1.0,
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(4.0),
+                          topRight: Radius.circular(4.0),
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  otherUsersBoxDecoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.transparent,
-                    ),
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  currentUserTextStyle: GoogleFonts.getFont(
-                    'Poppins',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.0,
-                    fontStyle: FontStyle.normal,
-                  ),
-                  otherUsersTextStyle: GoogleFonts.getFont(
-                    'DM Sans',
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.0,
-                  ),
-                  inputHintTextStyle: GoogleFonts.getFont(
-                    'DM Sans',
-                    color: Color(0xFF95A1AC),
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14.0,
-                  ),
-                  inputTextStyle: GoogleFonts.getFont(
-                    'Poppins',
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14.0,
-                  ),
-                  emptyChatWidget: Image.asset(
-                    'assets/images/messagesEmpty@2x.png',
-                    width: MediaQuery.of(context).size.width * 0.76,
-                  ),
-                )
-              : Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      color: FlutterFlowTheme.of(context).accent3,
-                    ),
+                    onChanged: (value) => {
+                      setState(() {
+                        // _searchText = value;
+                      })
+                    },
+                    style: FlutterFlowTheme.of(context).bodyMedium,
                   ),
                 ),
-        ),
+                SizedBox(width: 8.0),
+                ClipOval(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerRight,
+                        end: Alignment.centerLeft,
+                        colors: [
+                          blueColor,
+                          greenColor,
+                        ],
+                      ),
+                    ),
+                    child: Material(
+                      elevation: 0,
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          print('send message');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: SvgPicture.asset(
+                            'assets/icons/Message.svg',
+                            color: Colors.white,
+                            width: 24,
+                            height: 24,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -5,43 +5,50 @@ import 'package:http/http.dart' as http;
 import '../constant.dart';
 
 class ExplorerSearchData {
-Future<List> searchUsers(String query) async {
-  final QuerySnapshot nomQuery = await FirebaseFirestore.instance
-      .collection('users')
-      .where('nom', isGreaterThanOrEqualTo: query)
-      .get();
+  Future<List> searchUsers(String query) async {
+    final QuerySnapshot nomQuery = await FirebaseFirestore.instance
+        .collection('users')
+        .where('nom', isGreaterThanOrEqualTo: query)
+        .get();
 
-  final QuerySnapshot prenomQuery = await FirebaseFirestore.instance
-      .collection('users')
-      .where('prenom', isGreaterThanOrEqualTo: query)
-      .get();
+    final QuerySnapshot prenomQuery = await FirebaseFirestore.instance
+        .collection('users')
+        .where('prenom', isGreaterThanOrEqualTo: query)
+        .get();
 
-  final QuerySnapshot villeQuery = await FirebaseFirestore.instance
-      .collection('users')
-      .where('city', isGreaterThanOrEqualTo: query)
-      .get();
+    final QuerySnapshot villeQuery = await FirebaseFirestore.instance
+        .collection('users')
+        .where('city', isGreaterThanOrEqualTo: query)
+        .get();
+    final QuerySnapshot codePostalQuery = await FirebaseFirestore.instance
+        .collection('users')
+        .where('code_postal', isGreaterThanOrEqualTo: query)
+        .get();
 
-  final Set<String> addedUserIds = {}; // Set to keep track of added user IDs
-  final List<Map<String, dynamic>> uniqueUserData = []; // List to store unique user data
+    final Set<String> addedUserIds = {}; // Set to keep track of added user IDs
+    final List<Map<String, dynamic>> uniqueUserData =
+        []; // List to store unique user data
 
-  void addUserIfNotAdded(DocumentSnapshot userDoc) {
-    final String userId = userDoc.id;
-    final Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    void addUserIfNotAdded(DocumentSnapshot userDoc) {
+      final String userId = userDoc.id;
+      final Map<String, dynamic> userData =
+          userDoc.data() as Map<String, dynamic>;
 
-    // If the user ID is not in the set, add the user data to the list and the user ID to the set
-    if (!addedUserIds.contains(userId)) {
-      uniqueUserData.add(userData);
-      addedUserIds.add(userId);
+      // If the user ID is not in the set, add the user data to the list and the user ID to the set
+      if (!addedUserIds.contains(userId)) {
+        uniqueUserData.add(userData);
+        addedUserIds.add(userId);
+      }
     }
+
+    // Process each query
+    nomQuery.docs.forEach(addUserIfNotAdded);
+    prenomQuery.docs.forEach(addUserIfNotAdded);
+    villeQuery.docs.forEach(addUserIfNotAdded);
+    codePostalQuery.docs.forEach(addUserIfNotAdded);
+
+    return uniqueUserData;
   }
-
-  // Process each query
-  nomQuery.docs.forEach(addUserIfNotAdded);
-  prenomQuery.docs.forEach(addUserIfNotAdded);
-  villeQuery.docs.forEach(addUserIfNotAdded);
-
-  return uniqueUserData;
-}
 
   Future<List> searchPharmacies(String query) async {
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -74,21 +81,33 @@ Future<List> searchUsers(String query) async {
             isGreaterThanOrEqualTo: query)
         .get();
 
-    final List<DocumentSnapshot> combinedResults = [
-      ...querySnapshot.docs,
-      ...nomPharmaquerySnapshot.docs,
-      ...region.docs,
-      ...ville.docs,
-      ...adresse.docs,
-      ...postcode.docs,
-    ];
+    final Set<String> addedPharmaid = {}; // Set to keep track of added user IDs
+    final List<Map<String, dynamic>> uniquePharmaData =
+        []; // List to store unique user data
 
-    List pharmacieData = [];
-    for (final pharmacie in combinedResults) {
-      pharmacieData.add(pharmacie.data());
+    void addPharmaIfIsNotAdded(DocumentSnapshot pharmaDoc) {
+      final String pharmaId = pharmaDoc.id;
+      final Map<String, dynamic> pharmaData = pharmaDoc.data() as Map<String, dynamic>;
+      pharmaData['documentId'] = pharmaId; // Add the documentId to the pharmaData map
+
+
+      // If the user ID is not in the set, add the user data to the list and the user ID to the set
+      if (!addedPharmaid.contains(pharmaId)) {
+        uniquePharmaData.add(pharmaData);
+        addedPharmaid.add(pharmaId);
+      }
     }
 
-    return pharmacieData;
+    // Process each query
+    querySnapshot.docs.forEach(addPharmaIfIsNotAdded);
+    nomPharmaquerySnapshot.docs.forEach(addPharmaIfIsNotAdded);
+    ville.docs.forEach(addPharmaIfIsNotAdded);
+    adresse.docs.forEach(addPharmaIfIsNotAdded);
+    postcode.docs.forEach(addPharmaIfIsNotAdded);
+    region.docs.forEach(addPharmaIfIsNotAdded);
+
+    // print(uniquePharmaData);
+    return uniquePharmaData;
   }
 
   Future<List> searchJobs(String query) async {
