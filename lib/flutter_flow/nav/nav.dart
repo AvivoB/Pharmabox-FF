@@ -152,9 +152,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             'chatUser': getDoc(['users'], UsersRecord.serializer),
           },
           builder: (context, params) => DiscussionUserWidget(
-            chatUser: params.getParam('chatUser', ParamType.Document),
-            chatRef: params.getParam(
-                'chatRef', ParamType.DocumentReference, false, ['chats']),
+            toUser: params.getParam('chatUser', ParamType.Document),
           ),
         ),
         FFRoute(

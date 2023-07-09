@@ -14,17 +14,12 @@ import 'discussion_user_model.dart';
 export 'discussion_user_model.dart';
 
 class DiscussionUserWidget extends StatefulWidget {
-  const DiscussionUserWidget({
+  DiscussionUserWidget({
     Key? key,
-    this.chatUser,
-    this.chatRef,
+    required this.toUser,
   }) : super(key: key);
 
-  // final UsersRecord? chatUser;
-  // final DocumentReference? chatRef;
-  final String? chatUser;
-  final String? chatRef;
-
+  final String? toUser;
 
   @override
   _DiscussionUserWidgetState createState() => _DiscussionUserWidgetState();
@@ -32,7 +27,7 @@ class DiscussionUserWidget extends StatefulWidget {
 
 class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
   late DiscussionUserModel _model;
-    String _message = '';
+  final TextEditingController _message = TextEditingController();
 
   @override
   void initState() {
@@ -43,8 +38,29 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
   @override
   void dispose() {
     _model.dispose();
-
+    _message.dispose();
     super.dispose();
+  }
+
+  Future<void> sendMessage() async {
+    final CollectionReference messagesRef =
+        FirebaseFirestore.instance.collection('messages');
+
+    print(_message.text);
+
+    try {
+      await messagesRef.add({
+        'fromId': await getCurrentUserId(),
+        'isViewed': false,
+        'message': _message.text,
+        'receiverId': widget.toUser,
+      });
+      setState(() {
+        _message.text = '';
+      });
+    } catch (e) {
+      print('Error sending message: $e');
+    }
   }
 
   @override
@@ -145,10 +161,8 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  // .collection('chats')
-                  // .doc(memberId)
                   .collection('messages')
-                  .orderBy('timestamp', descending: true)
+                  .where('fromId', isEqualTo: getCurrentUserId())
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -165,13 +179,29 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
 
                 return ListView(
                   reverse: true,
-                  padding: EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(12.0),
                   children: snapshot.data!.docs.map((doc) {
-                    final message = doc['message'] as String;
 
-                    return ListTile(
-                      title: Text(message),
-                      // Personnalisez l'affichage des messages ici
+                    return Container(
+                      padding: EdgeInsets.only(left: 0,right: 0,top: 10,bottom: 10),
+                      child: Align(
+                        alignment: (false ? Alignment.topLeft:Alignment.topRight),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: (false ?Colors.grey.shade200:greenColor),
+                          ),
+                          padding: EdgeInsets.all(12),
+                          child: Text(doc['message'], style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                  fontFamily: 'Poppins',
+                                  color: false ? blackColor:Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400)
+                          ),
+                        ),
+                      ),
                     );
                   }).toList(),
                 );
@@ -190,7 +220,9 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    // controller: _model.groupementFilterController,
+                    controller: _message,
+                    minLines: 1,
+                    maxLines: null,
                     obscureText: false,
                     decoration: InputDecoration(
                       labelText: 'Message',
@@ -237,9 +269,9 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                       ),
                     ),
                     onChanged: (value) => {
-                      setState(() {
-                        _message = value;
-                      })
+                      // setState(() {
+                      //   _message.text = value;
+                      // })
                     },
                     style: FlutterFlowTheme.of(context).bodyMedium,
                   ),
@@ -262,7 +294,8 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
-                          print(_message);
+                          sendMessage();
+                          // _message.text = '';
                         },
                         child: Padding(
                           padding: EdgeInsets.all(8),
