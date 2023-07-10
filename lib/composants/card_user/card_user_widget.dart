@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../constant.dart';
 import '../../custom_code/widgets/button_network_manager.dart';
 import '../../custom_code/widgets/like_button.dart';
+import '../../discussion_user/discussion_user_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -314,7 +315,12 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                   size: 24.0,
                                 ),
                                 onPressed: () {
-                                  print('IconButton pressed ...');
+                                   Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DiscussionUserWidget(toUser: widget.data['id']),
+                                    ),
+                                  );
                                 },
                               ),
                             ),

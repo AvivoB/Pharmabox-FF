@@ -1,5 +1,6 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '/backend/backend.dart';
 import '/flutter_flow/chat/index.dart';
@@ -19,7 +20,7 @@ class DiscussionUserWidget extends StatefulWidget {
     required this.toUser,
   }) : super(key: key);
 
-  final String? toUser;
+  final String toUser;
 
   @override
   _DiscussionUserWidgetState createState() => _DiscussionUserWidgetState();
@@ -28,11 +29,14 @@ class DiscussionUserWidget extends StatefulWidget {
 class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
   late DiscussionUserModel _model;
   final TextEditingController _message = TextEditingController();
+  Map userMessage = {};
+  String currentUser = '';
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => DiscussionUserModel());
+    getUserById(widget.toUser);
   }
 
   @override
@@ -49,18 +53,34 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
     print(_message.text);
 
     try {
-      await messagesRef.add({
-        'fromId': await getCurrentUserId(),
-        'isViewed': false,
-        'message': _message.text,
-        'receiverId': widget.toUser,
-      });
-      setState(() {
-        _message.text = '';
-      });
+      if (_message.text != '') {
+        await messagesRef.add({
+          'fromId': currentUser,
+          'isViewed': false,
+          'message': _message.text,
+          'receiverId': widget.toUser,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+        setState(() {
+          _message.text = '';
+        });
+      }
     } catch (e) {
       print('Error sending message: $e');
     }
+  }
+
+  Future<void> getUserById(String userId) async {
+    DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    String currentUserId = await getCurrentUserId();
+
+    setState(() {
+      userMessage = userData;
+      currentUser = currentUserId;
+    });
   }
 
   @override
@@ -93,7 +113,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                     padding: const EdgeInsets.all(8.0),
                     child: ClipOval(
                       child: Material(
-                        elevation: 2,
+                        elevation: 10,
                         color: Colors.white, // Couleur de l'arrière-plan
                         child: IconButton(
                           onPressed: () {
@@ -104,19 +124,34 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                       ),
                     ),
                   ),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://randomuser.me/api/portraits/men/5.jpg"),
-                    maxRadius: 20,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0x00FFFFFF),
+                      borderRadius:
+                          BorderRadius.circular(95.0),
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 2.0,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          userMessage['photoUrl'],
+                        ),
+                        maxRadius: 25,
+                      ),
+                    ),
                   ),
-                  SizedBox(width: 12),
+                  SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          "Isabelle Retig",
+                          userMessage['prenom'] + ' ' + userMessage['nom'],
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
@@ -125,9 +160,8 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600),
                         ),
-                        SizedBox(height: 2),
                         Text(
-                          "Pharmacien(ne)",
+                          userMessage['poste'],
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
@@ -160,10 +194,18 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
+              stream: Rx.merge([
+                FirebaseFirestore.instance
                   .collection('messages')
-                  .where('fromId', isEqualTo: getCurrentUserId())
+                  .where('receiverId', whereIn: [currentUser, widget.toUser])
+                  .orderBy('timestamp', descending: true)
                   .snapshots(),
+                FirebaseFirestore.instance
+                  .collection('messages')
+                  .where('fromId', whereIn: [currentUser, widget.toUser])
+                  .orderBy('timestamp', descending: true)
+                  .snapshots(),
+              ]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -177,29 +219,36 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                   return Center(child: Text('Aucun message à afficher'));
                 }
 
+                final mergedList = snapshot.data!.docs;
+                
+
                 return ListView(
                   reverse: true,
                   padding: EdgeInsets.all(12.0),
-                  children: snapshot.data!.docs.map((doc) {
-
+                  children: mergedList.map((doc) {
+                    bool isCurrentUser = doc['fromId'] == currentUser;
                     return Container(
-                      padding: EdgeInsets.only(left: 0,right: 0,top: 10,bottom: 10),
+                      padding: EdgeInsets.only(
+                          left: 0, right: 0, top: 10, bottom: 10),
                       child: Align(
-                        alignment: (false ? Alignment.topLeft:Alignment.topRight),
+                        alignment:
+                            (isCurrentUser ? Alignment.topRight : Alignment.topLeft),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: (false ?Colors.grey.shade200:greenColor),
+                            color: (isCurrentUser
+                                ? greenColor
+                                : Colors.grey.shade200),
                           ),
                           padding: EdgeInsets.all(12),
-                          child: Text(doc['message'], style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                  fontFamily: 'Poppins',
-                                  color: false ? blackColor:Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400)
-                          ),
+                          child: Text(doc['message'],
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                      fontFamily: 'Poppins',
+                                      color: isCurrentUser ? Colors.white : blackColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400)),
                         ),
                       ),
                     );

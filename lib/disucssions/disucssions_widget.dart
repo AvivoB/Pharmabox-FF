@@ -118,7 +118,7 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DiscussionUserWidget(toUser: 'dd'),
+                  builder: (context) => DiscussionUserWidget(toUser: 'UTsEZTyAqNNbwGK0BOuSmEODh453'),
                 ),
               );
             },
