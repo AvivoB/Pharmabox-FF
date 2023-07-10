@@ -207,9 +207,6 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                   .snapshots(),
               ]),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
 
                 if (snapshot.hasError) {
                   return Center(child: Text('Une erreur s\'est produite'));
@@ -227,6 +224,18 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                   padding: EdgeInsets.all(12.0),
                   children: mergedList.map((doc) {
                     bool isCurrentUser = doc['fromId'] == currentUser;
+
+                    if(doc['receiverId'] == currentUser) {
+                      FirebaseFirestore.instance
+                        .collection('messages')
+                        .doc(doc.id)
+                        .update({'isViewed': true})
+                        .then((value) {
+                        })
+                        .catchError((error) {
+                          print('Error updating document: $error');
+                        });
+                    }
                     return Container(
                       padding: EdgeInsets.only(
                           left: 0, right: 0, top: 10, bottom: 10),

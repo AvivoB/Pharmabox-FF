@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -19,9 +20,14 @@ import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
 
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print('Handling a background message: ${message.messageId}');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
+   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
   await FlutterFlowTheme.initialize();
 
