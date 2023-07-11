@@ -46,8 +46,10 @@ class _ReseauWidgetState extends State<ReseauWidget> {
         .where('reseau', arrayContains: currentUserId)
         .get();
 
-    for (var doc in queryPharmacies.docs) {
-      pharmaciesNetwork.add(doc.data());
+    for (var doc in queryPharmacies?.docs ?? []) {
+      var data = doc.data();
+      data['documentId'] = doc.id;
+      pharmaciesNetwork.add(data);
     }
 
     // Split users based on their 'poste' field
@@ -59,18 +61,13 @@ class _ReseauWidgetState extends State<ReseauWidget> {
         nonTitulairesNetwork.add(data);
       }
     }
-
-    print(pharmaciesNetwork);
   }
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => ReseauModel());
-
-    Future.delayed(Duration.zero, () async {
-      await getNetworkData();
-    });
+    getNetworkData();
   }
 
   @override
@@ -82,7 +79,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(pharmaciesNetwork);
+    print(pharmaciesNetwork.length);
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -197,6 +194,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                         if (isExpanded_Titu)
                           for (var i in titulairesNetwork)
                             CardUserWidget(data: i),
+                        SizedBox(height: 15),
                         InkWell(
                           onTap: () {
                             setState(() {
@@ -238,6 +236,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                         if (isExpanded_NonTitu)
                           for (var i in nonTitulairesNetwork)
                             CardUserWidget(data: i),
+                        SizedBox(height: 15),
                         InkWell(
                           onTap: () {
                             setState(() {
@@ -276,14 +275,12 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             ),
                           ),
                         ),
-                        // if (isExpanded_Pharma)
-                        //   for (var i in pharmaciesNetwork)
-                            // CardPharmacieWidget(
-                            //   data: i,
-                            // ),
+                        if (isExpanded_Pharma)
+                          for (var i in pharmaciesNetwork)
+                            CardPharmacieWidget(data: i),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

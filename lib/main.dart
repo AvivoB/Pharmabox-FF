@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pharmabox/notifications/firebase_notifications_service.dart';
 import 'package:pharmabox/register/register_provider.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 import 'package:provider/provider.dart';
@@ -20,17 +22,11 @@ import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
 
-Future<void> backgroundHandler(RemoteMessage message) async {
-  print('Handling a background message: ${message.messageId}');
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
-   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-
   await FlutterFlowTheme.initialize();
-
+  await setupFlutterNotifications();
   runApp(MyApp());
 }
 
@@ -40,12 +36,14 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 
   static _MyAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>()!;
+      context.findAncestorStateOfType<_MyAppState>()!;  
 }
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   late Stream<BaseAuthUser> userStream;
 
@@ -168,14 +166,15 @@ class _NavBarPageState extends State<NavBarPage> {
               children: [
                 Icon(
                   Icons.search,
-                  color:
-                      currentIndex == 0 ? Color(0xFF7CEDAC) : greyColor,
+                  color: currentIndex == 0 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
                   'Explorer',
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontWeight: currentIndex == 0 ? FontWeight.w600: FontWeight.w400,
+                  style: TextStyle(
+                    fontWeight:
+                        currentIndex == 0 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -189,15 +188,15 @@ class _NavBarPageState extends State<NavBarPage> {
               children: [
                 Icon(
                   Icons.campaign_outlined,
-                  color:
-                      currentIndex == 1 ? Color(0xFF7CEDAC) : greyColor,
+                  color: currentIndex == 1 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
                   'PharmaJob',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 1 ? FontWeight.w600: FontWeight.w400,
+                    fontWeight:
+                        currentIndex == 1 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -211,15 +210,15 @@ class _NavBarPageState extends State<NavBarPage> {
               children: [
                 Icon(
                   Icons.people_alt_outlined,
-                  color:
-                      currentIndex == 2 ? Color(0xFF7CEDAC) : greyColor,
+                  color: currentIndex == 2 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
                   'Réseau',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 2 ? FontWeight.w600: FontWeight.w400,
+                    fontWeight:
+                        currentIndex == 2 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -233,15 +232,15 @@ class _NavBarPageState extends State<NavBarPage> {
               children: [
                 Icon(
                   Icons.account_circle_outlined,
-                  color:
-                      currentIndex == 3 ? Color(0xFF7CEDAC) : greyColor,
+                  color: currentIndex == 3 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
                   'Profil',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 3 ? FontWeight.w600: FontWeight.w400,
+                    fontWeight:
+                        currentIndex == 3 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),

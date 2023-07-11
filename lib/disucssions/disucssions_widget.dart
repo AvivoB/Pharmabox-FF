@@ -29,7 +29,6 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
   late DisucssionsModel _model;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
-  late CollectionReference<Map<String, dynamic>> messagesRef;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -37,20 +36,8 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => DisucssionsModel());
-    messagesRef = firestore.collection('messages');
     getRecentConversations();
     // Configurer la réception des notifications push
-    messaging.getToken().then((token) {
-      print('FCM Token: $token');
-      messaging.subscribeToTopic('chat');
-    });
-
-    FirebaseMessaging.onMessage.listen((message) {
-      if (message.notification != null) {
-        print(
-            'Notification reçue: ${message.notification!.title} - ${message.notification!.body}');
-      }
-    });
   }
 
   Future<List> getRecentConversations() async {

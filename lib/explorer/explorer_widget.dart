@@ -53,7 +53,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
   String? searchTerms;
   List searchResults = [];
   List selectedItem = [];
-  late CameraPosition _currentCameraPosition;
+  var _currentCameraPosition;
 
   Future<void> getCurrentPosition() async {
     bool isLocationPermissionGranted = await requestLocationPermission();
@@ -103,8 +103,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
       });
 
       for (var doc in userSearch) {
-        print(doc['nom']);
-
         // Retrieve the user name
         String name = doc['nom'] + ' ' + doc['prenom'];
         LatLng latLng = await getLatLngFromPostalCode(doc['code_postal']);
@@ -135,9 +133,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
             Place(name: name, latLng: LatLng(location[0], location[1]));
 
         // Add the Place object to the list of places
+        
         setState(() {
           items.add(place);
         });
+
+        print(items);
       }
     }
   }
@@ -150,7 +151,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
     _model.textController ??= TextEditingController();
     _manager = _initClusterManager();
     _tabController = TabController(length: 2, vsync: this);
-    getCurrentPosition();
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -183,7 +183,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
 
   @override
   Widget build(BuildContext context) {
-    print(selectedItem.length);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -242,18 +241,18 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           validator: _model.textControllerValidator
                               .asValidator(context),
                           onChanged: (query) async {
+                            setState(() {
+                              
+                            });
                             if (currentTAB == 0)
-                              setState(() async {
-                                userSearch = await ExplorerSearchData()
-                                    .searchUsers(query);
-                                await getLocation();
-                              });
+                              userSearch =
+                                  await ExplorerSearchData().searchUsers(query);
+                            await getLocation();
                             if (currentTAB == 1)
-                              setState(() async {
-                                pharmacieInPlace = await ExplorerSearchData()
-                                    .searchPharmacies(query);
-                                await getLocation();
-                              });
+                              pharmacieInPlace = await ExplorerSearchData()
+                                  .searchPharmacies(query);
+                            await getLocation();
+                            
                           }),
                       TabBar(
                         labelColor: blackColor,
@@ -273,9 +272,11 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                         indicatorPadding: EdgeInsets.only(top: 40),
                         controller: _tabController,
                         onTap: (value) async {
-                          setState(() async {
-                            currentTAB = value;
-                            await getLocation();
+                          currentTAB = value;
+                          await getLocation();
+                          setState(() {
+                            selectedItem.clear();
+                            items.clear();
                           });
                         },
                         unselectedLabelStyle:
@@ -325,27 +326,24 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                   ),
 
                   if (selectedItem.isNotEmpty)
-                    for(var i in selectedItem)
-                    
                     Positioned(
                       bottom: 60.0,
-                      left: 10.0,
-                      right: 10.0,
-                      child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: Offset(0, 1),
-                            end: Offset.zero,
-                          ).animate(_animationController),
-                          child: Row(
-                            children: [
-                              if (currentTAB == 0)
-                                CardUserWidget(data: userSearch[0]),
-                              if (currentTAB == 1)
-                                CardPharmacieWidget(
-                                  data: pharmacieInPlace[0],
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            if (currentTAB == 0)
+                              for (var i in selectedItem)
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: CardUserWidget(data: userSearch[i]),
                                 ),
-                            ],
-                          )),
+                            if (currentTAB == 1)
+                              for (var i in selectedItem)
+                                CardPharmacieWidget(data: pharmacieInPlace[i]),
+                          ],
+                        ),
+                      ),
                     ),
                   // Afficher les resulats
                   DraggableScrollableSheet(
