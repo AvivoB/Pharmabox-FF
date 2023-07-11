@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pharmabox/constant.dart';
 
+import '../custom_code/widgets/gradient_text_custom.dart';
 import '../custom_code/widgets/like_button.dart';
+import '../popups/popup_specialisation/popup_specialisation_widget.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -85,25 +87,38 @@ class _ProfilWidgetState extends State<ProfilWidget> {
     super.dispose();
   }
 
-  getUserData() {
-    // User? user = FirebaseAuth.instance.currentUser;
-    // if (user == null) {
-    //   // Handle user not signed in.
-    //   return;
-    // }
+  getUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      // Gérer le cas où l'utilisateur n'est pas connecté.
+      return;
+    }
 
-    // DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
 
-    // if (docSnapshot.exists) {
-    //   // Access the data inside the document.
-    //   var data = docSnapshot.data();
-    //   setState(() {
-    //     userData = data;
-    //   });
-    // } else {
-    //   // Handle the case where the user data does not exist.
-    //   return;
-    // }
+    if (docSnapshot.exists) {
+      // Accéder aux données du document.
+      var data = docSnapshot.data();
+      setState(() {
+        userData = data;
+      });
+
+      // Définir les valeurs initiales dans les contrôleurs de texte.
+      _model.nomFamilleController.text = userData['nom'] ?? '';
+      _model.prenomController.text = userData['prenom'] ?? '';
+      _model.emailController.text = userData['email'];
+      _model.telephoneController.text = userData['telephone'] ?? '';
+      _model.birthDateController.text = userData['date_naissance'] ?? '';
+      _model.postcodeController.text = userData['code_postal'] ?? '';
+      _model.cityController.text = userData['city'] ?? '';
+      _model.presentationController.text = userData['presentation'] ?? '';
+    } else {
+      // Gérer le cas où les données de l'utilisateur n'existent pas.
+      return;
+    }
   }
 
   @override
@@ -156,7 +171,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  width: 200.0,
+                                  width: MediaQuery.of(context).size.width * 0.50,
                                   height: 150.0,
                                   child: Stack(
                                     alignment: AlignmentDirectional(0.0, 1.0),
@@ -184,10 +199,18 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                             ),
-                                            child: Image.asset(
+                                            
+                                            child: userData['photoUrl'] != '' ? 
+                                            
+                                            Image.network(
+                                              userData['photoUrl'],
+                                              fit: BoxFit.cover,
+                                            )
+                                            :
+                                            Image.asset(
                                               'assets/images/Group_18.png',
                                               fit: BoxFit.cover,
-                                            ),
+                                            )
                                           ),
                                         ),
                                       ),
@@ -216,39 +239,42 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                 ),
                               ],
                             ),
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Jimmy',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                                Text(
-                                  'Poste',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
-                                      ),
-                                ),
-                                Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 10.0, 0.0, 0.0),
-                                    child: LikeButtonWidget(
-                                      documentId: 'oDQZ5FG8ZEeo7mMdbMnkacC7Egm2',
-                                      isActive: false,
-                                    )),
-                              ],
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.50,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userData['prenom'] + ' ' + userData['nom'],
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Poppins',
+                                          color: Colors.white,
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                  Text(
+                                    userData['poste'],
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Poppins',
+                                          color: Colors.white,
+                                        ),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 10.0, 0.0, 0.0),
+                                      child: LikeButtonWidget(
+                                        documentId: userData['id'],
+                                        isActive: false,
+                                      )),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -422,7 +448,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                               controller: _model
                                                       .posteValueController ??=
                                                   FormFieldController<String>(
-                                                      null),
+                                                      userData['poste']),
                                               options: [
                                                 'Rayonniste',
                                                 'Conseiller',
@@ -866,13 +892,36 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                 Align(
                                   alignment: Alignment(0.0, 0),
                                   child: TabBar(
-                                    labelColor: Color(0xFF161730),
-                                    unselectedLabelColor: Color(0xFF161730),
-                                    labelStyle:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    indicatorColor:
-                                        FlutterFlowTheme.of(context).secondary,
-                                    indicatorWeight: 4.0,
+                                    labelColor: blackColor,
+                                    unselectedLabelColor: blackColor,
+                                    indicator: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFF7CEDAC),
+                                          Color(0xFF42D2FF),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    indicatorWeight: 1,
+                                    indicatorPadding: EdgeInsets.only(top: 40),
+                                    unselectedLabelStyle:
+                                        FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color: Color(0xFF595A71),
+                                              fontSize: 14.0,
+                                            ),
+                                    labelStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                            fontFamily: 'Poppins',
+                                            color: blackColor,
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w600),
                                     tabs: [
                                       Tab(
                                         text: 'Profil',
@@ -881,7 +930,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                         text: 'Réseau',
                                       ),
                                       Tab(
-                                        text: 'userTitu' == 'Titulaire'
+                                        text: userData['poste'] == 'Pharmacien(ne) titulaire'
                                             ? 'Offres'
                                             : 'Recherches',
                                       ),
@@ -891,7 +940,215 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                 Expanded(
                                   child: TabBarView(
                                     children: [
-                                      Container(),
+                                      Container(
+                                        child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                                        child: Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFEFF6F7),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 12,
+                                                color: Color(0x2B1F5C67),
+                                                offset: Offset(10, 10),
+                                              )
+                                            ],
+                                            borderRadius: BorderRadius.circular(15),
+                                          ),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context).secondaryBackground,
+                                              borderRadius: BorderRadius.circular(15),
+                                              shape: BoxShape.rectangle,
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.spaceBetween,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        'Spécialisations',
+                                                        style: FlutterFlowTheme.of(context)
+                                                            .headlineMedium
+                                                            .override(
+                                                              fontFamily: 'Poppins',
+                                                              color: FlutterFlowTheme.of(context)
+                                                                  .primaryText,
+                                                              fontSize: 18,
+                                                              fontWeight: FontWeight.w600,
+                                                            ),
+                                                      ),
+                                                      InkWell(
+                                                        splashColor: Colors.transparent,
+                                                        focusColor: Colors.transparent,
+                                                        hoverColor: Colors.transparent,
+                                                        highlightColor: Colors.transparent,
+                                                        onTap: () async {
+                                                          await showModalBottomSheet(
+                                                            isScrollControlled: true,
+                                                            backgroundColor: Colors.transparent,
+                                                            enableDrag: false,
+                                                            context: context,
+                                                            builder: (bottomSheetContext) {
+                                                              return GestureDetector(
+                                                                onTap: () => FocusScope.of(context)
+                                                                    .requestFocus(_unfocusNode),
+                                                                child: Padding(
+                                                                  padding: MediaQuery.of(
+                                                                          bottomSheetContext)
+                                                                      .viewInsets,
+                                                                  child:
+                                                                      PopupSpecialisationWidget(),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ).then((value) => setState(() {}));
+                                                        },
+                                                        child: Container(
+                                                          width: 100,
+                                                          height: 30,
+                                                          child: GradientTextCustom(
+                                                            width: 100,
+                                                            height: 30,
+                                                            text: 'Ajouter',
+                                                            radius: 0.0,
+                                                            fontSize: 12.0,
+                                                            action: () async {
+                                                              await showModalBottomSheet(
+                                                                isScrollControlled: true,
+                                                                backgroundColor: Colors.transparent,
+                                                                enableDrag: false,
+                                                                context: context,
+                                                                builder: (bottomSheetContext) {
+                                                                  return GestureDetector(
+                                                                    onTap: () => FocusScope.of(
+                                                                            context)
+                                                                        .requestFocus(_unfocusNode),
+                                                                    child: Padding(
+                                                                      padding: MediaQuery.of(
+                                                                              bottomSheetContext)
+                                                                          .viewInsets,
+                                                                      child:
+                                                                          PopupSpecialisationWidget(),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ).then((value) => setState(() {}));
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                            5, 5, 5, 5),
+                                                        child: Container(
+                                                          width: MediaQuery.of(context).size.width,
+                                                          decoration: BoxDecoration(
+                                                            color: FlutterFlowTheme.of(context)
+                                                                .secondaryBackground,
+                                                          ),
+                                                          child: ListView.builder(
+                                                            padding: EdgeInsets.zero,
+                                                            shrinkWrap: true,
+                                                            scrollDirection: Axis.vertical,
+                                                            physics:
+                                                                const NeverScrollableScrollPhysics(),
+                                                            itemCount: /* providerUserRegister
+                                                                .selectedSpecialisation.length */10,
+                                                            itemBuilder: (context, index) {
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional.fromSTEB(
+                                                                        0, 10, 0, 0),
+                                                                child: Row(
+                                                                  mainAxisSize: MainAxisSize.max,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment.center,
+                                                                  children: [
+                                                                    FlutterFlowIconButton(
+                                                                      borderColor:
+                                                                          Colors.transparent,
+                                                                      borderRadius: 30,
+                                                                      borderWidth: 1,
+                                                                      buttonSize: 40,
+                                                                      icon: Icon(
+                                                                        Icons.delete_outline_sharp,
+                                                                        color: FlutterFlowTheme.of(
+                                                                                context)
+                                                                            .alternate,
+                                                                        size: 20,
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        // userRegisterSate
+                                                                        //     .deleteSelectedSpecialisation(
+                                                                        //         index);
+
+                                                                      },
+                                                                    ),
+                                                                    Icon(
+                                                                      Icons.verified,
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .secondaryText,
+                                                                      size: 24,
+                                                                    ),
+                                                                    Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width *
+                                                                          0.6,
+                                                                      decoration: BoxDecoration(
+                                                                        color: FlutterFlowTheme.of(
+                                                                                context)
+                                                                            .secondaryBackground,
+                                                                      ),
+                                                                      child: Padding(
+                                                                        padding:
+                                                                            EdgeInsetsDirectional
+                                                                                .fromSTEB(
+                                                                                    5, 0, 0, 0),
+                                                                        child: Text(
+                                                                          // userData
+                                                                          //         .selectedSpecialisation[
+                                                                          //     index],
+                                                                          'hhh',
+                                                                          style:
+                                                                              FlutterFlowTheme.of(
+                                                                                      context)
+                                                                                  .bodyMedium,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      ),
                                       Container(),
                                       Container(),
                                     ],
