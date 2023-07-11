@@ -280,6 +280,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             CardPharmacieWidget(data: i),
                       ],
                     ),
+                  
                   ),
                 ],
               ),
