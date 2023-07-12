@@ -10,7 +10,8 @@ import 'popup_lgo_model.dart';
 export 'popup_lgo_model.dart';
 
 class PopupLgoWidget extends StatefulWidget {
-  const PopupLgoWidget({Key? key}) : super(key: key);
+  const PopupLgoWidget({Key? key, required this.onTap}) : super(key: key);
+  final Function onTap;
 
   @override
   _PopupLgoWidgetState createState() => _PopupLgoWidgetState();
@@ -187,8 +188,8 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                       itemBuilder: (context, index) {
                         final item = listLGO;
                         return Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 5.0, 0.0, 5.0),
                           child: GestureDetector(
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
@@ -212,9 +213,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                               ],
                             ),
                             onTap: () {
-                              var lgo = context.read<ProviderUserRegister>();
-                              lgo.addSelectedLgo(item[index]);
-                              Navigator.pop(context);
+                              widget.onTap(item[index]);
                             },
                           ),
                         );

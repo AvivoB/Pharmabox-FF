@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/register/register_provider.dart';
 
+import '../custom_code/widgets/gradient_text_custom.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -517,12 +518,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     onTap: () async {
                                       final _datePickedDate =
                                           await showDatePicker(
-                                        context: context,
-                                        initialDate: getCurrentTimestamp,
-                                        firstDate: DateTime(1900),
-                                        lastDate: getCurrentTimestamp,
-                                        keyboardType: TextInputType.url
-                                      );
+                                              context: context,
+                                              initialDate: getCurrentTimestamp,
+                                              firstDate: DateTime(1900),
+                                              lastDate: getCurrentTimestamp,
+                                              keyboardType: TextInputType.url);
 
                                       if (_datePickedDate != null) {
                                         setState(() {
@@ -819,8 +819,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               padding: MediaQuery.of(
                                                       bottomSheetContext)
                                                   .viewInsets,
-                                              child:
-                                                  PopupSpecialisationWidget(),
+                                              child: PopupSpecialisationWidget(
+                                                  onTap: (specialisation) => {
+                                                        userRegisterSate
+                                                            .addSelectedSpecialisation(
+                                                                specialisation)
+                                                      }),
                                             ),
                                           );
                                         },
@@ -829,34 +833,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     child: Container(
                                       width: 100,
                                       height: 30,
-                                      child: custom_widgets.GradientTextCustom(
+                                      child: GradientTextCustom(
                                         width: 100,
                                         height: 30,
                                         text: 'Ajouter',
                                         radius: 0.0,
                                         fontSize: 12.0,
-                                        action: () async {
-                                          await showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            enableDrag: false,
-                                            context: context,
-                                            builder: (bottomSheetContext) {
-                                              return GestureDetector(
-                                                onTap: () => FocusScope.of(
-                                                        context)
-                                                    .requestFocus(_unfocusNode),
-                                                child: Padding(
-                                                  padding: MediaQuery.of(
-                                                          bottomSheetContext)
-                                                      .viewInsets,
-                                                  child:
-                                                      PopupSpecialisationWidget(),
-                                                ),
-                                              );
-                                            },
-                                          ).then((value) => setState(() {}));
-                                        },
                                       ),
                                     ),
                                   ),
@@ -1030,7 +1012,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                   padding: MediaQuery.of(
                                                           bottomSheetContext)
                                                       .viewInsets,
-                                                  child: PopupLgoWidget(),
+                                                  child: PopupLgoWidget(
+                                                    onTap: (lgo) => {
+                                                      userRegisterSate.addSelectedLgo(lgo)
+                                                    },
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -1046,30 +1032,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                             text: 'Ajouter',
                                             radius: 0.0,
                                             fontSize: 12.0,
-                                            action: () async {
-                                              await showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                enableDrag: false,
-                                                context: context,
-                                                builder: (bottomSheetContext) {
-                                                  return GestureDetector(
-                                                    onTap: () =>
-                                                        FocusScope.of(context)
-                                                            .requestFocus(
-                                                                _unfocusNode),
-                                                    child: Padding(
-                                                      padding: MediaQuery.of(
-                                                              bottomSheetContext)
-                                                          .viewInsets,
-                                                      child: PopupLgoWidget(),
-                                                    ),
-                                                  );
-                                                },
-                                              ).then(
-                                                  (value) => setState(() {}));
-                                            },
                                           ),
                                         ),
                                       ),
@@ -1529,7 +1491,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                   padding: MediaQuery.of(
                                                           bottomSheetContext)
                                                       .viewInsets,
-                                                  child: PopupLanguesWidget(),
+                                                  child: PopupLanguesWidget(
+                                                    onTap: (langue) {
+                                                      userRegisterSate
+                                                          .addLangues(langue);
+                                                    },
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -1539,36 +1506,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           width: 100,
                                           height: 30,
                                           child:
-                                              custom_widgets.GradientTextCustom(
+                                          GradientTextCustom(
                                             width: 100,
                                             height: 30,
                                             text: 'Ajouter',
                                             radius: 0.0,
                                             fontSize: 12.0,
-                                            action: () async {
-                                              await showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                enableDrag: false,
-                                                context: context,
-                                                builder: (bottomSheetContext) {
-                                                  return GestureDetector(
-                                                    onTap: () =>
-                                                        FocusScope.of(context)
-                                                            .requestFocus(
-                                                                _unfocusNode),
-                                                    child: Padding(
-                                                      padding: MediaQuery.of(
-                                                              bottomSheetContext)
-                                                          .viewInsets,
-                                                      child: PopupLgoWidget(),
-                                                    ),
-                                                  );
-                                                },
-                                              ).then(
-                                                  (value) => setState(() {}));
-                                            },
                                           ),
                                         ),
                                       ),
@@ -1747,7 +1690,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               padding: MediaQuery.of(
                                                       bottomSheetContext)
                                                   .viewInsets,
-                                              child: PopupExperiencesWidget(),
+                                              child: PopupExperiencesWidget(
+                                                onTap: (nom_pharmacie, annee_debut, annee_fin) => {
+                                                  userRegisterSate.addExperiences(nom_pharmacie, annee_debut, annee_fin)
+                                                },
+                                              ),
                                             ),
                                           );
                                         },
@@ -1762,28 +1709,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         text: 'Ajouter',
                                         radius: 0.0,
                                         fontSize: 12.0,
-                                        action: () async {
-                                          await showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            enableDrag: false,
-                                            context: context,
-                                            builder: (bottomSheetContext) {
-                                              return GestureDetector(
-                                                onTap: () => FocusScope.of(
-                                                        context)
-                                                    .requestFocus(_unfocusNode),
-                                                child: Padding(
-                                                  padding: MediaQuery.of(
-                                                          bottomSheetContext)
-                                                      .viewInsets,
-                                                  child:
-                                                      PopupExperiencesWidget(),
-                                                ),
-                                              );
-                                            },
-                                          ).then((value) => setState(() {}));
-                                        },
                                       ),
                                     ),
                                   ),

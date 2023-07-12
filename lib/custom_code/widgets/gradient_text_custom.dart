@@ -17,7 +17,6 @@ class GradientTextCustom extends StatefulWidget {
     required this.text,
     required this.radius,
     required this.fontSize,
-    required this.action,
   }) : super(key: key);
 
   final double? width;
@@ -25,7 +24,6 @@ class GradientTextCustom extends StatefulWidget {
   final String text;
   final double radius;
   final double fontSize;
-  final Future<dynamic> Function() action;
 
   @override
   _GradientTextCustomState createState() => _GradientTextCustomState();

@@ -12,7 +12,9 @@ import 'popup_specialisation_model.dart';
 export 'popup_specialisation_model.dart';
 
 class PopupSpecialisationWidget extends StatefulWidget {
-  const PopupSpecialisationWidget({Key? key}) : super(key: key);
+  const PopupSpecialisationWidget({Key? key, required this.onTap})
+      : super(key: key);
+  final Function onTap;
 
   @override
   _PopupSpecialisationWidgetState createState() =>
@@ -203,9 +205,9 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium),
                                 onTap: () {
-                                  var specialisation = context.read<ProviderUserRegister>();
-                                  specialisation.addSelectedSpecialisation(filtered[index]);
+                                  widget.onTap(filtered[index]);
                                   Navigator.pop(context);
+                                  print(filtered[index]);
                                 },
                               )
                             ],

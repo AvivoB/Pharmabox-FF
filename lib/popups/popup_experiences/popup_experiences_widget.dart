@@ -11,14 +11,10 @@ import 'popup_experiences_model.dart';
 export 'popup_experiences_model.dart';
 
 class PopupExperiencesWidget extends StatefulWidget {
-  const PopupExperiencesWidget({
-    Key? key,
-    this.filterComponent,
-    this.filterData,
-  }) : super(key: key);
+  const PopupExperiencesWidget({Key? key, required this.onTap})
+      : super(key: key);
 
-  final String? filterComponent;
-  final String? filterData;
+  final Function onTap;
 
   @override
   _PopupExperiencesWidgetState createState() => _PopupExperiencesWidgetState();
@@ -327,8 +323,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                     ),
                     child: FFButtonWidget(
                       onPressed: () {
-                        var experience = context.read<ProviderUserRegister>();
-                        experience.addExperiences(
+                        widget.onTap(
                             _model.lgoFilterController.text,
                             _model.experienceDebutController.text,
                             _model.experienceFinController.text);

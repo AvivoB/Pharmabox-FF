@@ -9,7 +9,8 @@ import 'popup_langues_model.dart';
 export 'popup_langues_model.dart';
 
 class PopupLanguesWidget extends StatefulWidget {
-  const PopupLanguesWidget({Key? key}) : super(key: key);
+  const PopupLanguesWidget({Key? key, required this.onTap}) : super(key: key);
+  final Function onTap;
 
   @override
   _PopupLanguesWidgetState createState() => _PopupLanguesWidgetState();
@@ -208,8 +209,8 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
                               ],
                             ),
                             onTap: () {
-                              var langue = context.read<ProviderUserRegister>();
-                              langue.addLangues(item[index]);
+                              widget.onTap(item[index]);
+                              
                               Navigator.pop(context);
                             },
                           ),
