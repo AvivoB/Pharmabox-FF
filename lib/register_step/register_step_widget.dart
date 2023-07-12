@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pharmabox/register/register_provider.dart';
+import 'package:pharmabox/register_step/register_provider.dart';
 
 import '../custom_code/widgets/gradient_text_custom.dart';
 import '/auth/firebase_auth/auth_util.dart';
@@ -1154,6 +1154,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ],
                       ),
                     ),
+                  
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),

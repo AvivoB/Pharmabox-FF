@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pharmabox/notifications/firebase_notifications_service.dart';
-import 'package:pharmabox/register/register_provider.dart';
+import 'package:pharmabox/profil/profil_provider.dart';
+import 'package:pharmabox/register_step/register_provider.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 import 'package:provider/provider.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
@@ -88,6 +89,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => ProviderUserRegister()),
         ChangeNotifierProvider(create: (_) => ProviderPharmacieRegister()),
+        ChangeNotifierProvider(create: (_) => ProviderProfilUser()),
       ],
       child: MaterialApp.router(
         title: 'Pharmabox',

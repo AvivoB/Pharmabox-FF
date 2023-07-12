@@ -1,4 +1,4 @@
-import 'package:pharmabox/register/register_provider.dart';
+import 'package:pharmabox/register_step/register_provider.dart';
 
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -214,6 +214,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                             ),
                             onTap: () {
                               widget.onTap(item[index]);
+                              Navigator.pop(context);
                             },
                           ),
                         );

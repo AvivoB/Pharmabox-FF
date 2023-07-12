@@ -1,7 +1,7 @@
 import 'package:pharmabox/register_step/register_step_model.dart';
 
 import '../../constant.dart';
-import '../../register/register_provider.dart';
+import '../../register_step/register_provider.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -207,7 +207,6 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                                 onTap: () {
                                   widget.onTap(filtered[index]);
                                   Navigator.pop(context);
-                                  print(filtered[index]);
                                 },
                               )
                             ],

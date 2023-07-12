@@ -417,31 +417,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             text: 'Modifier',
                                             radius: 0.0,
                                             fontSize: 12.0,
-                                            action: () async {
-                                              await showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                enableDrag: false,
-                                                context: context,
-                                                builder: (bottomSheetContext) {
-                                                  return GestureDetector(
-                                                    onTap: () =>
-                                                        FocusScope.of(context)
-                                                            .requestFocus(
-                                                                _unfocusNode),
-                                                    child: Padding(
-                                                      padding: MediaQuery.of(
-                                                              bottomSheetContext)
-                                                          .viewInsets,
-                                                      child:
-                                                          PopupGroupementWidget(),
-                                                    ),
-                                                  );
-                                                },
-                                              ).then(
-                                                  (value) => setState(() {}));
-                                            },
                                           ),
                                         ),
                                       ),
@@ -5657,31 +5632,6 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             text: 'Ajouter',
                                             radius: 0.0,
                                             fontSize: 12.0,
-                                            action: () async {
-                                              await showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                enableDrag: false,
-                                                context: context,
-                                                builder: (bottomSheetContext) {
-                                                  return GestureDetector(
-                                                    onTap: () =>
-                                                        FocusScope.of(context)
-                                                            .requestFocus(
-                                                                _unfocusNode),
-                                                    child: Padding(
-                                                      padding: MediaQuery.of(
-                                                              bottomSheetContext)
-                                                          .viewInsets,
-                                                      child:
-                                                          PopupLgoPharmacieWidget(),
-                                                    ),
-                                                  );
-                                                },
-                                              ).then(
-                                                  (value) => setState(() {}));
-                                            },
                                           ),
                                         ),
                                       ),

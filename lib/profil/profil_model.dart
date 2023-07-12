@@ -55,6 +55,16 @@ class ProfilModel extends FlutterFlowModel {
   TextEditingController? presentationController;
   String? Function(BuildContext, String?)? presentationControllerValidator;
 
+  bool comptencesTestCovidValue = false;
+  // State field(s) for ComptencesVaccination widget.
+  bool comptencesVaccinationValue = false;
+  // State field(s) for ComptencesTiersPayant widget.
+  bool comptencesTiersPayantValue = false;
+  // State field(s) for ComptencesLabo widget.
+  bool comptencesLaboValue = false;
+  // State field(s) for ComptencesTROD widget.
+  bool comptencesTRODValue = false;
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {

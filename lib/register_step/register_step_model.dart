@@ -1,5 +1,5 @@
 import 'package:image_picker/image_picker.dart';
-import 'package:pharmabox/register/register_provider.dart';
+import 'package:pharmabox/register_step/register_provider.dart';
 
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';

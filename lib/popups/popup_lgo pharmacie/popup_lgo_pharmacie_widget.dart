@@ -1,4 +1,4 @@
-import 'package:pharmabox/register/register_provider.dart';
+import 'package:pharmabox/register_step/register_provider.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 
 import '/flutter_flow/flutter_flow_icon_button.dart';
