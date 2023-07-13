@@ -855,7 +855,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> {
                                                                     child:
                                                                         ListSkillWithSliderWidget(
                                                                       slider:
-                                                                          1.0,
+                                                                          1,
                                                                     ),
                                                                   ),
                                                                 ),

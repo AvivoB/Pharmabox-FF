@@ -27,19 +27,19 @@ class PopupLgoModel extends FlutterFlowModel {
   static selectLGO() {
 
     List<Map> listLGO = [
-      {"image": "ActiPharm.jpg", "name": "ActiPharm"},
-      {"image": "CADUCIEL.jpg", "name": "CADUCIEL"},
-      {"image": "Crystal.jpg", "name": "Crystal"},
-      {"image": "Leo.jpg", "name": "Léo"},
-      {"image": "LGPI.jpg", "name": "LGPI"},
-      {"image": "Pharmagest.jpg", "name": "Pharmagest"},
-      {"image": "Pharmaland.jpg", "name": "Pharmaland"},
-      {"image": "PharmaVitale.jpg", "name": "PharmaVitale"},
-      {"image": "Pharmony.jpg", "name": "Pharmony"},
-      {"image": "SMART_RX.jpg", "name": "SMART RX"},
-      {"image": "Vindilis.jpg", "name": "Vindilis"},
-      {"image": "Visiopharm.jpg", "name": "Visiopharm"},
-      {"image": "Winpharma.jpg", "name": "Winpharma"}
+      {"image": "ActiPharm.jpg", "name": "ActiPharm", "niveau": 0},
+      {"image": "CADUCIEL.jpg", "name": "CADUCIEL", "niveau": 0},
+      {"image": "Crystal.jpg", "name": "Crystal", "niveau": 0},
+      {"image": "Leo.jpg", "name": "Léo", "niveau": 0},
+      {"image": "LGPI.jpg", "name": "LGPI", "niveau": 0},
+      {"image": "Pharmagest.jpg", "name": "Pharmagest", "niveau": 0},
+      {"image": "Pharmaland.jpg", "name": "Pharmaland", "niveau": 0},
+      {"image": "PharmaVitale.jpg", "name": "PharmaVitale", "niveau": 0},
+      {"image": "Pharmony.jpg", "name": "Pharmony", "niveau": 0},
+      {"image": "SMART_RX.jpg", "name": "SMART RX", "niveau": 0},
+      {"image": "Vindilis.jpg", "name": "Vindilis", "niveau": 0},
+      {"image": "Visiopharm.jpg", "name": "Visiopharm", "niveau": 0},
+      {"image": "Winpharma.jpg", "name": "Winpharma", "niveau": 0},
     ];
 
     return listLGO.toList();

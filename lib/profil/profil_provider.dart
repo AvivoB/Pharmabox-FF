@@ -19,19 +19,14 @@ class ProviderProfilUser extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool checkCompetence(value) {
-    return _selectedCompetences.contains(value);
-  }
-
-  void addCompetences(competence) {
-    _selectedSpecialisation.add(competence);
+  void updateCompetence(boolean, competence) {
+    if (boolean) {
+      _selectedCompetences.add(competence);
+    } else {
+      _selectedCompetences.remove(competence);
+    }
     notifyListeners();
   }
-  void unsetCompetence(competence) {
-    _selectedSpecialisation.remove(competence);
-    notifyListeners();
-  }
-
 
 /* Options Specialisations */
   void addSelectedSpecialisation(specialisation) {
@@ -61,7 +56,7 @@ class ProviderProfilUser extends ChangeNotifier {
   }
 
   void updateSelectedLgo(index, niveau) {
-    _selectedLgo[index]['niveau'] = niveau;
+    _selectedLgo[index]['niveau'] = niveau ?? 0;
     notifyListeners();
   }
 
@@ -82,9 +77,8 @@ class ProviderProfilUser extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateLangues(index, niveau) {
+  void updateLangues(index, int niveau) {
     _selectedLangues[index]['niveau'] = niveau;
-    print(_selectedLangues);
     notifyListeners();
   }
 

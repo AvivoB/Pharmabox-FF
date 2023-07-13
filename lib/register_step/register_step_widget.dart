@@ -1136,7 +1136,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                 .listSkillWithSliderModel1);
                                           },
                                           child: ListSkillWithSliderWidget(
-                                            slider: 1.0,
+                                            slider: 1,
                                             onChanged: (value) {
                                               userRegisterSate
                                                   .updateSelectedLgo(
@@ -1607,7 +1607,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               _model.listSkillWithSliderModel2,
                                           updateCallback: () => setState(() {}),
                                           child: ListSkillWithSliderWidget(
-                                            slider: 0.0,
+                                            slider: 0,
                                             onChanged: (value) {
                                               userRegisterSate.updateLangues(
                                                   index, value);

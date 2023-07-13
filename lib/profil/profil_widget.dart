@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
 
@@ -89,6 +93,51 @@ class _ProfilWidgetState extends State<ProfilWidget> {
     }
   }
 
+  updateUserToFirebase(context) {
+    final providerProfilUser =
+        Provider.of<ProviderProfilUser>(context, listen: false);
+
+    final firestore = FirebaseFirestore.instance;
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    final CollectionReference<Map<String, dynamic>> usersRef =
+        FirebaseFirestore.instance.collection('users');
+
+    String? posteValue =
+        _model.posteValue ?? _model.posteValueController!.initialValue;
+
+    if (_model.nomFamilleController.text != '' &&
+        _model.prenomController.text != '' &&
+        _model.postcodeController.text != '' &&
+        _model.cityController.text != '' &&
+        posteValue != null) {
+      usersRef.doc(currentUser?.uid).update({
+        'nom': _model.nomFamilleController.text,
+        'prenom': _model.prenomController.text,
+        'poste': posteValue,
+        'email': _model.emailController.text,
+        'telephone': _model.telephoneController.text,
+        'date_naissance': _model.birthDateController.text,
+        'code_postal': _model.postcodeController.text,
+        'city': _model.cityController.text,
+        'presentation': _model.presentationController.text,
+        'specialisations': providerProfilUser.selectedSpecialisation,
+        'lgo': providerProfilUser.selectedLgo,
+        'competences': providerProfilUser.selectedCompetences,
+        'langues': providerProfilUser.selectedLangues,
+        'experiences': providerProfilUser.selectedExperiences,
+        'photoUrl': _model.imageURL,
+      });
+    } else {
+      return ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Merci de compléter votre profil'),
+          backgroundColor: redColor,
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -162,6 +211,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
       _model.postcodeController.text = userData['code_postal'] ?? '';
       _model.cityController.text = userData['city'] ?? '';
       _model.presentationController.text = userData['presentation'] ?? '';
+      _model.imageURL = userData['photoURL'] ?? '';
     } else {
       // Gérer le cas où les données de l'utilisateur n'existent pas.
       return;
@@ -176,6 +226,34 @@ class _ProfilWidgetState extends State<ProfilWidget> {
     providerProfilUser.setCompetence(userData['competences']);
     providerProfilUser.setLangues(userData['langues']);
     providerProfilUser.setExperiences(userData['experiences']);
+
+    File? _image;
+    bool _isUploading = false;
+
+    Future<void> _pickImage() async {
+      final pickedFile =
+          await ImagePicker().getImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+          _isUploading = true;
+        });
+
+        final Reference storageRef = FirebaseStorage.instance
+            .ref()
+            .child('profile_pictures/${DateTime.now()}.png');
+        final UploadTask uploadTask = storageRef.putFile(_image!);
+        final TaskSnapshot downloadUrl = (await uploadTask);
+
+        String url = (await downloadUrl.ref.getDownloadURL());
+
+        setState(() {
+          _isUploading = false;
+          _model.imageURL = url;
+        });
+      }
+    }
 
     return Consumer<ProviderProfilUser>(
         builder: (context, providerProfilUser, child) {
@@ -285,7 +363,7 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                               size: 30.0,
                                             ),
                                             onPressed: () {
-                                              print('IconButton pressed ...');
+                                              _pickImage();
                                             },
                                           ),
                                         ),
@@ -1508,7 +1586,10 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                                                   ),
                                                                   child:
                                                                       ListSkillWithSliderWidget(
-                                                                    slider: 1.0,
+                                                                    slider: providerProfilUser
+                                                                            .selectedLgo[index]
+                                                                        [
+                                                                        'niveau'],
                                                                     onChanged:
                                                                         (value) {
                                                                       providerProfilUser.updateSelectedLgo(
@@ -1626,14 +1707,20 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                                               ],
                                                             ),
                                                             Switch.adaptive(
-                                                              value: _model.comptencesTestCovidValue ??=
-                                                                  false,
+                                                              value: providerProfilUser
+                                                                      .selectedCompetences
+                                                                      .contains(
+                                                                          'Test COVID')
+                                                                  ? true
+                                                                  : false,
                                                               onChanged:
                                                                   (newValue) async {
-                                                                setState(() =>
-                                                                    _model.comptencesTestCovidValue =
-                                                                        newValue
-                                                                  );
+                                                                setState(() {
+                                                                  providerProfilUser
+                                                                      .updateCompetence(
+                                                                          newValue,
+                                                                          'Test COVID');
+                                                                });
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -1687,14 +1774,18 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                                               ],
                                                             ),
                                                             Switch.adaptive(
-                                                              value: /* _model
-                                                                      .comptencesVaccinationValue ??= */
-                                                                  false,
+                                                              value: providerProfilUser
+                                                                      .selectedCompetences
+                                                                      .contains(
+                                                                          'Vaccination')
+                                                                  ? true
+                                                                  : false,
                                                               onChanged:
                                                                   (newValue) async {
-                                                                /* setState(() =>
-                                                                        _model.comptencesVaccinationValue =
-                                                                            newValue); */
+                                                                providerProfilUser
+                                                                    .updateCompetence(
+                                                                        newValue,
+                                                                        'Vaccination');
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -1746,14 +1837,18 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                                               ],
                                                             ),
                                                             Switch.adaptive(
-                                                              value: /* _model
-                                                                      .comptencesTiersPayantValue ??=  */
-                                                                  false,
+                                                              value: providerProfilUser
+                                                                      .selectedCompetences
+                                                                      .contains(
+                                                                          'Gestion des tiers payant')
+                                                                  ? true
+                                                                  : false,
                                                               onChanged:
                                                                   (newValue) async {
-                                                                // setState(() =>
-                                                                //     _model.comptencesTiersPayantValue =
-                                                                //         newValue);
+                                                                providerProfilUser
+                                                                    .updateCompetence(
+                                                                        newValue,
+                                                                        'Gestion des tiers payant');
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -1805,12 +1900,18 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                                               ],
                                                             ),
                                                             Switch.adaptive(
-                                                              value: /* _model.comptencesLaboValue ??= */
-                                                                  false,
+                                                              value: providerProfilUser
+                                                                      .selectedCompetences
+                                                                      .contains(
+                                                                          'Gestion de laboratoire')
+                                                                  ? true
+                                                                  : false,
                                                               onChanged:
                                                                   (newValue) async {
-                                                                // setState(() => _model
-                                                                //     .comptencesLaboValue = newValue);
+                                                                providerProfilUser
+                                                                    .updateCompetence(
+                                                                        newValue,
+                                                                        'Gestion de laboratoire');
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -1864,12 +1965,18 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                                               ],
                                                             ),
                                                             Switch.adaptive(
-                                                              value: /* _model.comptencesTRODValue ??= */
-                                                                  false,
+                                                              value: providerProfilUser
+                                                                      .selectedCompetences
+                                                                      .contains(
+                                                                          'TROD')
+                                                                  ? true
+                                                                  : false,
                                                               onChanged:
                                                                   (newValue) async {
-                                                                // setState(() => _model
-                                                                //     .comptencesTRODValue = newValue);
+                                                                providerProfilUser
+                                                                    .updateCompetence(
+                                                                        newValue,
+                                                                        'TROD');
                                                               },
                                                               activeColor: Color(
                                                                   0xFF7CEDAC),
@@ -2153,8 +2260,10 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                                                             () {}),
                                                                     child:
                                                                         ListSkillWithSliderWidget(
-                                                                      slider:
-                                                                          0.0,
+                                                                      slider: providerProfilUser
+                                                                              .selectedLangues[index]
+                                                                          [
+                                                                          'niveau'],
                                                                       onChanged:
                                                                           (value) {
                                                                         providerProfilUser.updateLangues(
@@ -2399,6 +2508,76 @@ class _ProfilWidgetState extends State<ProfilWidget> {
                                                         },
                                                       ),
                                                     ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 20.0, 0.0, 0.0),
+                                              child: Container(
+                                                width: double.infinity,
+                                                height: 50.0,
+                                                decoration: BoxDecoration(
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      blurRadius: 4.0,
+                                                      color: Color(0x301F5C67),
+                                                      offset: Offset(0.0, 4.0),
+                                                    )
+                                                  ],
+                                                  gradient: LinearGradient(
+                                                    colors: [
+                                                      Color(0xFF7CEDAC),
+                                                      Color(0xFF42D2FF)
+                                                    ],
+                                                    stops: [0.0, 1.0],
+                                                    begin: AlignmentDirectional(
+                                                        1.0, -1.0),
+                                                    end: AlignmentDirectional(
+                                                        -1.0, 1.0),
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
+                                                ),
+                                                child: FFButtonWidget(
+                                                  onPressed: () {
+                                                    updateUserToFirebase(
+                                                        context);
+                                                  },
+                                                  text: 'Enregistrer',
+                                                  options: FFButtonOptions(
+                                                    width: double.infinity,
+                                                    height: 40.0,
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 0.0,
+                                                                0.0, 0.0),
+                                                    iconPadding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 0.0,
+                                                                0.0, 0.0),
+                                                    color: Color(0x00FFFFFF),
+                                                    textStyle: FlutterFlowTheme
+                                                            .of(context)
+                                                        .titleSmall
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: Colors.white,
+                                                          fontSize: 18.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                    elevation: 0.0,
+                                                    borderSide: BorderSide(
+                                                      color: Colors.transparent,
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
                                                   ),
                                                 ),
                                               ),
