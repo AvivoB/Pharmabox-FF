@@ -72,7 +72,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                    if(isTitulaire == true)
+                  if (isTitulaire == true)
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
@@ -120,7 +120,6 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                         ),
                       ),
                     ),
-                  
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
@@ -130,15 +129,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.goNamed(
-                          'Profil',
-                          queryParams: {
-                            'tyeRedirect': serializeParam(
-                              'profil',
-                              ParamType.String,
-                            ),
-                          }.withoutNulls,
-                        );
+                        Navigator.pop(context);
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -178,7 +169,6 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                         GoRouter.of(context).prepareAuthEvent();
                         await authManager.signOut();
                         GoRouter.of(context).clearRedirectLocation();
-
                         context.goNamedAuth('Register', mounted);
                       },
                       child: Row(

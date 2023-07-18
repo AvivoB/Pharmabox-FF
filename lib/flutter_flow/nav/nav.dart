@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../profil_pharmacie/profil_pharmacie_widget.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
 
@@ -137,6 +138,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : ProfilWidget(
                   tyeRedirect: params.getParam('tyeRedirect', ParamType.String),
                 ),
+        ),
+        FFRoute(
+          name: 'PharmacieProfil',
+          path: '/pharmacieProfil',
+          builder: (context, params) => ProfilPharmacie(),
         ),
         FFRoute(
           name: 'ProfilView',

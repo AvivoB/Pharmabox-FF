@@ -9,7 +9,9 @@ import 'popup_groupement_model.dart';
 export 'popup_groupement_model.dart';
 
 class PopupGroupementWidget extends StatefulWidget {
-  const PopupGroupementWidget({Key? key}) : super(key: key);
+  const PopupGroupementWidget({Key? key, required this.onTap})
+      : super(key: key);
+  final Function onTap;
 
   @override
   _PopupGroupementWidgetState createState() => _PopupGroupementWidgetState();
@@ -156,10 +158,10 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                             ),
                           ),
                           onChanged: (value) => {
-                              setState(() {
-                                _searchText = value;
-                              })
-                            },
+                            setState(() {
+                              _searchText = value;
+                            })
+                          },
                           style: FlutterFlowTheme.of(context).bodyMedium,
                           validator: _model.groupementFilterControllerValidator
                               .asValidator(context),
@@ -169,53 +171,52 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                   ],
                 ),
                 Container(
-                   width: MediaQuery.of(context).size.width * 1.0,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                  width: MediaQuery.of(context).size.width * 1.0,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: listGroupement.length,
-                      itemBuilder: (context, index) {
-                        final item = listGroupement;
-                        return Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-                          child: GestureDetector(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  'assets/groupements/' + item[index]['image'],
-                                  width: 120.0,
-                                  height: 60.0,
-                                  fit: BoxFit.cover,
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: listGroupement.length,
+                    itemBuilder: (context, index) {
+                      final item = listGroupement;
+                      return Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                        child: GestureDetector(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                'assets/groupements/' + item[index]['image'],
+                                width: 120.0,
+                                height: 60.0,
+                                fit: BoxFit.cover,
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    25.0, 0.0, 0.0, 0.0),
+                                child: Text(
+                                  item[index]['name'],
+                                  style:
+                                      FlutterFlowTheme.of(context).bodyMedium,
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      25.0, 0.0, 0.0, 0.0),
-                                  child: Text(
-                                    item[index]['name'],
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              var groupement = context.read<ProviderPharmacieRegister>();
-                              groupement.selectGroupement(item[index]);
-                              Navigator.pop(context);
-                            },
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                          onTap: () {
+                            widget.onTap(item[index]);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

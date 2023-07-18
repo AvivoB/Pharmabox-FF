@@ -192,25 +192,25 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
       'equipe': {
         'nb_pharmaciens': (_model.phonePharmacieController2.text != '')
             ? _model.phonePharmacieController2.text
-            : 0,
+            : '0',
         'nb_preparateurs': (_model.nbPreparateurController.text != '')
-            ? _model.phonePharmacieController2.text
-            : 0,
+            ? _model.nbPreparateurController.text
+            : '0',
         'nb_rayonnistes': (_model.nbRayonnistesController.text != '')
-            ? _model.nbRayonnistesController.text
-            : 0,
+            ? _model.nbPreparateurController.text
+            : '0',
         'nb_conseillers': (_model.nbConseillersController.text != '')
             ? _model.nbConseillersController.text
-            : 0,
+            : '0',
         'nb_apprentis': (_model.nbApprentiController.text != '')
             ? _model.nbApprentiController.text
-            : 0,
+            : '0',
         'nb_etudiants': (_model.nbEtudiantsController.text != '')
             ? _model.nbEtudiantsController.text
-            : 0,
+            : '0',
         'nb_etudiants_6eme_annee': (_model.nbEtudiants6emeController.text != '')
             ? _model.nbEtudiants6emeController.text
-            : 0,
+            : '0',
       }
     });
   }
@@ -401,7 +401,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                           bottomSheetContext)
                                                       .viewInsets,
                                                   child:
-                                                      PopupGroupementWidget(),
+                                                      PopupGroupementWidget(
+                                                        onTap: (value) {
+                                                          var groupement =
+                                                                context.read<ProviderPharmacieRegister>();
+                                                            groupement.selectGroupement(value);
+                                                        }
+                                                      ),
                                                 ),
                                               );
                                             },
@@ -6462,11 +6468,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               .secondaryBackground,
                                         ),
                                         child: custom_widgets.SliderSimple(
-                                            slider: 1.0,
+                                            slider: 1,
                                             onChanged: (value) {
                                               providerPharmacieRegister
                                                   .setTendences(0, 'Ordonances',
-                                                      value.toString());
+                                                      value);
                                             })),
                                   ],
                                 ),
@@ -6510,11 +6516,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               .secondaryBackground,
                                         ),
                                         child: custom_widgets.SliderSimple(
-                                          slider: 1.0,
+                                          slider: 1,
                                           onChanged: (value) {
                                             providerPharmacieRegister
                                                 .setTendences(1, 'Cosmétiques',
-                                                    value.toString());
+                                                    value);
                                           },
                                         )),
                                   ],
@@ -6559,13 +6565,13 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               .secondaryBackground,
                                         ),
                                         child: custom_widgets.SliderSimple(
-                                            slider: 1.0,
+                                            slider: 1,
                                             onChanged: (value) {
                                               providerPharmacieRegister
                                                   .setTendences(
                                                       2,
                                                       'Phyto / aroma',
-                                                      value.toString());
+                                                      value);
                                             })),
                                   ],
                                 ),
@@ -6609,11 +6615,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               .secondaryBackground,
                                         ),
                                         child: custom_widgets.SliderSimple(
-                                            slider: 1.0,
+                                            slider: 1,
                                             onChanged: (value) {
                                               providerPharmacieRegister
                                                   .setTendences(3, 'Nutrition',
-                                                      value.toString());
+                                                      value);
                                             })),
                                   ],
                                 ),
@@ -6657,11 +6663,11 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               .secondaryBackground,
                                         ),
                                         child: custom_widgets.SliderSimple(
-                                            slider: 1.0,
+                                            slider: 1,
                                             onChanged: (value) {
                                               providerPharmacieRegister
                                                   .setTendences(4, 'Conseil',
-                                                      value.toString());
+                                                      value);
                                               print(value);
                                             })),
                                   ],

@@ -7,6 +7,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pharmabox/notifications/firebase_notifications_service.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
+import 'package:pharmabox/profil_pharmacie/profil_pharmacie_provider.dart';
+import 'package:pharmabox/profil_pharmacie/profil_pharmacie_widget.dart';
 import 'package:pharmabox/register_step/register_provider.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 import 'package:provider/provider.dart';
@@ -90,6 +92,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProviderUserRegister()),
         ChangeNotifierProvider(create: (_) => ProviderPharmacieRegister()),
         ChangeNotifierProvider(create: (_) => ProviderProfilUser()),
+        ChangeNotifierProvider(create: (_) => ProviderPharmacieUser()),
       ],
       child: MaterialApp.router(
         title: 'Pharmabox',
@@ -141,6 +144,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'PharmaJob': PharmaJobWidget(),
       'Reseau': ReseauWidget(),
       'Profil': ProfilWidget(),
+      'Pharmacie': ProfilPharmacie(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
@@ -239,6 +243,28 @@ class _NavBarPageState extends State<NavBarPage> {
                 ),
                 Text(
                   'Profil',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight:
+                        currentIndex == 3 ? FontWeight.w600 : FontWeight.w400,
+                    color: greyColor,
+                    fontSize: 11.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FloatingNavbarItem(
+            customWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.account_circle_outlined,
+                  color: currentIndex == 3 ? Color(0xFF7CEDAC) : greyColor,
+                  size: 24.0,
+                ),
+                Text(
+                  'Pharmacie',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight:

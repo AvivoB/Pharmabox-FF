@@ -9,9 +9,12 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class PredictionNomPhamracie extends StatefulWidget {
-  const PredictionNomPhamracie({Key? key, required this.onPlaceSelected}) : super(key: key);
+  PredictionNomPhamracie(
+      {Key? key, required this.onPlaceSelected, this.initialValue})
+      : super(key: key);
 
-   final Function(String) onPlaceSelected;
+  final Function(String) onPlaceSelected;
+  String? initialValue;
   @override
   _PredictionNomPhamracieState createState() => _PredictionNomPhamracieState();
 }
@@ -54,15 +57,17 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
       _predictions = [];
     });
     if (widget.onPlaceSelected != null) {
-          final providerPharmacieRegister = Provider.of<ProviderPharmacieRegister>(context, listen: false);
+      final providerPharmacieRegister =
+          Provider.of<ProviderPharmacieRegister>(context, listen: false);
 
-        providerPharmacieRegister.setAdressePharmacie(prediction);
+      providerPharmacieRegister.setAdressePharmacie(prediction);
       widget.onPlaceSelected(prediction);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    _searchController.text = widget.initialValue ?? '';
     return Column(
       children: [
         TextFormField(
@@ -121,7 +126,8 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
                   title: Text(_predictions[index]['description'],
                       style: FlutterFlowTheme.of(context).bodyMedium),
                   onTap: () {
-                    _onPredictionSelected(_predictions[index]['terms'][0]['value']);
+                    _onPredictionSelected(
+                        _predictions[index]['terms'][0]['value']);
                   },
                 );
               },

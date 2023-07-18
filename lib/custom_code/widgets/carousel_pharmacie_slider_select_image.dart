@@ -10,8 +10,10 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 
 class CarouselPharmacieSliderSelect extends StatefulWidget {
   final Function(List<String>) onImagesSelected;
+  final List<String>? initialImagesSelected;
 
-  CarouselPharmacieSliderSelect({required this.onImagesSelected});
+  CarouselPharmacieSliderSelect(
+      {required this.onImagesSelected, this.initialImagesSelected});
 
   @override
   _CarouselPharmacieSliderSelectState createState() =>
@@ -21,7 +23,16 @@ class CarouselPharmacieSliderSelect extends StatefulWidget {
 class _CarouselPharmacieSliderSelectState
     extends State<CarouselPharmacieSliderSelect> {
   final List<File> _selectedImages = [];
-  final urls = <String>[];
+  List<String>? _initialImagesSelected;
+  List<String> urls = <String>[];
+
+  @override
+    void initState() {
+      super.initState(); // Don't forget to call super.initState()
+       urls = widget.initialImagesSelected ?? <String>[];  // Assign value to urls here
+    }
+
+
 
   Future<void> _selectImages() async {
     final pickedImages =
@@ -183,58 +194,56 @@ class _CarouselPharmacieSliderSelectState
                           width: MediaQuery.of(context).size.width * 1,
                           fit: BoxFit.cover,
                         ),
-                         Positioned(
-                          bottom: 10,
-                          left: 10,
-                          child: Row(
-                            children: [
-                              FlutterFlowIconButton(
-                                      borderColor: Colors.transparent,
-                                      borderRadius: 30,
-                                      borderWidth: 1,
-                                      buttonSize: 45,
-                                      fillColor: Colors.white,
-                                      icon: Icon(
-                                        Icons.add_a_photo_outlined,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        size: 22,
-                                      ),
-                                      onPressed: _selectImages,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: FlutterFlowIconButton(
-                                        borderColor: Colors.transparent,
-                                        borderRadius: 30,
-                                        borderWidth: 1,
-                                        buttonSize: 45,
-                                        fillColor: Colors.white,
-                                        icon: Icon(
-                                          Icons.delete_outline,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          size: 22,
-                                        ),
-                                        onPressed: () async {
-                                          try {
-                                              await FirebaseStorage.instance.refFromURL(urls[index].toString()).delete();
-                                              urls.removeAt(index);
-                                            } catch (e) {
-                                              print('Error deleting photo: $e');
-                                            }
-                                            setState(() {
-                                              
-                                            });
-                                        },
+                        Positioned(
+                            bottom: 10,
+                            left: 10,
+                            child: Row(
+                              children: [
+                                FlutterFlowIconButton(
+                                  borderColor: Colors.transparent,
+                                  borderRadius: 30,
+                                  borderWidth: 1,
+                                  buttonSize: 45,
+                                  fillColor: Colors.white,
+                                  icon: Icon(
+                                    Icons.add_a_photo_outlined,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 22,
+                                  ),
+                                  onPressed: _selectImages,
                                 ),
-                              ),
-                            ],
-                          )
-                          
-                        )
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  child: FlutterFlowIconButton(
+                                    borderColor: Colors.transparent,
+                                    borderRadius: 30,
+                                    borderWidth: 1,
+                                    buttonSize: 45,
+                                    fillColor: Colors.white,
+                                    icon: Icon(
+                                      Icons.delete_outline,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 22,
+                                    ),
+                                    onPressed: () async {
+                                      try {
+                                        await FirebaseStorage.instance
+                                            .refFromURL(urls[index].toString())
+                                            .delete();
+                                        urls.removeAt(index);
+                                      } catch (e) {
+                                        print('Error deleting photo: $e');
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ))
                       ],
-                     
                     );
                   },
                 ),

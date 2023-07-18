@@ -9,11 +9,13 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class MapAdressePharmacie extends StatefulWidget {
-  const MapAdressePharmacie({Key? key, required this.onAdressSelected})
+  const MapAdressePharmacie(
+      {Key? key, required this.onAdressSelected, this.onInitialValue})
       : super(key: key);
 
   final Function(double, double, String, String, String, String, String)
       onAdressSelected;
+  final String? onInitialValue;
 
   @override
   _MapAdressePharmacieState createState() => _MapAdressePharmacieState();
@@ -28,6 +30,13 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
   late String _selectedPostalCode;
   late String _selectedCity;
   List<dynamic> _predictions = [];
+
+  @override
+  void initState() {
+    super.initState(); // Don't forget to call super.initState()
+    _searchAddress(widget.onInitialValue ?? '');
+    _searchController.text = widget.onInitialValue ?? '';
+  }
 
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
@@ -160,16 +169,17 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
     // Get the first prediction
     Location location = locations.first;
 
-    final aDreplacemark = await placemarkFromCoordinates(location.latitude, location.longitude);
+    final aDreplacemark =
+        await placemarkFromCoordinates(location.latitude, location.longitude);
 
     widget.onAdressSelected(
-        location.latitude, 
-        location.longitude, 
-        aDreplacemark.first.street.toString(), 
-        aDreplacemark.first.postalCode.toString(), 
-        aDreplacemark.first.locality.toString(),
-        aDreplacemark.first.subLocality.toString() ?? '',
-        aDreplacemark.first.administrativeArea.toString() ?? '',
+      location.latitude,
+      location.longitude,
+      aDreplacemark.first.street.toString(),
+      aDreplacemark.first.postalCode.toString(),
+      aDreplacemark.first.locality.toString(),
+      aDreplacemark.first.subLocality.toString() ?? '',
+      aDreplacemark.first.administrativeArea.toString() ?? '',
     );
 
     // Set the camera position to the selected location
