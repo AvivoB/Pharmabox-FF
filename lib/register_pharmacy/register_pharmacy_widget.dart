@@ -6520,7 +6520,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           onChanged: (value) {
                                             providerPharmacieRegister
                                                 .setTendences(1, 'Cosmétiques',
-                                                    value);
+                                                   value);
                                           },
                                         )),
                                   ],

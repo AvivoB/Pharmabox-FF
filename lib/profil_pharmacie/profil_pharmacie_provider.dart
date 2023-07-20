@@ -14,11 +14,11 @@ class ProviderPharmacieUser extends ChangeNotifier {
   List _selectedAdressePharma = [];
   List _tendences = [
     {
-      'Ordonances': '',
-      'Cosmétiques': '',
-      'Phyto / aroma': '',
-      'Nutrition': '',
-      'Conseil': ''
+      'Ordonances': 0,
+      'Cosmétiques': 0,
+      'Phyto / aroma': 0,
+      'Nutrition': 0,
+      'Conseil': 0
     }
   ];
 
@@ -39,7 +39,7 @@ class ProviderPharmacieUser extends ChangeNotifier {
 
   void setGroupement(groupement) {
     _selectedGroupement = groupement;
-    notifyListeners();
+    // notifyListeners();
   }
 
 /* Option LGO */
@@ -50,7 +50,7 @@ class ProviderPharmacieUser extends ChangeNotifier {
 
   void setLGO(lgo) {
     _selectedLgo = lgo;
-    notifyListeners();
+    // notifyListeners();
   }
 
   /* Localisation de la pharmacie */

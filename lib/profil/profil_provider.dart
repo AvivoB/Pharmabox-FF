@@ -16,7 +16,7 @@ class ProviderProfilUser extends ChangeNotifier {
 
   void setCompetence(competences) {
     _selectedCompetences = competences;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void updateCompetence(boolean, competence) {
@@ -41,13 +41,13 @@ class ProviderProfilUser extends ChangeNotifier {
 
   void setSpecialisation(specialisations) {
     _selectedSpecialisation = specialisations;
-    notifyListeners();
+    // notifyListeners();
   }
 
 /* Option LGO */
   void setLGO(lgo) {
     _selectedLgo = lgo;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void addSelectedLgo(lgo) {
@@ -68,7 +68,7 @@ class ProviderProfilUser extends ChangeNotifier {
   /* Option langues */
   void setLangues(langues) {
     _selectedLangues = langues;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void addLangues(langue) {
@@ -90,7 +90,7 @@ class ProviderProfilUser extends ChangeNotifier {
   /* Option langues */
   void setExperiences(experiences) {
     _selectedExperiences = experiences;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void addExperiences(nom_pharmacie, annee_debut, annee_fin) {

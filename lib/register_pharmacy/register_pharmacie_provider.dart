@@ -15,11 +15,11 @@ class ProviderPharmacieRegister extends ChangeNotifier {
   List _selectedAdressePharma = [];
   List _tendences = [
     {
-      'Ordonances': '',
-      'Cosmétiques': '',
-      'Phyto / aroma': '',
-      'Nutrition': '',
-      'Conseil': ''
+      'Ordonances': 0,
+      'Cosmétiques': 0,
+      'Phyto / aroma': 0,
+      'Nutrition': 0,
+      'Conseil': 0
     }
   ];
 
@@ -60,13 +60,15 @@ class ProviderPharmacieRegister extends ChangeNotifier {
   }
 
   void setAdresse(postcode, rue, ville, region, arrondissement) {
-    _selectedAdressePharma = [{
-      'rue': rue,
-      'postcode': postcode,
-      'ville': ville,
-      'region': region,
-      'arrondissement': arrondissement
-    }];
+    _selectedAdressePharma = [
+      {
+        'rue': rue,
+        'postcode': postcode,
+        'ville': ville,
+        'region': region,
+        'arrondissement': arrondissement
+      }
+    ];
     notifyListeners();
   }
 

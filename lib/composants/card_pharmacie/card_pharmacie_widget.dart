@@ -134,12 +134,14 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                             child: Text(
                               widget.data['situation_geographique']['adresse']
                                   .toString(),
+                              overflow: TextOverflow.ellipsis,
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
                                     fontFamily: 'Poppins',
                                     color: Color(0xFF161730),
                                     fontSize: 16.0,
+                                    
                                   ),
                             ),
                           )

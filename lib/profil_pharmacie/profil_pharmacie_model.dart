@@ -255,7 +255,7 @@ class PharmacieModel extends FlutterFlowModel {
     tramwayController2?.dispose();
     nbPharmaciensController?.dispose();
     nbPreparateurController?.dispose();
-    nbPreparateurController?.dispose();
+    // nbPreparateurController?.dispose();
     nbRayonnistesController?.dispose();
     nbConseillersController?.dispose();
     nbApprentiController?.dispose();

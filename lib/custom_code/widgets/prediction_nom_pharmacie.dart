@@ -66,8 +66,16 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     _searchController.text = widget.initialValue ?? '';
+  }
+
+  
+
+  @override
+  Widget build(BuildContext context) {
+    
     return Column(
       children: [
         TextFormField(

@@ -414,7 +414,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         return;
                                       }
 
-                                      context.goNamedAuth('Explorer', mounted);
+                                      context.goNamedAuth('RegisterStep', mounted);
                                     },
                                     text: 'S\'inscire avec Google',
                                     icon: FaIcon(
