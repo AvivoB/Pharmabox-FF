@@ -5867,7 +5867,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   BlendMode.srcIn),
                                             )),
                                         Text(
-                                          ' Entretien pharmaceutique',
+                                          'Entretien pharmaceutique',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium,
                                         ),

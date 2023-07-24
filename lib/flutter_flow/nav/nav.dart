@@ -148,7 +148,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'ProfilView',
           path: '/profilView',
           builder: (context, params) => ProfilViewWidget(
-            tyeRedirect: params.getParam('tyeRedirect', ParamType.String),
+            userId: params.getParam('userId', ParamType.String),
           ),
         ),
         FFRoute(
@@ -288,6 +288,7 @@ class FFParameters {
     bool isList = false,
     List<String>? collectionNamePath,
   ]) {
+    print(paramName);
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
     }

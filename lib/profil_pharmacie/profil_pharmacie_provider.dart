@@ -22,6 +22,9 @@ class ProviderPharmacieUser extends ChangeNotifier {
     }
   ];
 
+  List _selectedMissions = [];
+  String _selectedTypologie = '';
+
   // Getters qui permettent de recuperer les données dans les vues
   List get selectedGroupement => _selectedGroupement;
   List get selectedLgo => _selectedLgo;
@@ -30,6 +33,8 @@ class ProviderPharmacieUser extends ChangeNotifier {
   String get selectedPharmacieAdresse => _selectedPharmacieAdresse;
   String get selectedPharmacieAdresseRue => _selectedPharmacieAdresseRue;
   List get selectedAdressePharma => _selectedAdressePharma;
+  List get selectedMissions => _selectedMissions;
+  String get selectedTypologie => _selectedTypologie;
 
 /* Options Groupement */
   void selectGroupement(groupement) {
@@ -83,6 +88,35 @@ class ProviderPharmacieUser extends ChangeNotifier {
 
   void setTendences(index, type, value) {
     _tendences[0][type] = value;
+    notifyListeners();
+  }
+
+  void setMissions(missions) {
+    _selectedMissions = missions;
+    // notifyListeners();
+  }
+
+  void updateMissions(boolean, mission) {
+    if (boolean) {
+      _selectedMissions.add(mission);
+    } else {
+      _selectedMissions.remove(mission);
+    }
+    notifyListeners();
+  }
+
+  void setTypologie(typologie) {
+    _selectedTypologie = typologie;
+    // notifyListeners();
+  }
+
+  void updateTypologie(boolean, typologie) {
+    if (boolean) {
+      _selectedTypologie = '';
+      print(boolean);
+    } else {
+      _selectedTypologie = '';
+    }
     notifyListeners();
   }
 }

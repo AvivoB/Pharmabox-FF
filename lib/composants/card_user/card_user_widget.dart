@@ -83,8 +83,8 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 10.0, 0.0),
                           child: Container(
                             width: 50.0,
                             height: 50.0,
@@ -97,47 +97,62 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               placeholder: 'assets/images/Group_18.png',
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {
-                                return Image.asset('assets/images/Group_18.png');
+                                return Image.asset(
+                                    'assets/images/Group_18.png');
                               },
                             ),
                           ),
                         ),
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.30,
-                              child: Text(
-                                widget.data['nom'] + ' ' + widget.data['prenom'],
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: Color(0xFF595A71),
-                                      fontSize: 14.0,
-                                    ),
+                        GestureDetector(
+                          onTap: () => {
+                            context.pushNamed('ProfilView',
+                            queryParams: {
+                                'userId': serializeParam(
+                                  widget.data['id'],
+                                  ParamType.String,
+                                ),
+                              }.withoutNulls
+                            )
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.30,
+                                child: Text(
+                                  widget.data['nom'] +
+                                      ' ' +
+                                      widget.data['prenom'],
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF595A71),
+                                        fontSize: 14.0,
+                                      ),
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: 135,
-                              child: Text(
-                                widget.data['poste'],
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: Color(0xFF8D8D97),
-                                      fontSize: 13.0,
-                                    ),
+                              Container(
+                                width: 135,
+                                child: Text(
+                                  widget.data['poste'],
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF8D8D97),
+                                        fontSize: 13.0,
+                                      ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              15.0, 0.0, 0.0, 0.0),
                           child: Icon(
                             FFIcons.kbadgeOr,
                             color: Color(0xFFFFF492),
@@ -148,16 +163,15 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     ),
                   ),
                   Container(
-                    child: ButtonNetworkManager(
-                      width: 30,
-                      radius: 12.0,
-                      fontSize: 14,
-                      text: 'Ajouter',
-                      height: 25.0,
-                      typeCollection: 'users',
-                      docId: widget.data['id'],
-                    )
-                  ),
+                      child: ButtonNetworkManager(
+                    width: 30,
+                    radius: 12.0,
+                    fontSize: 14,
+                    text: 'Ajouter',
+                    height: 25.0,
+                    typeCollection: 'users',
+                    docId: widget.data['id'],
+                  )),
                 ],
               ),
             ),
@@ -315,10 +329,12 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                   size: 24.0,
                                 ),
                                 onPressed: () {
-                                   Navigator.push(
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => DiscussionUserWidget(toUser: widget.data['id']),
+                                      builder: (context) =>
+                                          DiscussionUserWidget(
+                                              toUser: widget.data['id']),
                                     ),
                                   );
                                 },

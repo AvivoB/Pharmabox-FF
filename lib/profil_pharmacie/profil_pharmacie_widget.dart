@@ -107,15 +107,16 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
   }
 
   Future<void> getNetworkData() async {
+    String pharmacieID = userData != null ? userData['documentId'] : '';
     // Use collection group to make query across all collections
     QuerySnapshot queryUsers = await FirebaseFirestore.instance
         .collection('users')
-        .where('reseau', arrayContains: userData['documentId'])
+        .where('reseau', arrayContains: pharmacieID)
         .get();
 
     QuerySnapshot queryPharmacies = await FirebaseFirestore.instance
         .collection('pharmacies')
-        .where('reseau', arrayContains: userData['documentId'])
+        .where('reseau', arrayContains: pharmacieID)
         .get();
 
     for (var doc in queryPharmacies?.docs ?? []) {
@@ -162,22 +163,24 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
 
-  final CollectionReference<Map<String, dynamic>> pharmaciesRef =
+    final CollectionReference<Map<String, dynamic>> pharmaciesRef =
         FirebaseFirestore.instance.collection('pharmacies');
 
     String doc_id = '';
     final Future<QuerySnapshot<Map<String, dynamic>>> pharmaciesQuery =
-    FirebaseFirestore.instance.collection('pharmacies').where('user_id', isEqualTo: userData['user_id']).get();
+        FirebaseFirestore.instance
+            .collection('pharmacies')
+            .where('user_id', isEqualTo: userData['user_id'])
+            .get();
 
     // Attendre que la Future soit complétée
     final QuerySnapshot<Map<String, dynamic>> snapshot = await pharmaciesQuery;
 
     // Parcourir les documents
     for (var doc in snapshot.docs) {
-        print(doc.data());
-        doc_id = doc.id;
+      print(doc.data());
+      doc_id = doc.id;
     }
-
 
     final providerPharmacieUser =
         Provider.of<ProviderPharmacieUser>(context, listen: false);
@@ -290,7 +293,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
       'nb_patient_jour': _model.patientParJourValue,
       'lgo': providerPharmacieUser.selectedLgo,
       'groupement': providerPharmacieUser.selectedGroupement,
-      'missions': missions,
+      'missions': providerPharmacieUser.selectedMissions,
       'confort': confort,
       'tendances': providerPharmacieUser.tendences,
       'equipe': {
@@ -329,31 +332,51 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
 
   @override
   Widget build(BuildContext context) {
-
     final providerPharmacieUser = Provider.of<ProviderPharmacieUser>(context);
 
-    _model.nomdelapharmacieController1.text = userData?['situation_geographique']?['adresse'] ?? '';
+   _model.imagePharmacie = userData != null ? List<String>.from(userData['photo_url']) : [];
 
-    _model.nomdelapharmacieController2.text = userData != null ? userData['titulaire_principal'] : '';
-    _model.presentationController.text = userData != null ? userData['presentation'] : '';
-    _model.emailPharmacieController.text = userData != null ? userData['contact_pharma']['email'] : '';
-    _model.phonePharmacieController1.text =  userData != null ? userData['contact_pharma']['telephone'] : '';
-    _model.rerController.text = userData != null ? userData['accessibilite']['rer'] : '';
-    _model.metroController.text = userData != null ? userData['accessibilite']['metro'] : '';
-    _model.busController.text = userData != null ? userData['accessibilite']['bus'] : '';
-    _model.tramwayController1.text = userData != null ? userData['accessibilite']['tram'] : '';
-    _model.tramwayController2.text = userData != null ? userData['accessibilite']['gare'] : '';
-    _model.nbPharmaciensController.text = userData != null ? userData['equipe']['nb_pharmaciens'] : '';
-    _model.nbPreparateurController.text = userData != null ? userData['equipe']['nb_preparateurs'] : '';
-    _model.nbRayonnistesController.text = userData != null ? userData['equipe']['nb_rayonnistes'] : '';
-    _model.nbConseillersController.text = userData != null ? userData['equipe']['nb_conseillers'] : '';
-    _model.nbApprentiController.text = userData != null ? userData['equipe']['nb_apprentis'] : '';
-    _model.nbEtudiantsController.text = userData != null ? userData['equipe']['nb_etudiants'] : '';
-    _model.nbEtudiants6emeController.text = userData != null ? userData['equipe']['nb_etudiants_6eme_annee'] : '';
+    _model.nomdelapharmacieController1.text =
+        userData?['situation_geographique']?['adresse'] ?? '';
+
+    _model.nomdelapharmacieController2.text =
+        userData != null ? userData['titulaire_principal'] : '';
+    _model.presentationController.text =
+        userData != null ? userData['presentation'] : '';
+    _model.emailPharmacieController.text =
+        userData != null ? userData['contact_pharma']['email'] : '';
+    _model.phonePharmacieController1.text =
+        userData != null ? userData['contact_pharma']['telephone'] : '';
+    _model.rerController.text =
+        userData != null ? userData['accessibilite']['rer'] : '';
+    _model.metroController.text =
+        userData != null ? userData['accessibilite']['metro'] : '';
+    _model.busController.text =
+        userData != null ? userData['accessibilite']['bus'] : '';
+    _model.tramwayController1.text =
+        userData != null ? userData['accessibilite']['tram'] : '';
+    _model.tramwayController2.text =
+        userData != null ? userData['accessibilite']['gare'] : '';
+    _model.nbPharmaciensController.text =
+        userData != null ? userData['equipe']['nb_pharmaciens'] : '';
+    _model.nbPreparateurController.text =
+        userData != null ? userData['equipe']['nb_preparateurs'] : '';
+    _model.nbRayonnistesController.text =
+        userData != null ? userData['equipe']['nb_rayonnistes'] : '';
+    _model.nbConseillersController.text =
+        userData != null ? userData['equipe']['nb_conseillers'] : '';
+    _model.nbApprentiController.text =
+        userData != null ? userData['equipe']['nb_apprentis'] : '';
+    _model.nbEtudiantsController.text =
+        userData != null ? userData['equipe']['nb_etudiants'] : '';
+    _model.nbEtudiants6emeController.text =
+        userData != null ? userData['equipe']['nb_etudiants_6eme_annee'] : '';
     typologie = userData != null ? userData['typologie'] : '';
 
     providerPharmacieUser.setGroupement(userData != null ? userData['groupement'] : []);
     providerPharmacieUser.setLGO(userData != null ? userData['lgo'] : []);
+    providerPharmacieUser.setMissions(userData != null ? userData['missions'] : []);
+    providerPharmacieUser.setTypologie(userData != null ? userData['typologie'] : '');
 
     getNetworkData();
 
@@ -373,7 +396,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                     onImagesSelected: (urls) {
                       _model.imagePharmacie = urls;
                     },
-                    initialImagesSelected: userData['photo_url'].cast<String>(),
+                    initialImagesSelected: userData != null
+                        ? userData['photo_url'].cast<String>()
+                        : [''],
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -396,9 +421,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 0, 0, 10),
                                     child: PredictionNomPhamracie(
-                                        initialValue:
-                                            userData['situation_geographique']
-                                                ['adresse'],
+                                        initialValue: userData != null
+                                            ? userData['situation_geographique']
+                                                ['adresse']
+                                            : '',
                                         onPlaceSelected: (adresse) {
                                           providerPharmacieUser
                                               .setAdresseRue(adresse);
@@ -5391,15 +5417,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                           ],
                                         ),
                                         Switch.adaptive(
-                                          value:
-                                              typologie == 'Centre commercial'
-                                                  ? true
-                                                  : false,
+                                          value: providerPharmacieUser.selectedTypologie =='Centre commercial'? true : false,
                                           onChanged: (newValue) async {
-                                            setState(() => _model
-                                                    .typologieCentrecommercialValue =
-                                                newValue);
-                                            typologie = 'Centre commercial';
+                                            setState(() => providerPharmacieUser.updateTypologie(newValue, 'Centre commercial'));
                                           },
                                           activeColor: Color(0xFF7CEDAC),
                                         ),
@@ -5437,16 +5457,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                           ],
                                         ),
                                         Switch.adaptive(
-                                          value: 'Centre ville' !=
-                                                  userData['typologie']
-                                              ? false
-                                              : true,
+                                          value: providerPharmacieUser.selectedTypologie =='Centre ville'? true : false,
                                           onChanged: (newValue) async {
-                                            setState(() {
-                                              _model.typologieCentrevilleValue =
-                                                  newValue;
-                                              typologie = 'Centre ville';
-                                            });
+                                            setState(() => providerPharmacieUser.updateTypologie(newValue, 'Centre ville'));
                                           },
                                           activeColor: Color(0xFF7CEDAC),
                                         ),
@@ -6006,12 +6019,18 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                           ],
                                         ),
                                         Switch.adaptive(
-                                          value: _model.missioTestCovidValue ??=
-                                              false,
+                                          value: providerPharmacieUser
+                                                          .selectedMissions
+                                                          .contains(
+                                                              'Test COVID')
+                                                      ? true
+                                                      : false,
                                           onChanged: (newValue) async {
                                             setState(() =>
-                                                _model.missioTestCovidValue =
-                                                    newValue);
+                                                providerPharmacieUser
+                                                          .updateMissions(
+                                                              newValue,
+                                                              'Test COVID'));
                                           },
                                           activeColor: Color(0xFF7CEDAC),
                                         ),
@@ -6051,12 +6070,18 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                         ),
                                         Switch.adaptive(
                                           value:
-                                              _model.missionVaccinationValue ??=
-                                                  false,
+                                              providerPharmacieUser
+                                                          .selectedMissions
+                                                          .contains(
+                                                              'Vaccination')
+                                                      ? true
+                                                      : false,
                                           onChanged: (newValue) async {
                                             setState(() =>
-                                                _model.missionVaccinationValue =
-                                                    newValue);
+                                                providerPharmacieUser
+                                                          .updateMissions(
+                                                              newValue,
+                                                              'Vaccination'));
                                           },
                                           activeColor: Color(0xFF7CEDAC),
                                         ),
@@ -6087,7 +6112,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                                       BlendMode.srcIn),
                                                 )),
                                             Text(
-                                              ' Entretien pharmaceutique',
+                                              'Entretien pharmaceutique',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium,
@@ -6095,13 +6120,18 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                           ],
                                         ),
                                         Switch.adaptive(
-                                          value: _model
-                                                  .missionEnretienPharmaValue ??=
-                                              false,
+                                          value: providerPharmacieUser
+                                                          .selectedMissions
+                                                          .contains(
+                                                              'Entretien pharmaceutique')
+                                                      ? true
+                                                      : false,
                                           onChanged: (newValue) async {
-                                            setState(() => _model
-                                                    .missionEnretienPharmaValue =
-                                                newValue);
+                                            setState(() =>
+                                                providerPharmacieUser
+                                                          .updateMissions(
+                                                              newValue,
+                                                              'Entretien pharmaceutique'));
                                           },
                                           activeColor: Color(0xFF7CEDAC),
                                         ),
@@ -6139,11 +6169,18 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                           ],
                                         ),
                                         Switch.adaptive(
-                                          value: _model.missionsBorneValue ??=
-                                              false,
+                                          value: providerPharmacieUser
+                                                          .selectedMissions
+                                                          .contains(
+                                                              'Borne de télé-médecine')
+                                                      ? true
+                                                      : false,
                                           onChanged: (newValue) async {
-                                            setState(() => _model
-                                                .missionsBorneValue = newValue);
+                                            setState(() =>
+                                                providerPharmacieUser
+                                                          .updateMissions(
+                                                              newValue,
+                                                              'Borne de télé-médecine'));
                                           },
                                           activeColor: Color(0xFF7CEDAC),
                                         ),
@@ -6188,11 +6225,18 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                           ],
                                         ),
                                         Switch.adaptive(
-                                          value: _model.missionPreparationValue,
+                                          value: providerPharmacieUser
+                                                          .selectedMissions
+                                                          .contains(
+                                                              'Préparation externalisé')
+                                                      ? true
+                                                      : false,
                                           onChanged: (newValue) async {
                                             setState(() =>
-                                                _model.missionPreparationValue =
-                                                    newValue);
+                                                providerPharmacieUser
+                                                          .updateMissions(
+                                                              newValue,
+                                                              'Préparation externalisé'));
                                           },
                                           activeColor: Color(0xFF7CEDAC),
                                         ),
@@ -6714,7 +6758,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                             ),
                                             child: SliderSimple(
                                                 slider: userData['tendances'][0]
-                                                        ['Ordonances'] ?? 
+                                                        ['Ordonances'] ??
                                                     1,
                                                 onChanged: (value) {
                                                   providerPharmacieUser

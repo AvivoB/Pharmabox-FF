@@ -50,7 +50,7 @@ class ProfilWidget extends StatefulWidget {
 }
 
 class _ProfilWidgetState extends State<ProfilWidget>
-    with SingleTickerProviderStateMixin {
+  with SingleTickerProviderStateMixin {
   late ProfilModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
