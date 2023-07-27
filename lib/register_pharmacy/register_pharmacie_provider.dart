@@ -12,6 +12,7 @@ class ProviderPharmacieRegister extends ChangeNotifier {
   List _selectedPharmacieLocation = [];
   String _selectedPharmacieAdresse = '';
   String _selectedPharmacieAdresseRue = '';
+  String _selectedAdressFromName = '';
   List _selectedAdressePharma = [];
   List _tendences = [
     {
@@ -23,6 +24,8 @@ class ProviderPharmacieRegister extends ChangeNotifier {
     }
   ];
 
+  dynamic _selectedHoraires;
+
   // Getters qui permettent de recuperer les données dans les vues
   List get selectedGroupement => _selectedGroupement;
   List get selectedLgo => _selectedLgo;
@@ -30,7 +33,9 @@ class ProviderPharmacieRegister extends ChangeNotifier {
   List get tendences => _tendences;
   String get selectedPharmacieAdresse => _selectedPharmacieAdresse;
   String get selectedPharmacieAdresseRue => _selectedPharmacieAdresseRue;
+  String get selectedAdressFromName => _selectedAdressFromName;
   List get selectedAdressePharma => _selectedAdressePharma;
+  dynamic get selectedHoraires => _selectedHoraires;
 
 /* Options Groupement */
   void selectGroupement(groupement) {
@@ -72,8 +77,17 @@ class ProviderPharmacieRegister extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setAdresseFromName(adresse) {
+    _selectedAdressFromName = adresse;
+    notifyListeners();
+  }
+
   void setTendences(index, type, value) {
     _tendences[0][type] = value;
     notifyListeners();
+  }
+
+  void setHoraire(listHoraire) {
+    _selectedHoraires = listHoraire;
   }
 }

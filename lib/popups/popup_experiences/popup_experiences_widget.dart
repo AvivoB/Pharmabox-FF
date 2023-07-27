@@ -1,3 +1,4 @@
+import '../../constant.dart';
 import '../../register_step/register_provider.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -9,6 +10,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'popup_experiences_model.dart';
 export 'popup_experiences_model.dart';
+import 'package:http/http.dart' as http;
 
 class PopupExperiencesWidget extends StatefulWidget {
   const PopupExperiencesWidget({Key? key, required this.onTap})
@@ -22,6 +24,37 @@ class PopupExperiencesWidget extends StatefulWidget {
 
 class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
   late PopupExperiencesModel _model;
+  List<dynamic> _predictions = [];
+
+  void _onSearchChanged(String query) async {
+    if (query.isNotEmpty) {
+      final response = await http.get(Uri.parse(
+          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&components=country:fr&key=$googleMapsApi'));
+      final json = jsonDecode(response.body);
+      print(json);
+      if (json['status'] == 'OK') {
+        setState(() {
+          _predictions = json['predictions'];
+          
+        });
+      } else {
+        setState(() {
+          _predictions = [];
+        });
+      }
+    } else {
+      setState(() {
+        _predictions = [];
+      });
+    }
+  }
+
+  void _onPredictionSelected(String prediction) {
+    setState(() {
+      _model.lgoFilterController.text = prediction;
+      _predictions = [];
+    });
+  }
 
   @override
   void setState(VoidCallback callback) {
@@ -104,6 +137,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
                           controller: _model.lgoFilterController,
+                          onChanged: _onSearchChanged,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Nom de la pharmacie',
@@ -160,6 +194,27 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                       ),
                     ),
                   ],
+                ),
+                if (_predictions.isNotEmpty)
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _predictions.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(_predictions[index]['description'],
+                            style: FlutterFlowTheme.of(context).bodyMedium),
+                        onTap: () {
+                          _onPredictionSelected(
+                              _predictions[index]['terms'][0]['value']);
+                        },
+                      );
+                    },
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
@@ -232,6 +287,27 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                           ),
                         ),
                       ),
+                      
+                      Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      // child: ListView.builder(
+                      //   shrinkWrap: true,
+                      //   itemCount: _predictions.length,
+                      //   itemBuilder: (context, index) {
+                      //     return ListTile(
+                      //       title: Text(_predictions[index]['description'],
+                      //           style: FlutterFlowTheme.of(context).bodyMedium),
+                      //       onTap: () {
+                      //         _onPredictionSelected(
+                      //             _predictions[index]['terms'][0]['value']);
+                      //       },
+                      //     );
+                      //   },
+                      // ),
+                    ),
                       Expanded(
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(

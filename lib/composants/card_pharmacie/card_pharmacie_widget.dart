@@ -85,31 +85,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                   ImageSliderWidget(
                     imageNames: widget.data['photo_url'],
                   ),
-                  Positioned(
-                    bottom: 5.0,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              10.0, 0.0, 0.0, 10.0),
-                          child: Image.asset(
-                            'assets/images/Badge.png',
-                            width: 40.0,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              10.0, 0.0, 0.0, 10.0),
-                          child: Image.asset(
-                            'assets/images/Badge2.png',
-                            width: 40.0,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ]),
               ),
             ),

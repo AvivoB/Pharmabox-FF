@@ -198,8 +198,8 @@ class _PopupLgoPharmacieWidgetState extends State<PopupLgoPharmacieWidget> {
                                 Image.asset(
                                   'assets/lgo/' + item[index]['image'],
                                   width: 120.0,
-                                  height: 60.0,
-                                  fit: BoxFit.cover,
+                                  height: 90.0,
+                                  fit: BoxFit.contain,
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(

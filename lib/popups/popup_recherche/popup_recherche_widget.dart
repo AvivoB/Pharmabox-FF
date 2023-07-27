@@ -552,11 +552,9 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                 );
 
                                 _model.debutContratController.text =
-                                    _datePickedDate.day.toString() +
-                                        '/' +
-                                        _datePickedDate.month.toString() +
-                                        '/' +
-                                        _datePickedDate.year.toString();
+                                    _datePickedDate.day.toString().padLeft(2, '0') + '/' +
+                                    _datePickedDate.month.toString().padLeft(2, '0') + '/' +
+                                    _datePickedDate.year.toString();
                               });
                             }
                           },

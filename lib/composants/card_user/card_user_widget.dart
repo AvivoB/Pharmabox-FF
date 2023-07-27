@@ -93,7 +93,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               shape: BoxShape.circle,
                             ),
                             child: FadeInImage.assetNetwork(
-                              image: widget.data['photoUrl'],
+                              image: widget.data != null ? widget.data['photoUrl'] : '',
                               placeholder: 'assets/images/Group_18.png',
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {

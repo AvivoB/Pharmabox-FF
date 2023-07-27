@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/register_step/register_provider.dart';
 
 import '../custom_code/widgets/gradient_text_custom.dart';
+import '../custom_code/widgets/prediction_ville.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -165,10 +166,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                       ),
-                                      child: Image.network(
-                                        _imageURL!,
-                                        fit: BoxFit.cover,
-                                      ),
+                                      child: _imageURL! != null
+                                          ? Image.network(
+                                              _imageURL!,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                              'assets/images/Group_18.png'),
                                     ),
                                   ),
                                 ),
@@ -448,6 +452,20 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryText,
                                       ),
+                                      suffixIcon: InkWell(
+                                      onTap: () => setState(
+                                        () => _model.afficherEmail =
+                                            !_model.afficherEmail,
+                                      ),
+                                      focusNode: FocusNode(skipTraversal: true),
+                                      child: Icon(
+                                        _model.afficherEmail
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
+                                        color: Color(0xFF757575),
+                                        size: 22.0,
+                                      ),
+                                    )
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyMedium,
@@ -499,6 +517,20 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryText,
                                       ),
+                                      suffixIcon: InkWell(
+                                      onTap: () => setState(
+                                        () => _model.afficherTelephone =
+                                            !_model.afficherTelephone,
+                                      ),
+                                      focusNode: FocusNode(skipTraversal: true),
+                                      child: Icon(
+                                        _model.afficherTelephone
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
+                                        color: Color(0xFF757575),
+                                        size: 22.0,
+                                      ),
+                                    )
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyMedium,
@@ -534,9 +566,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
 
                                           _model.birthDateController
                                               .text = _datePickedDate.day
-                                                  .toString() +
+                                                  .toString()
+                                                  .padLeft(2, '0') +
                                               '/' +
-                                              _datePickedDate.month.toString() +
+                                              _datePickedDate.month
+                                                  .toString()
+                                                  .padLeft(2, '0') +
                                               '/' +
                                               _datePickedDate.year.toString();
                                         });
@@ -592,111 +627,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     inputFormatters: [_model.birthDateMask],
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
-                                  child: TextFormField(
-                                    controller: _model.postcodeController,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Code postal *',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.location_on,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    keyboardType: TextInputType.number,
-                                    validator: _model
-                                        .postcodeControllerValidator
-                                        .asValidator(context),
-                                    inputFormatters: [_model.postcodeMask],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
-                                  child: TextFormField(
-                                    controller: _model.cityController,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Ville *',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.location_city,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    validator: _model.cityControllerValidator
-                                        .asValidator(context),
-                                  ),
-                                ),
+                                PredictionVille(onPlaceSelected: (ville) {
+                                  _model.postcodeController.text =
+                                      ville['postal_code'];
+                                  _model.cityController.text = ville['city'];
+                                }),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 10),
@@ -1014,7 +949,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                       .viewInsets,
                                                   child: PopupLgoWidget(
                                                     onTap: (lgo) => {
-                                                      userRegisterSate.addSelectedLgo(lgo)
+                                                      userRegisterSate
+                                                          .addSelectedLgo(lgo)
                                                     },
                                                   ),
                                                 ),
@@ -1096,7 +1032,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                   userRegisterSate
                                                           .selectedLgo[index]
                                                       ['image'],
-                                              width: 120,
+                                              width: 80,
                                               height: 60,
                                               fit: BoxFit.cover,
                                             ),
@@ -1154,7 +1090,6 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ],
                       ),
                     ),
-                  
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
@@ -1506,8 +1441,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         child: Container(
                                           width: 100,
                                           height: 30,
-                                          child:
-                                          GradientTextCustom(
+                                          child: GradientTextCustom(
                                             width: 100,
                                             height: 30,
                                             text: 'Ajouter',
@@ -1681,7 +1615,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       await showModalBottomSheet(
                                         isScrollControlled: true,
                                         backgroundColor: Colors.transparent,
-                                        enableDrag: false,
+                                        enableDrag: true,
                                         context: context,
                                         builder: (bottomSheetContext) {
                                           return GestureDetector(
@@ -1692,8 +1626,15 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                                       bottomSheetContext)
                                                   .viewInsets,
                                               child: PopupExperiencesWidget(
-                                                onTap: (nom_pharmacie, annee_debut, annee_fin) => {
-                                                  userRegisterSate.addExperiences(nom_pharmacie, annee_debut, annee_fin)
+                                                onTap: (nom_pharmacie,
+                                                        annee_debut,
+                                                        annee_fin) =>
+                                                    {
+                                                  userRegisterSate
+                                                      .addExperiences(
+                                                          nom_pharmacie,
+                                                          annee_debut,
+                                                          annee_fin)
                                                 },
                                               ),
                                             ),
@@ -1940,6 +1881,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                           var send_data = RegisterStepModel()
                               .createUserToFirebase(
                                   widget_context_provider,
+                                  _model.afficherTelephone,
+                                  _model.afficherEmail,
                                   _model.nomFamilleController.text,
                                   _model.prenomController.text,
                                   _model.posteValue,
@@ -1961,7 +1904,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                           if (send_data) {
                             if (_model.posteValue ==
                                 'Pharmacien(ne) titulaire') {
-                              context.pushNamed('RegisterPharmacy');
+                              context.pushNamed('RegisterPharmacy',
+                                  queryParams: {
+                                    'titulaire': serializeParam(
+                                      _model.nomFamilleController.text +' '+ _model.prenomController.text,
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls);
                             } else {
                               context.pushNamed('Explorer');
                             }

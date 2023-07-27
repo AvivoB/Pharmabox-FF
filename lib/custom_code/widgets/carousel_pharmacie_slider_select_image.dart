@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:pharmabox/constant.dart';
 
 import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
@@ -45,18 +46,16 @@ class _CarouselPharmacieSliderSelectState
           sourcePath: imageFile.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           compressQuality: 50,
-          maxWidth: 800,
-          maxHeight: 800,
           compressFormat: ImageCompressFormat.jpg,
           uiSettings: [
             AndroidUiSettings(
-                toolbarTitle: 'Cropper',
-                toolbarColor: Colors.deepOrange,
+                toolbarTitle: 'Redimensionner l\'image',
+                toolbarColor: blueColor,
                 toolbarWidgetColor: Colors.white,
                 initAspectRatio: CropAspectRatioPreset.original,
                 lockAspectRatio: false),
             IOSUiSettings(
-              title: 'Cropper',
+              title: 'Redimensionner l\'image',
             ),
           ],
         );

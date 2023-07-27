@@ -196,7 +196,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                                 'assets/groupements/' + item[index]['image'],
                                 width: 120.0,
                                 height: 60.0,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(

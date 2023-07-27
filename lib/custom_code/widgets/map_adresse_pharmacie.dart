@@ -41,7 +41,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
       final response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=geocode&key=$googleMapsApi'));
+          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=geocode&components=country:fr&key=$googleMapsApi'));
       final json = jsonDecode(response.body);
 
       if (json['status'] == 'OK') {

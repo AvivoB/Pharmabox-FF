@@ -36,6 +36,9 @@ class RegisterPharmacyModel extends FlutterFlowModel {
   // State field(s) for Nomdelapharmacie widget.
   TextEditingController? nomdelapharmacieController2;
   String? Function(BuildContext, String?)? nomdelapharmacieController2Validator;
+  // State field(s) for Nomdelapharmacie widget.
+  TextEditingController? groupementAutre;
+  String? Function(BuildContext, String?)? groupementAutreValidator;
   // Model for repeaterField component.
   late RepeaterFieldModel repeaterFieldModel;
   // State field(s) for Presentation widget.

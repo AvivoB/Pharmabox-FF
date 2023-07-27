@@ -24,6 +24,7 @@ class ProviderPharmacieUser extends ChangeNotifier {
 
   List _selectedMissions = [];
   String _selectedTypologie = '';
+  var _selectedHoraires;
 
   // Getters qui permettent de recuperer les données dans les vues
   List get selectedGroupement => _selectedGroupement;
@@ -35,6 +36,7 @@ class ProviderPharmacieUser extends ChangeNotifier {
   List get selectedAdressePharma => _selectedAdressePharma;
   List get selectedMissions => _selectedMissions;
   String get selectedTypologie => _selectedTypologie;
+  dynamic get selectedHoraires => _selectedHoraires;
 
 /* Options Groupement */
   void selectGroupement(groupement) {
@@ -118,5 +120,10 @@ class ProviderPharmacieUser extends ChangeNotifier {
       _selectedTypologie = '';
     }
     notifyListeners();
+  }
+
+  void setHoraire(listeHoraire) {
+    _selectedHoraires = listeHoraire;
+    // notifyListeners();
   }
 }

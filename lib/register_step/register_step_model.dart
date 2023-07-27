@@ -78,6 +78,10 @@ class RegisterStepModel extends FlutterFlowModel {
   // State field(s) for AllowCGU widget.
   bool allowCGUValue = false;
 
+  bool afficherEmail = true;
+
+  bool afficherTelephone = true;
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
@@ -103,6 +107,8 @@ class RegisterStepModel extends FlutterFlowModel {
 // Envoyer les données dans firebase
   createUserToFirebase(
       context,
+      afficher_tel,
+      afficher_email,
       nomFamille,
       prenom,
       poste,
@@ -160,7 +166,9 @@ class RegisterStepModel extends FlutterFlowModel {
         'prenom': prenom,
         'poste': poste,
         'email': email,
+        'afficher_email': afficher_email,
         'telephone': telephone,
+        'afficher_tel': afficher_tel,
         'date_naissance': birthDate,
         'code_postal': postcode,
         'city': city,

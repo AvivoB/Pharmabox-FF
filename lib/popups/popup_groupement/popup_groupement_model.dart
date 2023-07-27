@@ -25,6 +25,7 @@ class PopupGroupementModel extends FlutterFlowModel {
   static selectGroupement() {
     List<Map> listGroupement = [
       {"name": "Aucun groupement", "image": "Aucun.jpg"},
+      {"name": "Autre", "image": "Aucun.jpg"},
       {"name": "Aelia", "image": "Aelia.jpg"},
       {"name": "Agir Pharma", "image": "Agir Pharma.jpg"},
       {"name": "AGPF", "image": "AGPF.jpg"},

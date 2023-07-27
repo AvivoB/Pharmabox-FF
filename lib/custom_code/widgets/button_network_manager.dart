@@ -71,7 +71,7 @@ class ButtonNetworkManager extends StatefulWidget {
           documentSnapshot.data() as Map<String, dynamic>;
 
       // Check if 'reseau' array contains the current user's ID
-      if (data['reseau'].contains(currentUserId)) {
+      if (data != null ? data['reseau'].contains(currentUserId) : '') {
         // If the current user's ID is found in the 'reseau' array, remove it
         return isInNetwork = true;
       }
@@ -90,9 +90,6 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
     super.initState();
     Future.delayed(Duration.zero, () async {
       await widget.verifyInNetwork(widget.typeCollection, widget.docId);
-      setState(() {
-        
-      });
     });
   }
 

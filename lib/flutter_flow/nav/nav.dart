@@ -108,7 +108,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'RegisterPharmacy',
           path: '/registerPharmacy',
-          builder: (context, params) => RegisterPharmacyWidget(),
+          builder: (context, params) => RegisterPharmacyWidget(
+            titulaire: params.getParam('titulaire', ParamType.String)
+          ),
         ),
         FFRoute(
           name: 'PharmaJob',
