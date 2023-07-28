@@ -3,7 +3,7 @@ import 'package:pharmabox/backend/backend.dart';
 
 class ProviderPharmacieRegister extends ChangeNotifier {
   List _selectedGroupement = [
-    {"name": "Aucun groupement", "image": "Aucun.jpg"},
+    {"name": "Aelia", "image": "Aelia.jpg"},
   ];
   List _selectedLgo = [
     {"image": "ActiPharm.jpg", "name": "ActiPharm"}

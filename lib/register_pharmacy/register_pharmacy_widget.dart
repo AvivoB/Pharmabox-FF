@@ -83,7 +83,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
         Provider.of<ProviderPharmacieRegister>(context, listen: false);
 
     List missions = [];
-  
+
     if (_model.missioTestCovidValue) {
       missions.add('Test COVID');
     }
@@ -156,7 +156,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
         'gare': _model.tramwayController2.text,
         'stationnement': _model.parkingValue
       },
-      // 'horaires': providerPharmacieRegister.selectedHoraires,
+      'horaires': providerPharmacieRegister.selectedHoraires,
       'Non-stop': (_model.nonSTOPValue) ? true : false,
       'typologie': typologie,
       'nb_patient_jour': _model.patientParJourValue,
@@ -250,8 +250,10 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             .setAdresseRue(nomPharma);
                                       },
                                       onAdressSelected: (adresse) {
-                                        providerPharmacieRegister
-                                            .setAdresseFromName(adresse);
+                                        setState(() {
+                                          providerPharmacieRegister
+                                              .setAdresseFromName(adresse);
+                                        });
                                       },
                                     )),
                                 Padding(
@@ -312,7 +314,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                       0, 0, 0, 10),
                                   child: providerPharmacieRegister
                                               .selectedGroupement[0]['image'] !=
-                                          'Aucun.jpg'
+                                          'Autre.jpg'
                                       ? Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
@@ -354,8 +356,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   Text(
                                                     providerPharmacieRegister
                                                             .selectedGroupement[
-                                                        0]['name']
-                                                    ,
+                                                        0]['name'],
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium

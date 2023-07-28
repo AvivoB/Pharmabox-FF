@@ -231,6 +231,8 @@ class PharmacieModel extends FlutterFlowModel {
   TextEditingController? nbEtudiants6emeController;
   String? Function(BuildContext, String?)? nbEtudiants6emeControllerValidator;
 
+   TextEditingController? groupementAutre;
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {

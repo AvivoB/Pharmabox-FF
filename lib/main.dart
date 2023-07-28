@@ -238,7 +238,7 @@ class _NavBarPageState extends State<NavBarPage> {
               children: [
                 Icon(
                   Icons.account_circle_outlined,
-                  color: currentIndex == 3 ? Color(0xFF7CEDAC) : greyColor,
+                  color: currentIndex == 3 || currentIndex == 4 ? Color(0xFF7CEDAC) : greyColor,
                   size: 24.0,
                 ),
                 Text(
@@ -246,7 +246,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight:
-                        currentIndex == 3 ? FontWeight.w600 : FontWeight.w400,
+                        currentIndex == 3 || currentIndex == 4 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -254,28 +254,6 @@ class _NavBarPageState extends State<NavBarPage> {
               ],
             ),
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.account_circle_outlined,
-                  color: currentIndex == 3 ? Color(0xFF7CEDAC) : greyColor,
-                  size: 24.0,
-                ),
-                Text(
-                  'Pharmacie',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight:
-                        currentIndex == 3 ? FontWeight.w600 : FontWeight.w400,
-                    color: greyColor,
-                    fontSize: 11.0,
-                  ),
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );

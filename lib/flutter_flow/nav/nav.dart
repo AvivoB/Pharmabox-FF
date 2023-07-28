@@ -140,11 +140,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : ProfilWidget(
                   tyeRedirect: params.getParam('tyeRedirect', ParamType.String),
                 ),
+          
         ),
         FFRoute(
           name: 'PharmacieProfil',
           path: '/pharmacieProfil',
-          builder: (context, params) => ProfilPharmacie(),
+          builder: (context, params) => NavBarPage(initialPage: 'PharmacieProfil', page: ProfilPharmacie())
         ),
         FFRoute(
           name: 'ProfilView',

@@ -87,9 +87,10 @@ class ExplorerSearchData {
 
     void addPharmaIfIsNotAdded(DocumentSnapshot pharmaDoc) {
       final String pharmaId = pharmaDoc.id;
-      final Map<String, dynamic> pharmaData = pharmaDoc.data() as Map<String, dynamic>;
-      pharmaData['documentId'] = pharmaId; // Add the documentId to the pharmaData map
-
+      final Map<String, dynamic> pharmaData =
+          pharmaDoc.data() as Map<String, dynamic>;
+      pharmaData['documentId'] =
+          pharmaId; // Add the documentId to the pharmaData map
 
       // If the user ID is not in the set, add the user data to the list and the user ID to the set
       if (!addedPharmaid.contains(pharmaId)) {

@@ -15,7 +15,7 @@ class GrilleHoraire extends StatefulWidget {
 
 class _GrilleHoraireState extends State<GrilleHoraire> {
   List<String> daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-  List<String> periods = ['Matinée', 'Après-vv', 'Soirée', 'Nuit'];
+  List<String> periods = ['Matinée', 'Après-midi', 'Soirée', 'Nuit'];
   List<List<String>> selectedOptions= [];
 
   @override

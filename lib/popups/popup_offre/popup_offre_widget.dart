@@ -220,13 +220,6 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: custom_widgets.PredictionOffreRechercheLocalisation(
-                        onPlaceSelected: (value) {
-                      _model.localisationController.text = value;
-                    }),
-                  ),
                   Container(
                     decoration: BoxDecoration(),
                   ),

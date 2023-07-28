@@ -130,21 +130,21 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             ),
                             shape: BoxShape.circle,
                           ),
-                          child: FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            borderWidth: 1.0,
-                            buttonSize: 40.0,
-                            icon: Icon(
-                              Icons.add,
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              size: 20.0,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
-                          ),
+                          // child: FlutterFlowIconButton(
+                          //   borderColor: Colors.transparent,
+                          //   borderRadius: 30.0,
+                          //   borderWidth: 1.0,
+                          //   buttonSize: 40.0,
+                          //   icon: Icon(
+                          //     Icons.add,
+                          //     color: FlutterFlowTheme.of(context)
+                          //         .secondaryBackground,
+                          //     size: 20.0,
+                          //   ),
+                          //   onPressed: () {
+                          //     print('IconButton pressed ...');
+                          //   },
+                          // ),
                         ),
                       ],
                     ),

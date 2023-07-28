@@ -133,7 +133,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
             Place(name: name, latLng: LatLng(location[0], location[1]));
 
         // Add the Place object to the list of places
-        
+
         setState(() {
           items.add(place);
         });
@@ -143,10 +143,51 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
     }
   }
 
+  Future<void> getPharmaciesExceptCurrentUser() async {
+    var currentUserId = await getCurrentUserId();
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection("pharmacies").get();
+
+    var allDocuments = querySnapshot.docs.map((doc) {
+      return {
+        'documentId': doc.id,
+        ...doc.data() as Map<String, dynamic>,
+      };
+    }).toList();
+
+    var filteredPharmacies = allDocuments.where((document) {
+      return document['user_id'] != currentUserId;
+    }).toList();
+
+    for (var doc in filteredPharmacies) {
+        // Retrieve the pharmacy name
+        String name = doc['situation_geographique']['adresse'];
+
+        List<dynamic> location = doc['situation_geographique']['lat_lng'];
+
+        // Create a Place object
+        Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
+
+        // Add the Place object to the list of places
+
+        setState(() {
+          items.add(place);
+        });
+
+        print(items);
+      }
+
+    print(filteredPharmacies);
+
+    pharmacieInPlace = filteredPharmacies;
+    // filteredPharmacies contient maintenant tous les documents à l'exception de ceux où 'user_id' est égal à l'id de l'utilisateur actuel.
+  }
+
   @override
   void initState() {
     super.initState();
     getCurrentPosition();
+    getPharmaciesExceptCurrentUser();
     _model = createModel(context, () => ExplorerModel());
     _model.textController ??= TextEditingController();
     _manager = _initClusterManager();
@@ -241,9 +282,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           validator: _model.textControllerValidator
                               .asValidator(context),
                           onChanged: (query) async {
-                            setState(() {
-                              
-                            });
+                            setState(() {});
                             if (currentTAB == 0)
                               userSearch =
                                   await ExplorerSearchData().searchUsers(query);
@@ -252,7 +291,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                               pharmacieInPlace = await ExplorerSearchData()
                                   .searchPharmacies(query);
                             await getLocation();
-                            
                           }),
                       TabBar(
                         labelColor: blackColor,
@@ -301,117 +339,158 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                   ),
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                height: MediaQuery.of(context).size.height * 0.68,
-                child: Stack(children: [
-                  Container(
-                    child: GoogleMap(
-                        mapType: MapType.normal,
-                        initialCameraPosition: _currentCameraPosition,
-                        markers: markers,
-                        myLocationEnabled: true,
-                        zoomGesturesEnabled: true,
-                        zoomControlsEnabled: false,
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
-                          _manager.setMapId(controller.mapId);
-                        },
-                        onCameraMove: (position) {
-                          setState(() {
-                            selectedItem.clear();
-                          });
-                        },
-                        onCameraIdle: _manager.updateMap),
-                  ),
-
-                  if (selectedItem.isNotEmpty)
-                    Positioned(
-                      bottom: 60.0,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
+              if (currentTAB == 0)
+                Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.65,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
                           children: [
-                            if (currentTAB == 0)
-                              for (var i in selectedItem)
-                                Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: CardUserWidget(data: userSearch[i]),
-                                ),
-                            if (currentTAB == 1)
-                              for (var i in selectedItem)
-                                CardPharmacieWidget(data: pharmacieInPlace[i]),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              child: userSearch.length == 1
+                                  ? Text(
+                                      userSearch.length.toString() +
+                                          ' résultat',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            color: Color(0xFF595A71),
+                                            fontSize: 14.0,
+                                          ))
+                                  : Text(
+                                      pharmacieInPlace.length.toString() +
+                                          ' résultats',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            color: Color(0xFF595A71),
+                                            fontSize: 14.0,
+                                          )),
+                            ),
+                            for (var user in userSearch)
+                              CardUserWidget(
+                                data: user,
+                              ),
                           ],
                         ),
                       ),
+                    )),
+              if (currentTAB == 1)
+                Container(
+                  width: MediaQuery.of(context).size.width * 1.0,
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  child: Stack(children: [
+                    Container(
+                      child: GoogleMap(
+                          mapType: MapType.normal,
+                          initialCameraPosition: _currentCameraPosition,
+                          markers: markers,
+                          myLocationEnabled: true,
+                          zoomGesturesEnabled: true,
+                          zoomControlsEnabled: false,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                            _manager.setMapId(controller.mapId);
+                          },
+                          onCameraMove: (position) {
+                            setState(() {
+                              selectedItem.clear();
+                            });
+                          },
+                          onCameraIdle: _manager.updateMap),
                     ),
-                  // Afficher les resulats
-                  DraggableScrollableSheet(
-                    minChildSize: 0.09,
-                    initialChildSize: 0.09,
-                    builder: (BuildContext context,
-                        ScrollController scrollController) {
-                      return Container(
-                          decoration: BoxDecoration(
-                              color: Color(0xFFEFF6F7),
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15))),
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/icons/Home-Indicator.svg',
-                                    width: 60,
-                                    colorFilter: ColorFilter.mode(
-                                        Color(0xFFD0D1DE), BlendMode.srcIn),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0, bottom: 8.0),
-                                    child: currentTAB == 0
-                                        ? Text(
-                                            userSearch.length.toString() +
-                                                ' résultat',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Color(0xFF595A71),
-                                                  fontSize: 14.0,
-                                                ))
-                                        : Text(
-                                            pharmacieInPlace.length.toString() +
-                                                ' résultats',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Color(0xFF595A71),
-                                                  fontSize: 14.0,
-                                                )),
-                                  ),
-                                  if (currentTAB == 0)
-                                    for (var user in userSearch)
-                                      CardUserWidget(
-                                        data: user,
-                                      ),
-                                  if (currentTAB == 1)
-                                    for (var pharmacie in pharmacieInPlace)
-                                      CardPharmacieWidget(
-                                        data: pharmacie,
-                                      ),
-                                ],
+
+                    if (selectedItem.isNotEmpty)
+                      Positioned(
+                        bottom: 60.0,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for (var i in selectedItem)
+                                CardPharmacieWidget(data: pharmacieInPlace[i]),
+                            ],
+                          ),
+                        ),
+                      ),
+                    // Afficher les resulats
+                    DraggableScrollableSheet(
+                      minChildSize: 0.09,
+                      initialChildSize: 0.09,
+                      builder: (BuildContext context,
+                          ScrollController scrollController) {
+                        return Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFEFF6F7),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15))),
+                            child: SingleChildScrollView(
+                              controller: scrollController,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/Home-Indicator.svg',
+                                      width: 60,
+                                      colorFilter: ColorFilter.mode(
+                                          Color(0xFFD0D1DE), BlendMode.srcIn),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0, bottom: 8.0),
+                                      child: currentTAB == 0
+                                          ? Text(
+                                              userSearch.length.toString() +
+                                                  ' résultat',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            Color(0xFF595A71),
+                                                        fontSize: 14.0,
+                                                      ))
+                                          : Text(
+                                              pharmacieInPlace.length
+                                                      .toString() +
+                                                  ' résultats',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            Color(0xFF595A71),
+                                                        fontSize: 14.0,
+                                                      )),
+                                    ),
+                                    if (currentTAB == 0)
+                                      for (var user in userSearch)
+                                        CardUserWidget(
+                                          data: user,
+                                        ),
+                                    if (currentTAB == 1)
+                                      for (var pharmacie in pharmacieInPlace)
+                                        CardPharmacieWidget(
+                                          data: pharmacie,
+                                        ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ));
-                    },
-                  )
-                ]),
-              ),
+                            ));
+                      },
+                    )
+                  ]),
+                ),
             ],
           ),
         ),

@@ -84,13 +84,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                           highlightColor: Colors.transparent,
                           onTap: () async {
                             context.pushNamed(
-                              'Profil',
-                              queryParams: {
-                                'tyeRedirect': serializeParam(
-                                  'pharmacie',
-                                  ParamType.String,
-                                ),
-                              }.withoutNulls,
+                              'PharmacieProfil',
                             );
                           },
                           child: Row(
