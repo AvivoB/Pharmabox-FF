@@ -30,9 +30,18 @@ class ButtonNetworkManager extends StatefulWidget {
   final String docId;
   final double radius;
   final double fontSize;
-  bool isInNetwork = false;
 
-  // Ajoute au réseau
+
+
+
+  @override
+  _ButtonNetworkManagerState createState() => _ButtonNetworkManagerState();
+}
+
+class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
+    bool isInNetwork = false;
+
+    // Ajoute au réseau
   Future<void> updateNetwork(String typeCollection, String docId) async {
     final documentRef = FirebaseFirestore.instance
         .collection(typeCollection) // replace with your collection name
@@ -80,25 +89,19 @@ class ButtonNetworkManager extends StatefulWidget {
     return false;
   }
 
-  @override
-  _ButtonNetworkManagerState createState() => _ButtonNetworkManagerState();
-}
 
-class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      await widget.verifyInNetwork(widget.typeCollection, widget.docId);
-    });
+    verifyInNetwork(widget.typeCollection, widget.docId);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isInNetwork) {
+    if (isInNetwork) {
       return TextButton.icon(
         onPressed: () async {
-          await widget.deleteNetwork(widget.typeCollection, widget.docId);
+          await deleteNetwork(widget.typeCollection, widget.docId);
           setState(() {});
         },
         icon: Icon(Icons.delete_outline,
@@ -122,8 +125,8 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
             onTap: () async {
-              await widget.updateNetwork(widget.typeCollection, widget.docId);
-              await widget.verifyInNetwork(widget.typeCollection, widget.docId);
+              await updateNetwork(widget.typeCollection, widget.docId);
+              await verifyInNetwork(widget.typeCollection, widget.docId);
               setState(() {});
             },
             child: GradientText(

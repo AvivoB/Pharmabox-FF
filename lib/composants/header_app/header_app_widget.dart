@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -17,6 +20,7 @@ class HeaderAppWidget extends StatefulWidget {
 
 class _HeaderAppWidgetState extends State<HeaderAppWidget> {
   late HeaderAppModel _model;
+  final User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void setState(VoidCallback callback) {
@@ -182,27 +186,51 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                                 },
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context).alternate,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 8.0, 8.0, 8.0),
-                                child: Text(
-                                  '5',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Poppins',
+                            StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('messages')
+                                    .where('receiverId',
+                                        isEqualTo: currentUser?.uid)
+                                    .where('isViewed', isEqualTo: false)
+                                    .orderBy('timestamp', descending: true)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) {
+                                    // Display the error message
+                                    print('${snapshot.error}');
+                                  }
+
+                                  final int unreadMessagesCount =
+                                      snapshot.data?.docs.length ?? 0;
+
+                                  if (unreadMessagesCount > 0) {
+                                    return Container(
+                                      decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                        fontSize: 10.0,
+                                            .alternate,
+                                        shape: BoxShape.circle,
                                       ),
-                                ),
-                              ),
-                            ),
+                                      child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  8.0, 8.0, 8.0, 8.0),
+                                          child: Text(
+                                            unreadMessagesCount.toString(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                  fontSize: 10.0,
+                                                ),
+                                          )),
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                }),
                           ],
                         ),
                       ),

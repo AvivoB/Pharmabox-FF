@@ -3,11 +3,11 @@ import 'package:pharmabox/constant.dart';
 
 import '../../../flutter_flow/flutter_flow_theme.dart';
 
-
 class GrilleHoraire extends StatefulWidget {
   final Function(List<List<String>>) onSelectionChanged;
 
-  const GrilleHoraire({Key? key, required this.onSelectionChanged}) : super(key: key);
+  const GrilleHoraire({Key? key, required this.onSelectionChanged})
+      : super(key: key);
 
   @override
   _GrilleHoraireState createState() => _GrilleHoraireState();
@@ -16,12 +16,13 @@ class GrilleHoraire extends StatefulWidget {
 class _GrilleHoraireState extends State<GrilleHoraire> {
   List<String> daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   List<String> periods = ['Matinée', 'Après-midi', 'Soirée', 'Nuit'];
-  List<List<String>> selectedOptions= [];
+  List<List<String>> selectedOptions = [];
 
   @override
   void initState() {
     super.initState();
-    selectedOptions = List.generate(daysOfWeek.length, (_) => List.generate(periods.length, (_) => 'Obligatoire'));
+    selectedOptions = List.generate(daysOfWeek.length,
+        (_) => List.generate(periods.length, (_) => 'Obligatoire'));
   }
 
   void _toggleOption(int row, int col) {
@@ -51,7 +52,7 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
     } else if (option == 'Non souhaité') {
       return Icons.close;
     } else if (option == 'Négociable') {
-      return Icons.help_outline_rounded;
+      return Icons.question_mark_rounded;
     }
     return Icons.check;
   }
@@ -74,18 +75,15 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Table(
-        
         border: TableBorder(
-          horizontalInside: BorderSide(width: 2, color: greyLightColor, style: BorderStyle.solid)
-        ),
+            horizontalInside: BorderSide(
+                width: 2, color: greyLightColor, style: BorderStyle.solid)),
         children: [
           TableRow(
             decoration: BoxDecoration(
               color: Color(0xFFEFF6F7),
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15)
-              ),
+                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
             ),
             children: [
               TableCell(
@@ -98,14 +96,11 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
                     child: Text(
                       period,
                       textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Poppins',
-                                  color: greyColor,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600
-                                ),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Poppins',
+                          color: greyColor,
+                          fontSize: 9.0,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -115,19 +110,17 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
             TableRow(
               children: [
                 TableCell(
-                  verticalAlignment: TableCellVerticalAlignment.middle,
-                  child: Container(
-                  child: Text(
-                      daysOfWeek[i],
-                      style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Poppins',
-                                  color: greyColor,
-                                  fontSize: 12.0,
-                                ),
-                    ),)
-                ),
+                    verticalAlignment: TableCellVerticalAlignment.middle,
+                    child: Container(
+                      child: Text(
+                        daysOfWeek[i],
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Poppins',
+                              color: greyColor,
+                              fontSize: 12.0,
+                            ),
+                      ),
+                    )),
                 for (var j = 0; j < periods.length; j++)
                   TableCell(
                     child: GestureDetector(
@@ -137,7 +130,7 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
                           color: _getBackgroundColor(selectedOptions[i][j]),
                           borderRadius: BorderRadius.circular(20.0),
                         ),
-                        padding: EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(6.0),
                         margin: EdgeInsets.all(4.0),
                         child: Icon(
                           _getIcon(selectedOptions[i][j]),
@@ -153,4 +146,3 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
     );
   }
 }
-

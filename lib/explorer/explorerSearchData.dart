@@ -111,33 +111,34 @@ class ExplorerSearchData {
     return uniquePharmaData;
   }
 
-  Future<List> searchJobs(String query) async {
-    String collectionType = '';
-    if (await checkIsTitulaire()) {
-      collectionType = 'recherches';
-    } else {
-      collectionType = 'offres';
-    }
 
-    final QuerySnapshot villeQuery = await FirebaseFirestore.instance
-        .collection(collectionType)
-        .where('localisation', isGreaterThanOrEqualTo: query)
-        .get();
-    final QuerySnapshot contratQuery = await FirebaseFirestore.instance
-        .collection(collectionType)
-        .where('contrats', arrayContains: query)
-        .get();
+  // Future<List> searchJobs(String query) async {
+  //   String collectionType = '';
+  //   if (await checkIsTitulaire()) {
+  //     collectionType = 'recherches';
+  //   } else {
+  //     collectionType = 'offres';
+  //   }
 
-    final List<DocumentSnapshot> combinedResults = [
-      ...villeQuery.docs,
-      ...contratQuery.docs,
-    ];
+  //   final QuerySnapshot villeQuery = await FirebaseFirestore.instance
+  //       .collection(collectionType)
+  //       .where('localisation', isGreaterThanOrEqualTo: query)
+  //       .get();
+  //   final QuerySnapshot contratQuery = await FirebaseFirestore.instance
+  //       .collection(collectionType)
+  //       .where('contrats', arrayContains: query)
+  //       .get();
 
-    List jobsData = [];
-    for (final jobs in combinedResults) {
-      jobsData.add(jobs.data());
-    }
+  //   final List<DocumentSnapshot> combinedResults = [
+  //     ...villeQuery.docs,
+  //     ...contratQuery.docs,
+  //   ];
 
-    return jobsData;
-  }
+  //   List jobsData = [];
+  //   for (final jobs in combinedResults) {
+  //     jobsData.add(jobs.data());
+  //   }
+
+  //   return jobsData;
+  // }
 }

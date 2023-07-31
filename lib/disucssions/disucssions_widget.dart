@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../constant.dart';
 import '../custom_code/widgets/button_network_manager.dart';
 import '../custom_code/widgets/like_button.dart';
@@ -29,6 +31,7 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
   late DisucssionsModel _model;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final User? currentUser = FirebaseAuth.instance.currentUser;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -153,158 +156,189 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DiscussionUserWidget(
-                        toUser: 'UTsEZTyAqNNbwGK0BOuSmEODh453'),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  // height: MediaQuery.of(context).size.height * 0.65,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(15.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(31, 92, 103, 0.17),
-                        offset: Offset(10.0, 10.0),
-                        blurRadius: 12.0,
-                        spreadRadius: -6.0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            15.0, 15.0, 15.0, 0.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 10.0, 0.0),
-                                    child: Container(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: FadeInImage.assetNetwork(
-                                        image: 'photoUrl',
-                                        placeholder:
-                                            'assets/images/Group_18.png',
-                                        fit: BoxFit.cover,
-                                        imageErrorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Image.asset(
-                                              'assets/images/Group_18.png');
-                                        },
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+                  .collection('messages')
+                  .where('fromId', isEqualTo: currentUser?.uid)
+                  .where('receiverId', isEqualTo: currentUser?.uid)
+                  .orderBy('timestamp', descending: true)
+                  .snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+             if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+
+            if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              return Text('Aucune discussion récente');
+            }
+
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                DocumentSnapshot document = snapshot.data!.docs[index];
+                Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                
+
+                  return FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance.collection('users').doc(data['receiverId']).get(),
+                    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    Map<String, dynamic> userData = snapshot.data!.data() as Map<String, dynamic>;
+
+                      return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DiscussionUserWidget(
+                                toUser: document.id.toString()),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 1.0,
+                          // height: MediaQuery.of(context).size.height * 0.65,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).secondaryBackground,
+                            borderRadius: BorderRadius.circular(15.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromRGBO(31, 92, 103, 0.17),
+                                offset: Offset(10.0, 10.0),
+                                blurRadius: 12.0,
+                                spreadRadius: -6.0,
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    15.0, 15.0, 15.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        // mainAxisAlignment: MainAxisAlignment.start,
+                                        // crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 10.0, 0.0),
+                                            child: Container(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: FadeInImage.assetNetwork(
+                                                image: userData['photoUrl'],
+                                                placeholder:
+                                                    'assets/images/Group_18.png',
+                                                fit: BoxFit.cover,
+                                                imageErrorBuilder:
+                                                    (context, error, stackTrace) {
+                                                  return Image.asset(
+                                                      'assets/images/Group_18.png');
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width:
+                                                    MediaQuery.of(context).size.width *
+                                                        0.30,
+                                                child: Text(
+                                                  userData['nom'] + ' ' + userData['prenom'],
+                                                  style: FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: Color(0xFF595A71),
+                                                        fontSize: 15.0,
+                                                      ),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 135,
+                                                child: Text(
+                                                  'poste',
+                                                  style: FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: Color(0xFF8D8D97),
+                                                        fontSize: 13.0,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.30,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: redColor,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            8.0, 8.0, 8.0, 8.0),
                                         child: Text(
-                                          'nom' + ' ' + 'prenom',
+                                          '5',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Poppins',
-                                                color: Color(0xFF595A71),
-                                                fontSize: 15.0,
+                                                color: FlutterFlowTheme.of(context)
+                                                    .primaryBackground,
+                                                fontSize: 14.0,
                                               ),
                                         ),
                                       ),
-                                      Container(
-                                        width: 135,
-                                        child: Text(
-                                          'poste',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Poppins',
-                                                color: Color(0xFF8D8D97),
-                                                fontSize: 13.0,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: redColor,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 8.0, 8.0, 8.0),
-                                child: Text(
-                                  '5',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                        fontSize: 14.0,
-                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    15.0, 15.0, 15.0, 15.0),
+                                child: Text(
+                                  data['message'],
+                                  textAlign: TextAlign.left,
+                                  style:
+                                      FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: 'Poppins',
+                                            color: Color(0xFF595A71),
+                                          ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            15.0, 15.0, 15.0, 15.0),
-                        child: Text(
-                          'Salut comment ca va ...',
-                          textAlign: TextAlign.left,
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF595A71),
-                                  ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ]),
+                                  );
+                    }
+                  );
+              }
+            );
+          }
         ));
   }
 }

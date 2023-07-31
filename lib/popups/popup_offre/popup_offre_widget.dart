@@ -103,10 +103,10 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
       'pharmacie_id': pharmacieId
     };
 
-    if(PopupOffreModel().validateFormFields()) {
+    // if(PopupOffreModel().validateFormFields()) {
       firestore.collection('offres').add(createOffre);
       Navigator.pop(context);
-    }
+    // }
   }
 
   @override
@@ -184,6 +184,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                             ),
                           ),
                           FlutterFlowDropDown<String>(
+                            hintText: 'Poste',
                             controller: _model.posteValueController ??=
                                 FormFieldController<String>(null),
                             options: [
@@ -205,7 +206,6 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   fontFamily: 'Poppins',
                                   color: Colors.black,
                                 ),
-                            hintText: 'Poste',
                             fillColor: Colors.white,
                             elevation: 2.0,
                             borderColor: Colors.transparent,
@@ -248,15 +248,8 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   Color(0xFF595A71), BlendMode.srcIn),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              'Contrat',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
-                            ),
-                          ),
                           FlutterFlowDropDown<String>(
+                            hintText: 'Contrat',
                             controller: _model.contratValueController ??=
                                 FormFieldController<String>(null),
                             options: [
@@ -272,7 +265,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                 _model.addToContratType(_model.contratValue!);
                               });
                             },
-                            width: MediaQuery.of(context).size.width * 0.6,
+                            width: MediaQuery.of(context).size.width * 0.80,
                             height: 50.0,
                             textStyle: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -280,7 +273,6 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   fontFamily: 'Poppins',
                                   color: Colors.black,
                                 ),
-                            hintText: ' ',
                             fillColor: Colors.white,
                             elevation: 2.0,
                             borderColor: Colors.transparent,
@@ -354,6 +346,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       }).toList(),
                     ),
                   ),
+                  if(!_model.contratType.contains('CDI'))
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
