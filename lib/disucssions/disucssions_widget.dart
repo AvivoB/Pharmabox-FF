@@ -157,187 +157,232 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
           ),
         ),
         body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-                  .collectionGroup('message')
-                  .where('receiverId', isEqualTo: currentUser?.uid)
-                  .where('isViewed', isEqualTo: false)
-                  .snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            stream:
+                FirebaseFirestore.instance.collection('messages').snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Something went wrong');
+              }
 
-             if (snapshot.hasError) {
-              return Text('Something went wrong');
-            }
+              if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+                return Center(
+                    child: Text('Aucune discussion récente',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            color: blackColor,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600)));
+              }
 
-            if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-              return Center(child: Text('Aucune discussion récente', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor,fontSize: 18.0, fontWeight: FontWeight.w600)));
-            }
+              // Filter the documents to include only those that contains the current user id
+              List<DocumentSnapshot> userDocs =
+                  snapshot.data!.docs.where((doc) {
+                List<String> ids = doc.id.split('-');
+                return ids.contains(currentUser?.uid);
+              }).toList();
 
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (BuildContext context, int index) {
-                DocumentSnapshot document = snapshot.data!.docs[index];
-                Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-                
+              return ListView.builder(
+                  itemCount: userDocs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    String conversationId = userDocs[index].id;
+                    // Split the conversation id to get the user id
+                    List<String> userIds = conversationId.split('-');
+                    // Find the user id that is not equal to the current user id
+                    String otherUserId = userIds.firstWhere(
+                      (id) => id != currentUser?.uid,
+                      orElse: () => ''
+                    );
 
-                  return FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance.collection('users').doc(data['receiverId']).get(),
-                    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                    Map<String, dynamic> userData = snapshot.data!.data() as Map<String, dynamic>;
 
-                      return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DiscussionUserWidget(
-                                toUser: document.id.toString()),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 1.0,
-                          // height: MediaQuery.of(context).size.height * 0.65,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            borderRadius: BorderRadius.circular(15.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(31, 92, 103, 0.17),
-                                offset: Offset(10.0, 10.0),
-                                blurRadius: 12.0,
-                                spreadRadius: -6.0,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    15.0, 15.0, 15.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        // mainAxisAlignment: MainAxisAlignment.start,
-                                        // crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                0.0, 0.0, 10.0, 0.0),
-                                            child: Container(
-                                              width: 50.0,
-                                              height: 50.0,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: FadeInImage.assetNetwork(
-                                                image: userData['photoUrl'],
-                                                placeholder:
-                                                    'assets/images/Group_18.png',
-                                                fit: BoxFit.cover,
-                                                imageErrorBuilder:
-                                                    (context, error, stackTrace) {
-                                                  return Image.asset(
-                                                      'assets/images/Group_18.png');
-                                                },
+                    DocumentSnapshot document = userDocs[index];
+                    Map<String, dynamic> data =
+                        document.data() as Map<String, dynamic>;
+
+                    return FutureBuilder<DocumentSnapshot>(
+                      future: FirebaseFirestore.instance.collection('users').doc(otherUserId).get(),
+                      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+                         Map<String, dynamic> userData = snapshot.data!.data() as Map<String, dynamic>;
+
+                        return StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                                  .collection('messages')
+                                  .doc(conversationId)
+                                  .collection('message')
+                                  .where('isViewed', isEqualTo: false)
+                                  .snapshots(),
+                          builder: (context, snapshot) {
+                            int unreadMessagesCount = snapshot.data!.docs.length;
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DiscussionUserWidget(
+                                        toUser: otherUserId),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 1.0,
+                                  // height: MediaQuery.of(context).size.height * 0.65,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Color.fromRGBO(31, 92, 103, 0.17),
+                                        offset: Offset(10.0, 10.0),
+                                        blurRadius: 12.0,
+                                        spreadRadius: -6.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            15.0, 15.0, 15.0, 0.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                // mainAxisAlignment: MainAxisAlignment.start,
+                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional.fromSTEB(
+                                                            0.0, 0.0, 10.0, 0.0),
+                                                    child: Container(
+                                                      width: 50.0,
+                                                      height: 50.0,
+                                                      clipBehavior: Clip.antiAlias,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: FadeInImage.assetNetwork(
+                                                        image: userData['photoUrl'],
+                                                        placeholder:
+                                                            'assets/images/Group_18.png',
+                                                        fit: BoxFit.cover,
+                                                        imageErrorBuilder: (context,
+                                                            error, stackTrace) {
+                                                          return Image.asset(
+                                                              'assets/images/Group_18.png');
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Column(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        width: MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.60,
+                                                        child: Text(
+                                                          userData['nom'] + ' ' + userData['prenom'],
+                                                          style: FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily: 'Poppins',
+                                                                color:
+                                                                    Color(0xFF595A71),
+                                                                fontSize: 15.0,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 135,
+                                                        child: Text(
+                                                          userData['poste'],
+                                                          style: FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily: 'Poppins',
+                                                                color:
+                                                                    Color(0xFF8D8D97),
+                                                                fontSize: 13.0,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ),
-                                          Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width:
-                                                    MediaQuery.of(context).size.width *
-                                                        0.30,
+                                            unreadMessagesCount > 0 ?
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: redColor,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional.fromSTEB(
+                                                    8.0, 8.0, 8.0, 8.0),
                                                 child: Text(
-                                                  userData['nom'] + ' ' + userData['prenom'],
+                                                  unreadMessagesCount.toString(),
                                                   style: FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Poppins',
-                                                        color: Color(0xFF595A71),
-                                                        fontSize: 15.0,
+                                                        color:
+                                                            FlutterFlowTheme.of(context)
+                                                                .primaryBackground,
+                                                        fontSize: 14.0,
                                                       ),
                                                 ),
                                               ),
-                                              Container(
-                                                width: 135,
-                                                child: Text(
-                                                  userData['poste'],
-                                                  style: FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color: Color(0xFF8D8D97),
-                                                        fontSize: 13.0,
-                                                      ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                            )
+                                            :
+                                            Container()
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: redColor,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Padding(
+                                      Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            8.0, 8.0, 8.0, 8.0),
+                                            15.0, 15.0, 15.0, 15.0),
                                         child: Text(
-                                          '5',
+                                          data['last_message'],
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.left,
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Poppins',
-                                                color: FlutterFlowTheme.of(context)
-                                                    .primaryBackground,
-                                                fontSize: 14.0,
+                                                color: Color(0xFF595A71),
                                               ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    15.0, 15.0, 15.0, 15.0),
-                                child: Text(
-                                  data['message'],
-                                  textAlign: TextAlign.left,
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium.override(
-                                            fontFamily: 'Poppins',
-                                            color: Color(0xFF595A71),
-                                          ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                                  );
-                    }
-                  );
-              }
-            );
-          }
-        ));
+                            );
+                          }
+                        );
+                      }
+                    );
+                  });
+            }));
   }
 }
