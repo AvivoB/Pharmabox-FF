@@ -353,6 +353,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
         .setTypologie(userData != null ? userData['typologie'] : '');
     providerPharmacieUser
         .setHoraire(userData != null ? userData['horaires'] : '');
+    providerPharmacieUser.setPharmacieLocation(userData != null ? userData['situation_geographique']['lat_lng'][0] : '', userData != null ? userData['situation_geographique']['lat_lng'][1] : '');
 
     getNetworkData();
 
@@ -461,9 +462,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 10),
-                                  child: 
-                                  providerPharmacieUser.selectedGroupement[0]['image'] == 'Autre.jpg' ?
-                                  Row(
+                                  child: providerPharmacieUser
+                                              .selectedGroupement[0]['image'] ==
+                                          'Autre.jpg'
+                                      ? Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -474,7 +476,8 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                                       .width *
                                                   0.60,
                                               child: TextFormField(
-                                                controller:_model.groupementAutre,
+                                                controller:
+                                                    _model.groupementAutre,
                                                 onChanged: (value) {
                                                   providerPharmacieUser
                                                       .selectGroupement({
@@ -587,8 +590,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                               child: Container(
                                                 width: 100,
                                                 height: 30,
-                                                child:
-                                                GradientTextCustom(
+                                                child: GradientTextCustom(
                                                   width: 100,
                                                   height: 30,
                                                   text: 'Modifier',
@@ -599,104 +601,111 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                             ),
                                           ],
                                         )
-                                  :
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Image.asset(
-                                        'assets/groupements/' +
-                                            providerPharmacieUser
-                                                .selectedGroupement[0]['image'],
-                                        width: 120,
-                                        height: 60,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      Container(
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: Column(
+                                      : Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              'Groupement',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
+                                            Image.asset(
+                                              'assets/groupements/' +
+                                                  providerPharmacieUser
+                                                          .selectedGroupement[0]
+                                                      ['image'],
+                                              width: 120,
+                                              height: 60,
+                                              fit: BoxFit.cover,
                                             ),
-                                            Text(
-                                              providerPharmacieUser
-                                                      .selectedGroupement[0]
-                                                  ['name'],
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        fontSize: 11,
+                                            Container(
+                                              width: 100,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Groupement',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    providerPharmacieUser
+                                                            .selectedGroupement[
+                                                        0]['name'],
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize: 11,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                await showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  enableDrag: false,
+                                                  context: context,
+                                                  builder:
+                                                      (bottomSheetContext) {
+                                                    return GestureDetector(
+                                                      onTap: () =>
+                                                          FocusScope.of(context)
+                                                              .requestFocus(
+                                                                  _unfocusNode),
+                                                      child: Padding(
+                                                        padding: MediaQuery.of(
+                                                                bottomSheetContext)
+                                                            .viewInsets,
+                                                        child:
+                                                            PopupGroupementWidget(
+                                                                onTap: (value) {
+                                                          print(value);
+                                                          providerPharmacieUser
+                                                              .selectGroupement(
+                                                                  value);
+                                                        }),
                                                       ),
+                                                    );
+                                                  },
+                                                ).then(
+                                                    (value) => setState(() {}));
+                                              },
+                                              child: Container(
+                                                width: 100,
+                                                height: 30,
+                                                child: GradientTextCustom(
+                                                  width: 100,
+                                                  height: 30,
+                                                  text: 'Modifier',
+                                                  radius: 0.0,
+                                                  fontSize: 12.0,
+                                                ),
+                                              ),
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          await showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            enableDrag: false,
-                                            context: context,
-                                            builder: (bottomSheetContext) {
-                                              return GestureDetector(
-                                                onTap: () => FocusScope.of(
-                                                        context)
-                                                    .requestFocus(_unfocusNode),
-                                                child: Padding(
-                                                  padding: MediaQuery.of(
-                                                          bottomSheetContext)
-                                                      .viewInsets,
-                                                  child: PopupGroupementWidget(
-                                                      onTap: (value) {
-                                                    print(value);
-                                                    providerPharmacieUser
-                                                        .selectGroupement(
-                                                            value);
-                                                  }),
-                                                ),
-                                              );
-                                            },
-                                          ).then((value) => setState(() {}));
-                                        },
-                                        child: Container(
-                                          width: 100,
-                                          height: 30,
-                                          child: GradientTextCustom(
-                                            width: 100,
-                                            height: 30,
-                                            text: 'Modifier',
-                                            radius: 0.0,
-                                            fontSize: 12.0,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -1694,12 +1703,13 @@ class _ProfilPharmacieState extends State<ProfilPharmacie>
                                   ),
                                   if (_model.nonSTOPValue == false)
                                     HorraireSemaineSelect(
-                                    callback: (listHoraire) {
-                                      providerPharmacieUser
-                                          .setHoraire(listHoraire);
-                                    },
-                                    initialHours: providerPharmacieUser.selectedHoraires,
-                                  ),
+                                      callback: (listHoraire) {
+                                        providerPharmacieUser
+                                            .setHoraire(listHoraire);
+                                      },
+                                      initialHours: providerPharmacieUser
+                                          .selectedHoraires,
+                                    ),
                                 ],
                               ),
                             ),

@@ -158,10 +158,9 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-                  .collection('messages')
-                  .where('fromId', isEqualTo: currentUser?.uid)
+                  .collectionGroup('message')
                   .where('receiverId', isEqualTo: currentUser?.uid)
-                  .orderBy('timestamp', descending: true)
+                  .where('isViewed', isEqualTo: false)
                   .snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
 
@@ -170,7 +169,7 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
             }
 
             if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-              return Text('Aucune discussion récente');
+              return Center(child: Text('Aucune discussion récente', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor,fontSize: 18.0, fontWeight: FontWeight.w600)));
             }
 
             return ListView.builder(
@@ -277,7 +276,7 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
                                               Container(
                                                 width: 135,
                                                 child: Text(
-                                                  'poste',
+                                                  userData['poste'],
                                                   style: FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .override(

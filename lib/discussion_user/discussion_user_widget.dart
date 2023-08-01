@@ -47,14 +47,23 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
   }
 
   Future<void> sendMessage() async {
-    final CollectionReference messagesRef =
-        FirebaseFirestore.instance.collection('messages');
+     List<String> ids = [currentUser, widget.toUser];
+      ids.sort();
+      final String conversationId = ids.join('-');
 
-    print(_message.text);
+
+    final DocumentReference conversationDoc = FirebaseFirestore.instance
+        .collection('messages')
+        .doc(conversationId);
 
     try {
-      if (_message.text != '') {
-        await messagesRef.add({
+      if (_message.text.isNotEmpty) {
+        conversationDoc.set({
+          'last_message': _message.text,
+          'last_message_from': currentUser
+        });
+        // Add a new document to the 'message' subcollection.
+        await conversationDoc.collection('message').add({
           'fromId': currentUser,
           'isViewed': false,
           'message': _message.text,
@@ -73,7 +82,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
   Future<void> getUserById(String userId) async {
     DocumentSnapshot userDoc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
-    
+
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
     String currentUserId = await getCurrentUserId();
 
@@ -85,6 +94,12 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+     List<String> ids = [currentUser, widget.toUser];
+      ids.sort(); // This ensures that the conversationId will be the same regardless of which user starts the conversation
+      final String conversationId = ids.join('-'); 
+
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -127,8 +142,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                   Container(
                     decoration: BoxDecoration(
                       color: Color(0x00FFFFFF),
-                      borderRadius:
-                          BorderRadius.circular(95.0),
+                      borderRadius: BorderRadius.circular(95.0),
                       border: Border.all(
                         color: Colors.white,
                         width: 2.0,
@@ -194,30 +208,30 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: Rx.merge([
-                FirebaseFirestore.instance
-                  .collection('messages')
-                  .where('receiverId', whereIn: [currentUser, widget.toUser])
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
-                FirebaseFirestore.instance
-                  .collection('messages')
-                  .where('fromId', whereIn: [currentUser, widget.toUser])
-                  .orderBy('timestamp', descending: true)
-                  .snapshots(),
-              ]),
+              stream: FirebaseFirestore.instance
+                      .collection('messages')
+                      .doc(conversationId)
+                      .collection('message')
+                      .orderBy('timestamp', descending: true)
+                      .snapshots(),
               builder: (context, snapshot) {
-
                 if (snapshot.hasError) {
                   return Center(child: Text('Une erreur s\'est produite'));
                 }
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('Aucun message à afficher'));
+                  return Center(
+                      child: Text(
+                    'Démarrez une conversation avec ce membre',
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Poppins',
+                        color: blackColor,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600),
+                  ));
                 }
 
                 final mergedList = snapshot.data!.docs;
-                
 
                 return ListView(
                   reverse: true,
@@ -225,23 +239,25 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                   children: mergedList.map((doc) {
                     bool isCurrentUser = doc['fromId'] == currentUser;
 
-                    if(doc['receiverId'] == currentUser) {
+                    if (doc['receiverId'] == currentUser) {
                       FirebaseFirestore.instance
-                        .collection('messages')
-                        .doc(doc.id)
-                        .update({'isViewed': true})
-                        .then((value) {
-                        })
-                        .catchError((error) {
-                          print('Error updating document: $error');
-                        });
+                          .collection('messages')
+                          .doc(conversationId)
+                          .collection('message')
+                          .doc(doc.id)
+                          .update({'isViewed': true})
+                          .then((value) {})
+                          .catchError((error) {
+                            print('Error updating document: $error');
+                          });
                     }
                     return Container(
                       padding: EdgeInsets.only(
                           left: 0, right: 0, top: 10, bottom: 10),
                       child: Align(
-                        alignment:
-                            (isCurrentUser ? Alignment.topRight : Alignment.topLeft),
+                        alignment: (isCurrentUser
+                            ? Alignment.topRight
+                            : Alignment.topLeft),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
@@ -255,7 +271,9 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                                   .bodyMedium
                                   .override(
                                       fontFamily: 'Poppins',
-                                      color: isCurrentUser ? Colors.white : blackColor,
+                                      color: isCurrentUser
+                                          ? Colors.white
+                                          : blackColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400)),
                         ),

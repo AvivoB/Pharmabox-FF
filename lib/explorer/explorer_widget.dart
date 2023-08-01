@@ -85,109 +85,121 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
   List pharmacieInPlace = [];
   List userSearch = [];
 
-  Future<LatLng> getLatLngFromPostalCode(String postalCode) async {
-    List<Location> locations = await locationFromAddress(postalCode);
-    if (locations.isNotEmpty) {
-      Location location = locations.first;
-      return LatLng(location.latitude, location.longitude);
-    } else {
-      return LatLng(0, 0); // Default LatLng if no location found
-    }
-  }
+  Future<void> getAllPharmacies() async {
+    items.clear();
+    pharmacieInPlace.clear();
 
-  Future<void> getLocation() async {
-    // Si nous somme dans la recherche de membres
-    if (currentTAB == 0) {
-      setState(() {
-        items.clear();
-      });
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-      for (var doc in userSearch) {
-        // Retrieve the user name
-        String name = doc['nom'] + ' ' + doc['prenom'];
-        LatLng latLng = await getLatLngFromPostalCode(doc['code_postal']);
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('pharmacies')
+        .where('user_id', isNotEqualTo: await getCurrentUserId())
+        .get();
+    for (var doc in querySnapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        // Create a Place object
-        Place place = Place(
-            name: name, latLng: LatLng(latLng.latitude, latLng.longitude));
-        setState(() {
-          items.add(place);
-        });
-      }
-    }
-    // Si nous sommes dans la recherche pharmacie
-    if (currentTAB == 1) {
-      setState(() {
-        items.clear();
-      });
-
-      // Loop through the documents
-      for (var doc in pharmacieInPlace) {
-        // Retrieve the pharmacy name
-        String name = doc['situation_geographique']['adresse'];
-
-        List<dynamic> location = doc['situation_geographique']['lat_lng'];
-
-        // Create a Place object
-        Place place =
-            Place(name: name, latLng: LatLng(location[0], location[1]));
-
-        // Add the Place object to the list of places
-
-        setState(() {
-          items.add(place);
-        });
-
-        print(items);
-      }
-    }
-  }
-
-  Future<void> getPharmaciesExceptCurrentUser() async {
-    var currentUserId = await getCurrentUserId();
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection("pharmacies").get();
-
-    var allDocuments = querySnapshot.docs.map((doc) {
-      return {
+      // Create a new map that includes all keys from `data` and also adds `documentId`
+      Map<String, dynamic> dataWithId = {
+        ...data,
         'documentId': doc.id,
-        ...doc.data() as Map<String, dynamic>,
       };
+
+      String name = dataWithId['situation_geographique']['adresse'];
+      List<dynamic> location = dataWithId['situation_geographique']['lat_lng'];
+      Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
+      setState(() {
+        items.add(place);
+        pharmacieInPlace.add(dataWithId);
+      });
+    }
+  }
+
+  Future<void> searchPharmacies(String query) async {
+    items.clear();
+    pharmacieInPlace.clear();
+
+    final lowerCaseQuery = query.toLowerCase();
+
+    final pharmacieRef = FirebaseFirestore.instance.collection('pharmacies');
+
+    // Start by getting all users
+    final pharmacieSnapshot = await pharmacieRef
+        .where('user_id', isNotEqualTo: await getCurrentUserId())
+        .get();
+
+    // Prepare to launch search queries for each field
+    final fields = [
+      'situation_geographique_adresse',
+      'situation_geographique_data_postcode',
+      'situation_geographique_data_region',
+      'situation_geographique_data_rue',
+      'situation_geographique_data_ville',
+      'titulaire_principal',
+    ];
+
+    List<Future<QuerySnapshot>> searchDataFutures = [];
+
+    pharmacieSnapshot.docs.forEach((userDoc) {
+      fields.forEach((field) {
+        searchDataFutures.add(userDoc.reference
+            .collection('searchDataPharmacie')
+            .where(field, isGreaterThanOrEqualTo: lowerCaseQuery)
+            .where(field, isLessThan: lowerCaseQuery + '\uf8ff')
+            .get());
+      });
+    });
+
+    // Wait for all searchData queries to complete
+    final List<QuerySnapshot> searchDataSnapshots =
+        await Future.wait(searchDataFutures);
+
+    // Now, get the parent user documents for each searchData document that matches the query
+    final List pharmacieFuture =
+        searchDataSnapshots.expand((searchDataSnapshot) {
+      return searchDataSnapshot.docs.map((searchDataDoc) {
+        return pharmacieRef.doc(searchDataDoc.id).get();
+      });
     }).toList();
 
-    var filteredPharmacies = allDocuments.where((document) {
-      return document['user_id'] != currentUserId;
-    }).toList();
+    // Wait for all user queries to complete
+    List<DocumentSnapshot> userDocs = await Future.wait(
+        pharmacieFuture as Iterable<Future<DocumentSnapshot<Object?>>>);
 
-    for (var doc in filteredPharmacies) {
-        // Retrieve the pharmacy name
-        String name = doc['situation_geographique']['adresse'];
+    // Remove duplicate users and convert to list of user data
+    final Set<String> addedUserIds = {}; // Set to keep track of added user IDs
+    final List<Map<String, dynamic>> uniquePharmacie = [];
+    final List<Place> uniqueItem = []; // List to store unique user data
+    userDocs.forEach((pharmacieDoc) {
+      final String pharmacieId = pharmacieDoc.id;
+      final Map<String, dynamic> userData =
+          pharmacieDoc.data() as Map<String, dynamic>;
+      if (!addedUserIds.contains(pharmacieId)) {
+        userData['documentId'] = pharmacieId;
+        print(userData);
+        List<dynamic> location = userData['situation_geographique']['lat_lng'];
+        Place place = Place(
+            name: userData['situation_geographique']['adresse'],
+            latLng: LatLng(location[0], location[1]));
 
-        List<dynamic> location = doc['situation_geographique']['lat_lng'];
-
-        // Create a Place object
-        Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
-
-        // Add the Place object to the list of places
-
-        setState(() {
-          items.add(place);
-        });
-
-        print(items);
+        uniqueItem.add(place);
+        uniquePharmacie.add(userData);
       }
+    });
 
-    print(filteredPharmacies);
+    setState(() {
+      items = uniqueItem;
+      pharmacieInPlace = uniquePharmacie;
+      _initClusterManager();
+    });
 
-    pharmacieInPlace = filteredPharmacies;
-    // filteredPharmacies contient maintenant tous les documents à l'exception de ceux où 'user_id' est égal à l'id de l'utilisateur actuel.
+    print(uniquePharmacie);
   }
 
   @override
   void initState() {
     super.initState();
     getCurrentPosition();
-    getPharmaciesExceptCurrentUser();
+    getAllPharmacies();
     _model = createModel(context, () => ExplorerModel());
     _model.textController ??= TextEditingController();
     _manager = _initClusterManager();
@@ -282,15 +294,27 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           validator: _model.textControllerValidator
                               .asValidator(context),
                           onChanged: (query) async {
-                            setState(() {});
-                            if (currentTAB == 0)
-                              userSearch =
-                                  await ExplorerSearchData().searchUsers(query);
-                            await getLocation();
-                            if (currentTAB == 1)
-                              pharmacieInPlace = await ExplorerSearchData()
-                                  .searchPharmacies(query);
-                            await getLocation();
+                            setState(() async {
+                              if (currentTAB == 0) {
+                                if (query.isEmpty) {
+                                  userSearch.clear();
+                                } else {
+                                  userSearch = await ExplorerSearchData()
+                                      .searchUsers(query);
+                                }
+                              }
+
+                              if (currentTAB == 1) {
+                                if (query.isEmpty) {
+                                  items.clear();
+                                  pharmacieInPlace.clear();
+                                  await getAllPharmacies();
+                                } else {
+                                  pharmacieInPlace.clear();
+                                  await searchPharmacies(query);
+                                }
+                              }
+                            });
                           }),
                       TabBar(
                         labelColor: blackColor,
@@ -311,10 +335,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                         controller: _tabController,
                         onTap: (value) async {
                           currentTAB = value;
-                          await getLocation();
                           setState(() {
                             selectedItem.clear();
-                            items.clear();
+                            // items.clear();
                           });
                         },
                         unselectedLabelStyle:
@@ -341,6 +364,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
               ),
               if (currentTAB == 0)
                 Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFEFF6F7),
+                    ),
                     width: MediaQuery.of(context).size.width * 1.0,
                     height: MediaQuery.of(context).size.height * 0.65,
                     child: SingleChildScrollView(
@@ -363,7 +389,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                                             fontSize: 14.0,
                                           ))
                                   : Text(
-                                      pharmacieInPlace.length.toString() +
+                                      userSearch.length.toString() +
                                           ' résultats',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -446,9 +472,10 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           top: 8.0, bottom: 8.0),
-                                      child: currentTAB == 0
+                                      child: pharmacieInPlace.length == 1
                                           ? Text(
-                                              userSearch.length.toString() +
+                                              pharmacieInPlace.length
+                                                      .toString() +
                                                   ' résultat',
                                               style:
                                                   FlutterFlowTheme.of(context)

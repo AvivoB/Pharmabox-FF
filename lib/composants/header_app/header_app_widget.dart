@@ -188,11 +188,9 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                             ),
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
-                                    .collection('messages')
-                                    .where('receiverId',
-                                        isEqualTo: currentUser?.uid)
+                                    .collectionGroup('message')
+                                    .where('receiverId', isEqualTo: currentUser?.uid)
                                     .where('isViewed', isEqualTo: false)
-                                    .orderBy('timestamp', descending: true)
                                     .snapshots(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasError) {

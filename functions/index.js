@@ -1,10 +1,14 @@
 const functions = require("firebase-functions");
 const admin = require('firebase-admin');
+const nodemailer = require('nodemailer');
+const path = require('path');
+const fs = require('fs');
 
 admin.initializeApp();
 
 // crée une copie des champs utilisateurs en minuscule pour la recherche
-exports.updateSearchData = functions.firestore
+exports.searchDataUsers = functions
+  .firestore
   .document('users/{userId}')
   .onWrite((change, context) => {
     // Get the document
@@ -33,54 +37,102 @@ exports.updateSearchData = functions.firestore
       return null;
     }
   });
+  
+// Applatissement des données pour la recherche et enregistrement de la donnée dans le document
+  function flattenData(data, prefix = '') {
+    let result = {};
+  
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+        result = { ...result, ...flattenData(value, `${prefix}${key}_`) };
+      } else if (Array.isArray(value)) {
+        result[`${prefix}${key}`] = value.map(item => typeof item === 'string' ? item.toLowerCase() : item);
+      } else if (typeof value === 'string') {
+        result[`${prefix}${key}`] = value.toLowerCase();
+      } else {
+        result[`${prefix}${key}`] = value;
+      }
+    }
+  
+    return result;
+  }
+  
+  exports.searchDataPharmacie = functions.firestore
+    .document('pharmacies/{pharmacieId}')
+    .onWrite((change, context) => {
+      // Get the document
+      const document = change.after.exists ? change.after.data() : null;
+  
+      // Proceed if the document exists
+      if (document) {
+        const searchData = flattenData(document);
+  
+        // Update the document's search data in a subcollection
+        return admin.firestore()
+          .collection('pharmacies')
+          .doc(context.params.pharmacieId)
+          .collection('searchDataPharmacie')
+          .doc(context.params.pharmacieId)
+          .set(searchData);
+      } else {
+        return null;
+      }
+    });
 
-// Permet de d'enregistrer une notification lors de l'ajout au reseau
-exports.createNotificationOnNetworkUpdate = functions.firestore
-.document('users/{userId}')
-.onUpdate(async (change, context) => {
-// Get the current and previous value of 'reseau'
-const beforeReseau = change.before.data().reseau;
-const afterReseau = change.after.data().reseau;
 
-// Check if 'reseau' field has changed
-if (JSON.stringify(beforeReseau) !== JSON.stringify(afterReseau)) {
-    // Create a new notification document
-    const notification = {
-        type: 'network',
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        userId: afterReseau,
-    };
 
-    await admin.firestore().collection('notifications').add(notification);
-}
+/* ENVOI DES EMAILS */
+// Configuration du serveur SMTP
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'pharmaboxdb@gmail.com',
+        pass: 'pharmaboxdb5526'
+    }
 });
 
-// Crée une notification push lors de l'enregistrement au reseau
-exports.sendPushNotification = functions.firestore
-  .document('notifications/{notificationId}')
-  .onCreate(async (snapshot, context) => {
-    const notification = snapshot.data();
+const htmlPath = path.join(__dirname, '/email_template/code_validation.html');
+const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-    // You'll need to retrieve the FCM token of the user you want to send the notification to.
-    // Here, we'll assume you have a 'users' collection, and each user document contains an 'fcmToken' field.
-    const userDoc = await admin.firestore().collection('users').doc(notification.userId).get();
-    const user = userDoc.data();
-    const fcmToken = user.fcmToken;
+// Envoi du code de verification du compte
+exports.sendVerificationCode = functions.firestore
+  .document('users/{userId}')
+  .onCreate((snap, context) => {
+    const user = snap.data();
 
-    const payload = {
-      notification: {
-        title: 'Nouvelle notification',
-        body: `Vous avez été ajouté`,
-      },
-    };
-
-    if (fcmToken) {
-      await admin.messaging().sendToDevice(fcmToken, payload);
+    // Vérification du champ 'poste'
+    if (user.poste !== 'Pharmacien(ne) titulaire') {
+        console.log('Pas un titulaire, skipping email');
+        return null;
     }
-  });
 
+    // Génère un code de validation
+    let verificationCode = Math.floor(1000 + Math.random() * 9000);
 
+    // Mise à jour du document utilisateur avec le code de validation
+    return admin.firestore().collection('users').doc(snap.id).update({
+        verificationCode: verificationCode
+    }).then(() => {
+        // Construire le courriel
+        const mailOptions = {
+            from: 'pharmaboxdb@gmail.com',
+            to: user.email,
+            subject: 'Votre code de vérification',
+            html: htmlContent.replace('{{code}}', verificationCode)
+        };        
 
+        // Envoie le mail
+        return transporter.sendMail(mailOptions, (error, data) => {
+            if (error) {
+                console.log(error);
+                throw new functions.https.HttpsError('internal', 'Failed to send email.');
+            }
+        });
+    }).catch((error) => {
+        console.log(error);
+        throw new functions.https.HttpsError('internal', 'Failed to update user document.');
+    });
+});
 
 
 
