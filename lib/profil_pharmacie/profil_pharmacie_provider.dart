@@ -63,7 +63,6 @@ class ProviderPharmacieUser extends ChangeNotifier {
   /* Localisation de la pharmacie */
   void setPharmacieLocation(latitude, longitude) {
     _selectedPharmacieLocation = [latitude, longitude];
-    notifyListeners();
   }
 
   void setAdressePharmacie(adresse) {

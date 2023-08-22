@@ -52,15 +52,22 @@ class _ReseauWidgetState extends State<ReseauWidget> {
       pharmaciesNetwork.add(data);
     }
 
+    List fTitulaireNetwork = [];
+    List fnonTitulairesNetwork = [];
     // Split users based on their 'poste' field
     for (var doc in queryUsers.docs) {
       var data = doc.data() as Map<String, dynamic>;
       if (data != null && data['poste'] == 'Pharmacien(ne) titulaire') {
-        titulairesNetwork.add(data);
+        fTitulaireNetwork.add(data);
       } else {
-        nonTitulairesNetwork.add(data);
+        fnonTitulairesNetwork.add(data);
       }
     }
+
+    setState(() {
+      titulairesNetwork = fTitulaireNetwork;
+      nonTitulairesNetwork = fnonTitulairesNetwork;
+    });
   }
 
   @override
@@ -73,13 +80,11 @@ class _ReseauWidgetState extends State<ReseauWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(pharmaciesNetwork.length);
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -92,197 +97,199 @@ class _ReseauWidgetState extends State<ReseauWidget> {
               updateCallback: () => setState(() {}),
               child: HeaderAppWidget(),
             ),
-            SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Mon réseau',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 22.0,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 4.0,
-                                color: Color(0x33000000),
-                                offset: Offset(0.0, 2.0),
-                              )
-                            ],
-                            gradient: LinearGradient(
-                              colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                              stops: [0.0, 1.0],
-                              begin: AlignmentDirectional(1.0, -1.0),
-                              end: AlignmentDirectional(-1.0, 1.0),
-                            ),
-                            shape: BoxShape.circle,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Mon réseau',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
-                          // child: FlutterFlowIconButton(
-                          //   borderColor: Colors.transparent,
-                          //   borderRadius: 30.0,
-                          //   borderWidth: 1.0,
-                          //   buttonSize: 40.0,
-                          //   icon: Icon(
-                          //     Icons.add,
-                          //     color: FlutterFlowTheme.of(context)
-                          //         .secondaryBackground,
-                          //     size: 20.0,
-                          //   ),
-                          //   onPressed: () {
-                          //     print('IconButton pressed ...');
-                          //   },
-                          // ),
-                        ),
-                      ],
+                          Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 4.0,
+                                  color: Color(0x33000000),
+                                  offset: Offset(0.0, 2.0),
+                                )
+                              ],
+                              gradient: LinearGradient(
+                                colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                                stops: [0.0, 1.0],
+                                begin: AlignmentDirectional(1.0, -1.0),
+                                end: AlignmentDirectional(-1.0, 1.0),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            // child: FlutterFlowIconButton(
+                            //   borderColor: Colors.transparent,
+                            //   borderRadius: 30.0,
+                            //   borderWidth: 1.0,
+                            //   buttonSize: 40.0,
+                            //   icon: Icon(
+                            //     Icons.add,
+                            //     color: FlutterFlowTheme.of(context)
+                            //         .secondaryBackground,
+                            //     size: 20.0,
+                            //   ),
+                            //   onPressed: () {
+                            //     print('IconButton pressed ...');
+                            //   },
+                            // ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              isExpanded_Titu = !isExpanded_Titu;
-                            });
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 1.0,
-                            height: 67,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                color: Color(0xFFF2FDFF),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x2b1e5b67),
-                                      blurRadius: 12,
-                                      offset: Offset(10, 10))
-                                ]),
-                            child: Row(
-                              children: [
-                                Icon(isExpanded_Titu
-                                    ? Icons.expand_less
-                                    : Icons.expand_more),
-                                Text(
-                                  'Membres titulaires (' +
-                                      titulairesNetwork.length.toString() +
-                                      ')',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18.0,
-                                    fontFamily: 'Poppins',
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                isExpanded_Titu = !isExpanded_Titu;
+                              });
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 1.0,
+                              height: 67,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  color: Color(0xFFF2FDFF),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Color(0x2b1e5b67),
+                                        blurRadius: 12,
+                                        offset: Offset(10, 10))
+                                  ]),
+                              child: Row(
+                                children: [
+                                  Icon(isExpanded_Titu
+                                      ? Icons.expand_less
+                                      : Icons.expand_more),
+                                  Text(
+                                    'Membres titulaires (' +
+                                        titulairesNetwork.length.toString() +
+                                        ')',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18.0,
+                                      fontFamily: 'Poppins',
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        if (isExpanded_Titu)
-                          for (var i in titulairesNetwork)
-                            CardUserWidget(data: i),
-                        SizedBox(height: 15),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              isExpanded_NonTitu = !isExpanded_NonTitu;
-                            });
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 1.0,
-                            height: 67,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                color: Color(0xFFF2FDFF),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x2b1e5b67),
-                                      blurRadius: 12,
-                                      offset: Offset(10, 10))
-                                ]),
-                            child: Row(
-                              children: [
-                                Icon(isExpanded_NonTitu
-                                    ? Icons.expand_less
-                                    : Icons.expand_more),
-                                Text(
-                                  'Membres (' +
-                                      nonTitulairesNetwork.length.toString() +
-                                      ')',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18.0,
-                                    fontFamily: 'Poppins',
+                          if (isExpanded_Titu)
+                            for (var i in titulairesNetwork)
+                              CardUserWidget(data: i),
+                          SizedBox(height: 15),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                isExpanded_NonTitu = !isExpanded_NonTitu;
+                              });
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 1.0,
+                              height: 67,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  color: Color(0xFFF2FDFF),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Color(0x2b1e5b67),
+                                        blurRadius: 12,
+                                        offset: Offset(10, 10))
+                                  ]),
+                              child: Row(
+                                children: [
+                                  Icon(isExpanded_NonTitu
+                                      ? Icons.expand_less
+                                      : Icons.expand_more),
+                                  Text(
+                                    'Membres (' +
+                                        nonTitulairesNetwork.length.toString() +
+                                        ')',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18.0,
+                                      fontFamily: 'Poppins',
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        if (isExpanded_NonTitu)
-                          for (var i in nonTitulairesNetwork)
-                            CardUserWidget(data: i),
-                        SizedBox(height: 15),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              isExpanded_Pharma = !isExpanded_Pharma;
-                            });
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 1.0,
-                            height: 67,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                color: Color(0xFFF2FDFF),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color(0x2b1e5b67),
-                                      blurRadius: 12,
-                                      offset: Offset(10, 10))
-                                ]),
-                            child: Row(
-                              children: [
-                                Icon(isExpanded_Pharma
-                                    ? Icons.expand_less
-                                    : Icons.expand_more),
-                                Text(
-                                  'Pharmacies (' +
-                                      pharmaciesNetwork.length.toString() +
-                                      ')',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18.0,
-                                    fontFamily: 'Poppins',
+                          if (isExpanded_NonTitu)
+                            for (var i in nonTitulairesNetwork)
+                              CardUserWidget(data: i),
+                          SizedBox(height: 15),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                isExpanded_Pharma = !isExpanded_Pharma;
+                              });
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 1.0,
+                              height: 67,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  color: Color(0xFFF2FDFF),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Color(0x2b1e5b67),
+                                        blurRadius: 12,
+                                        offset: Offset(10, 10))
+                                  ]),
+                              child: Row(
+                                children: [
+                                  Icon(isExpanded_Pharma
+                                      ? Icons.expand_less
+                                      : Icons.expand_more),
+                                  Text(
+                                    'Pharmacies (' +
+                                        pharmaciesNetwork.length.toString() +
+                                        ')',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18.0,
+                                      fontFamily: 'Poppins',
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        if (isExpanded_Pharma)
-                          for (var i in pharmaciesNetwork)
-                            CardPharmacieWidget(data: i),
-                      ],
+                          if (isExpanded_Pharma)
+                            for (var i in pharmaciesNetwork)
+                              CardPharmacieWidget(data: i),
+                        ],
+                      ),
                     ),
-                  
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

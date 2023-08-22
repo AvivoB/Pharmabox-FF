@@ -51,6 +51,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List<Place> items = [];
   List pharmacieInPlace = [];
   List offres = [];
+  List recherches = [];
 
   Future<void> getPharmaciesLocations({searchTerm}) async {
     QuerySnapshot querySnapshot =
@@ -89,6 +90,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     getPharmaciesLocations();
     checkTitulaireStatus();
     getOffres();
+    getRecherche();
   }
 
   ClusterManager _initClusterManager() {
@@ -117,13 +119,13 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     });
   }
 
-void getOffres() async {
+  void getOffres() async {
     offres.clear();
     String pharmacieId = await getPharmacyByUserId();
 
     final Query query = FirebaseFirestore.instance
-            .collection('offres')
-            .where('pharmacie_id', isEqualTo: pharmacieId);
+        .collection('offres')
+        .where('pharmacie_id', isEqualTo: pharmacieId);
 
     final QuerySnapshot querySnapshot = await query.get();
 
@@ -131,7 +133,23 @@ void getOffres() async {
       offres.add(doc.data());
       print(doc.data());
     });
-}
+  }
+
+  void getRecherche() async {
+    offres.clear();
+    String pharmacieId = await getCurrentUserId();
+
+    final Query query = FirebaseFirestore.instance
+        .collection('recherches')
+        .where('user_id', isEqualTo: pharmacieId);
+
+    final QuerySnapshot querySnapshot = await query.get();
+
+    querySnapshot.docs.forEach((doc) {
+      recherches.add(doc.data());
+      print(doc.data());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +242,7 @@ void getOffres() async {
                     ),
                   ],
                 ), */
-                     Column(
+                      Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (offres.isNotEmpty)
@@ -246,29 +264,117 @@ void getOffres() async {
                                   begin: Alignment.topRight,
                                   end: Alignment.bottomLeft,
                                   colors: [
-                                    Color(0xFF7CEDAC), Color(0xFF42D2FF)
+                                    Color(0xFF7CEDAC),
+                                    Color(0xFF42D2FF)
                                   ],
                                 ),
                               ),
                               child: Container(
-                                 margin: EdgeInsets.all(2.0),
-                                 padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                margin: EdgeInsets.all(2.0),
+                                padding: EdgeInsets.all(
+                                    10.0), // adjust as needed for border width
                                 decoration: BoxDecoration(
-                                  color: Colors.white, // or whatever the inner color needs to be
-                                  borderRadius: BorderRadius.circular(5.0), // adjust as needed
+                                  color: Colors
+                                      .white, // or whatever the inner color needs to be
+                                  borderRadius: BorderRadius.circular(
+                                      5.0), // adjust as needed
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(offres[0]['nom'], overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins',color: blackColor,fontSize: 14.0,fontWeight: FontWeight.w400)),
-                                    Text(offres[0]['poste']+' - '+offres[0]['temps']+' - '+offres[0]['salaire_mensuel']+'€ / mois', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins',color: greyColor,fontSize: 14.0,fontWeight: FontWeight.w400)),
+                                    Text(offres[0]['nom'],
+                                        overflow: TextOverflow.ellipsis,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                                fontFamily: 'Poppins',
+                                                color: blackColor,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400)),
+                                    Text(
+                                        offres[0]['poste'] +
+                                            ' - ' +
+                                            offres[0]['temps'] +
+                                            ' - ' +
+                                            offres[0]['salaire_mensuel'] +
+                                            '€ / mois',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                                fontFamily: 'Poppins',
+                                                color: greyColor,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400)),
                                   ],
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        
+                      if (recherches.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Ma dernière recherche',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                        fontFamily: 'Poppins',
+                                        color: blackColor,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w600)),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 1.0,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    Color(0xFF7CEDAC),
+                                    Color(0xFF42D2FF)
+                                  ],
+                                ),
+                              ),
+                              child: Container(
+                                margin: EdgeInsets.all(2.0),
+                                padding: EdgeInsets.all(
+                                    10.0), // adjust as needed for border width
+                                decoration: BoxDecoration(
+                                  color: Colors
+                                      .white, // or whatever the inner color needs to be
+                                  borderRadius: BorderRadius.circular(
+                                      5.0), // adjust as needed
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(recherches[0]['nom'],
+                                        overflow: TextOverflow.ellipsis,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                                fontFamily: 'Poppins',
+                                                color: blackColor,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400)),
+                                    Text(
+                                            recherches[0]['salaire_mensuel'] +
+                                            '€ / mois',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                                fontFamily: 'Poppins',
+                                                color: greyColor,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
@@ -347,7 +453,9 @@ void getOffres() async {
             ),
             Container(
               width: MediaQuery.of(context).size.width * 1.0,
-              height: MediaQuery.of(context).size.height * 0.58,
+              height: offres.isNotEmpty || recherches.isNotEmpty
+                  ? MediaQuery.of(context).size.height * 0.61
+                  : MediaQuery.of(context).size.height * 0.67,
               child: Stack(children: [
                 Container(
                   child: GoogleMap(

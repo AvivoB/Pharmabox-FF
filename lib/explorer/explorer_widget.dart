@@ -189,10 +189,10 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
     setState(() {
       items = uniqueItem;
       pharmacieInPlace = uniquePharmacie;
-      _initClusterManager();
     });
 
-    print(uniquePharmacie);
+    _manager.setItems(items);
+    _manager.updateMap();
   }
 
   @override
@@ -368,7 +368,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                       color: Color(0xFFEFF6F7),
                     ),
                     width: MediaQuery.of(context).size.width * 1.0,
-                    height: MediaQuery.of(context).size.height * 0.65,
+                    height: MediaQuery.of(context).size.height * 0.67,
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -410,7 +410,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
               if (currentTAB == 1)
                 Container(
                   width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.65,
+                  height: MediaQuery.of(context).size.height * 0.67,
                   child: Stack(children: [
                     Container(
                       child: GoogleMap(
@@ -536,8 +536,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
             _playAnimation();
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-              text: /* cluster.isMultiple ? */
-                  cluster.count.toString() /* : null */),
+          text: cluster.count.toString()),
         );
       };
   Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {
@@ -569,8 +568,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
     }
 
     final img = await pictureRecorder.endRecording().toImage(size, size);
-    final data =
-        await img.toByteData(format: ui.ImageByteFormat.png) as ByteData;
+    final data = await img.toByteData(format: ui.ImageByteFormat.png) as ByteData;
 
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
