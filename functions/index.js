@@ -79,6 +79,59 @@ exports.searchDataUsers = functions
       }
     });
 
+    exports.notifyOnAddNetwork = functions.firestore
+      .document('users/{userId}')
+      .onWrite(async (change, context) => {
+          // Récupère les données du document modifié ou créé
+          const newData = change.after.data();
+          // Vérifie si la clé 'reseau' existe
+          if (newData && newData.reseau) {
+              // Accède à Firestore
+              const db = admin.firestore();
+              // Crée un nouveau document dans la collection 'notifications'
+              const notificationData = {
+                  addedToNetwork: true,
+                  liked: false,
+                  by_user: newData.reseau,
+                  timestamp: FieldValue.serverTimestamp(), 
+              };
+
+              return db.collection('notifications').add(notificationData);
+          } else {
+              // Si 'reseau' n'est pas dans le document, ne fait rien
+              return null;
+          }
+    });
+
+    exports.notifyOnLike = functions.firestore
+    .document('like/{likeId}')
+    .onCreate(async (snapshot, context) => {
+        // Récupère les données du document créé
+        const data = snapshot.data();
+
+        // Vérifie si des données sont ajoutés
+        if (data) {
+            // Accède à Firestore
+            const db = admin.firestore();
+
+            // Crée un nouveau document dans la collection 'notifications'
+            const notificationData = {
+              addedToNetwork: false,
+              liked: true,
+              by_user: newData.liked_by,
+              timestamp: FieldValue.serverTimestamp(),
+            };
+
+            return db.collection('notifications').add(notificationData);
+        } else {
+            // Si 'reseau' n'est pas dans le document, ne fait rien
+            return null;
+        }
+    });
+
+
+
+
 
 
 /* ENVOI DES EMAILS */

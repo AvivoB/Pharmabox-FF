@@ -15,6 +15,8 @@ class PopupOffreModel extends FlutterFlowModel {
   ///  Local state fields for this component.
 
   List<String> contratType = [];
+
+  List horaireDispoInterim = [];
   void addToContratType(String item) {
     if (!contratType.contains(item)) {
       contratType.add(item);

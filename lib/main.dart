@@ -25,11 +25,22 @@ import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await FirebaseMessaging.instance.getToken();
+  print("Handling a background message: ${message.messageId}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
   await FlutterFlowTheme.initialize();
-  await setupFlutterNotifications();
+  final RemoteMessage? remoteMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+  print(remoteMessage);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
 }
 
@@ -39,7 +50,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 
   static _MyAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>()!;  
+      context.findAncestorStateOfType<_MyAppState>()!;
 }
 
 class _MyAppState extends State<MyApp> {
@@ -47,6 +58,8 @@ class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final PushNotificationManager _notificationManager =
+      PushNotificationManager();
 
   late Stream<BaseAuthUser> userStream;
 
@@ -59,6 +72,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _appStateNotifier = AppStateNotifier();
+    _notificationManager.initNotifications();
     _router = createRouter(_appStateNotifier);
     userStream = pharmaboxFirebaseUserStream()
       ..listen((user) => _appStateNotifier.update(user));
@@ -238,15 +252,18 @@ class _NavBarPageState extends State<NavBarPage> {
               children: [
                 Icon(
                   Icons.account_circle_outlined,
-                  color: currentIndex == 3 || currentIndex == 4 ? Color(0xFF7CEDAC) : greyColor,
+                  color: currentIndex == 3 || currentIndex == 4
+                      ? Color(0xFF7CEDAC)
+                      : greyColor,
                   size: 24.0,
                 ),
                 Text(
                   'Profil',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight:
-                        currentIndex == 3 || currentIndex == 4 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: currentIndex == 3 || currentIndex == 4
+                        ? FontWeight.w600
+                        : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),

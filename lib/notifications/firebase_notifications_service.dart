@@ -74,25 +74,54 @@ void showFlutterNotification(RemoteMessage message) {
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-class FirebaseNotification {
-  final _firebaseMessaging = FirebaseMessaging.instance;
+
+Future<void> backgroundMessageHandler(RemoteMessage message) async {
+  print('A background message was received: ${message.messageId}');
+  // Mettez votre logique de traitement ici
+}
+
+class PushNotificationManager {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
-    await _firebaseMessaging.requestPermission();
+    // Ask for permission if needed (iOS)
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      provisional: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("Notifications authorized");
+      // Use the token for sending FCM messages
+      String? token = await _firebaseMessaging.getToken();
+      print("FirebaseMessaging token: $token");
+    } else {
+      print("Notifications not authorized");
+    }
+
+    // Enregistrez le gestionnaire de messages d'arrière-plan
+    FirebaseMessaging.onBackgroundMessage(backgroundMessageHandler);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification?.body}');
-        // Access other properties like message.notification!.body
-      }
+      // Handle the received notification when the app is in foreground
+      print(
+          "Received a message while in foreground: ${message.notification?.body}");
     });
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      // Handle the notification caused by tapping the notification in the system tray
+      print(
+          "Tapped on a notification to open the app: ${message.notification?.body}");
+    });
 
-    final fCMToken = await _firebaseMessaging.getToken();
-    print('TOKEN FCM:  $fCMToken');
+    // Handle notification tap when the app is terminated and not in the background
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      print(
+          "Tapped on a notification to open the app from terminated state: ${initialMessage.notification?.body}");
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../constant.dart';
+import '../../custom_code/widgets/date_selector_interimaire.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -97,6 +98,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
       'grille_horaire': grilleHoraireNetsed,
       'grille_pair_impaire_identique': _model.pairImpaireValue,
       'grille_horaire_impaire': grilleHoraireImpaireNetsed,
+      'proposition_dispo_interim': _model.horaireDispoInterim,
       'description_offre': _model.descriptionOffreController.text,
       'nom': _model.nomOffreController.text,
       'user_id': currentUser?.uid,
@@ -346,7 +348,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       }).toList(),
                     ),
                   ),
-                  if(!_model.contratType.contains('CDI'))
+                  if(!_model.contratType.contains('CDI') && !_model.contratType.contains('Intérimaire'))
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -444,6 +446,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ),
                     ),
                   ),
+                  if(!_model.contratType.contains('Intérimaire'))
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -502,6 +505,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ),
                     ),
                   ),
+                  if(!_model.contratType.contains('Intérimaire'))
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -540,6 +544,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ],
                     ),
                   ),
+                  if(!_model.contratType.contains('Intérimaire'))
                   Container(
                     decoration: BoxDecoration(),
                     child: Visibility(
@@ -630,6 +635,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ),
                     ),
                   ),
+                  
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -714,7 +720,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                         _model.salaireMensuelNetController,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      hintText: 'Salaire mensuel net',
+                                      hintText: _model.contratType.contains('Intérimaire') ? 'Salaire proposé' : 'Salaire mensuel net',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodySmall,
                                       enabledBorder: UnderlineInputBorder(
@@ -769,6 +775,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                               ),
                             ),
                             Text(
+                              _model.contratType.contains('Intérimaire') ? '€ TTC / H' :
                               '€ / mois',
                               style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
@@ -779,6 +786,24 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                   Container(
                     decoration: BoxDecoration(),
                   ),
+                  if (_model.contratType.contains('Intérimaire'))
+                    Text('Vos disponibilités',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            color: blackColor,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600)),
+                  if (_model.contratType.contains('Intérimaire'))
+                    Container(
+                      height: 350,
+                      child: DateSelector(
+                        onDatesChanged: (selectedDates) {
+                          // Faites ce que vous voulez avec selectedDates ici
+                          _model.horaireDispoInterim = selectedDates;
+                        },
+                      ),
+                    ),
+                  if(!_model.contratType.contains('Intérimaire'))
                   Container(
                     width: MediaQuery.of(context).size.width * 1.0,
                     decoration: BoxDecoration(
@@ -840,6 +865,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ),
                     ),
                   ),
+                  if(!_model.contratType.contains('Intérimaire'))
                   Container(
                     width: MediaQuery.of(context).size.width * 1.0,
                     decoration: BoxDecoration(
@@ -912,6 +938,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       ),
                     ),
                   ),
+                  if(!_model.contratType.contains('Intérimaire'))
                   Container(
                     width: MediaQuery.of(context).size.width * 1.0,
                     decoration: BoxDecoration(

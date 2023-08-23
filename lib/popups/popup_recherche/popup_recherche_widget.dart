@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../constant.dart';
+import '../../custom_code/widgets/date_selector_interimaire.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -61,18 +63,19 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
     final CollectionReference<Map<String, dynamic>> usersRef =
         FirebaseFirestore.instance.collection('users');
 
-    List<Map<String, dynamic>> grilleHoraireNetsed = _model.grilleHoraire.map((semaine) {
+    List<Map<String, dynamic>> grilleHoraireNetsed =
+        _model.grilleHoraire.map((semaine) {
       return {
         'semaine': semaine,
       };
     }).toList();
 
-    List<Map<String, dynamic>> grilleHoraireImpaireNetsed = _model.grilleHoraireImpaire.map((semaine) {
+    List<Map<String, dynamic>> grilleHoraireImpaireNetsed =
+        _model.grilleHoraireImpaire.map((semaine) {
       return {
         'semaine': semaine,
       };
     }).toList();
-
 
     // Données à enregistrer
     final createRecherche = {
@@ -88,6 +91,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
       'grille_horaire': grilleHoraireNetsed,
       'grille_pair_impaire_identique': _model.pairImpaireValue,
       'grille_horaire_impaire': grilleHoraireImpaireNetsed,
+      'horaire_dispo_interim': _model.horaireDispoInterim,
       'user_id': currentUser?.uid
     };
 
@@ -331,292 +335,307 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       }).toList(),
                     ),
                   ),
-                  
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                    child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(4.0),
-                        border: Border.all(
-                          color: Color(0xFFD0D1DE),
+                  if (!_model.contratType.contains('CDI') &&
+                      !_model.contratType.contains('Intérimaire'))
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      child: Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(4.0),
+                          border: Border.all(
+                            color: Color(0xFFD0D1DE),
+                          ),
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
-                            child: Icon(
-                              Icons.calendar_month,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 24.0,
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  10.0, 0.0, 0.0, 0.0),
-                              child: TextFormField(
-                                textAlign: TextAlign.center,
-                                controller: _model.dureMoisController,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  hintText: 'Durée',
-                                  hintStyle:
-                                      FlutterFlowTheme.of(context).bodySmall,
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color(0x00000000),
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color(0x00000000),
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  errorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color(0x00000000),
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  focusedErrorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color(0x00000000),
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                ),
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                                keyboardType: TextInputType.number,
-                                validator: _model.dureMoisControllerValidator
-                                    .asValidator(context),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'mois',
-                            style: FlutterFlowTheme.of(context).bodyMedium,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                    child: Container(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(4.0),
-                        border: Border.all(
-                          color: Color(0xFFD0D1DE),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
-                            child: Icon(
-                              Icons.access_time,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 24.0,
-                            ),
-                          ),
-                          FlutterFlowDropDown<String>(
-                            controller:
-                                _model.tempspleinpartielValueController ??=
-                                    FormFieldController<String>(null),
-                            options: [
-                              'Temps plein',
-                              'Temps partiel',
-                              'Dépannage'
-                            ],
-                            onChanged: (val) => setState(
-                                () => _model.tempspleinpartielValue = val),
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: 50.0,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.black,
-                                ),
-                            hintText: 'Temps plein/partiel',
-                            fillColor: Colors.white,
-                            elevation: 2.0,
-                            borderColor: Colors.transparent,
-                            borderWidth: 0.0,
-                            borderRadius: 0.0,
-                            margin: EdgeInsetsDirectional.fromSTEB(
-                                12.0, 4.0, 12.0, 4.0),
-                            hidesUnderline: true,
-                            isSearchable: false,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 10.0, 0.0),
+                                  5.0, 0.0, 0.0, 0.0),
                               child: Icon(
-                                Icons.calendar_today_rounded,
+                                Icons.calendar_month,
                                 color:
                                     FlutterFlowTheme.of(context).secondaryText,
                                 size: 24.0,
                               ),
                             ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 0.0, 0.0, 0.0),
+                                child: TextFormField(
+                                  textAlign: TextAlign.center,
+                                  controller: _model.dureMoisController,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    hintText: 'Durée',
+                                    hintStyle:
+                                        FlutterFlowTheme.of(context).bodySmall,
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedErrorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                  ),
+                                  style:
+                                      FlutterFlowTheme.of(context).bodyMedium,
+                                  keyboardType: TextInputType.number,
+                                  validator: _model.dureMoisControllerValidator
+                                      .asValidator(context),
+                                ),
+                              ),
+                            ),
                             Text(
-                              'Début immédiate',
+                              'mois',
                               style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
                           ],
                         ),
-                        Switch.adaptive(
-                          value: _model.debutImmediateValue ??= false,
-                          onChanged: (newValue) async {
-                            setState(
-                                () => _model.debutImmediateValue = newValue!);
-                          },
-                          activeColor: Color(0xFF7CEDAC),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(),
-                    child: Visibility(
-                      visible: _model.debutImmediateValue == false,
-                      child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                        child: TextFormField(
-                          controller: _model.debutContratController,
-                          onTap: () async {
-                            final _datePickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: getCurrentTimestamp,
-                              firstDate: getCurrentTimestamp,
-                              lastDate: DateTime(2100),
-                            );
-
-                            if (_datePickedDate != null) {
-                              setState(() {
-                                _model.datePicked = DateTime(
-                                  _datePickedDate.year,
-                                  _datePickedDate.month,
-                                  _datePickedDate.day,
-                                );
-
-                                _model.debutContratController.text =
-                                    _datePickedDate.day.toString().padLeft(2, '0') + '/' +
-                                    _datePickedDate.month.toString().padLeft(2, '0') + '/' +
-                                    _datePickedDate.year.toString();
-                              });
-                            }
-                          },
-                          readOnly: true,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            labelText: 'Début du contrat',
-                            hintText: 'JJ/MM/AAAA',
-                            hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFD0D1DE),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).focusColor,
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            prefixIcon: Icon(
-                              Icons.calendar_today_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                            ),
+                  if (!_model.contratType.contains('Intérimaire'))
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      child: Container(
+                        height: 50.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(4.0),
+                          border: Border.all(
+                            color: Color(0xFFD0D1DE),
                           ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
-                          validator: _model.debutContratControllerValidator
-                              .asValidator(context),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  5.0, 0.0, 0.0, 0.0),
+                              child: Icon(
+                                Icons.access_time,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                size: 24.0,
+                              ),
+                            ),
+                            FlutterFlowDropDown<String>(
+                              controller:
+                                  _model.tempspleinpartielValueController ??=
+                                      FormFieldController<String>(null),
+                              options: [
+                                'Temps plein',
+                                'Temps partiel',
+                                'Dépannage'
+                              ],
+                              onChanged: (val) => setState(
+                                  () => _model.tempspleinpartielValue = val),
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: 50.0,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.black,
+                                  ),
+                              hintText: 'Temps plein/partiel',
+                              fillColor: Colors.white,
+                              elevation: 2.0,
+                              borderColor: Colors.transparent,
+                              borderWidth: 0.0,
+                              borderRadius: 0.0,
+                              margin: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 4.0, 12.0, 4.0),
+                              hidesUnderline: true,
+                              isSearchable: false,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  
+                  if (!_model.contratType.contains('Intérimaire'))
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 10.0, 0.0),
+                                child: Icon(
+                                  Icons.calendar_today_rounded,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  size: 24.0,
+                                ),
+                              ),
+                              Text(
+                                'Début immédiate',
+                                style: FlutterFlowTheme.of(context).bodyMedium,
+                              ),
+                            ],
+                          ),
+                          Switch.adaptive(
+                            value: _model.debutImmediateValue ??= false,
+                            onChanged: (newValue) async {
+                              setState(
+                                  () => _model.debutImmediateValue = newValue!);
+                            },
+                            activeColor: Color(0xFF7CEDAC),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (!_model.contratType.contains('Intérimaire'))
+                    Container(
+                      decoration: BoxDecoration(),
+                      child: Visibility(
+                        visible: _model.debutImmediateValue == false,
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 10.0),
+                          child: TextFormField(
+                            controller: _model.debutContratController,
+                            onTap: () async {
+                              final _datePickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: getCurrentTimestamp,
+                                firstDate: getCurrentTimestamp,
+                                lastDate: DateTime(2100),
+                              );
+
+                              if (_datePickedDate != null) {
+                                setState(() {
+                                  _model.datePicked = DateTime(
+                                    _datePickedDate.year,
+                                    _datePickedDate.month,
+                                    _datePickedDate.day,
+                                  );
+
+                                  _model.debutContratController.text =
+                                      _datePickedDate.day
+                                              .toString()
+                                              .padLeft(2, '0') +
+                                          '/' +
+                                          _datePickedDate.month
+                                              .toString()
+                                              .padLeft(2, '0') +
+                                          '/' +
+                                          _datePickedDate.year.toString();
+                                });
+                              }
+                            },
+                            readOnly: true,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'Début du contrat',
+                              hintText: 'JJ/MM/AAAA',
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFD0D1DE),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color:
+                                      FlutterFlowTheme.of(context).focusColor,
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1.0,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              prefixIcon: Icon(
+                                Icons.calendar_today_rounded,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                              ),
+                            ),
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                            validator: _model.debutContratControllerValidator
+                                .asValidator(context),
+                          ),
+                        ),
+                      ),
+                    ),
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -659,7 +678,10 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                       _model.salaireMensuelNetController,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    hintText: 'Salaire mensuel net',
+                                    hintText: _model.contratType
+                                            .contains('Intérimaire')
+                                        ? 'Salaire souhaité'
+                                        : 'Salaire mensuel net',
                                     hintStyle:
                                         FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: UnderlineInputBorder(
@@ -714,82 +736,53 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                             ),
                           ),
                           Text(
-                            '€ / mois',
+                            _model.contratType.contains('Intérimaire')
+                                ? '€ TTC / H'
+                                : '€ / mois',
                             style: FlutterFlowTheme.of(context).bodyMedium,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  
-                  Container(
-                    decoration: BoxDecoration(),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                  if (_model.contratType.contains('Intérimaire'))
+                    Text('Vos disponibilités',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            color: blackColor,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600)),
+                  if (_model.contratType.contains('Intérimaire'))
+                    Container(
+                      height: 350,
+                      child: DateSelector(
+                        onDatesChanged: (selectedDates) {
+                          // Faites ce que vous voulez avec selectedDates ici
+                          _model.horaireDispoInterim = selectedDates;
+                        },
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                  if (!_model.contratType.contains('Intérimaire'))
+                    Container(
+                      decoration: BoxDecoration(),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 10.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                            ),
-                            child: Text(
-                              'Grille horaire',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
-                            ),
-                          ),
-                        ),
-                        custom_widgets.GrilleHoraire(
-                          onSelectionChanged: (selected) {
-                            _model.grilleHoraire = selected;
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    'Semaines paires / impaires identiques',
-                                    style:
-                                        FlutterFlowTheme.of(context).bodySmall,
-                                  ),
-                                ],
-                              ),
-                              Switch.adaptive(
-                                value: _model.pairImpaireValue ??= true,
-                                onChanged: (newValue) async {
-                                  setState(() =>
-                                      _model.pairImpaireValue = newValue!);
-                                },
-                                activeColor: Color(0xFF7CEDAC),
-                              ),
-                            ],
-                          ),
-                        ),
-                        if (_model.pairImpaireValue == false)
+                  if (!_model.contratType.contains('Intérimaire'))
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                    ),
+                  if (!_model.contratType.contains('Intérimaire'))
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 10.0),
@@ -800,19 +793,70 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                     .secondaryBackground,
                               ),
                               child: Text(
-                                'Grille horaire semaines impaires',
+                                'Grille horaire',
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
                             ),
                           ),
-                        if (_model.pairImpaireValue == false)
                           custom_widgets.GrilleHoraire(
-                              onSelectionChanged: (value) {
-                            _model.grilleHoraireImpaire = value;
-                          })
-                      ],
+                            onSelectionChanged: (selected) {
+                              _model.grilleHoraire = selected;
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 10.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Semaines paires / impaires identiques',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodySmall,
+                                    ),
+                                  ],
+                                ),
+                                Switch.adaptive(
+                                  value: _model.pairImpaireValue ??= true,
+                                  onChanged: (newValue) async {
+                                    setState(() =>
+                                        _model.pairImpaireValue = newValue!);
+                                  },
+                                  activeColor: Color(0xFF7CEDAC),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (_model.pairImpaireValue == false)
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 10.0),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 10.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                child: Text(
+                                  'Grille horaire semaines impaires',
+                                  style:
+                                      FlutterFlowTheme.of(context).bodyMedium,
+                                ),
+                              ),
+                            ),
+                          if (_model.pairImpaireValue == false)
+                            custom_widgets.GrilleHoraire(
+                                onSelectionChanged: (value) {
+                              _model.grilleHoraireImpaire = value;
+                            })
+                        ],
+                      ),
                     ),
-                  ),
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
