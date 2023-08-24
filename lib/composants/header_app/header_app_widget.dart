@@ -121,27 +121,47 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                               },
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).alternate,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  8.0, 8.0, 8.0, 8.0),
-                              child: Text(
-                                '3',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Poppins',
+                          StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('notifications')
+                                  .where('for', isEqualTo: currentUser?.uid)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  // Display the error message
+                                  print('${snapshot.error}');
+                                }
+
+                                final int unreadNotificationsCount =
+                                    snapshot.data?.docs.length ?? 0;
+                                if (unreadNotificationsCount > 0) {
+                                  return Container(
+                                    decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      fontSize: 10.0,
+                                          .alternate,
+                                      shape: BoxShape.circle,
                                     ),
-                              ),
-                            ),
-                          ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          8.0, 8.0, 8.0, 8.0),
+                                      child: Text(
+                                        unreadNotificationsCount.toString(),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryBackground,
+                                              fontSize: 10.0,
+                                            ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }),
                         ],
                       ),
                       Padding(
@@ -189,7 +209,8 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collectionGroup('message')
-                                    .where('receiverId', isEqualTo: currentUser?.uid)
+                                    .where('receiverId',
+                                        isEqualTo: currentUser?.uid)
                                     .where('isViewed', isEqualTo: false)
                                     .snapshots(),
                                 builder: (context, snapshot) {

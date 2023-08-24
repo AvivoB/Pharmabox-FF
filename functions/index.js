@@ -1,16 +1,14 @@
 const functions = require("firebase-functions");
 const admin = require('firebase-admin');
 const nodemailer = require('nodemailer');
+const FieldValue = admin.firestore.FieldValue;
 const path = require('path');
 const fs = require('fs');
 
 admin.initializeApp();
 
 // crée une copie des champs utilisateurs en minuscule pour la recherche
-exports.searchDataUsers = functions
-  .firestore
-  .document('users/{userId}')
-  .onWrite((change, context) => {
+exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite((change, context) => {
     // Get the document
     const document = change.after.exists ? change.after.data() : null;
 
@@ -36,7 +34,7 @@ exports.searchDataUsers = functions
     } else {
       return null;
     }
-  });
+});
   
 // Applatissement des données pour la recherche et enregistrement de la donnée dans le document
   function flattenData(data, prefix = '') {
@@ -57,9 +55,7 @@ exports.searchDataUsers = functions
     return result;
   }
   
-  exports.searchDataPharmacie = functions.firestore
-    .document('pharmacies/{pharmacieId}')
-    .onWrite((change, context) => {
+  exports.searchDataPharmacie = functions.firestore.document('pharmacies/{pharmacieId}').onWrite((change, context) => {
       // Get the document
       const document = change.after.exists ? change.after.data() : null;
   
@@ -77,56 +73,58 @@ exports.searchDataUsers = functions
       } else {
         return null;
       }
-    });
+  });
 
-    exports.notifyOnAddNetwork = functions.firestore
-      .document('users/{userId}')
-      .onWrite(async (change, context) => {
-          // Récupère les données du document modifié ou créé
-          const newData = change.after.data();
-          // Vérifie si la clé 'reseau' existe
-          if (newData && newData.reseau) {
-              // Accède à Firestore
-              const db = admin.firestore();
-              // Crée un nouveau document dans la collection 'notifications'
-              const notificationData = {
-                  addedToNetwork: true,
-                  liked: false,
-                  by_user: newData.reseau,
-                  timestamp: FieldValue.serverTimestamp(), 
-              };
+  exports.notifyOnAddNetwork = functions.firestore.document('users/{userId}').onWrite(async (change, context) => {
+    // Récupère les données du document avant le changement
+    const oldData = change.before.data();
+    // Récupère les données du document après le changement
+    const newData = change.after.data();
 
-              return db.collection('notifications').add(notificationData);
-          } else {
-              // Si 'reseau' n'est pas dans le document, ne fait rien
-              return null;
-          }
-    });
+    if (newData && newData.reseau && (!oldData || newData.reseau.length > oldData.reseau.length)) {
+        // Récupère la dernière entrée ajoutée au tableau `reseau`
+        const lastEntry = newData.reseau[newData.reseau.length - 1];
 
-    exports.notifyOnLike = functions.firestore
-    .document('like/{likeId}')
-    .onCreate(async (snapshot, context) => {
+        // Convertit cette entrée en chaîne de caractères (si ce n'est pas déjà une chaîne)
+        const lastEntryAsString = lastEntry.toString();
+
+        // Accède à Firestore
+        const db = admin.firestore();
+        const userId = context.params.userId;
+
+        // Crée un nouveau document dans la collection 'notifications'
+        const notificationData = {
+            addedToNetwork: true,
+            liked: false,
+            by_user: lastEntryAsString,
+            for: userId,
+            timestamp: FieldValue.serverTimestamp(),
+        };
+
+        return db.collection('notifications').add(notificationData);
+    } else {
+        // Si 'reseau' n'est pas dans le document ou si aucune nouvelle entrée n'a été ajoutée, ne fait rien
+        return null;
+    }
+});
+
+
+    exports.notifyOnLike = functions.firestore.document('likes/{likeId}').onCreate(async (snapshot, context) => {
         // Récupère les données du document créé
         const data = snapshot.data();
+        // Accède à Firestore
+        const db = admin.firestore();
 
-        // Vérifie si des données sont ajoutés
-        if (data) {
-            // Accède à Firestore
-            const db = admin.firestore();
+        // Crée un nouveau document dans la collection 'notifications'
+        const notificationData = {
+          addedToNetwork: false,
+          liked: true,
+          by_user: data.liked_by,
+          for: data.document_id,
+          timestamp: FieldValue.serverTimestamp(),
+        };
 
-            // Crée un nouveau document dans la collection 'notifications'
-            const notificationData = {
-              addedToNetwork: false,
-              liked: true,
-              by_user: newData.liked_by,
-              timestamp: FieldValue.serverTimestamp(),
-            };
-
-            return db.collection('notifications').add(notificationData);
-        } else {
-            // Si 'reseau' n'est pas dans le document, ne fait rien
-            return null;
-        }
+        return db.collection('notifications').add(notificationData);
     });
 
 
@@ -136,56 +134,59 @@ exports.searchDataUsers = functions
 
 /* ENVOI DES EMAILS */
 // Configuration du serveur SMTP
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'pharmaboxdb@gmail.com',
-        pass: 'pharmaboxdb5526'
-    }
-});
+// let transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//       type: 'OAuth2',
+//       user: 'pharmaboxdb@gmail.com',
+//       clientId: '402993811587-37kvqs20k7hseum2r0c3spchjnpjn3e7.apps.googleusercontent.com',
+//       clientSecret: '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',
+//   }
+// });
 
-const htmlPath = path.join(__dirname, '/email_template/code_validation.html');
-const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+// const htmlPath = path.join(__dirname, '/email_template/code_validation.html');
+// const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-// Envoi du code de verification du compte
-exports.sendVerificationCode = functions.firestore
-  .document('users/{userId}')
-  .onCreate((snap, context) => {
-    const user = snap.data();
+// // Envoi du code de verification du compte
+// exports.sendVerificationCode = functions.firestore
+//   .document('users/{userId}')
+//   .onCreate((snap, context) => {
+//     const user = snap.data();
 
-    // Vérification du champ 'poste'
-    if (user.poste !== 'Pharmacien(ne) titulaire') {
-        console.log('Pas un titulaire, skipping email');
-        return null;
-    }
+//     // Vérification du champ 'poste'
+//     if (user.poste !== 'Pharmacien(ne) titulaire') {
+//         console.log('Pas un titulaire, skipping email');
+//         return null;
+//     }
 
-    // Génère un code de validation
-    let verificationCode = Math.floor(1000 + Math.random() * 9000);
+//     // Génère un code de validation
+//     let verificationCode = Math.floor(1000 + Math.random() * 9000);
 
-    // Mise à jour du document utilisateur avec le code de validation
-    return admin.firestore().collection('users').doc(snap.id).update({
-        verificationCode: verificationCode
-    }).then(() => {
-        // Construire le courriel
-        const mailOptions = {
-            from: 'pharmaboxdb@gmail.com',
-            to: user.email,
-            subject: 'Votre code de vérification',
-            html: htmlContent.replace('{{code}}', verificationCode)
-        };        
+//     // Mise à jour du document utilisateur avec le code de validation
+//     return admin.firestore().collection('users').doc(snap.id).update({
+//         verificationCode: verificationCode,
+//         isVerified: false
+//     }).then(() => {
+//         // Construire le courriel
+//         const mailOptions = {
+//             from: 'pharmaboxdb@gmail.com',
+//             to: user.email,
+//             subject: 'Votre code de vérification',
+//             html: htmlContent.replace('{{code}}', verificationCode)
+//         };        
 
-        // Envoie le mail
-        return transporter.sendMail(mailOptions, (error, data) => {
-            if (error) {
-                console.log(error);
-                throw new functions.https.HttpsError('internal', 'Failed to send email.');
-            }
-        });
-    }).catch((error) => {
-        console.log(error);
-        throw new functions.https.HttpsError('internal', 'Failed to update user document.');
-    });
-});
+//         // Envoie le mail
+//         return transporter.sendMail(mailOptions, (error, data) => {
+//             if (error) {
+//                 console.log(error);
+//                 throw new functions.https.HttpsError('internal', 'Failed to send email.');
+//             }
+//         });
+//     }).catch((error) => {
+//         console.log(error);
+//         throw new functions.https.HttpsError('internal', 'Failed to update user document.');
+//     });
+// });
 
 
 

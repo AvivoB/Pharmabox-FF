@@ -798,7 +798,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                       height: 350,
                       child: DateSelector(
                         onDatesChanged: (selectedDates) {
-                          // Faites ce que vous voulez avec selectedDates ici
+                          
                           _model.horaireDispoInterim = selectedDates;
                         },
                       ),
