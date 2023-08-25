@@ -69,6 +69,54 @@ class ProfilModel extends FlutterFlowModel {
   // State field of image
   String? imageURL = '';
 
+  List<String> contratType = [];
+
+  List horaireDispoInterim =  [];
+  void addToContratType(String item) {
+    if (!contratType.contains(item)) {
+      contratType.add(item);
+    }
+  }
+
+  void removeFromContratType(String item) => contratType.remove(item);
+  void removeAtIndexFromContratType(int index) => contratType.removeAt(index);
+
+  ///  State fields for stateful widgets in this component.
+
+  // State field(s) for Localisation widget.
+  TextEditingController? localisationController;
+  String? Function(BuildContext, String?)? localisationControllerValidator;
+  // State field(s) for Contrat widget.
+  String? contratValue;
+  FormFieldController<String>? contratValueController;
+  // State field(s) for DureMois widget.
+  TextEditingController? dureMoisController;
+  String? Function(BuildContext, String?)? dureMoisControllerValidator;
+  // State field(s) for Tempspleinpartiel widget.
+  String? tempspleinpartielValue;
+  FormFieldController<String>? tempspleinpartielValueController;
+  // State field(s) for DebutImmediate widget.
+  bool? debutImmediateValue;
+  // State field(s) for DebutContrat widget.
+  TextEditingController? debutContratController;
+  String? Function(BuildContext, String?)? debutContratControllerValidator;
+  DateTime? datePickedContrat;
+  // State field(s) for SalaireMensuelNet widget.
+  TextEditingController? salaireMensuelNetController;
+  String? Function(BuildContext, String?)? salaireMensuelNetControllerValidator;
+  // State field(s) for PairImpaire widget.
+  bool? pairImpaireValue;
+
+  List grilleHoraire = [];
+  List grilleHoraireImpaire = [];
+
+  TextEditingController? rayonController;
+  String? Function(BuildContext, String?)? rayonControllerValidator;
+  // State field(s) for NomOffre widget.
+  TextEditingController? nomOffreController;
+  String? Function(BuildContext, String?)? nomOffreControllerValidator;
+
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {

@@ -292,7 +292,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.w400)),
                                     Text(
-                                        offres[0]['poste'] +
+                                        offres[0]['poste'] ?? '' +
                                             ' - ' +
                                             offres[0]['temps'] +
                                             ' - ' +
