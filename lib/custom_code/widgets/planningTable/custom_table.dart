@@ -4,9 +4,15 @@ import 'package:pharmabox/constant.dart';
 import '../../../flutter_flow/flutter_flow_theme.dart';
 
 class GrilleHoraire extends StatefulWidget {
-  final Function(List<List<String>>) onSelectionChanged;
+  final Function(List) onSelectionChanged;
+  final List? onInitialValue;
+  final bool isEditable;
 
-  const GrilleHoraire({Key? key, required this.onSelectionChanged})
+  GrilleHoraire(
+      {Key? key,
+      required this.onSelectionChanged,
+      this.onInitialValue,
+      this.isEditable = true})
       : super(key: key);
 
   @override
@@ -16,16 +22,26 @@ class GrilleHoraire extends StatefulWidget {
 class _GrilleHoraireState extends State<GrilleHoraire> {
   List<String> daysOfWeek = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   List<String> periods = ['Matinée', 'Après-midi', 'Soirée', 'Nuit'];
-  List<List<String>> selectedOptions = [];
+  List selectedOptions = [];
+
+  List transformInitialValue(List initialValue) {
+    return initialValue.map((e) => e['semaine']!).toList();
+  }
 
   @override
   void initState() {
     super.initState();
-    selectedOptions = List.generate(daysOfWeek.length,
-        (_) => List.generate(periods.length, (_) => 'Obligatoire'));
+    print(widget.onInitialValue);
+    selectedOptions = widget.onInitialValue != ''
+        ? transformInitialValue(widget.onInitialValue!)
+        : List.generate(daysOfWeek.length,
+            (_) => List.generate(periods.length, (_) => 'Obligatoire'));
   }
 
   void _toggleOption(int row, int col) {
+    if (!widget.isEditable) return;
+    print(widget.isEditable);
+
     String currentOption = selectedOptions[row][col];
     String newOption = '';
 

@@ -7,13 +7,20 @@ class ProviderProfilUser extends ChangeNotifier {
   List _selectedLangues = [];
   List _selectedExperiences = [];
 
+  Map _searchSaved = {};
+
   // Getters qui permettent de recuperer les données dans les vues
   List get selectedLgo => _selectedLgo;
   List get selectedSpecialisation => _selectedSpecialisation;
   List get selectedCompetences => _selectedCompetences;
   List get selectedLangues => _selectedLangues;
   List get selectedExperiences => _selectedExperiences;
+  Map get searchSaved => _searchSaved;
 
+  void setSearchSaved (search) {
+    
+  }
+  
   void setCompetence(competences) {
     _selectedCompetences = competences;
     // notifyListeners();
