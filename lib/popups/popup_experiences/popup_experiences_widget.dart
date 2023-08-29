@@ -13,8 +13,7 @@ export 'popup_experiences_model.dart';
 import 'package:http/http.dart' as http;
 
 class PopupExperiencesWidget extends StatefulWidget {
-  const PopupExperiencesWidget({Key? key, required this.onTap})
-      : super(key: key);
+  const PopupExperiencesWidget({Key? key, required this.onTap}) : super(key: key);
 
   final Function onTap;
 
@@ -28,14 +27,12 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
 
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
-      final response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&components=country:fr&key=$googleMapsApi'));
+      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&components=country:fr&key=$googleMapsApi'));
       final json = jsonDecode(response.body);
       print(json);
       if (json['status'] == 'OK') {
         setState(() {
           _predictions = json['predictions'];
-          
         });
       } else {
         setState(() {
@@ -133,8 +130,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
                           controller: _model.lgoFilterController,
                           onChanged: _onSearchChanged,
@@ -188,34 +184,31 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyMedium,
-                          validator: _model.lgoFilterControllerValidator
-                              .asValidator(context),
+                          validator: _model.lgoFilterControllerValidator.asValidator(context),
                         ),
                       ),
                     ),
                   ],
                 ),
                 if (_predictions.isNotEmpty)
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8.0),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _predictions.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_predictions[index]['description'], style: FlutterFlowTheme.of(context).bodyMedium),
+                          onTap: () {
+                            _onPredictionSelected(_predictions[index]['terms'][0]['value']);
+                          },
+                        );
+                      },
+                    ),
                   ),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _predictions.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(_predictions[index]['description'],
-                            style: FlutterFlowTheme.of(context).bodyMedium),
-                        onTap: () {
-                          _onPredictionSelected(
-                              _predictions[index]['terms'][0]['value']);
-                        },
-                      );
-                    },
-                  ),
-                ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                   child: Row(
@@ -224,15 +217,13 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 5.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                           child: TextFormField(
                             controller: _model.experienceDebutController,
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'Année de début',
-                              labelStyle:
-                                  FlutterFlowTheme.of(context).bodyMedium,
+                              labelStyle: FlutterFlowTheme.of(context).bodyMedium,
                               hintText: 'Année',
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -246,8 +237,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color:
-                                      FlutterFlowTheme.of(context).focusColor,
+                                  color: FlutterFlowTheme.of(context).focusColor,
                                   width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
@@ -281,44 +271,40 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                             ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
                             keyboardType: TextInputType.number,
-                            validator: _model.experienceDebutControllerValidator
-                                .asValidator(context),
+                            validator: _model.experienceDebutControllerValidator.asValidator(context),
                             inputFormatters: [_model.experienceDebutMask],
                           ),
                         ),
                       ),
-                      
                       Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        // child: ListView.builder(
+                        //   shrinkWrap: true,
+                        //   itemCount: _predictions.length,
+                        //   itemBuilder: (context, index) {
+                        //     return ListTile(
+                        //       title: Text(_predictions[index]['description'],
+                        //           style: FlutterFlowTheme.of(context).bodyMedium),
+                        //       onTap: () {
+                        //         _onPredictionSelected(
+                        //             _predictions[index]['terms'][0]['value']);
+                        //       },
+                        //     );
+                        //   },
+                        // ),
                       ),
-                      // child: ListView.builder(
-                      //   shrinkWrap: true,
-                      //   itemCount: _predictions.length,
-                      //   itemBuilder: (context, index) {
-                      //     return ListTile(
-                      //       title: Text(_predictions[index]['description'],
-                      //           style: FlutterFlowTheme.of(context).bodyMedium),
-                      //       onTap: () {
-                      //         _onPredictionSelected(
-                      //             _predictions[index]['terms'][0]['value']);
-                      //       },
-                      //     );
-                      //   },
-                      // ),
-                    ),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                           child: TextFormField(
                             controller: _model.experienceFinController,
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'Année de fin',
-                              labelStyle:
-                                  FlutterFlowTheme.of(context).bodyMedium,
+                              labelStyle: FlutterFlowTheme.of(context).bodyMedium,
                               hintText: 'Année',
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -332,8 +318,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color:
-                                      FlutterFlowTheme.of(context).focusColor,
+                                  color: FlutterFlowTheme.of(context).focusColor,
                                   width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
@@ -367,8 +352,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                             ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
                             keyboardType: TextInputType.number,
-                            validator: _model.experienceFinControllerValidator
-                                .asValidator(context),
+                            validator: _model.experienceFinControllerValidator.asValidator(context),
                             inputFormatters: [_model.experienceFinMask],
                           ),
                         ),
@@ -399,28 +383,22 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                     ),
                     child: FFButtonWidget(
                       onPressed: () {
-                        widget.onTap(
-                            _model.lgoFilterController.text,
-                            _model.experienceDebutController.text,
-                            _model.experienceFinController.text);
+                        widget.onTap(_model.lgoFilterController.text, _model.experienceDebutController.text, _model.experienceFinController.text);
                         Navigator.pop(context);
                       },
                       text: 'Ajouter',
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 40.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                         color: Color(0x00FFFFFF),
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600,
+                            ),
                         elevation: 0.0,
                         borderSide: BorderSide(
                           color: Colors.transparent,

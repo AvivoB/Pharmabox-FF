@@ -9,9 +9,7 @@ import 'list_skill_with_slider_model.dart';
 export 'list_skill_with_slider_model.dart';
 
 class ListSkillWithSliderWidget extends StatefulWidget {
-  const ListSkillWithSliderWidget(
-      {Key? key, required this.slider, this.onChanged})
-      : super(key: key);
+  const ListSkillWithSliderWidget({Key? key, required this.slider, this.onChanged}) : super(key: key);
 
   final int? slider;
   final Function(int)? onChanged;
@@ -19,8 +17,7 @@ class ListSkillWithSliderWidget extends StatefulWidget {
   static void emptyFunction() {}
 
   @override
-  _ListSkillWithSliderWidgetState createState() =>
-      _ListSkillWithSliderWidgetState();
+  _ListSkillWithSliderWidgetState createState() => _ListSkillWithSliderWidgetState();
 }
 
 class _ListSkillWithSliderWidgetState extends State<ListSkillWithSliderWidget> {

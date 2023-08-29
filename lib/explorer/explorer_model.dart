@@ -42,8 +42,7 @@ class ExplorerModel extends FlutterFlowModel {
 
   // Search pharmacie, jobs and memeber in explorer
   getPharmaciesLocations({searchTerm}) async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection('pharmacies').get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('pharmacies').get();
 
     // Boucle à travers les documents
     for (DocumentSnapshot doc in querySnapshot.docs) {

@@ -23,8 +23,7 @@ class ProfilViewModel extends FlutterFlowModel {
 
   void initState(BuildContext context) {
     headerAppModel = createModel(context, () => HeaderAppModel());
-    listSkillWithSliderModel =
-        createModel(context, () => ListSkillWithSliderModel());
+    listSkillWithSliderModel = createModel(context, () => ListSkillWithSliderModel());
   }
 
   void dispose() {
@@ -33,5 +32,4 @@ class ProfilViewModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
-
 }

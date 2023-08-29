@@ -58,8 +58,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
     _model.postcodeController ??= TextEditingController();
     _model.cityController ??= TextEditingController();
     _model.presentationController ??= TextEditingController();
-    _imageURL =
-        'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+    _imageURL = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
   }
 
   @override
@@ -76,8 +75,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
     bool _isUploading = false;
 
     Future<void> _pickImage() async {
-      final pickedFile =
-          await ImagePicker().getImage(source: ImageSource.gallery);
+      final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
         setState(() {
@@ -85,9 +83,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
           _isUploading = true;
         });
 
-        final Reference storageRef = FirebaseStorage.instance
-            .ref()
-            .child('profile_pictures/${DateTime.now()}.png');
+        final Reference storageRef = FirebaseStorage.instance.ref().child('profile_pictures/${DateTime.now()}.png');
         final UploadTask uploadTask = storageRef.putFile(_image!);
         final TaskSnapshot downloadUrl = (await uploadTask);
 
@@ -106,8 +102,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
 
     final providerUserRegister = Provider.of<ProviderUserRegister>(context);
 
-    return Consumer<ProviderUserRegister>(
-        builder: (context, userRegisterSate, child) {
+    return Consumer<ProviderUserRegister>(builder: (context, userRegisterSate, child) {
       return GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: Scaffold(
@@ -123,11 +118,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                     height: MediaQuery.of(context).size.height * 0.3,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF7F7FD5),
-                          Color(0xFF86A8E7),
-                          Color(0xFF91EAE4)
-                        ],
+                        colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
                         stops: [0, 0.5, 1],
                         begin: AlignmentDirectional(1, 0.34),
                         end: AlignmentDirectional(-1, -0.34),
@@ -157,8 +148,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        7, 7, 7, 7),
+                                    padding: EdgeInsetsDirectional.fromSTEB(7, 7, 7, 7),
                                     child: Container(
                                       width: 150,
                                       height: 150,
@@ -171,8 +161,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               _imageURL!,
                                               fit: BoxFit.cover,
                                             )
-                                          : Image.asset(
-                                              'assets/images/Group_18.png'),
+                                          : Image.asset('assets/images/Group_18.png'),
                                     ),
                                   ),
                                 ),
@@ -186,8 +175,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     fillColor: Colors.white,
                                     icon: Icon(
                                       Icons.add_a_photo_outlined,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
+                                      color: FlutterFlowTheme.of(context).primaryText,
                                       size: 30,
                                     ),
                                     onPressed: () {
@@ -199,17 +187,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                             child: Text(
                               'Les profils avec photo ont 80% de vues en plus',
                               textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
+                                    color: FlutterFlowTheme.of(context).primaryBackground,
                                   ),
                             ),
                           ),
@@ -235,15 +219,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.nomFamilleController,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Nom de famille *',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
+                                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0xFFD0D1DE),
@@ -253,8 +235,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
+                                          color: FlutterFlowTheme.of(context).focusColor,
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(4),
@@ -275,27 +256,21 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                       prefixIcon: Icon(
                                         Icons.person,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
+                                        color: FlutterFlowTheme.of(context).secondaryText,
                                       ),
                                     ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    validator: _model
-                                        .nomFamilleControllerValidator
-                                        .asValidator(context),
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                                    validator: _model.nomFamilleControllerValidator.asValidator(context),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.prenomController,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Prénom *',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
+                                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0xFFD0D1DE),
@@ -305,8 +280,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
+                                          color: FlutterFlowTheme.of(context).focusColor,
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(4),
@@ -327,24 +301,19 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                       prefixIcon: Icon(
                                         Icons.person,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
+                                        color: FlutterFlowTheme.of(context).secondaryText,
                                       ),
                                     ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    validator: _model.prenomControllerValidator
-                                        .asValidator(context),
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                                    validator: _model.prenomControllerValidator.asValidator(context),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: Container(
                                     height: 50,
                                     decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
+                                      color: FlutterFlowTheme.of(context).secondaryBackground,
                                       borderRadius: BorderRadius.circular(4),
                                       border: Border.all(
                                         color: Color(0xFFD0D1DE),
@@ -354,53 +323,30 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  5, 0, 0, 0),
+                                          padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                                           child: Icon(
                                             Icons.work_outline,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
+                                            color: FlutterFlowTheme.of(context).secondaryText,
                                             size: 24,
                                           ),
                                         ),
                                         FlutterFlowDropDown<String>(
-                                          controller: _model
-                                                  .posteValueController ??=
-                                              FormFieldController<String>(null),
-                                          options: [
-                                            'Rayonniste',
-                                            'Conseiller',
-                                            'Préparateur',
-                                            'Apprenti',
-                                            'Etudiant pharmacie',
-                                            'Etudiant pharmacie 6ème année validée',
-                                            'Pharmacien(ne)',
-                                            'Pharmacien(ne) titulaire'
-                                          ],
-                                          onChanged: (val) => setState(
-                                              () => _model.posteValue = val),
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.78,
+                                          controller: _model.posteValueController ??= FormFieldController<String>(null),
+                                          options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien(ne)', 'Pharmacien(ne) titulaire'],
+                                          onChanged: (val) => setState(() => _model.posteValue = val),
+                                          width: MediaQuery.of(context).size.width * 0.78,
                                           height: 50,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    color: Colors.black,
-                                                  ),
+                                          textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                fontFamily: 'Poppins',
+                                                color: Colors.black,
+                                              ),
                                           hintText: 'Poste',
                                           fillColor: Colors.white,
                                           elevation: 2,
                                           borderColor: Colors.transparent,
                                           borderWidth: 0,
                                           borderRadius: 0,
-                                          margin:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  12, 4, 12, 4),
+                                          margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
                                           hidesUnderline: true,
                                           isSearchable: false,
                                         ),
@@ -409,152 +355,124 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.emailController,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Email',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1,
+                                        labelText: 'Email',
+                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFD0D1DE),
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
-                                          width: 1,
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context).focusColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.mail_outline_rounded,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                      suffixIcon: InkWell(
-                                      onTap: () => setState(
-                                        () => _model.afficherEmail =
-                                            !_model.afficherEmail,
-                                      ),
-                                      focusNode: FocusNode(skipTraversal: true),
-                                      child: Icon(
-                                        _model.afficherEmail
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: Color(0xFF757575),
-                                        size: 22.0,
-                                      ),
-                                    )
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    validator: _model.emailControllerValidator
-                                        .asValidator(context),
+                                        prefixIcon: Icon(
+                                          Icons.mail_outline_rounded,
+                                          color: FlutterFlowTheme.of(context).secondaryText,
+                                        ),
+                                        suffixIcon: InkWell(
+                                          onTap: () => setState(
+                                            () => _model.afficherEmail = !_model.afficherEmail,
+                                          ),
+                                          focusNode: FocusNode(skipTraversal: true),
+                                          child: Icon(
+                                            _model.afficherEmail ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                            color: Color(0xFF757575),
+                                            size: 22.0,
+                                          ),
+                                        )),
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                                    validator: _model.emailControllerValidator.asValidator(context),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.telephoneController,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Téléphone',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1,
+                                        labelText: 'Téléphone',
+                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFD0D1DE),
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
-                                          width: 1,
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context).focusColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(4),
                                         ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.local_phone,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                      suffixIcon: InkWell(
-                                      onTap: () => setState(
-                                        () => _model.afficherTelephone =
-                                            !_model.afficherTelephone,
-                                      ),
-                                      focusNode: FocusNode(skipTraversal: true),
-                                      child: Icon(
-                                        _model.afficherTelephone
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: Color(0xFF757575),
-                                        size: 22.0,
-                                      ),
-                                    )
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
+                                        prefixIcon: Icon(
+                                          Icons.local_phone,
+                                          color: FlutterFlowTheme.of(context).secondaryText,
+                                        ),
+                                        suffixIcon: InkWell(
+                                          onTap: () => setState(
+                                            () => _model.afficherTelephone = !_model.afficherTelephone,
+                                          ),
+                                          focusNode: FocusNode(skipTraversal: true),
+                                          child: Icon(
+                                            _model.afficherTelephone ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                            color: Color(0xFF757575),
+                                            size: 22.0,
+                                          ),
+                                        )),
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
                                     keyboardType: TextInputType.number,
-                                    validator: _model
-                                        .telephoneControllerValidator
-                                        .asValidator(context),
+                                    validator: _model.telephoneControllerValidator.asValidator(context),
                                     inputFormatters: [_model.telephoneMask],
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.birthDateController,
                                     readOnly: true,
                                     onTap: () async {
-                                      final _datePickedDate =
-                                          await showDatePicker(
-                                              context: context,
-                                              initialDate: getCurrentTimestamp,
-                                              firstDate: DateTime(1900),
-                                              lastDate: getCurrentTimestamp,
-                                              keyboardType: TextInputType.url);
+                                      final _datePickedDate = await showDatePicker(context: context, initialDate: getCurrentTimestamp, firstDate: DateTime(1900), lastDate: getCurrentTimestamp, keyboardType: TextInputType.url);
 
                                       if (_datePickedDate != null) {
                                         setState(() {
@@ -564,16 +482,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                             _datePickedDate.day,
                                           );
 
-                                          _model.birthDateController
-                                              .text = _datePickedDate.day
-                                                  .toString()
-                                                  .padLeft(2, '0') +
-                                              '/' +
-                                              _datePickedDate.month
-                                                  .toString()
-                                                  .padLeft(2, '0') +
-                                              '/' +
-                                              _datePickedDate.year.toString();
+                                          _model.birthDateController.text = _datePickedDate.day.toString().padLeft(2, '0') + '/' + _datePickedDate.month.toString().padLeft(2, '0') + '/' + _datePickedDate.year.toString();
                                         });
                                       }
                                     },
@@ -581,8 +490,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     decoration: InputDecoration(
                                       labelText: 'Date de naissance',
                                       hintText: '01/01/1970',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
+                                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0xFFD0D1DE),
@@ -592,8 +500,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
+                                          color: FlutterFlowTheme.of(context).focusColor,
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(4),
@@ -614,34 +521,27 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                       prefixIcon: Icon(
                                         Icons.cake,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
+                                        color: FlutterFlowTheme.of(context).secondaryText,
                                       ),
                                     ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
                                     keyboardType: TextInputType.datetime,
-                                    validator: _model
-                                        .birthDateControllerValidator
-                                        .asValidator(context),
+                                    validator: _model.birthDateControllerValidator.asValidator(context),
                                     inputFormatters: [_model.birthDateMask],
                                   ),
                                 ),
                                 PredictionVille(onPlaceSelected: (ville) {
-                                  _model.postcodeController.text =
-                                      ville['postal_code'];
+                                  _model.postcodeController.text = ville['postal_code'];
                                   _model.cityController.text = ville['city'];
                                 }),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
                                     controller: _model.presentationController,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Présentation',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall,
+                                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0xFFD0D1DE),
@@ -651,8 +551,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .focusColor,
+                                          color: FlutterFlowTheme.of(context).focusColor,
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(4),
@@ -672,13 +571,10 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                     ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
                                     maxLines: null,
                                     keyboardType: TextInputType.multiline,
-                                    validator: _model
-                                        .presentationControllerValidator
-                                        .asValidator(context),
+                                    validator: _model.presentationControllerValidator.asValidator(context),
                                   ),
                                 ),
                               ],
@@ -706,31 +602,25 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       child: Container(
                         width: 100,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(15),
                           shape: BoxShape.rectangle,
                         ),
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Spécialisations',
-                                    style: FlutterFlowTheme.of(context)
-                                        .headlineMedium
-                                        .override(
+                                    style: FlutterFlowTheme.of(context).headlineMedium.override(
                                           fontFamily: 'Poppins',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
+                                          color: FlutterFlowTheme.of(context).primaryText,
                                           fontSize: 18,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -748,18 +638,10 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         context: context,
                                         builder: (bottomSheetContext) {
                                           return GestureDetector(
-                                            onTap: () => FocusScope.of(context)
-                                                .requestFocus(_unfocusNode),
+                                            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
                                             child: Padding(
-                                              padding: MediaQuery.of(
-                                                      bottomSheetContext)
-                                                  .viewInsets,
-                                              child: PopupSpecialisationWidget(
-                                                  onTap: (specialisation) => {
-                                                        userRegisterSate
-                                                            .addSelectedSpecialisation(
-                                                                specialisation)
-                                                      }),
+                                              padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                              child: PopupSpecialisationWidget(onTap: (specialisation) => {userRegisterSate.addSelectedSpecialisation(specialisation)}),
                                             ),
                                           );
                                         },
@@ -783,81 +665,54 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        5, 5, 5, 5),
+                                    padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                                     child: Container(
                                       width: MediaQuery.of(context).size.width,
                                       decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
+                                        color: FlutterFlowTheme.of(context).secondaryBackground,
                                       ),
                                       child: ListView.builder(
                                         padding: EdgeInsets.zero,
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: providerUserRegister
-                                            .selectedSpecialisation.length,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemCount: providerUserRegister.selectedSpecialisation.length,
                                         itemBuilder: (context, index) {
                                           return Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 10, 0, 0),
+                                            padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 FlutterFlowIconButton(
-                                                  borderColor:
-                                                      Colors.transparent,
+                                                  borderColor: Colors.transparent,
                                                   borderRadius: 30,
                                                   borderWidth: 1,
                                                   buttonSize: 40,
                                                   icon: Icon(
                                                     Icons.delete_outline_sharp,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .alternate,
+                                                    color: FlutterFlowTheme.of(context).alternate,
                                                     size: 20,
                                                   ),
                                                   onPressed: () {
-                                                    userRegisterSate
-                                                        .deleteSelectedSpecialisation(
-                                                            index);
+                                                    userRegisterSate.deleteSelectedSpecialisation(index);
                                                   },
                                                 ),
                                                 Icon(
                                                   Icons.verified,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
+                                                  color: FlutterFlowTheme.of(context).secondaryText,
                                                   size: 24,
                                                 ),
                                                 Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.6,
+                                                  width: MediaQuery.of(context).size.width * 0.6,
                                                   decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryBackground,
+                                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                                   ),
                                                   child: Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                5, 0, 0, 0),
+                                                    padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                                                     child: Text(
-                                                      userRegisterSate
-                                                              .selectedSpecialisation[
-                                                          index],
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium,
+                                                      userRegisterSate.selectedSpecialisation[index],
+                                                      style: FlutterFlowTheme.of(context).bodyMedium,
                                                     ),
                                                   ),
                                                 ),
@@ -895,12 +750,10 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                            padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                                 borderRadius: BorderRadius.circular(15),
                                 shape: BoxShape.rectangle,
                               ),
@@ -909,20 +762,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 children: [
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'LGO',
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineMedium
-                                            .override(
+                                        style: FlutterFlowTheme.of(context).headlineMedium.override(
                                               fontFamily: 'Poppins',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
+                                              color: FlutterFlowTheme.of(context).primaryText,
                                               fontSize: 18,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -940,18 +787,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                             context: context,
                                             builder: (bottomSheetContext) {
                                               return GestureDetector(
-                                                onTap: () => FocusScope.of(
-                                                        context)
-                                                    .requestFocus(_unfocusNode),
+                                                onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
                                                 child: Padding(
-                                                  padding: MediaQuery.of(
-                                                          bottomSheetContext)
-                                                      .viewInsets,
+                                                  padding: MediaQuery.of(bottomSheetContext).viewInsets,
                                                   child: PopupLgoWidget(
-                                                    onTap: (lgo) => {
-                                                      userRegisterSate
-                                                          .addSelectedLgo(lgo)
-                                                    },
+                                                    onTap: (lgo) => {userRegisterSate.addSelectedLgo(lgo)},
                                                   ),
                                                 ),
                                               );
@@ -961,8 +801,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         child: Container(
                                           width: 100,
                                           height: 30,
-                                          child:
-                                              custom_widgets.GradientTextCustom(
+                                          child: custom_widgets.GradientTextCustom(
                                             width: 100,
                                             height: 30,
                                             text: 'Ajouter',
@@ -982,8 +821,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                               ),
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
@@ -994,21 +832,16 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 itemBuilder: (context, index) {
                                   return Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.42,
+                                        width: MediaQuery.of(context).size.width * 0.42,
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             FlutterFlowIconButton(
                                               borderColor: Colors.transparent,
@@ -1017,21 +850,15 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               buttonSize: 40,
                                               icon: Icon(
                                                 Icons.delete_outline_sharp,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .alternate,
+                                                color: FlutterFlowTheme.of(context).alternate,
                                                 size: 20,
                                               ),
                                               onPressed: () {
-                                                userRegisterSate
-                                                    .deleteSelectedLgo(index);
+                                                userRegisterSate.deleteSelectedLgo(index);
                                               },
                                             ),
                                             Image.asset(
-                                              'assets/lgo/' +
-                                                  userRegisterSate
-                                                          .selectedLgo[index]
-                                                      ['image'],
+                                              'assets/lgo/' + userRegisterSate.selectedLgo[index]['image'],
                                               width: 80,
                                               height: 60,
                                               fit: BoxFit.cover,
@@ -1057,26 +884,19 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         ),
                                       ),
                                       Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
+                                        width: MediaQuery.of(context).size.width * 0.4,
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
                                         ),
                                         child: wrapWithModel(
-                                          model:
-                                              _model.listSkillWithSliderModel1,
+                                          model: _model.listSkillWithSliderModel1,
                                           updateCallback: () {
-                                            print(_model
-                                                .listSkillWithSliderModel1);
+                                            print(_model.listSkillWithSliderModel1);
                                           },
                                           child: ListSkillWithSliderWidget(
                                             slider: 1,
                                             onChanged: (value) {
-                                              userRegisterSate
-                                                  .updateSelectedLgo(
-                                                      index, value);
+                                              userRegisterSate.updateSelectedLgo(index, value);
                                             },
                                           ),
                                         ),
@@ -1102,8 +922,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       child: Container(
                         width: 100,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           boxShadow: [
                             BoxShadow(
                               blurRadius: 12,
@@ -1115,25 +934,20 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                           shape: BoxShape.rectangle,
                         ),
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Compétences',
-                                    style: FlutterFlowTheme.of(context)
-                                        .headlineMedium
-                                        .override(
+                                    style: FlutterFlowTheme.of(context).headlineMedium.override(
                                           fontFamily: 'Poppins',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
+                                          color: FlutterFlowTheme.of(context).primaryText,
                                           fontSize: 18,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -1141,21 +955,17 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ],
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                           child: Icon(
                                             Icons.coronavirus,
                                             color: Color(0xFF595A71),
@@ -1164,18 +974,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         ),
                                         Text(
                                           'Test COVID',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                          style: FlutterFlowTheme.of(context).bodyMedium,
                                         ),
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.comptencesTestCovidValue ??=
-                                          false,
+                                      value: _model.comptencesTestCovidValue ??= false,
                                       onChanged: (newValue) async {
-                                        setState(() =>
-                                            _model.comptencesTestCovidValue =
-                                                newValue);
+                                        setState(() => _model.comptencesTestCovidValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1183,42 +989,32 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 10, 0),
+                                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                             child: SvgPicture.asset(
                                               'assets/icons/Vaccines.svg',
                                               width: 24,
-                                              colorFilter: ColorFilter.mode(
-                                                  Color(0xFF595A71),
-                                                  BlendMode.srcIn),
+                                              colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
                                             )),
                                         Text(
                                           'Vaccination',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                          style: FlutterFlowTheme.of(context).bodyMedium,
                                         ),
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model
-                                          .comptencesVaccinationValue ??= false,
+                                      value: _model.comptencesVaccinationValue ??= false,
                                       onChanged: (newValue) async {
-                                        setState(() =>
-                                            _model.comptencesVaccinationValue =
-                                                newValue);
+                                        setState(() => _model.comptencesVaccinationValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1226,21 +1022,17 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                           child: Icon(
                                             Icons.payments_outlined,
                                             color: Color(0xFF595A71),
@@ -1249,18 +1041,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         ),
                                         Text(
                                           'Gestion des tiers payant',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                          style: FlutterFlowTheme.of(context).bodyMedium,
                                         ),
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model
-                                          .comptencesTiersPayantValue ??= false,
+                                      value: _model.comptencesTiersPayantValue ??= false,
                                       onChanged: (newValue) async {
-                                        setState(() =>
-                                            _model.comptencesTiersPayantValue =
-                                                newValue);
+                                        setState(() => _model.comptencesTiersPayantValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1268,21 +1056,17 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                           child: Icon(
                                             Icons.science_outlined,
                                             color: Color(0xFF595A71),
@@ -1291,17 +1075,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         ),
                                         Text(
                                           'Gestion de laboratoire',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                          style: FlutterFlowTheme.of(context).bodyMedium,
                                         ),
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.comptencesLaboValue ??=
-                                          false,
+                                      value: _model.comptencesLaboValue ??= false,
                                       onChanged: (newValue) async {
-                                        setState(() => _model
-                                            .comptencesLaboValue = newValue);
+                                        setState(() => _model.comptencesLaboValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1309,41 +1090,32 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 10, 0),
+                                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                             child: SvgPicture.asset(
                                               'assets/icons/labs.svg',
                                               width: 27,
-                                              colorFilter: ColorFilter.mode(
-                                                  Color(0xFF595A71),
-                                                  BlendMode.srcIn),
+                                              colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
                                             )),
                                         Text(
                                           'TROD',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                          style: FlutterFlowTheme.of(context).bodyMedium,
                                         ),
                                       ],
                                     ),
                                     Switch.adaptive(
-                                      value: _model.comptencesTRODValue ??=
-                                          false,
+                                      value: _model.comptencesTRODValue ??= false,
                                       onChanged: (newValue) async {
-                                        setState(() => _model
-                                            .comptencesTRODValue = newValue);
+                                        setState(() => _model.comptencesTRODValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1375,12 +1147,10 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                            padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                                 borderRadius: BorderRadius.circular(15),
                                 shape: BoxShape.rectangle,
                               ),
@@ -1389,20 +1159,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 children: [
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Langues',
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineMedium
-                                            .override(
+                                        style: FlutterFlowTheme.of(context).headlineMedium.override(
                                               fontFamily: 'Poppins',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
+                                              color: FlutterFlowTheme.of(context).primaryText,
                                               fontSize: 18,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -1420,17 +1184,12 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                             context: context,
                                             builder: (bottomSheetContext) {
                                               return GestureDetector(
-                                                onTap: () => FocusScope.of(
-                                                        context)
-                                                    .requestFocus(_unfocusNode),
+                                                onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
                                                 child: Padding(
-                                                  padding: MediaQuery.of(
-                                                          bottomSheetContext)
-                                                      .viewInsets,
+                                                  padding: MediaQuery.of(bottomSheetContext).viewInsets,
                                                   child: PopupLanguesWidget(
                                                     onTap: (langue) {
-                                                      userRegisterSate
-                                                          .addLangues(langue);
+                                                      userRegisterSate.addLangues(langue);
                                                     },
                                                   ),
                                                 ),
@@ -1461,34 +1220,27 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                               ),
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
-                                itemCount:
-                                    userRegisterSate.selectedLangues.length,
+                                itemCount: userRegisterSate.selectedLangues.length,
                                 itemBuilder: (context, index) {
                                   return Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
+                                        width: MediaQuery.of(context).size.width * 0.4,
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             FlutterFlowIconButton(
                                               borderColor: Colors.transparent,
@@ -1497,14 +1249,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               buttonSize: 40,
                                               icon: Icon(
                                                 Icons.delete_outline_sharp,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .alternate,
+                                                color: FlutterFlowTheme.of(context).alternate,
                                                 size: 20,
                                               ),
                                               onPressed: () {
-                                                userRegisterSate
-                                                    .deleteLangues(index);
+                                                userRegisterSate.deleteLangues(index);
                                               },
                                             ),
                                             Icon(
@@ -1513,38 +1262,28 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               size: 24,
                                             ),
                                             Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(5, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                                               child: Text(
-                                                userRegisterSate
-                                                        .selectedLangues[index]
-                                                    ['name'],
+                                                userRegisterSate.selectedLangues[index]['name'],
                                                 overflow: TextOverflow.ellipsis,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium,
+                                                style: FlutterFlowTheme.of(context).bodyMedium,
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
                                       Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
+                                        width: MediaQuery.of(context).size.width * 0.4,
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
                                         ),
                                         child: wrapWithModel(
-                                          model:
-                                              _model.listSkillWithSliderModel2,
+                                          model: _model.listSkillWithSliderModel2,
                                           updateCallback: () => setState(() {}),
                                           child: ListSkillWithSliderWidget(
                                             slider: 0,
                                             onChanged: (value) {
-                                              userRegisterSate.updateLangues(
-                                                  index, value);
+                                              userRegisterSate.updateLangues(index, value);
                                             },
                                           ),
                                         ),
@@ -1570,8 +1309,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       child: Container(
                         width: 100,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           boxShadow: [
                             BoxShadow(
                               blurRadius: 12,
@@ -1583,25 +1321,20 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                           shape: BoxShape.rectangle,
                         ),
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Expériences',
-                                    style: FlutterFlowTheme.of(context)
-                                        .headlineMedium
-                                        .override(
+                                    style: FlutterFlowTheme.of(context).headlineMedium.override(
                                           fontFamily: 'Poppins',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
+                                          color: FlutterFlowTheme.of(context).primaryText,
                                           fontSize: 18,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -1619,23 +1352,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         context: context,
                                         builder: (bottomSheetContext) {
                                           return GestureDetector(
-                                            onTap: () => FocusScope.of(context)
-                                                .requestFocus(_unfocusNode),
+                                            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
                                             child: Padding(
-                                              padding: MediaQuery.of(
-                                                      bottomSheetContext)
-                                                  .viewInsets,
+                                              padding: MediaQuery.of(bottomSheetContext).viewInsets,
                                               child: PopupExperiencesWidget(
-                                                onTap: (nom_pharmacie,
-                                                        annee_debut,
-                                                        annee_fin) =>
-                                                    {
-                                                  userRegisterSate
-                                                      .addExperiences(
-                                                          nom_pharmacie,
-                                                          annee_debut,
-                                                          annee_fin)
-                                                },
+                                                onTap: (nom_pharmacie, annee_debut, annee_fin) => {userRegisterSate.addExperiences(nom_pharmacie, annee_debut, annee_fin)},
                                               ),
                                             ),
                                           );
@@ -1661,16 +1382,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount:
-                                    userRegisterSate.selectedExperiences.length,
+                                itemCount: userRegisterSate.selectedExperiences.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 10, 0, 0),
+                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         FlutterFlowIconButton(
                                           borderColor: Colors.transparent,
@@ -1679,21 +1397,16 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           buttonSize: 40,
                                           icon: Icon(
                                             Icons.delete_outline_sharp,
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
+                                            color: FlutterFlowTheme.of(context).alternate,
                                             size: 20,
                                           ),
                                           onPressed: () {
-                                            userRegisterSate
-                                                .deleteExperience(index);
-                                            print(userRegisterSate
-                                                .selectedExperiences[index]);
+                                            userRegisterSate.deleteExperience(index);
+                                            print(userRegisterSate.selectedExperiences[index]);
                                           },
                                         ),
                                         Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 10, 0),
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                           child: Icon(
                                             Icons.work_outline,
                                             color: Color(0xFF595A71),
@@ -1701,28 +1414,13 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           ),
                                         ),
                                         Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.6,
+                                          width: MediaQuery.of(context).size.width * 0.6,
                                           decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
+                                            color: FlutterFlowTheme.of(context).secondaryBackground,
                                           ),
                                           child: Text(
-                                            userRegisterSate
-                                                        .selectedExperiences[
-                                                    index]['nom_pharmacie'] +
-                                                ', ' +
-                                                userRegisterSate
-                                                        .selectedExperiences[
-                                                    index]['annee_debut'] +
-                                                '-' +
-                                                userRegisterSate
-                                                        .selectedExperiences[
-                                                    index]['annee_fin'],
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
+                                            userRegisterSate.selectedExperiences[index]['nom_pharmacie'] + ', ' + userRegisterSate.selectedExperiences[index]['annee_debut'] + '-' + userRegisterSate.selectedExperiences[index]['annee_fin'],
+                                            style: FlutterFlowTheme.of(context).bodyMedium,
                                           ),
                                         ),
                                       ],
@@ -1754,44 +1452,35 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       child: Container(
                         width: 100,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(15),
                           shape: BoxShape.rectangle,
                         ),
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.65,
+                                      width: MediaQuery.of(context).size.width * 0.65,
                                       constraints: BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
+                                        maxWidth: MediaQuery.of(context).size.width * 0.8,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
+                                        color: FlutterFlowTheme.of(context).secondaryBackground,
                                       ),
                                       child: Text(
                                         'Je donne à PharmaBox le droit de m\'envoyer des notifications.',
                                         textAlign: TextAlign.start,
                                         maxLines: 2,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
                                               fontFamily: 'Poppins',
                                               fontSize: 12,
                                             ),
@@ -1800,8 +1489,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     Switch.adaptive(
                                       value: _model.allowNotifsValue ??= false,
                                       onChanged: (newValue) async {
-                                        setState(() =>
-                                            _model.allowNotifsValue = newValue);
+                                        setState(() => _model.allowNotifsValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1809,30 +1497,23 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.65,
+                                      width: MediaQuery.of(context).size.width * 0.65,
                                       constraints: BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
+                                        maxWidth: MediaQuery.of(context).size.width * 0.8,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
+                                        color: FlutterFlowTheme.of(context).secondaryBackground,
                                       ),
                                       child: Text(
                                         'J\'accepte les conditions d\'utilisation',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
                                               fontFamily: 'Poppins',
                                               fontSize: 12,
                                             ),
@@ -1841,8 +1522,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     Switch.adaptive(
                                       value: _model.allowCGUValue ??= false,
                                       onChanged: (newValue) async {
-                                        setState(() =>
-                                            _model.allowCGUValue = newValue);
+                                        setState(() => _model.allowCGUValue = newValue);
                                       },
                                       activeColor: Color(0xFF7CEDAC),
                                     ),
@@ -1878,36 +1558,34 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () {
-                          var send_data = RegisterStepModel()
-                              .createUserToFirebase(
-                                  widget_context_provider,
-                                  _model.afficherTelephone,
-                                  _model.afficherEmail,
-                                  _model.nomFamilleController.text,
-                                  _model.prenomController.text,
-                                  _model.posteValue,
-                                  _model.emailController.text,
-                                  _model.telephoneController.text,
-                                  _model.birthDateController.text,
-                                  _model.postcodeController.text,
-                                  _model.cityController.text,
-                                  _model.presentationController.text,
-                                  _model.comptencesTestCovidValue,
-                                  _model.comptencesVaccinationValue,
-                                  _model.comptencesTiersPayantValue,
-                                  _model.comptencesLaboValue,
-                                  _model.comptencesTRODValue,
-                                  _model.allowNotifsValue,
-                                  _model.allowCGUValue,
-                                  _imageURL!);
+                          var send_data = RegisterStepModel().createUserToFirebase(
+                              widget_context_provider,
+                              _model.afficherTelephone,
+                              _model.afficherEmail,
+                              _model.nomFamilleController.text,
+                              _model.prenomController.text,
+                              _model.posteValue,
+                              _model.emailController.text,
+                              _model.telephoneController.text,
+                              _model.birthDateController.text,
+                              _model.postcodeController.text,
+                              _model.cityController.text,
+                              _model.presentationController.text,
+                              _model.comptencesTestCovidValue,
+                              _model.comptencesVaccinationValue,
+                              _model.comptencesTiersPayantValue,
+                              _model.comptencesLaboValue,
+                              _model.comptencesTRODValue,
+                              _model.allowNotifsValue,
+                              _model.allowCGUValue,
+                              _imageURL!);
 
                           if (send_data) {
-                            if (_model.posteValue ==
-                                'Pharmacien(ne) titulaire') {
+                            if (_model.posteValue == 'Pharmacien(ne) titulaire') {
                               context.pushNamed('RegisterPharmacy',
                                   queryParams: {
                                     'titulaire': serializeParam(
-                                      _model.nomFamilleController.text +' '+ _model.prenomController.text,
+                                      _model.nomFamilleController.text + ' ' + _model.prenomController.text,
                                       ParamType.String,
                                     ),
                                   }.withoutNulls);
@@ -1922,16 +1600,14 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                           width: double.infinity,
                           height: 40,
                           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                          iconPadding:
-                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                           color: Color(0x00FFFFFF),
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                          textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
                           borderSide: BorderSide(
                             color: Colors.transparent,
                             width: 1,

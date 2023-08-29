@@ -40,18 +40,12 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
     super.dispose();
   }
 
-    String _searchText = '';
+  String _searchText = '';
 
   @override
   Widget build(BuildContext context) {
     List<Map> listLangue = PopupLanguesModel.selectLangues();
-    listLangue = listLangue
-        .where((element) => element['name']
-            .toString()
-            .toLowerCase()
-            .contains(_searchText!.toLowerCase()))
-        .toList();
-
+    listLangue = listLangue.where((element) => element['name'].toString().toLowerCase().contains(_searchText!.toLowerCase())).toList();
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -105,8 +99,7 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
                             controller: _model.langueFilterController,
                             autofocus: false,
@@ -128,8 +121,7 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color:
-                                      FlutterFlowTheme.of(context).focusColor,
+                                  color: FlutterFlowTheme.of(context).focusColor,
                                   width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
@@ -167,14 +159,12 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
                               })
                             },
                             style: FlutterFlowTheme.of(context).bodyMedium,
-                            validator: _model.langueFilterControllerValidator
-                                .asValidator(context),
+                            validator: _model.langueFilterControllerValidator.asValidator(context),
                           ),
                         ),
                       ),
                     ],
                   ),
-
                   Container(
                     width: MediaQuery.of(context).size.width * 1.0,
                     height: MediaQuery.of(context).size.height * 0.23,
@@ -190,27 +180,24 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
                       itemBuilder: (context, index) {
                         final item = listLangue;
                         return Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
                           child: GestureDetector(
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      25.0, 0.0, 0.0, 0.0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 0.0, 0.0),
                                   child: Text(
                                     item[index]['name'],
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
                                   ),
                                 ),
                               ],
                             ),
                             onTap: () {
                               widget.onTap(item[index]);
-                              
+
                               Navigator.pop(context);
                             },
                           ),

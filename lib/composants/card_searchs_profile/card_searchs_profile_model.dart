@@ -10,12 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class PopupRechercheModel extends FlutterFlowModel {
+class CardSearchProfilModel extends FlutterFlowModel {
   ///  Local state fields for this component.
 
-  List<String> contratType = [];
+  List contratType = [];
 
   List horaireDispoInterim = [];
+
+  bool? isActive;
+
   void addToContratType(String item) {
     if (!contratType.contains(item)) {
       contratType.add(item);

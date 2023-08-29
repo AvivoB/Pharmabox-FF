@@ -21,8 +21,7 @@ import 'dart:convert';
 import 'package:like_button/like_button.dart';
 
 class CardPharmacieWidget extends StatefulWidget {
-  const CardPharmacieWidget({Key? key, this.data})
-      : super(key: key);
+  const CardPharmacieWidget({Key? key, this.data}) : super(key: key);
 
   final data;
   @override
@@ -107,16 +106,12 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                           Container(
                             width: MediaQuery.of(context).size.width * 0.45,
                             child: Text(
-                              widget.data['situation_geographique']['adresse']
-                                  .toString(),
+                              widget.data['situation_geographique']['adresse'].toString(),
                               overflow: TextOverflow.ellipsis,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: Color(0xFF161730),
                                     fontSize: 16.0,
-                                    
                                   ),
                             ),
                           )
@@ -128,8 +123,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Image.asset(
-                        'assets/groupements/' +
-                            widget.data['groupement'][0]['image'].toString(),
+                        'assets/groupements/' + widget.data['groupement'][0]['image'].toString(),
                         width: 150.0,
                         height: 50.0,
                         fit: BoxFit.cover,
@@ -155,21 +149,12 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                         size: 35.0,
                       ),
                       Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.45,
                           child: Text(
-                            widget.data['situation_geographique']['data']
-                                        ['ville']
-                                    .toString() +
-                                ', ' +
-                                widget.data['situation_geographique']['data']
-                                        ['postcode']
-                                    .toString(),
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
+                            widget.data['situation_geographique']['data']['ville'].toString() + ', ' + widget.data['situation_geographique']['data']['postcode'].toString(),
+                            style: FlutterFlowTheme.of(context).bodyMedium.override(
                                   fontFamily: 'Poppins',
                                   color: Color(0xFF595A71),
                                 ),
@@ -179,16 +164,15 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                     ],
                   ),
                   Container(
-                    child: ButtonNetworkManager(
-                       width: 30,
-                      radius: 12.0,
-                      fontSize: 14,
-                      text: 'Ajouter',
-                      height: 25.0,
-                      typeCollection: 'pharmacies',
-                      docId: widget.data['documentId'],
-                    )
-                  ),
+                      child: ButtonNetworkManager(
+                    width: 30,
+                    radius: 12.0,
+                    fontSize: 14,
+                    text: 'Ajouter',
+                    height: 25.0,
+                    typeCollection: 'pharmacies',
+                    docId: widget.data['documentId'],
+                  )),
                 ],
               ),
             ),
@@ -223,15 +207,11 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 5.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFF42D2FF),
-                                    Color(0xFF7CEDAC)
-                                  ],
+                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),
@@ -239,8 +219,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    2.0, 2.0, 2.0, 2.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
                                 child: FlutterFlowIconButton(
                                   borderColor: Color(0x0042D2FF),
                                   borderRadius: 30.0,
@@ -260,15 +239,11 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 5.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFF42D2FF),
-                                    Color(0xFF7CEDAC)
-                                  ],
+                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),
@@ -276,8 +251,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    2.0, 2.0, 2.0, 2.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
                                 child: FlutterFlowIconButton(
                                   borderColor: Color(0x0042D2FF),
                                   borderRadius: 30.0,
@@ -307,8 +281,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                               shape: BoxShape.circle,
                             ),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  2.0, 2.0, 2.0, 2.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
                               child: FlutterFlowIconButton(
                                 borderColor: Color(0x0042D2FF),
                                 borderRadius: 30.0,

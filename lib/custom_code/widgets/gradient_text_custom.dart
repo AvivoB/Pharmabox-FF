@@ -37,29 +37,26 @@ class _GradientTextCustomState extends State<GradientTextCustom> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GradientText(
-            this.widget.text,
-            radius: this.widget.radius,
-            style: TextStyle(
-              fontSize: this.widget.fontSize,
-              fontWeight: FontWeight.w400,
-            ),
-            colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
+          this.widget.text,
+          radius: this.widget.radius,
+          style: TextStyle(
+            fontSize: this.widget.fontSize,
+            fontWeight: FontWeight.w400,
           ),
+          colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
+        ),
       ),
       decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0.0, 1.0), //(x,y)
-                    blurRadius: 2.0,
-                  ),
-                ],
-              ),
+        borderRadius: BorderRadius.circular(5.0),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 2.0,
+          ),
+        ],
+      ),
     );
   }
 }
-
-
-

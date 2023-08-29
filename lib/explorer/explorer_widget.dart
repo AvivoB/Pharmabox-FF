@@ -39,8 +39,7 @@ class ExplorerWidget extends StatefulWidget {
   _ExplorerWidgetState createState() => _ExplorerWidgetState();
 }
 
-class _ExplorerWidgetState extends State<ExplorerWidget>
-    with TickerProviderStateMixin {
+class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStateMixin {
   TabController? _tabController;
   int currentTAB = 0;
   late ExplorerModel _model;
@@ -91,10 +90,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
 
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    QuerySnapshot querySnapshot = await _firestore
-        .collection('pharmacies')
-        .where('user_id', isNotEqualTo: await getCurrentUserId())
-        .get();
+    QuerySnapshot querySnapshot = await _firestore.collection('pharmacies').where('user_id', isNotEqualTo: await getCurrentUserId()).get();
     for (var doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
@@ -123,9 +119,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
     final pharmacieRef = FirebaseFirestore.instance.collection('pharmacies');
 
     // Start by getting all users
-    final pharmacieSnapshot = await pharmacieRef
-        .where('user_id', isNotEqualTo: await getCurrentUserId())
-        .get();
+    final pharmacieSnapshot = await pharmacieRef.where('user_id', isNotEqualTo: await getCurrentUserId()).get();
 
     // Prepare to launch search queries for each field
     final fields = [
@@ -141,29 +135,22 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
 
     pharmacieSnapshot.docs.forEach((userDoc) {
       fields.forEach((field) {
-        searchDataFutures.add(userDoc.reference
-            .collection('searchDataPharmacie')
-            .where(field, isGreaterThanOrEqualTo: lowerCaseQuery)
-            .where(field, isLessThan: lowerCaseQuery + '\uf8ff')
-            .get());
+        searchDataFutures.add(userDoc.reference.collection('searchDataPharmacie').where(field, isGreaterThanOrEqualTo: lowerCaseQuery).where(field, isLessThan: lowerCaseQuery + '\uf8ff').get());
       });
     });
 
     // Wait for all searchData queries to complete
-    final List<QuerySnapshot> searchDataSnapshots =
-        await Future.wait(searchDataFutures);
+    final List<QuerySnapshot> searchDataSnapshots = await Future.wait(searchDataFutures);
 
     // Now, get the parent user documents for each searchData document that matches the query
-    final List pharmacieFuture =
-        searchDataSnapshots.expand((searchDataSnapshot) {
+    final List pharmacieFuture = searchDataSnapshots.expand((searchDataSnapshot) {
       return searchDataSnapshot.docs.map((searchDataDoc) {
         return pharmacieRef.doc(searchDataDoc.id).get();
       });
     }).toList();
 
     // Wait for all user queries to complete
-    List<DocumentSnapshot> userDocs = await Future.wait(
-        pharmacieFuture as Iterable<Future<DocumentSnapshot<Object?>>>);
+    List<DocumentSnapshot> userDocs = await Future.wait(pharmacieFuture as Iterable<Future<DocumentSnapshot<Object?>>>);
 
     // Remove duplicate users and convert to list of user data
     final Set<String> addedUserIds = {}; // Set to keep track of added user IDs
@@ -171,15 +158,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
     final List<Place> uniqueItem = []; // List to store unique user data
     userDocs.forEach((pharmacieDoc) {
       final String pharmacieId = pharmacieDoc.id;
-      final Map<String, dynamic> userData =
-          pharmacieDoc.data() as Map<String, dynamic>;
+      final Map<String, dynamic> userData = pharmacieDoc.data() as Map<String, dynamic>;
       if (!addedUserIds.contains(pharmacieId)) {
         userData['documentId'] = pharmacieId;
         print(userData);
         List<dynamic> location = userData['situation_geographique']['lat_lng'];
-        Place place = Place(
-            name: userData['situation_geographique']['adresse'],
-            latLng: LatLng(location[0], location[1]));
+        Place place = Place(name: userData['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]));
 
         uniqueItem.add(place);
         uniquePharmacie.add(userData);
@@ -216,8 +200,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
   }
 
   ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers,
-        markerBuilder: _markerBuilder);
+    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder);
   }
 
   void _updateMarkers(Set<Marker> markers) {
@@ -291,16 +274,14 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyMedium,
-                          validator: _model.textControllerValidator
-                              .asValidator(context),
+                          validator: _model.textControllerValidator.asValidator(context),
                           onChanged: (query) async {
                             setState(() async {
                               if (currentTAB == 0) {
                                 if (query.isEmpty) {
                                   userSearch.clear();
                                 } else {
-                                  userSearch = await ExplorerSearchData()
-                                      .searchUsers(query);
+                                  userSearch = await ExplorerSearchData().searchUsers(query);
                                 }
                               }
 
@@ -340,19 +321,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                             // items.clear();
                           });
                         },
-                        unselectedLabelStyle:
-                            FlutterFlowTheme.of(context).bodyMedium.override(
-                                  fontFamily: 'Poppins',
-                                  color: Color(0xFF595A71),
-                                  fontSize: 14.0,
-                                ),
-                        labelStyle: FlutterFlowTheme.of(context)
-                            .bodyMedium
-                            .override(
-                                fontFamily: 'Poppins',
-                                color: blackColor,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w600),
+                        unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Poppins',
+                              color: Color(0xFF595A71),
+                              fontSize: 14.0,
+                            ),
+                        labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                         tabs: [
                           Tab(text: 'Membres'),
                           Tab(text: 'Pharmacies'),
@@ -375,25 +349,16 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                         child: Column(
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: userSearch.length == 1
-                                  ? Text(
-                                      userSearch.length.toString() +
-                                          ' résultat',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
+                                  ? Text(userSearch.length.toString() + ' résultat',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),
                                             fontSize: 14.0,
                                           ))
-                                  : Text(
-                                      userSearch.length.toString() +
-                                          ' résultats',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
+                                  : Text(userSearch.length.toString() + ' résultats',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),
                                             fontSize: 14.0,
@@ -439,8 +404,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              for (var i in selectedItem)
-                                CardPharmacieWidget(data: pharmacieInPlace[i]),
+                              for (var i in selectedItem) CardPharmacieWidget(data: pharmacieInPlace[i]),
                             ],
                           ),
                         ),
@@ -449,14 +413,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                     DraggableScrollableSheet(
                       minChildSize: 0.09,
                       initialChildSize: 0.09,
-                      builder: (BuildContext context,
-                          ScrollController scrollController) {
+                      builder: (BuildContext context, ScrollController scrollController) {
                         return Container(
-                            decoration: BoxDecoration(
-                                color: Color(0xFFEFF6F7),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15))),
+                            decoration: BoxDecoration(color: Color(0xFFEFF6F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
                             child: SingleChildScrollView(
                               controller: scrollController,
                               child: Padding(
@@ -466,39 +425,23 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                                     SvgPicture.asset(
                                       'assets/icons/Home-Indicator.svg',
                                       width: 60,
-                                      colorFilter: ColorFilter.mode(
-                                          Color(0xFFD0D1DE), BlendMode.srcIn),
+                                      colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 8.0, bottom: 8.0),
+                                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                       child: pharmacieInPlace.length == 1
-                                          ? Text(
-                                              pharmacieInPlace.length
-                                                      .toString() +
-                                                  ' résultat',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            Color(0xFF595A71),
-                                                        fontSize: 14.0,
-                                                      ))
-                                          : Text(
-                                              pharmacieInPlace.length
-                                                      .toString() +
-                                                  ' résultats',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            Color(0xFF595A71),
-                                                        fontSize: 14.0,
-                                                      )),
+                                          ? Text(pharmacieInPlace.length.toString() + ' résultat',
+                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                    fontFamily: 'Poppins',
+                                                    color: Color(0xFF595A71),
+                                                    fontSize: 14.0,
+                                                  ))
+                                          : Text(pharmacieInPlace.length.toString() + ' résultats',
+                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                    fontFamily: 'Poppins',
+                                                    color: Color(0xFF595A71),
+                                                    fontSize: 14.0,
+                                                  )),
                                     ),
                                     if (currentTAB == 0)
                                       for (var user in userSearch)
@@ -525,8 +468,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
     );
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
-      (cluster) async {
+  Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
         return Marker(
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
@@ -535,8 +477,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
             cluster.items.forEach((p) => selectedItem.add(1));
             _playAnimation();
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-          text: cluster.count.toString()),
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, text: cluster.count.toString()),
         );
       };
   Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {

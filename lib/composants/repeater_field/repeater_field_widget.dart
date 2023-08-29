@@ -62,8 +62,7 @@ class _RepeaterFieldWidgetState extends State<RepeaterFieldWidget> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: TextFormField(
                         controller: _model.cityController,
                         autofocus: true,
@@ -102,8 +101,7 @@ class _RepeaterFieldWidgetState extends State<RepeaterFieldWidget> {
                           prefixIcon: widget.icone,
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium,
-                        validator:
-                            _model.cityControllerValidator.asValidator(context),
+                        validator: _model.cityControllerValidator.asValidator(context),
                       ),
                     ),
                   ),

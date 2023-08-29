@@ -85,10 +85,8 @@ class RegisterStepModel extends FlutterFlowModel {
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
-    listSkillWithSliderModel1 =
-        createModel(context, () => ListSkillWithSliderModel());
-    listSkillWithSliderModel2 =
-        createModel(context, () => ListSkillWithSliderModel());
+    listSkillWithSliderModel1 = createModel(context, () => ListSkillWithSliderModel());
+    listSkillWithSliderModel2 = createModel(context, () => ListSkillWithSliderModel());
   }
 
   void dispose() {
@@ -105,35 +103,13 @@ class RegisterStepModel extends FlutterFlowModel {
   }
 
 // Envoyer les données dans firebase
-  createUserToFirebase(
-      context,
-      afficher_tel,
-      afficher_email,
-      nomFamille,
-      prenom,
-      poste,
-      email,
-      telephone,
-      birthDate,
-      postcode,
-      city,
-      presentation,
-      comptencesTestCovid,
-      comptencesVaccination,
-      comptencesTiersPayant,
-      comptencesLabo,
-      comptencesTROD,
-      allowNotifs,
-      allowCGU,
-      imageURL) {
-    final providerUserRegister =
-        Provider.of<ProviderUserRegister>(context, listen: false);
+  createUserToFirebase(context, afficher_tel, afficher_email, nomFamille, prenom, poste, email, telephone, birthDate, postcode, city, presentation, comptencesTestCovid, comptencesVaccination, comptencesTiersPayant, comptencesLabo, comptencesTROD, allowNotifs, allowCGU, imageURL) {
+    final providerUserRegister = Provider.of<ProviderUserRegister>(context, listen: false);
 
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
 
-    final CollectionReference<Map<String, dynamic>> usersRef =
-        FirebaseFirestore.instance.collection('users');
+    final CollectionReference<Map<String, dynamic>> usersRef = FirebaseFirestore.instance.collection('users');
 
     List competences = [];
 
@@ -153,13 +129,7 @@ class RegisterStepModel extends FlutterFlowModel {
       competences.add('TROD');
     }
 
-    if (nomFamille != '' &&
-        prenom != '' &&
-        postcode != '' &&
-        city != '' &&
-        poste != null &&
-        allowCGU &&
-        allowNotifs) {
+    if (nomFamille != '' && prenom != '' && postcode != '' && city != '' && poste != null && allowCGU && allowNotifs) {
       usersRef.doc(currentUser?.uid).set({
         'id': currentUser?.uid,
         'nom': nomFamille,
@@ -185,8 +155,7 @@ class RegisterStepModel extends FlutterFlowModel {
     } else {
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-              'Pour continuer, vous devez compléter votre compte et vous devez accepter les CGU'),
+          content: Text('Pour continuer, vous devez compléter votre compte et vous devez accepter les CGU'),
           backgroundColor: redColor,
         ),
       );

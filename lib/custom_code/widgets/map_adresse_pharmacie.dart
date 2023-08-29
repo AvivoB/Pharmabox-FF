@@ -9,12 +9,9 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class MapAdressePharmacie extends StatefulWidget {
-  const MapAdressePharmacie(
-      {Key? key, required this.onAdressSelected, this.onInitialValue})
-      : super(key: key);
+  const MapAdressePharmacie({Key? key, required this.onAdressSelected, this.onInitialValue}) : super(key: key);
 
-  final Function(double, double, String, String, String, String, String)
-      onAdressSelected;
+  final Function(double, double, String, String, String, String, String) onAdressSelected;
   final String? onInitialValue;
 
   @override
@@ -40,8 +37,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
 
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
-      final response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=geocode&components=country:fr&key=$googleMapsApi'));
+      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=geocode&components=country:fr&key=$googleMapsApi'));
       final json = jsonDecode(response.body);
 
       if (json['status'] == 'OK') {
@@ -125,8 +121,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
               itemCount: _predictions.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(_predictions[index]['description'],
-                      style: FlutterFlowTheme.of(context).bodyMedium),
+                  title: Text(_predictions[index]['description'], style: FlutterFlowTheme.of(context).bodyMedium),
                   onTap: () {
                     _onPredictionSelected(_predictions[index]['description']);
                   },
@@ -136,8 +131,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
           ),
         SizedBox(height: 5),
         Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
           height: 150,
           child: GoogleMap(
             scrollGesturesEnabled: false,
@@ -169,8 +163,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
     // Get the first prediction
     Location location = locations.first;
 
-    final aDreplacemark =
-        await placemarkFromCoordinates(location.latitude, location.longitude);
+    final aDreplacemark = await placemarkFromCoordinates(location.latitude, location.longitude);
 
     widget.onAdressSelected(
       location.latitude,
@@ -190,11 +183,9 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
       ),
     ));
 
-    final providerPharmacieRegister =
-        Provider.of<ProviderPharmacieRegister>(context, listen: false);
+    final providerPharmacieRegister = Provider.of<ProviderPharmacieRegister>(context, listen: false);
 
-    providerPharmacieRegister.setPharmacieLocation(
-        location.latitude, location.longitude);
+    providerPharmacieRegister.setPharmacieLocation(location.latitude, location.longitude);
 
     // Add a marker for the selected location
     _markers.add(Marker(
@@ -203,8 +194,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
     ));
 
     // // Set the selected address
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(location.latitude, location.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(location.latitude, location.longitude);
     Placemark placemark = placemarks.first;
     setState(() {
       _selectedAddress = placemark.street ?? '';

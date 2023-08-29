@@ -58,25 +58,21 @@ class _LoginWidgetState extends State<LoginWidget> {
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 20.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 20.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                                 child: Text(
                                   'Pharma-box',
-                                  style:
-                                      FlutterFlowTheme.of(context).displaySmall,
+                                  style: FlutterFlowTheme.of(context).displaySmall,
                                 ),
                               ),
                               Text(
@@ -94,16 +90,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.emailController,
                                   autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
@@ -116,8 +110,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .focusColor,
+                                        color: FlutterFlowTheme.of(context).focusColor,
                                         width: 1.0,
                                       ),
                                       borderRadius: const BorderRadius.only(
@@ -146,23 +139,19 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       ),
                                     ),
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.emailControllerValidator
-                                      .asValidator(context),
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
+                                  validator: _model.emailControllerValidator.asValidator(context),
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.motdepasseController,
                                   autofocus: true,
                                   obscureText: !_model.motdepasseVisibility,
                                   decoration: InputDecoration(
                                     labelText: 'Mot de passe',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
@@ -175,8 +164,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .focusColor,
+                                        color: FlutterFlowTheme.of(context).focusColor,
                                         width: 1.0,
                                       ),
                                       borderRadius: const BorderRadius.only(
@@ -205,16 +193,12 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       ),
                                     ),
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model
-                                      .motdepasseControllerValidator
-                                      .asValidator(context),
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
+                                  validator: _model.motdepasseControllerValidator.asValidator(context),
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                 child: Container(
                                   width: double.infinity,
                                   height: 50.0,
@@ -227,10 +211,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       )
                                     ],
                                     gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFF7CEDAC),
-                                        Color(0xFF42D2FF)
-                                      ],
+                                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
                                       stops: [0.0, 1.0],
                                       begin: AlignmentDirectional(1.0, -1.0),
                                       end: AlignmentDirectional(-1.0, 1.0),
@@ -241,8 +222,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     onPressed: () async {
                                       GoRouter.of(context).prepareAuthEvent();
 
-                                      final user =
-                                          await authManager.signInWithEmail(
+                                      final user = await authManager.signInWithEmail(
                                         context,
                                         _model.emailController.text,
                                         _model.motdepasseController.text,
@@ -258,15 +238,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       width: double.infinity,
                                       elevation: 0.0,
                                       height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
+                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                       color: Color.fromARGB(0, 255, 255, 255),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
+                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                             fontFamily: 'Poppins',
                                             color: Colors.white,
                                             fontSize: 18.0,
@@ -282,8 +257,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                 child: Container(
                                   width: double.infinity,
                                   height: 50.0,
@@ -296,10 +270,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       )
                                     ],
                                     gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFF7CEDAC),
-                                        Color(0xFF42D2FF)
-                                      ],
+                                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
                                       stops: [0.0, 1.0],
                                       begin: AlignmentDirectional(1.0, -1.0),
                                       end: AlignmentDirectional(-1.0, 1.0),
@@ -309,8 +280,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   child: FFButtonWidget(
                                     onPressed: () async {
                                       GoRouter.of(context).prepareAuthEvent();
-                                      final user = await authManager
-                                          .signInWithGoogle(context);
+                                      final user = await authManager.signInWithGoogle(context);
                                       if (user == null) {
                                         return;
                                       }
@@ -325,15 +295,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     options: FFButtonOptions(
                                       width: double.infinity,
                                       height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
+                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                       color: Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
+                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                             fontFamily: 'Poppins',
                                             color: Colors.white,
                                             fontSize: 18.0,
@@ -353,22 +318,17 @@ class _LoginWidgetState extends State<LoginWidget> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 50.0, 0.0, 10.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 10.0),
                           child: FFButtonWidget(
                             onPressed: () async {
                               context.pushNamed('PasswordReset');
                             },
                             text: 'Mot de passe oublié?',
                             options: FFButtonOptions(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                               color: Color(0x004B39EF),
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
+                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                     fontFamily: 'Poppins',
                                     color: FlutterFlowTheme.of(context).accent2,
                                     fontSize: 14.0,
@@ -389,17 +349,12 @@ class _LoginWidgetState extends State<LoginWidget> {
                           },
                           text: 'Vous n’avez pas encore de compte? Inscription',
                           options: FFButtonOptions(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                             color: Color(0x004B39EF),
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
+                            textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Poppins',
-                                  color:
-                                      FlutterFlowTheme.of(context).focusColor,
+                                  color: FlutterFlowTheme.of(context).focusColor,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.normal,
                                 ),

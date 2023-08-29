@@ -12,12 +12,10 @@ class PopupEnregistrerOffreWidget extends StatefulWidget {
   const PopupEnregistrerOffreWidget({Key? key}) : super(key: key);
 
   @override
-  _PopupEnregistrerOffreWidgetState createState() =>
-      _PopupEnregistrerOffreWidgetState();
+  _PopupEnregistrerOffreWidgetState createState() => _PopupEnregistrerOffreWidgetState();
 }
 
-class _PopupEnregistrerOffreWidgetState
-    extends State<PopupEnregistrerOffreWidget> {
+class _PopupEnregistrerOffreWidgetState extends State<PopupEnregistrerOffreWidget> {
   late PopupEnregistrerOffreModel _model;
 
   @override
@@ -95,8 +93,7 @@ class _PopupEnregistrerOffreWidgetState
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
                             controller: _model.lgoFilterController,
                             readOnly: true,
@@ -117,8 +114,7 @@ class _PopupEnregistrerOffreWidgetState
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color:
-                                      FlutterFlowTheme.of(context).focusColor,
+                                  color: FlutterFlowTheme.of(context).focusColor,
                                   width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
@@ -151,8 +147,7 @@ class _PopupEnregistrerOffreWidgetState
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
-                            validator: _model.lgoFilterControllerValidator
-                                .asValidator(context),
+                            validator: _model.lgoFilterControllerValidator.asValidator(context),
                           ),
                         ),
                       ),
@@ -166,16 +161,13 @@ class _PopupEnregistrerOffreWidgetState
                     options: FFButtonOptions(
                       width: double.infinity,
                       height: 40.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                       color: FlutterFlowTheme.of(context).primary,
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                              ),
+                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                            fontFamily: 'Poppins',
+                            color: Colors.white,
+                          ),
                       borderSide: BorderSide(
                         color: Colors.transparent,
                         width: 1.0,

@@ -9,9 +9,10 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class PredictionOffreRechercheLocalisation extends StatefulWidget {
-  const PredictionOffreRechercheLocalisation({Key? key, required this.onPlaceSelected}) : super(key: key);
+  const PredictionOffreRechercheLocalisation({Key? key, required this.onPlaceSelected, this.initialValue = ''}) : super(key: key);
 
-   final Function(String) onPlaceSelected;
+  final Function(String) onPlaceSelected;
+  final String initialValue;
   @override
   _PredictionOffreRechercheLocalisationState createState() => _PredictionOffreRechercheLocalisationState();
 }
@@ -26,10 +27,15 @@ class _PredictionOffreRechercheLocalisationState extends State<PredictionOffreRe
   late String _selectedCity;
   List<dynamic> _predictions = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _searchController.text = widget.initialValue;
+  }
+
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
-      final response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=(regions)&key=$googleMapsApi'));
+      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=(regions)&key=$googleMapsApi'));
       final json = jsonDecode(response.body);
 
       if (json['status'] == 'OK') {
@@ -54,7 +60,6 @@ class _PredictionOffreRechercheLocalisationState extends State<PredictionOffreRe
       _predictions = [];
     });
     if (widget.onPlaceSelected != null) {
-      
       widget.onPlaceSelected(prediction);
     }
   }
@@ -105,7 +110,6 @@ class _PredictionOffreRechercheLocalisationState extends State<PredictionOffreRe
           ),
           style: FlutterFlowTheme.of(context).bodyMedium,
         ),
-        
         if (_predictions.isNotEmpty)
           Container(
             decoration: BoxDecoration(
@@ -117,8 +121,7 @@ class _PredictionOffreRechercheLocalisationState extends State<PredictionOffreRe
               itemCount: _predictions.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(_predictions[index]['description'],
-                      style: FlutterFlowTheme.of(context).bodyMedium),
+                  title: Text(_predictions[index]['description'], style: FlutterFlowTheme.of(context).bodyMedium),
                   onTap: () {
                     _onPredictionSelected(_predictions[index]['description']);
                   },

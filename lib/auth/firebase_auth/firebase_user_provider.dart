@@ -30,25 +30,16 @@ class PharmaboxFirebaseUser extends BaseAuthUser {
     // Reloads the user when checking in order to get the most up to date
     // email verified status.
     if (loggedIn && !user!.emailVerified) {
-      FirebaseAuth.instance.currentUser
-          ?.reload()
-          .then((_) => user = FirebaseAuth.instance.currentUser);
+      FirebaseAuth.instance.currentUser?.reload().then((_) => user = FirebaseAuth.instance.currentUser);
     }
     return user?.emailVerified ?? false;
   }
 
-  static BaseAuthUser fromUserCredential(UserCredential userCredential) =>
-      fromFirebaseUser(userCredential.user);
-  static BaseAuthUser fromFirebaseUser(User? user) =>
-      PharmaboxFirebaseUser(user);
+  static BaseAuthUser fromUserCredential(UserCredential userCredential) => fromFirebaseUser(userCredential.user);
+  static BaseAuthUser fromFirebaseUser(User? user) => PharmaboxFirebaseUser(user);
 }
 
-Stream<BaseAuthUser> pharmaboxFirebaseUserStream() => FirebaseAuth.instance
-        .authStateChanges()
-        .debounce((user) => user == null && !loggedIn
-            ? TimerStream(true, const Duration(seconds: 1))
-            : Stream.value(user))
-        .map<BaseAuthUser>(
+Stream<BaseAuthUser> pharmaboxFirebaseUserStream() => FirebaseAuth.instance.authStateChanges().debounce((user) => user == null && !loggedIn ? TimerStream(true, const Duration(seconds: 1)) : Stream.value(user)).map<BaseAuthUser>(
       (user) {
         currentUser = PharmaboxFirebaseUser(user);
         return currentUser!;

@@ -19,14 +19,7 @@ import 'jwt_token_auth.dart';
 
 export '../base_auth_user_provider.dart';
 
-class FirebaseAuthManager extends AuthManager
-    with
-        EmailSignInManager,
-        AnonymousSignInManager,
-        AppleSignInManager,
-        GoogleSignInManager,
-        JwtSignInManager,
-        PhoneSignInManager {
+class FirebaseAuthManager extends AuthManager with EmailSignInManager, AnonymousSignInManager, AppleSignInManager, GoogleSignInManager, JwtSignInManager, PhoneSignInManager {
   // Set when using phone verification (after phone number is provided).
   String? _phoneAuthVerificationCode;
   // Set when using phone sign in in web mode (ignored otherwise).
@@ -49,9 +42,7 @@ class FirebaseAuthManager extends AuthManager
       if (e.code == 'requires-recent-login') {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-                  'Too long since most recent sign in. Sign in again before deleting your account.')),
+          SnackBar(content: Text('Too long since most recent sign in. Sign in again before deleting your account.')),
         );
       }
     }
@@ -107,17 +98,13 @@ class FirebaseAuthManager extends AuthManager
       _signInOrCreateAccount(context, anonymousSignInFunc, 'ANONYMOUS');
 
   @override
-  Future<BaseAuthUser?> signInWithApple(BuildContext context) =>
-      _signInOrCreateAccount(context, appleSignIn, 'APPLE');
+  Future<BaseAuthUser?> signInWithApple(BuildContext context) => _signInOrCreateAccount(context, appleSignIn, 'APPLE');
 
   @override
-  Future<BaseAuthUser?> signInWithGoogle(BuildContext context) =>
-      _signInOrCreateAccount(context, googleSignInFunc, 'GOOGLE');
+  Future<BaseAuthUser?> signInWithGoogle(BuildContext context) => _signInOrCreateAccount(context, googleSignInFunc, 'GOOGLE');
 
   @override
-  Future<BaseAuthUser?> signInWithJwtToken(
-          BuildContext context, String jwtToken) =>
-      _signInOrCreateAccount(context, () => jwtTokenSignIn(jwtToken), 'JWT');
+  Future<BaseAuthUser?> signInWithJwtToken(BuildContext context, String jwtToken) => _signInOrCreateAccount(context, () => jwtTokenSignIn(jwtToken), 'JWT');
 
   @override
   Future beginPhoneAuth({
@@ -126,8 +113,7 @@ class FirebaseAuthManager extends AuthManager
     required VoidCallback onCodeSent,
   }) async {
     if (kIsWeb) {
-      _webPhoneAuthConfirmationResult =
-          await FirebaseAuth.instance.signInWithPhoneNumber(phoneNumber);
+      _webPhoneAuthConfirmationResult = await FirebaseAuth.instance.signInWithPhoneNumber(phoneNumber);
       onCodeSent();
       return;
     }
@@ -179,8 +165,7 @@ class FirebaseAuthManager extends AuthManager
         'PHONE',
       );
     } else {
-      final authCredential = PhoneAuthProvider.credential(
-          verificationId: _phoneAuthVerificationCode!, smsCode: smsCode);
+      final authCredential = PhoneAuthProvider.credential(verificationId: _phoneAuthVerificationCode!, smsCode: smsCode);
       return _signInOrCreateAccount(
         context,
         () => FirebaseAuth.instance.signInWithCredential(authCredential),
@@ -201,9 +186,7 @@ class FirebaseAuthManager extends AuthManager
       if (userCredential?.user != null) {
         await maybeCreateUser(userCredential!.user!);
       }
-      return userCredential == null
-          ? null
-          : PharmaboxFirebaseUser.fromUserCredential(userCredential);
+      return userCredential == null ? null : PharmaboxFirebaseUser.fromUserCredential(userCredential);
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(

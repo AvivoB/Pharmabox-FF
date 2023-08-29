@@ -75,8 +75,7 @@ class FFChatWidget extends StatelessWidget {
                     trailing: [
                       if (uploadMediaAction != null)
                         Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                              start: 12.0, end: 6.0),
+                          padding: const EdgeInsetsDirectional.only(start: 12.0, end: 6.0),
                           child: InkWell(
                             onTap: uploadMediaAction,
                             child: const Icon(
@@ -108,10 +107,8 @@ class FFChatWidget extends StatelessWidget {
                       right: 20.0,
                       top: 10.0,
                     ),
-                    inputToolbarPadding:
-                        const EdgeInsets.symmetric(vertical: 6.0),
-                    messageContainerPadding:
-                        const EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 0.0),
+                    inputToolbarPadding: const EdgeInsets.symmetric(vertical: 6.0),
+                    messageContainerPadding: const EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 0.0),
                     inputContainerStyle: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.white,
@@ -129,8 +126,7 @@ class FFChatWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              if (messages.isEmpty && emptyChatWidget != null)
-                Center(child: emptyChatWidget),
+              if (messages.isEmpty && emptyChatWidget != null) Center(child: emptyChatWidget),
             ],
           ),
         ),
@@ -175,9 +171,7 @@ class _FFChatMessageState extends State<FFChatMessage> {
     }
   }
 
-  BoxDecoration get boxDecoration => ((widget.isMe
-                  ? widget.currentUserBoxDecoration
-                  : widget.otherUsersBoxDecoration) ??
+  BoxDecoration get boxDecoration => ((widget.isMe ? widget.currentUserBoxDecoration : widget.otherUsersBoxDecoration) ??
               BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: widget.isMe ? Colors.white : const Color(0xFF4B39EF),
@@ -192,9 +186,7 @@ class _FFChatMessageState extends State<FFChatMessage> {
         ],
       );
 
-  TextStyle get textStyle => ((widget.isMe
-              ? widget.currentUserTextStyle
-              : widget.otherUsersTextStyle) ??
+  TextStyle get textStyle => ((widget.isMe ? widget.currentUserTextStyle : widget.otherUsersTextStyle) ??
           GoogleFonts.getFont(
             'DM Sans',
             color: widget.isMe ? const Color(0xFF1E2429) : Colors.white,
@@ -207,22 +199,17 @@ class _FFChatMessageState extends State<FFChatMessage> {
 
   @override
   Widget build(BuildContext context) => Align(
-        alignment: widget.isMe
-            ? AlignmentDirectional.centerEnd
-            : AlignmentDirectional.centerStart,
+        alignment: widget.isMe ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
         child: Column(
-          crossAxisAlignment:
-              widget.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: widget.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 6.0),
             InkWell(
               onTap: () => setState(() => _showTime = !showTime),
               splashColor: Colors.transparent,
               child: Container(
-                constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.65),
-                decoration: boxDecoration.copyWith(
-                    color: hasImage ? Colors.transparent : null),
+                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.65),
+                decoration: boxDecoration.copyWith(color: hasImage ? Colors.transparent : null),
                 child: hasImage
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(16),
@@ -247,10 +234,7 @@ class _FFChatMessageState extends State<FFChatMessage> {
               Padding(
                 padding: const EdgeInsetsDirectional.only(top: 5.0, start: 5.0),
                 child: Text(
-                  widget.chatMessage.createdAt.isBefore(
-                          DateTime.now().subtract(const Duration(minutes: 3)))
-                      ? timeago.format(widget.chatMessage.createdAt)
-                      : DateFormat.jm().format(widget.chatMessage.createdAt),
+                  widget.chatMessage.createdAt.isBefore(DateTime.now().subtract(const Duration(minutes: 3))) ? timeago.format(widget.chatMessage.createdAt) : DateFormat.jm().format(widget.chatMessage.createdAt),
                   style: TextStyle(
                     color: Colors.grey[500],
                     fontSize: 12,

@@ -38,18 +38,12 @@ class PopupGroupementModel extends FlutterFlowModel {
       {"name": "Apsara", "image": "Apsara.jpg"},
       {"name": "Aptiphar", "image": "Aptiphar.jpg"},
       {"name": "Boticinal", "image": "Boticinal.jpg"},
-      {
-        "name": "Bretagne Santé Référence",
-        "image": "Bretagne Santé Référence.jpg"
-      },
+      {"name": "Bretagne Santé Référence", "image": "Bretagne Santé Référence.jpg"},
       {"name": "CABG Pharmacie", "image": "CABG Pharmacie.jpg"},
       {"name": "Cali Pharma", "image": "Cali Pharma.jpg"},
       {"name": "Cap’Unipharm", "image": "Cap’Unipharm.jpg"},
       {"name": "Ceido", "image": "Ceido.jpg"},
-      {
-        "name": "Centrale des Pharmaciens - Astera",
-        "image": "Centrale des Pharmaciens - Astera.jpg"
-      },
+      {"name": "Centrale des Pharmaciens - Astera", "image": "Centrale des Pharmaciens - Astera.jpg"},
       {"name": "Cofisanté", "image": "Cofisanté.jpg"},
       {"name": "Directlabo", "image": "Directlabo.jpg"},
       {"name": "DPGS", "image": "DPGS.jpg"},
@@ -72,28 +66,16 @@ class PopupGroupementModel extends FlutterFlowModel {
       {"name": "Grap", "image": "Grap.jpg"},
       {"name": "Gripamel Pro Santé", "image": "Gripamel Pro Santé.jpg"},
       {"name": "Groupe Rocade", "image": "Groupe Rocade.jpg"},
-      {
-        "name": "Groupe Univers Pharmacie",
-        "image": "Groupe Univers Pharmacie.jpg"
-      },
+      {"name": "Groupe Univers Pharmacie", "image": "Groupe Univers Pharmacie.jpg"},
       {"name": "Hello Pharmacie", "image": "Hello Pharmacie.jpg"},
       {"name": "HexaPharm", "image": "HexaPharm.jpg"},
       {"name": "HPI Totum", "image": "HPI Totum.jpg"},
       {"name": "IFMO", "image": "IFMO.jpg"},
       {"name": "iPharm", "image": "iPharm.jpg"},
       {"name": "Leadersanté", "image": "Leadersanté.jpg"},
-      {
-        "name": "Les Nouvelles Pharmacies",
-        "image": "Les Nouvelles Pharmacies.jpg"
-      },
-      {
-        "name": "Les Pharmaciens Associés",
-        "image": "Les Pharmaciens Associés.jpg"
-      },
-      {
-        "name": "Les pharmaciens d’Armor",
-        "image": "Les pharmaciens d’Armor.jpg"
-      },
+      {"name": "Les Nouvelles Pharmacies", "image": "Les Nouvelles Pharmacies.jpg"},
+      {"name": "Les Pharmaciens Associés", "image": "Les Pharmaciens Associés.jpg"},
+      {"name": "Les pharmaciens d’Armor", "image": "Les pharmaciens d’Armor.jpg"},
       {"name": "Les Pharmaciens Unis", "image": "Les Pharmaciens Unis.jpg"},
       {"name": "Mediprix", "image": "Mediprix.jpg"},
       {"name": "Multipharma", "image": "Multipharma.jpg"},
@@ -145,17 +127,11 @@ class PopupGroupementModel extends FlutterFlowModel {
       {"name": "SocoPharma", "image": "SocoPharma.jpg"},
       {"name": "Sofiadis", "image": "Sofiadis.jpg"},
       {"name": "Sopharef", "image": "Sopharef.jpg"},
-      {
-        "name": "Sud Aquitaine Pharmaceutique",
-        "image": "Sud Aquitaine Pharmaceutique.jpg"
-      },
+      {"name": "Sud Aquitaine Pharmaceutique", "image": "Sud Aquitaine Pharmaceutique.jpg"},
       {"name": "Sunipharma", "image": "Sunipharma.jpg"},
       {"name": "Suprapharm", "image": "Suprapharm.jpg"},
       {"name": "SynergiPhar", "image": "SynergiPhar.jpg"},
-      {
-        "name": "Union des Grandes Pharmacies (UGP)",
-        "image": "Union des Grandes Pharmacies (UGP).jpg"
-      },
+      {"name": "Union des Grandes Pharmacies (UGP)", "image": "Union des Grandes Pharmacies (UGP).jpg"},
       {"name": "Unipharm", "image": "Unipharm.jpg"},
       {"name": "Unipharm 33", "image": "Unipharm 33.jpg"},
       {"name": "Unipharm Loire Océan", "image": "Unipharm Loire Océan.jpg"},
@@ -163,10 +139,7 @@ class PopupGroupementModel extends FlutterFlowModel {
       {"name": "Upsem", "image": "Upsem.jpg"},
       {"name": "Vitapharma", "image": "Vitapharma.jpg"},
       {"name": "VPharma", "image": "VPharma.jpg"},
-      {
-        "name": "Well&well les Pharmaciens",
-        "image": "Well&well les Pharmaciens.jpg"
-      },
+      {"name": "Well&well les Pharmaciens", "image": "Well&well les Pharmaciens.jpg"},
       {"name": "Wellpharma", "image": "Wellpharma.jpg"}
     ];
 

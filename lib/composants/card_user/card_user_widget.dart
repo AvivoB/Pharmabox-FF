@@ -83,8 +83,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 10.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
                           child: Container(
                             width: 50.0,
                             height: 50.0,
@@ -97,8 +96,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               placeholder: 'assets/images/Group_18.png',
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                    'assets/images/Group_18.png');
+                                return Image.asset('assets/images/Group_18.png');
                               },
                             ),
                           ),
@@ -106,13 +104,12 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                         GestureDetector(
                           onTap: () => {
                             context.pushNamed('ProfilView',
-                            queryParams: {
-                                'userId': serializeParam(
-                                  widget.data['id'],
-                                  ParamType.String,
-                                ),
-                              }.withoutNulls
-                            )
+                                queryParams: {
+                                  'userId': serializeParam(
+                                    widget.data['id'],
+                                    ParamType.String,
+                                  ),
+                                }.withoutNulls)
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -122,12 +119,8 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.30,
                                 child: Text(
-                                  widget.data['nom'] +
-                                      ' ' +
-                                      widget.data['prenom'],
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
+                                  widget.data['nom'] + ' ' + widget.data['prenom'],
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Color(0xFF595A71),
                                         fontSize: 14.0,
@@ -138,9 +131,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                 width: 135,
                                 child: Text(
                                   widget.data['poste'],
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Color(0xFF8D8D97),
                                         fontSize: 13.0,
@@ -151,8 +142,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              15.0, 0.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
                           child: Icon(
                             FFIcons.kbadgeOr,
                             color: Color(0xFFFFF492),
@@ -187,8 +177,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     size: 35.0,
                   ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                     child: Text(
                       widget.data['code_postal'] + ', ' + widget.data['city'],
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -231,15 +220,11 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 5.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFF42D2FF),
-                                    Color(0xFF7CEDAC)
-                                  ],
+                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),
@@ -247,8 +232,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    2.0, 2.0, 2.0, 2.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
                                 child: FlutterFlowIconButton(
                                   borderColor: Color(0x0042D2FF),
                                   borderRadius: 30.0,
@@ -268,15 +252,11 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 5.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFF42D2FF),
-                                    Color(0xFF7CEDAC)
-                                  ],
+                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),
@@ -284,8 +264,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    2.0, 2.0, 2.0, 2.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
                                 child: FlutterFlowIconButton(
                                   borderColor: Color(0x0042D2FF),
                                   borderRadius: 30.0,
@@ -315,8 +294,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               shape: BoxShape.circle,
                             ),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  2.0, 2.0, 2.0, 2.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
                               child: FlutterFlowIconButton(
                                 borderColor: Color(0x0042D2FF),
                                 borderRadius: 30.0,
@@ -332,9 +310,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          DiscussionUserWidget(
-                                              toUser: widget.data['id']),
+                                      builder: (context) => DiscussionUserWidget(toUser: widget.data['id']),
                                     ),
                                   );
                                 },

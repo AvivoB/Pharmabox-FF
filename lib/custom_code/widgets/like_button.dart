@@ -8,9 +8,7 @@ class LikeButtonWidget extends StatefulWidget {
   final String documentId;
   final bool isActive;
 
-  const LikeButtonWidget(
-      {Key? key, required this.documentId, this.isActive = true})
-      : super(key: key);
+  const LikeButtonWidget({Key? key, required this.documentId, this.isActive = true}) : super(key: key);
 
   @override
   _LikeButtonWidgetState createState() => _LikeButtonWidgetState();
@@ -33,15 +31,11 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
     final likesRef = await FirebaseFirestore.instance
         .collection('likes')
         .where('liked_by', isEqualTo: currentUserId)
-        .where('document_id',
-            isEqualTo:
-                widget.documentId) // Check for likes of this specific document
+        .where('document_id', isEqualTo: widget.documentId) // Check for likes of this specific document
         .get();
     final likesCountNumber = await FirebaseFirestore.instance
         .collection('likes')
-        .where('document_id',
-            isEqualTo:
-                widget.documentId) // Check for likes of this specific document
+        .where('document_id', isEqualTo: widget.documentId) // Check for likes of this specific document
         .get();
 
     setState(() {
@@ -51,15 +45,10 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
   }
 
   Future<void> _toggleLike() async {
-
     String currentUserId = await getCurrentUserId();
     if (isLiked) {
       // Query for all 'like' documents by the current user for the current item.
-      QuerySnapshot query = await FirebaseFirestore.instance
-          .collection('likes')
-          .where('liked_by', isEqualTo: currentUserId)
-          .where('document_id', isEqualTo: widget.documentId)
-          .get();
+      QuerySnapshot query = await FirebaseFirestore.instance.collection('likes').where('liked_by', isEqualTo: currentUserId).where('document_id', isEqualTo: widget.documentId).get();
 
       // Delete each 'like' document found by the query.
       for (var doc in query.docs) {
@@ -95,7 +84,7 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
           focusColor: Color(0xFFFFFFFF),
           // onTap: () {
           //   if (widget.isActive) {
-              
+
           //   }
           // },
           onTap: _toggleLike,
@@ -106,8 +95,7 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
                 SvgPicture.asset(
                   'assets/icons/Like.svg',
                   width: 22,
-                  colorFilter: ColorFilter.mode(
-                      isLiked ? blueColor : greyColor, BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(isLiked ? blueColor : greyColor, BlendMode.srcIn),
                 ),
                 SizedBox(width: 8),
                 Text(

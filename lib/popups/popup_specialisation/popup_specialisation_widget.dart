@@ -12,13 +12,11 @@ import 'popup_specialisation_model.dart';
 export 'popup_specialisation_model.dart';
 
 class PopupSpecialisationWidget extends StatefulWidget {
-  const PopupSpecialisationWidget({Key? key, required this.onTap})
-      : super(key: key);
+  const PopupSpecialisationWidget({Key? key, required this.onTap}) : super(key: key);
   final Function onTap;
 
   @override
-  _PopupSpecialisationWidgetState createState() =>
-      _PopupSpecialisationWidgetState();
+  _PopupSpecialisationWidgetState createState() => _PopupSpecialisationWidgetState();
 }
 
 class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
@@ -49,12 +47,9 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> listSpecialite =
-        PopupSpecialisationModel().getSpecialite().toList();
+    List<String> listSpecialite = PopupSpecialisationModel().getSpecialite().toList();
 
-    List filtered = listSpecialite
-        .where((item) => item.toLowerCase().contains(_search!.toLowerCase()))
-        .toList();
+    List filtered = listSpecialite.where((item) => item.toLowerCase().contains(_search!.toLowerCase())).toList();
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -78,8 +73,7 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,16 +107,14 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.lgoFilterController,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Spécialisations',
                                     hintText: 'Recherchez vos spécialisations',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
@@ -135,8 +127,7 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .focusColor,
+                                        color: FlutterFlowTheme.of(context).focusColor,
                                         width: 1.0,
                                       ),
                                       borderRadius: const BorderRadius.only(
@@ -168,10 +159,8 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                                       Icons.verified,
                                     ),
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.lgoFilterControllerValidator
-                                      .asValidator(context),
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
+                                  validator: _model.lgoFilterControllerValidator.asValidator(context),
                                   onChanged: (value) => setState(() {
                                     _search = value;
                                   }),
@@ -195,15 +184,12 @@ class _PopupSpecialisationWidgetState extends State<PopupSpecialisationWidget> {
                       itemCount: filtered.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              15.0, 5.0, 15.0, 5.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 5.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               GestureDetector(
-                                child: Text(filtered[index],
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium),
+                                child: Text(filtered[index], style: FlutterFlowTheme.of(context).bodyMedium),
                                 onTap: () {
                                   widget.onTap(filtered[index]);
                                   Navigator.pop(context);

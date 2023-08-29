@@ -74,8 +74,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                 children: [
                   if (isTitulaire == true)
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                       child: AuthUserStreamWidget(
                         builder: (context) => InkWell(
                           splashColor: Colors.transparent,
@@ -96,13 +95,10 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                                 size: 24.0,
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                                 child: Text(
                                   'Ma pharmacie',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Color(0xFF161730),
                                         fontWeight: FontWeight.w500,
@@ -115,8 +111,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                       ),
                     ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -134,13 +129,10 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                             size: 28.0,
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                             child: Text(
                               'Mon profil',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: Color(0xFF161730),
                                     fontWeight: FontWeight.w500,
@@ -152,8 +144,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                     ),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                     child: InkWell(
                       splashColor: Colors.transparent,
                       focusColor: Colors.transparent,
@@ -174,16 +165,12 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                             size: 28.0,
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                             child: Text(
                               'Se déconnecter de mon compte',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
-                                    color:
-                                        FlutterFlowTheme.of(context).alternate,
+                                    color: FlutterFlowTheme.of(context).alternate,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),

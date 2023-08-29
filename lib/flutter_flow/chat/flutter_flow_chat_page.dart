@@ -54,23 +54,18 @@ class _FFChatPageState extends State<FFChatPage> {
   late StreamSubscription<List<ChatMessagesRecord>> messagesStream;
   bool _initialized = false;
 
-  DateTime? latestMessageTime() =>
-      messages.isNotEmpty ? messages.last.timestamp : null;
+  DateTime? latestMessageTime() => messages.isNotEmpty ? messages.last.timestamp : null;
 
   Future updateSeenBy() => chatReference.update({
         'last_message_seen_by': FieldValue.arrayUnion([currentUserReference])
       });
 
   void onNewMessage(DateTime? lastBefore, DateTime? lastAfter) {
-    if (!mounted ||
-        !_initialized ||
-        lastAfter == null ||
-        (lastBefore?.isAtSameMomentAs(lastAfter) ?? false)) {
+    if (!mounted || !_initialized || lastAfter == null || (lastBefore?.isAtSameMomentAs(lastAfter) ?? false)) {
       return;
     }
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      Future.delayed(Duration(milliseconds: 100))
-          .then((_) => scrollController.jumpTo(0));
+      Future.delayed(Duration(milliseconds: 100)).then((_) => scrollController.jumpTo(0));
       updateSeenBy();
     });
   }
@@ -84,9 +79,7 @@ class _FFChatPageState extends State<FFChatPage> {
     setState(() {});
   }
 
-  StreamSubscription<List<ChatMessagesRecord>> getMessagesStream(
-          DocumentReference chatReference) =>
-      FFChatManager.instance.getChatMessages(chatReference).listen((m) {
+  StreamSubscription<List<ChatMessagesRecord>> getMessagesStream(DocumentReference chatReference) => FFChatManager.instance.getChatMessages(chatReference).listen((m) {
         if (mounted) {
           updateMessages(m);
           FFChatManager.instance.setLatestMessages(chatReference, messages);
@@ -147,27 +140,21 @@ class _FFChatPageState extends State<FFChatPage> {
                 .map(
                   (message) => ChatMessage(
                     id: message.reference.id,
-                    user: message.user?.id == currentUser.uid
-                        ? currentUser
-                        : otherUsers[message.user?.id]!,
+                    user: message.user?.id == currentUser.uid ? currentUser : otherUsers[message.user?.id]!,
                     text: message.text,
                     image: message.image,
                     createdAt: message.timestamp,
                   ),
                 )
                 .toList(),
-            onSend: (message) =>
-                sendMessage(text: message.text, imageUrl: message.image),
+            onSend: (message) => sendMessage(text: message.text, imageUrl: message.image),
             uploadMediaAction: widget.allowImages
                 ? () async {
-                    final selectedMedia =
-                        await selectMediaWithSourceBottomSheet(
+                    final selectedMedia = await selectMediaWithSourceBottomSheet(
                       context: context,
                       allowPhoto: true,
                     ).then((m) => m != null && m.isNotEmpty ? m.first : null);
-                    if (selectedMedia == null ||
-                        !validateFileFormat(
-                            selectedMedia.storagePath, context)) {
+                    if (selectedMedia == null || !validateFileFormat(selectedMedia.storagePath, context)) {
                       return;
                     }
                     showUploadMessage(
@@ -175,8 +162,7 @@ class _FFChatPageState extends State<FFChatPage> {
                       'Sending photo',
                       showLoading: true,
                     );
-                    final downloadUrl = await uploadData(
-                        selectedMedia.storagePath, selectedMedia.bytes);
+                    final downloadUrl = await uploadData(selectedMedia.storagePath, selectedMedia.bytes);
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     await sendMessage(imageUrl: downloadUrl);
                   }

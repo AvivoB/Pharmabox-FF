@@ -13,7 +13,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class CardPharmacieModel extends FlutterFlowModel {
-
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}
@@ -21,19 +20,15 @@ class CardPharmacieModel extends FlutterFlowModel {
   void dispose() {}
 
   /// Additional helper methods are added here.
-  /// 
+  ///
   /// import 'package:http/http.dart' as http;
-  
+
   Future<String?> getCurrentUserId() async {
-  final User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    return user.uid;
-  } else {
-    return null;
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.uid;
+    } else {
+      return null;
+    }
   }
-}
-
-
-
-
 }

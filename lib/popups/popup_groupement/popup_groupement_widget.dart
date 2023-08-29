@@ -9,8 +9,7 @@ import 'popup_groupement_model.dart';
 export 'popup_groupement_model.dart';
 
 class PopupGroupementWidget extends StatefulWidget {
-  const PopupGroupementWidget({Key? key, required this.onTap})
-      : super(key: key);
+  const PopupGroupementWidget({Key? key, required this.onTap}) : super(key: key);
   final Function onTap;
 
   @override
@@ -46,12 +45,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
   @override
   Widget build(BuildContext context) {
     List<Map> listGroupement = PopupGroupementModel.selectGroupement();
-    listGroupement = listGroupement
-        .where((element) => element['name']
-            .toString()
-            .toLowerCase()
-            .contains(_searchText!.toLowerCase()))
-        .toList();
+    listGroupement = listGroupement.where((element) => element['name'].toString().toLowerCase().contains(_searchText!.toLowerCase())).toList();
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -104,8 +98,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
                           controller: _model.groupementFilterController,
                           obscureText: false,
@@ -163,8 +156,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                             })
                           },
                           style: FlutterFlowTheme.of(context).bodyMedium,
-                          validator: _model.groupementFilterControllerValidator
-                              .asValidator(context),
+                          validator: _model.groupementFilterControllerValidator.asValidator(context),
                         ),
                       ),
                     ),
@@ -185,8 +177,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                     itemBuilder: (context, index) {
                       final item = listGroupement;
                       return Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
                         child: GestureDetector(
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -199,12 +190,10 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                                 fit: BoxFit.contain,
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    25.0, 0.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 0.0, 0.0),
                                 child: Text(
                                   item[index]['name'],
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
                                 ),
                               ),
                             ],

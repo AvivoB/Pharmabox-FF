@@ -10,7 +10,6 @@ class LevelProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
         child: Column(
@@ -32,9 +31,7 @@ class LevelProgressBar extends StatelessWidget {
                 min: 0,
                 max: 2,
                 // divisions: 2,
-                onChanged: (double value) {
-                  
-                },
+                onChanged: (double value) {},
                 activeColor: level == 0
                     ? redColor
                     : level == 1

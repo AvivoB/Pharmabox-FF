@@ -33,5 +33,4 @@ class PopupExperiencesModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
-
 }

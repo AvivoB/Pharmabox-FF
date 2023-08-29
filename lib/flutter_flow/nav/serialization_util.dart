@@ -27,8 +27,7 @@ String placeToString(FFPlace place) => jsonEncode({
       'zipCode': place.zipCode,
     });
 
-String uploadedFileToString(FFUploadedFile uploadedFile) =>
-    uploadedFile.serialize();
+String uploadedFileToString(FFUploadedFile uploadedFile) => uploadedFile.serialize();
 
 const _kDocIdDelimeter = '|';
 String _serializeDocumentReference(DocumentReference ref) {
@@ -53,11 +52,7 @@ String? serializeParam(
       return null;
     }
     if (isList) {
-      final serializedValues = (param as Iterable)
-          .map((p) => serializeParam(p, paramType, false))
-          .where((p) => p != null)
-          .map((p) => p!)
-          .toList();
+      final serializedValues = (param as Iterable).map((p) => serializeParam(p, paramType, false)).where((p) => p != null).map((p) => p!).toList();
       return json.encode(serializedValues);
     }
     switch (paramType) {
@@ -127,9 +122,7 @@ LatLng? latLngFromString(String latLngStr) {
 FFPlace placeFromString(String placeStr) {
   final serializedData = jsonDecode(placeStr) as Map<String, dynamic>;
   final data = {
-    'latLng': serializedData.containsKey('latLng')
-        ? latLngFromString(serializedData['latLng'] as String)
-        : const LatLng(0.0, 0.0),
+    'latLng': serializedData.containsKey('latLng') ? latLngFromString(serializedData['latLng'] as String) : const LatLng(0.0, 0.0),
     'name': serializedData['name'] ?? '',
     'address': serializedData['address'] ?? '',
     'city': serializedData['city'] ?? '',
@@ -148,8 +141,7 @@ FFPlace placeFromString(String placeStr) {
   );
 }
 
-FFUploadedFile uploadedFileFromString(String uploadedFileStr) =>
-    FFUploadedFile.deserialize(uploadedFileStr);
+FFUploadedFile uploadedFileFromString(String uploadedFileStr) => FFUploadedFile.deserialize(uploadedFileStr);
 
 DocumentReference _deserializeDocumentReference(
   String refStr,
@@ -194,14 +186,7 @@ dynamic deserializeParam<T>(
       if (paramValues is! Iterable || paramValues.isEmpty) {
         return null;
       }
-      return paramValues
-          .where((p) => p is String)
-          .map((p) => p as String)
-          .map((p) =>
-              deserializeParam<T>(p, paramType, false, collectionNamePath))
-          .where((p) => p != null)
-          .map((p) => p! as T)
-          .toList();
+      return paramValues.where((p) => p is String).map((p) => p as String).map((p) => deserializeParam<T>(p, paramType, false, collectionNamePath)).where((p) => p != null).map((p) => p! as T).toList();
     }
     switch (paramType) {
       case ParamType.int:
@@ -214,9 +199,7 @@ dynamic deserializeParam<T>(
         return param == 'true';
       case ParamType.DateTime:
         final milliseconds = int.tryParse(param);
-        return milliseconds != null
-            ? DateTime.fromMillisecondsSinceEpoch(milliseconds)
-            : null;
+        return milliseconds != null ? DateTime.fromMillisecondsSinceEpoch(milliseconds) : null;
       case ParamType.DateTimeRange:
         return dateTimeRangeFromString(param);
       case ParamType.LatLng:
@@ -245,9 +228,7 @@ Future<dynamic> Function(String) getDoc(
   List<String> collectionNamePath,
   Serializer serializer,
 ) {
-  return (String ids) => _deserializeDocumentReference(ids, collectionNamePath)
-      .get()
-      .then((s) => serializers.deserializeWith(serializer, serializedData(s)));
+  return (String ids) => _deserializeDocumentReference(ids, collectionNamePath).get().then((s) => serializers.deserializeWith(serializer, serializedData(s)));
 }
 
 Future<List<T>> Function(String) getDocList<T>(
@@ -262,9 +243,7 @@ Future<List<T>> Function(String) getDocList<T>(
     } catch (_) {}
     return Future.wait(
       docIds.map(
-        (ids) => _deserializeDocumentReference(ids, collectionNamePath)
-            .get()
-            .then(
+        (ids) => _deserializeDocumentReference(ids, collectionNamePath).get().then(
               (s) => serializers.deserializeWith(serializer, serializedData(s)),
             ),
       ),

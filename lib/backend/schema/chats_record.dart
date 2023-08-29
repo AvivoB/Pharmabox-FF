@@ -38,25 +38,16 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
     ..lastMessage = ''
     ..lastMessageSeenBy = ListBuilder();
 
-  static CollectionReference get collection =>
-      FirebaseFirestore.instance.collection('chats');
+  static CollectionReference get collection => FirebaseFirestore.instance.collection('chats');
 
-  static Stream<ChatsRecord> getDocument(DocumentReference ref) => ref
-      .snapshots()
-      .map((s) => serializers.deserializeWith(serializer, serializedData(s))!);
+  static Stream<ChatsRecord> getDocument(DocumentReference ref) => ref.snapshots().map((s) => serializers.deserializeWith(serializer, serializedData(s))!);
 
-  static Future<ChatsRecord> getDocumentOnce(DocumentReference ref) => ref
-      .get()
-      .then((s) => serializers.deserializeWith(serializer, serializedData(s))!);
+  static Future<ChatsRecord> getDocumentOnce(DocumentReference ref) => ref.get().then((s) => serializers.deserializeWith(serializer, serializedData(s))!);
 
   ChatsRecord._();
-  factory ChatsRecord([void Function(ChatsRecordBuilder) updates]) =
-      _$ChatsRecord;
+  factory ChatsRecord([void Function(ChatsRecordBuilder) updates]) = _$ChatsRecord;
 
-  static ChatsRecord getDocumentFromData(
-          Map<String, dynamic> data, DocumentReference reference) =>
-      serializers.deserializeWith(serializer,
-          {...mapFromFirestore(data), kDocumentReferenceField: reference})!;
+  static ChatsRecord getDocumentFromData(Map<String, dynamic> data, DocumentReference reference) => serializers.deserializeWith(serializer, {...mapFromFirestore(data), kDocumentReferenceField: reference})!;
 }
 
 Map<String, dynamic> createChatsRecordData({

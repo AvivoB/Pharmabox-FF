@@ -9,13 +9,9 @@ class FFChatInfo {
   final ChatsRecord chatRecord;
   final List<UsersRecord>? groupMembers;
 
-  UsersRecord get currentUser => groupMembers!
-      .where((user) => user.reference == currentUserReference)
-      .first;
+  UsersRecord get currentUser => groupMembers!.where((user) => user.reference == currentUserReference).first;
   Map<String, UsersRecord> get otherUsers => Map.fromEntries(
-        groupMembers!
-            .where((user) => user.reference != currentUserReference)
-            .map((user) => MapEntry(user.reference.id, user)),
+        groupMembers!.where((user) => user.reference != currentUserReference).map((user) => MapEntry(user.reference.id, user)),
       );
   List<UsersRecord> get otherUsersList => otherUsers.values.toList();
   bool get isGroupChat => otherUsers.length > 1;
@@ -31,14 +27,11 @@ class FFChatInfo {
           }
           return 'Friend';
         }).join(', ') +
-        (numOthers > 0
-            ? ' + $numOthers other]${numOthers > 1 ? 's' : ''}'
-            : '');
+        (numOthers > 0 ? ' + $numOthers other]${numOthers > 1 ? 's' : ''}' : '');
   }
 
   String chatPreviewMessage() {
-    final userSentLastMessage =
-        chatRecord.lastMessageSentBy == currentUserReference;
+    final userSentLastMessage = chatRecord.lastMessageSentBy == currentUserReference;
     var lastChatText = chatRecord.lastMessage;
     if (userSentLastMessage && lastChatText!.isNotEmpty) {
       lastChatText = 'You: $lastChatText';
@@ -50,8 +43,7 @@ class FFChatInfo {
     if (groupMembers == null || otherUsersList.length == 0) {
       return '';
     }
-    final userSentLastMessage =
-        chatRecord.lastMessageSentBy == currentUserReference;
+    final userSentLastMessage = chatRecord.lastMessageSentBy == currentUserReference;
     final chatUser = userSentLastMessage
         ? otherUsersList.first
         : otherUsersList.firstWhere(
@@ -76,11 +68,9 @@ class FFChatManager {
   static FFChatManager? _instance;
   static FFChatManager get instance => _instance ??= FFChatManager._();
 
-  Stream<List<ChatMessagesRecord>> getChatMessages(
-      DocumentReference chatReference) {
+  Stream<List<ChatMessagesRecord>> getChatMessages(DocumentReference chatReference) {
     final chatId = chatReference.id;
-    if (!_chatMessages.containsKey(chatId) &&
-        _chatMessages.length >= kMaxChatCacheSize) {
+    if (!_chatMessages.containsKey(chatId) && _chatMessages.length >= kMaxChatCacheSize) {
       _chatMessages.remove(_chatMessages.keys.first);
       _chatMessagesCache.remove(_chatMessages.keys.first);
     }
@@ -94,16 +84,12 @@ class FFChatManager {
     return _chatMessages[chatId]!;
   }
 
-  void setLatestMessages(
-          DocumentReference chatReference, List<ChatMessagesRecord> messages) =>
-      _chatMessagesCache[chatReference.id] = messages;
+  void setLatestMessages(DocumentReference chatReference, List<ChatMessagesRecord> messages) => _chatMessagesCache[chatReference.id] = messages;
 
-  List<ChatMessagesRecord> getLatestMessages(DocumentReference chatReference) =>
-      _chatMessagesCache[chatReference.id] ?? [];
+  List<ChatMessagesRecord> getLatestMessages(DocumentReference chatReference) => _chatMessagesCache[chatReference.id] ?? [];
 
   DocumentReference getChatUserRef(ChatsRecord chat) {
-    final userRef =
-        chat.users!.firstWhere((d) => d.path != currentUserReference?.path);
+    final userRef = chat.users!.firstWhere((d) => d.path != currentUserReference?.path);
     _userChats[userRef.id] = chat.reference;
     return userRef;
   }
@@ -123,9 +109,7 @@ class FFChatManager {
         ? Stream.value(chatRecord)
         : Stream.value(chatReference)
             .asyncMap(
-              (chatRef) async =>
-                  chatRef ??
-                  await _getChatReference(otherUserRecord!.reference),
+              (chatRef) async => chatRef ?? await _getChatReference(otherUserRecord!.reference),
             )
             .switchMap(ChatsRecord.getDocument);
     return chatStream.asyncMap((chat) async {
@@ -134,10 +118,7 @@ class FFChatManager {
         // If from chat preview widget, don't bother querying all chat users
         // as this could be computationally expensive. Instead, take at most
         // 5, including the user and the user who last sent a message.
-        final userAndSender = {
-          currentUserReference!,
-          if (chat.lastMessageSentBy != null) chat.lastMessageSentBy!
-        };
+        final userAndSender = {currentUserReference!, if (chat.lastMessageSentBy != null) chat.lastMessageSentBy!};
         userRefs = {
           ...userAndSender,
           // Take at most 3 more besides the user and last sender
@@ -169,13 +150,7 @@ class FFChatManager {
     final users = [otherUser, currentUserReference!];
     users.sort((a, b) => a.id.compareTo(b.id));
 
-    var chat = await queryChatsRecord(
-            queryBuilder: (q) => q
-                .where('user_a', isEqualTo: users.first)
-                .where('user_b', isEqualTo: users.last)
-                .where('users', arrayContains: currentUserReference),
-            singleRecord: true)
-        .first;
+    var chat = await queryChatsRecord(queryBuilder: (q) => q.where('user_a', isEqualTo: users.first).where('user_b', isEqualTo: users.last).where('users', arrayContains: currentUserReference), singleRecord: true).first;
     // If chat already exists, cache and return it.
     if (chat.isNotEmpty) {
       _userChats[otherUser.id] = chat.first.reference;
@@ -214,8 +189,7 @@ class FFChatManager {
     return ChatsRecord.getDocumentFromData(chatData, chatRef);
   }
 
-  Future<ChatsRecord?> addGroupMembers(
-      ChatsRecord? chat, List<DocumentReference> users) async {
+  Future<ChatsRecord?> addGroupMembers(ChatsRecord? chat, List<DocumentReference> users) async {
     if (chat == null) {
       return null;
     }
@@ -228,8 +202,7 @@ class FFChatManager {
     return chat.rebuild((c) => c.users.replace(newUsers));
   }
 
-  Future<ChatsRecord> removeGroupMembers(
-      ChatsRecord chat, List<DocumentReference> users) async {
+  Future<ChatsRecord> removeGroupMembers(ChatsRecord chat, List<DocumentReference> users) async {
     final newUsers = (chat.users!.toSet()..removeAll(users)).toList();
     // Can't reduce group chat to fewer than 3 members.
     if (newUsers.length < 3) {

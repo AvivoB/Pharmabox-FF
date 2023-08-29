@@ -35,8 +35,7 @@ class ProfilViewWidget extends StatefulWidget {
   _ProfilViewWidgetState createState() => _ProfilViewWidgetState();
 }
 
-class _ProfilViewWidgetState extends State<ProfilViewWidget>
-    with SingleTickerProviderStateMixin {
+class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerProviderStateMixin {
   late ProfilViewModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -53,17 +52,10 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
   int _selectedIndex = 0;
 
   Future<void> getNetworkData() async {
-
     // Use collection group to make query across all collections
-    QuerySnapshot queryUsers = await FirebaseFirestore.instance
-        .collection('users')
-        .where('reseau', arrayContains: widget.userId)
-        .get();
+    QuerySnapshot queryUsers = await FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: widget.userId).get();
 
-    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance
-        .collection('pharmacies')
-        .where('reseau', arrayContains: widget.userId)
-        .get();
+    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance.collection('pharmacies').where('reseau', arrayContains: widget.userId).get();
 
     for (var doc in queryPharmacies?.docs ?? []) {
       var data = doc.data();
@@ -94,8 +86,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
     // Calcule l'âge
     DateTime currentDate = DateTime.now();
     int age = currentDate.year - birthDateTime.year;
-    if (birthDateTime.month > currentDate.month || 
-        (birthDateTime.month == currentDate.month && birthDateTime.day > currentDate.day)) {
+    if (birthDateTime.month > currentDate.month || (birthDateTime.month == currentDate.month && birthDateTime.day > currentDate.day)) {
       age--;
     }
     return age.toString();
@@ -126,10 +117,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
       return;
     }
 
-    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.userId)
-        .get();
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('users').doc(widget.userId).get();
 
     if (docSnapshot.exists) {
       // Accéder aux données du document.
@@ -173,11 +161,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                       height: MediaQuery.of(context).size.height * 0.30,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF7F7FD5),
-                            Color(0xFF86A8E7),
-                            Color(0xFF91EAE4)
-                          ],
+                          colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
                           stops: [0.0, 0.5, 1.0],
                           begin: AlignmentDirectional(1.0, 0.34),
                           end: AlignmentDirectional(-1.0, -0.34),
@@ -201,16 +185,14 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                       height: 150.0,
                                       decoration: BoxDecoration(
                                         color: Color(0x00FFFFFF),
-                                        borderRadius:
-                                            BorderRadius.circular(95.0),
+                                        borderRadius: BorderRadius.circular(95.0),
                                         border: Border.all(
                                           color: Colors.white,
                                           width: 2.0,
                                         ),
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            7.0, 7.0, 7.0, 7.0),
+                                        padding: EdgeInsetsDirectional.fromSTEB(7.0, 7.0, 7.0, 7.0),
                                         child: Container(
                                             width: 150.0,
                                             height: 150.0,
@@ -218,11 +200,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                             ),
-                                            child: (userData != null &&
-                                                    userData['photoUrl'] !=
-                                                        null &&
-                                                    userData['photoUrl']
-                                                        .isNotEmpty)
+                                            child: (userData != null && userData['photoUrl'] != null && userData['photoUrl'].isNotEmpty)
                                                 ? Image.network(
                                                     userData['photoUrl'],
                                                     fit: BoxFit.cover,
@@ -246,14 +224,8 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  userData != null
-                                      ? userData['prenom'] +
-                                          ' ' +
-                                          userData['nom']
-                                      : '',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
+                                  userData != null ? userData['prenom'] + ' ' + userData['nom'] : '',
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Colors.white,
                                         fontSize: 18.0,
@@ -262,20 +234,15 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                 ),
                                 Text(
                                   userData != null ? userData['poste'] : '',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Colors.white,
                                       ),
                                 ),
                                 Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 10.0, 0.0, 0.0),
+                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                                     child: LikeButtonWidget(
-                                      documentId: userData != null
-                                          ? userData['id']
-                                          : '',
+                                      documentId: userData != null ? userData['id'] : '',
                                       isActive: false,
                                     )),
                               ],
@@ -291,71 +258,70 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 5),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.cake,
-                                    color: FlutterFlowTheme.of(context).secondaryText,
-                                    size: 24,
-                                  ),
-                                  SizedBox( width: 5),
-                                  Text(calculateAge(userData['date_naissance']) +' ans', style: FlutterFlowTheme.of(context).bodyMedium)
-                                ],
-                              ),
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.cake,
+                                  color: FlutterFlowTheme.of(context).secondaryText,
+                                  size: 24,
+                                ),
+                                SizedBox(width: 5),
+                                Text(calculateAge(userData['date_naissance']) + ' ans', style: FlutterFlowTheme.of(context).bodyMedium)
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 5),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.place,
-                                    color: FlutterFlowTheme.of(context).secondaryText,
-                                    size: 24,
-                                  ),
-                                  SizedBox( width: 5),
-                                  Text(userData['code_postal']+', '+userData['city'], style: FlutterFlowTheme.of(context).bodyMedium)
-                                ],
-                              ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.place,
+                                  color: FlutterFlowTheme.of(context).secondaryText,
+                                  size: 24,
+                                ),
+                                SizedBox(width: 5),
+                                Text(userData['code_postal'] + ', ' + userData['city'], style: FlutterFlowTheme.of(context).bodyMedium)
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 5),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.mail_outline,
-                                    color: FlutterFlowTheme.of(context).secondaryText,
-                                    size: 24,
-                                  ),
-                                  SizedBox( width: 5),
-                                  Text(userData['email'], style: FlutterFlowTheme.of(context).bodyMedium)
-                                ],
-                              ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.mail_outline,
+                                  color: FlutterFlowTheme.of(context).secondaryText,
+                                  size: 24,
+                                ),
+                                SizedBox(width: 5),
+                                Text(userData['email'], style: FlutterFlowTheme.of(context).bodyMedium)
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 5),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.call,
-                                    color: FlutterFlowTheme.of(context).secondaryText,
-                                    size: 24,
-                                  ),
-                                  SizedBox( width: 5),
-                                  Text(userData['telephone'], style: FlutterFlowTheme.of(context).bodyMedium)
-                                ],
-                              ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.call,
+                                  color: FlutterFlowTheme.of(context).secondaryText,
+                                  size: 24,
+                                ),
+                                SizedBox(width: 5),
+                                Text(userData['telephone'], style: FlutterFlowTheme.of(context).bodyMedium)
+                              ],
                             ),
-                            SizedBox(height: 25,),
-                            Text(userData != null ? userData['presentation'] : '', style: FlutterFlowTheme.of(context).bodyMedium)
-                          ]),
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Text(userData != null ? userData['presentation'] : '', style: FlutterFlowTheme.of(context).bodyMedium)
+                        ]),
                       ),
-                     ),
-                    
+                    ),
                     Container(
                       width: MediaQuery.of(context).size.width * 1.0,
                       // height: MediaQuery.of(context).size.height * 1,
@@ -384,19 +350,12 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                         ),
                         indicatorWeight: 1,
                         indicatorPadding: EdgeInsets.only(top: 40),
-                        unselectedLabelStyle:
-                            FlutterFlowTheme.of(context).bodyMedium.override(
-                                  fontFamily: 'Poppins',
-                                  color: Color(0xFF595A71),
-                                  fontSize: 14.0,
-                                ),
-                        labelStyle: FlutterFlowTheme.of(context)
-                            .bodyMedium
-                            .override(
-                                fontFamily: 'Poppins',
-                                color: blackColor,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w600),
+                        unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Poppins',
+                              color: Color(0xFF595A71),
+                              fontSize: 14.0,
+                            ),
+                        labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                         tabs: [
                           Tab(
                             text: 'Profil',
@@ -405,11 +364,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                             text: 'Réseau',
                           ),
                           Tab(
-                            text: userData != null &&
-                                    userData['poste'] ==
-                                        'Pharmacien(ne) titulaire'
-                                ? 'Offres'
-                                : 'Recherches',
+                            text: userData != null && userData['poste'] == 'Pharmacien(ne) titulaire' ? 'Offres' : 'Recherches',
                           ),
                         ],
                       ),
@@ -420,8 +375,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                         child: Column(
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: Color(0xFFEFF6F7),
@@ -436,109 +390,69 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     borderRadius: BorderRadius.circular(15),
                                     shape: BoxShape.rectangle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Spécialisations',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                     fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: FlutterFlowTheme.of(context).primaryText,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                             ),
-                                            ],
+                                          ],
                                         ),
                                         Column(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(5, 5, 5, 5),
+                                              padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                                               child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
+                                                width: MediaQuery.of(context).size.width,
                                                 decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryBackground,
+                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
                                                 ),
                                                 child: ListView.builder(
                                                   padding: EdgeInsets.zero,
                                                   shrinkWrap: true,
-                                                  scrollDirection:
-                                                      Axis.vertical,
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
+                                                  scrollDirection: Axis.vertical,
+                                                  physics: const NeverScrollableScrollPhysics(),
                                                   itemCount: userData != null ? userData['specialisations'].length : 0,
-                                                  itemBuilder:
-                                                      (context, index) {
+                                                  itemBuilder: (context, index) {
                                                     return Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0, 10, 0, 0),
+                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                                       child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
+                                                        mainAxisSize: MainAxisSize.max,
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
                                                         children: [
                                                           Icon(
                                                             Icons.verified,
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondaryText,
+                                                            color: FlutterFlowTheme.of(context).secondaryText,
                                                             size: 24,
                                                           ),
                                                           Container(
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.8,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .secondaryBackground,
+                                                            width: MediaQuery.of(context).size.width * 0.8,
+                                                            decoration: BoxDecoration(
+                                                              color: FlutterFlowTheme.of(context).secondaryBackground,
                                                             ),
                                                             child: Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          5,
-                                                                          0,
-                                                                          0,
-                                                                          0),
+                                                              padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                                                               child: Text(
                                                                 userData != null ? userData['specialisations'][index] : '',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium,
+                                                                style: FlutterFlowTheme.of(context).bodyMedium,
                                                               ),
                                                             ),
                                                           ),
@@ -558,12 +472,10 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
                                   boxShadow: [
                                     BoxShadow(
                                       blurRadius: 12,
@@ -577,14 +489,11 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10, 10, 10, 10),
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
+                                          borderRadius: BorderRadius.circular(15),
                                           shape: BoxShape.rectangle,
                                         ),
                                         child: Column(
@@ -592,77 +501,53 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                           children: [
                                             Row(
                                               mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   'LGO',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
+                                                  style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                         fontFamily: 'Poppins',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
+                                                        color: FlutterFlowTheme.of(context).primaryText,
                                                         fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w600,
                                                       ),
                                                 ),
-                                                ],
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          5, 5, 5, 5),
+                                      padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                                       child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        width: MediaQuery.of(context).size.width,
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
                                         ),
                                         child: ListView.builder(
                                           padding: EdgeInsets.zero,
                                           shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
+                                          physics: const NeverScrollableScrollPhysics(),
                                           scrollDirection: Axis.vertical,
                                           itemCount: userData != null ? userData['lgo'].length : 0,
                                           itemBuilder: (context, index) {
                                             return Row(
                                               mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.42,
+                                                  width: MediaQuery.of(context).size.width * 0.42,
                                                   decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryBackground,
+                                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                                   ),
                                                   child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
                                                     children: [
                                                       Image.asset(
-                                                        'assets/lgo/' +
-                                                            userData['lgo'][index]['image'],
+                                                        'assets/lgo/' + userData['lgo'][index]['image'],
                                                         width: 120,
                                                         height: 60,
                                                         fit: BoxFit.cover,
@@ -671,14 +556,9 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                                   ),
                                                 ),
                                                 Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
+                                                  width: MediaQuery.of(context).size.width * 0.4,
                                                   decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryBackground,
+                                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                                   ),
                                                   child: LevelProgressBar(
                                                     level: userData['lgo'][index]['niveau'],
@@ -695,12 +575,10 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
                                   boxShadow: [
                                     BoxShadow(
                                       blurRadius: 12,
@@ -712,223 +590,174 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                   shape: BoxShape.rectangle,
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      10, 10, 10, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Row(
                                         mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'Compétences',
-                                            style: FlutterFlowTheme.of(context)
-                                                .headlineMedium
-                                                .override(
+                                            style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                   fontFamily: 'Poppins',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
+                                                  color: FlutterFlowTheme.of(context).primaryText,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                           ),
                                         ],
                                       ),
-                                      if(userData['competences'].contains('Test COVID'))
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 10, 0, 0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 0, 10, 0),
-                                                  child: Icon(
-                                                    Icons.coronavirus,
-                                                    color: Color(0xFF595A71),
-                                                    size: 28,
+                                      if (userData['competences'].contains('Test COVID'))
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                                    child: Icon(
+                                                      Icons.coronavirus,
+                                                      color: Color(0xFF595A71),
+                                                      size: 28,
+                                                    ),
                                                   ),
-                                                ),
-                                                Text(
-                                                  'Test COVID',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      if(userData['competences'].contains('Vaccination'))
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 5, 0, 0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 0, 10, 0),
-                                                    child: SvgPicture.asset(
-                                                      'assets/icons/Vaccines.svg',
-                                                      width: 24,
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                              Color(0xFF595A71),
-                                                              BlendMode.srcIn),
-                                                    )),
-                                                Text(
-                                                  'Vaccination',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      if(userData['competences'].contains('Gestion des tiers payant'))
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 5, 0, 0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 0, 10, 0),
-                                                  child: Icon(
-                                                    Icons.payments_outlined,
-                                                    color: Color(0xFF595A71),
-                                                    size: 28,
+                                                  Text(
+                                                    'Test COVID',
+                                                    style: FlutterFlowTheme.of(context).bodyMedium,
                                                   ),
-                                                ),
-                                                Text(
-                                                  'Gestion des tiers payant',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      if(userData['competences'].contains('Gestion de laboratoire'))
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 5, 0, 0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 0, 10, 0),
-                                                  child: Icon(
-                                                    Icons.science_outlined,
-                                                    color: Color(0xFF595A71),
-                                                    size: 28,
+                                      if (userData['competences'].contains('Vaccination'))
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Padding(
+                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                                      child: SvgPicture.asset(
+                                                        'assets/icons/Vaccines.svg',
+                                                        width: 24,
+                                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                                      )),
+                                                  Text(
+                                                    'Vaccination',
+                                                    style: FlutterFlowTheme.of(context).bodyMedium,
                                                   ),
-                                                ),
-                                                Text(
-                                                  'Gestion de laboratoire',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      if(userData['competences'].contains('TROD'))
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 5, 0, 0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 0, 10, 0),
-                                                    child: SvgPicture.asset(
-                                                      'assets/icons/labs.svg',
-                                                      width: 27,
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                              Color(0xFF595A71),
-                                                              BlendMode.srcIn),
-                                                    )),
-                                                Text(
-                                                  'TROD',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                      if (userData['competences'].contains('Gestion des tiers payant'))
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                                    child: Icon(
+                                                      Icons.payments_outlined,
+                                                      color: Color(0xFF595A71),
+                                                      size: 28,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Gestion des tiers payant',
+                                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
+                                      if (userData['competences'].contains('Gestion de laboratoire'))
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                                    child: Icon(
+                                                      Icons.science_outlined,
+                                                      color: Color(0xFF595A71),
+                                                      size: 28,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Gestion de laboratoire',
+                                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      if (userData['competences'].contains('TROD'))
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Padding(
+                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                                      child: SvgPicture.asset(
+                                                        'assets/icons/labs.svg',
+                                                        width: 27,
+                                                        colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
+                                                      )),
+                                                  Text(
+                                                    'TROD',
+                                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
                                   boxShadow: [
                                     BoxShadow(
                                       blurRadius: 12,
@@ -942,14 +771,11 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10, 10, 10, 10),
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
+                                          borderRadius: BorderRadius.circular(15),
                                           shape: BoxShape.rectangle,
                                         ),
                                         child: Column(
@@ -957,26 +783,16 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                           children: [
                                             Row(
                                               mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   'Langues',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
+                                                  style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                         fontFamily: 'Poppins',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
+                                                        color: FlutterFlowTheme.of(context).primaryText,
                                                         fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                                        fontWeight: FontWeight.w600,
                                                       ),
                                                 ),
                                               ],
@@ -986,87 +802,59 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          5, 5, 5, 5),
+                                      padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                                       child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        width: MediaQuery.of(context).size.width,
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
                                         ),
                                         child: ListView.builder(
                                           padding: EdgeInsets.zero,
                                           shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
+                                          physics: const NeverScrollableScrollPhysics(),
                                           scrollDirection: Axis.vertical,
                                           itemCount: userData != null ? userData['langues'].length : 0,
                                           itemBuilder: (context, index) {
                                             return Row(
                                               mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
+                                                  width: MediaQuery.of(context).size.width * 0.4,
                                                   decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryBackground,
+                                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                                   ),
                                                   child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
                                                     children: [
                                                       Icon(
                                                         Icons.language_sharp,
-                                                        color:
-                                                            Color(0xFF595A71),
+                                                        color: Color(0xFF595A71),
                                                         size: 24,
                                                       ),
                                                       Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    5, 0, 0, 0),
+                                                        padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                                                         child: Text(
                                                           userData['langues'][index]['name'],
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: FlutterFlowTheme.of(context).bodyMedium,
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
                                                 Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
+                                                  width: MediaQuery.of(context).size.width * 0.4,
                                                   decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryBackground,
+                                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                                   ),
                                                   child: wrapWithModel(
-                                                    model: _model
-                                                        .headerAppModel /*  _model.listSkillWithSliderModel2 */,
-                                                    updateCallback: () =>
-                                                        setState(() {}),
-                                                    child:
-                                                        LevelProgressBar(
-                                                    level: userData['langues'][index]['niveau'],
-                                                  ),
+                                                    model: _model.headerAppModel /*  _model.listSkillWithSliderModel2 */,
+                                                    updateCallback: () => setState(() {}),
+                                                    child: LevelProgressBar(
+                                                      level: userData['langues'][index]['niveau'],
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -1080,12 +868,10 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
                                   boxShadow: [
                                     BoxShadow(
                                       blurRadius: 12,
@@ -1097,27 +883,20 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                   shape: BoxShape.rectangle,
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      10, 10, 10, 10),
+                                  padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Row(
                                         mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'Expériences',
-                                            style: FlutterFlowTheme.of(context)
-                                                .headlineMedium
-                                                .override(
+                                            style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                   fontFamily: 'Poppins',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
+                                                  color: FlutterFlowTheme.of(context).primaryText,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600,
                                                 ),
@@ -1128,22 +907,17 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                         padding: EdgeInsets.zero,
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
+                                        physics: const NeverScrollableScrollPhysics(),
                                         itemCount: userData != null ? userData['experiences'].length : 0,
                                         itemBuilder: (context, index) {
                                           return Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 10, 0, 0),
+                                            padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 0, 10, 0),
+                                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                                   child: Icon(
                                                     Icons.work_outline,
                                                     color: Color(0xFF595A71),
@@ -1151,26 +925,13 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                                   ),
                                                 ),
                                                 Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.6,
+                                                  width: MediaQuery.of(context).size.width * 0.6,
                                                   decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryBackground,
+                                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                                   ),
                                                   child: Text(
-                                                    
-                                                            userData['experiences'][index]['nom_pharmacie'] +
-                                                        ', ' +
-                                                       
-                                                         userData['experiences'][index]['annee_debut'] +
-                                                        '-' +
-                                                       userData['experiences'][index]['annee_fin'],
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium,
+                                                    userData['experiences'][index]['nom_pharmacie'] + ', ' + userData['experiences'][index]['annee_debut'] + '-' + userData['experiences'][index]['annee_fin'],
+                                                    style: FlutterFlowTheme.of(context).bodyMedium,
                                                   ),
                                                 ),
                                               ],
@@ -1201,29 +962,14 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                     });
                                   },
                                   child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 1.0,
+                                    width: MediaQuery.of(context).size.width * 1.0,
                                     height: 67,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(15)),
-                                        color: Color(0xFFF2FDFF),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0x2b1e5b67),
-                                              blurRadius: 12,
-                                              offset: Offset(10, 10))
-                                        ]),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
                                     child: Row(
                                       children: [
-                                        Icon(isExpanded_Titu
-                                            ? Icons.expand_less
-                                            : Icons.expand_more),
+                                        Icon(isExpanded_Titu ? Icons.expand_less : Icons.expand_more),
                                         Text(
-                                          'Membres titulaires (' +
-                                              titulairesNetwork.length
-                                                  .toString() +
-                                              ')',
+                                          'Membres titulaires (' + titulairesNetwork.length.toString() + ')',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 18.0,
@@ -1235,8 +981,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                   ),
                                 ),
                                 if (isExpanded_Titu)
-                                  for (var i in titulairesNetwork)
-                                    CardUserWidget(data: i),
+                                  for (var i in titulairesNetwork) CardUserWidget(data: i),
                                 SizedBox(height: 15),
                                 InkWell(
                                   onTap: () {
@@ -1245,29 +990,14 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                     });
                                   },
                                   child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 1.0,
+                                    width: MediaQuery.of(context).size.width * 1.0,
                                     height: 67,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(15)),
-                                        color: Color(0xFFF2FDFF),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0x2b1e5b67),
-                                              blurRadius: 12,
-                                              offset: Offset(10, 10))
-                                        ]),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
                                     child: Row(
                                       children: [
-                                        Icon(isExpanded_NonTitu
-                                            ? Icons.expand_less
-                                            : Icons.expand_more),
+                                        Icon(isExpanded_NonTitu ? Icons.expand_less : Icons.expand_more),
                                         Text(
-                                          'Membres (' +
-                                              nonTitulairesNetwork.length
-                                                  .toString() +
-                                              ')',
+                                          'Membres (' + nonTitulairesNetwork.length.toString() + ')',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 18.0,
@@ -1279,8 +1009,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                   ),
                                 ),
                                 if (isExpanded_NonTitu)
-                                  for (var i in nonTitulairesNetwork)
-                                    CardUserWidget(data: i),
+                                  for (var i in nonTitulairesNetwork) CardUserWidget(data: i),
                                 SizedBox(height: 15),
                                 InkWell(
                                   onTap: () {
@@ -1289,29 +1018,14 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                     });
                                   },
                                   child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 1.0,
+                                    width: MediaQuery.of(context).size.width * 1.0,
                                     height: 67,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(15)),
-                                        color: Color(0xFFF2FDFF),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0x2b1e5b67),
-                                              blurRadius: 12,
-                                              offset: Offset(10, 10))
-                                        ]),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
                                     child: Row(
                                       children: [
-                                        Icon(isExpanded_Pharma
-                                            ? Icons.expand_less
-                                            : Icons.expand_more),
+                                        Icon(isExpanded_Pharma ? Icons.expand_less : Icons.expand_more),
                                         Text(
-                                          'Pharmacies (' +
-                                              pharmaciesNetwork.length
-                                                  .toString() +
-                                              ')',
+                                          'Pharmacies (' + pharmaciesNetwork.length.toString() + ')',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 18.0,
@@ -1323,8 +1037,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget>
                                   ),
                                 ),
                                 if (isExpanded_Pharma)
-                                  for (var i in pharmaciesNetwork)
-                                    CardPharmacieWidget(data: i),
+                                  for (var i in pharmaciesNetwork) CardPharmacieWidget(data: i),
                               ],
                             ),
                           ),

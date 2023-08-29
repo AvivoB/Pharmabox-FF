@@ -8,8 +8,7 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/form_field_controller.dart';
 
 class HorraireSemaineSelect extends StatefulWidget {
-  const HorraireSemaineSelect(
-      {Key? key, required this.callback, this.initialHours});
+  const HorraireSemaineSelect({Key? key, required this.callback, this.initialHours});
   final Function(dynamic) callback;
   final dynamic initialHours;
 
@@ -38,10 +37,9 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
   @override
   void initState() {
     super.initState();
-     if (widget.initialHours != null) {
+    if (widget.initialHours != null) {
       _selectedHour = widget.initialHours!;
-      _selectedHour = LinkedHashMap.fromIterable(orderedDays,
-          key: (k) => k, value: (v) => _selectedHour[v]);
+      _selectedHour = LinkedHashMap.fromIterable(orderedDays, key: (k) => k, value: (v) => _selectedHour[v]);
       print(_selectedHour);
     }
   }
@@ -88,8 +86,7 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
                             isDense: true,
                             menuMaxHeight: 350,
                             value: _selectedHour[day]![0],
-                            items: _hours
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: _hours.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -112,8 +109,7 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
                             isDense: true,
                             menuMaxHeight: 350,
                             value: _selectedHour[day]![1],
-                            items: _hours
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: _hours.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -138,13 +134,7 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
                           alignment: Alignment.center,
                           child: Text(
                             'Fermé',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: redColor),
+                            style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.w600, color: redColor),
                           ),
                         ),
                         height: 50,

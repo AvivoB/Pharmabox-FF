@@ -8,12 +8,7 @@ class GrilleHoraire extends StatefulWidget {
   final List? onInitialValue;
   final bool isEditable;
 
-  GrilleHoraire(
-      {Key? key,
-      required this.onSelectionChanged,
-      this.onInitialValue,
-      this.isEditable = true})
-      : super(key: key);
+  GrilleHoraire({Key? key, required this.onSelectionChanged, this.onInitialValue, this.isEditable = true}) : super(key: key);
 
   @override
   _GrilleHoraireState createState() => _GrilleHoraireState();
@@ -32,10 +27,8 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
   void initState() {
     super.initState();
     print(widget.onInitialValue);
-    selectedOptions = widget.onInitialValue != ''
-        ? transformInitialValue(widget.onInitialValue!)
-        : List.generate(daysOfWeek.length,
-            (_) => List.generate(periods.length, (_) => 'Obligatoire'));
+    // ignore: unrelated_type_equality_checks
+    selectedOptions = widget.onInitialValue != null ? transformInitialValue(widget.onInitialValue!) : List.generate(daysOfWeek.length, (_) => List.generate(periods.length, (_) => 'Obligatoire'));
   }
 
   void _toggleOption(int row, int col) {
@@ -91,15 +84,12 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Table(
-        border: TableBorder(
-            horizontalInside: BorderSide(
-                width: 2, color: greyLightColor, style: BorderStyle.solid)),
+        border: TableBorder(horizontalInside: BorderSide(width: 2, color: greyLightColor, style: BorderStyle.solid)),
         children: [
           TableRow(
             decoration: BoxDecoration(
               color: Color(0xFFEFF6F7),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
             ),
             children: [
               TableCell(
@@ -112,11 +102,7 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
                     child: Text(
                       period,
                       textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Poppins',
-                          color: greyColor,
-                          fontSize: 9.0,
-                          fontWeight: FontWeight.w600),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 9.0, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),

@@ -46,12 +46,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
   @override
   Widget build(BuildContext context) {
     List<Map> listLGO = PopupLgoModel.selectLGO();
-    listLGO = listLGO
-        .where((element) => element['name']
-            .toString()
-            .toLowerCase()
-            .contains(_searchText!.toLowerCase()))
-        .toList();
+    listLGO = listLGO.where((element) => element['name'].toString().toLowerCase().contains(_searchText!.toLowerCase())).toList();
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -104,8 +99,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
                             controller: _model.lgoFilterController,
                             autofocus: false,
@@ -127,8 +121,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color:
-                                      FlutterFlowTheme.of(context).focusColor,
+                                  color: FlutterFlowTheme.of(context).focusColor,
                                   width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
@@ -166,8 +159,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                               })
                             },
                             style: FlutterFlowTheme.of(context).bodyMedium,
-                            validator: _model.lgoFilterControllerValidator
-                                .asValidator(context),
+                            validator: _model.lgoFilterControllerValidator.asValidator(context),
                           ),
                         ),
                       ),
@@ -188,8 +180,7 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                       itemBuilder: (context, index) {
                         final item = listLGO;
                         return Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 5.0, 0.0, 5.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
                           child: GestureDetector(
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
@@ -202,12 +193,10 @@ class _PopupLgoWidgetState extends State<PopupLgoWidget> {
                                   fit: BoxFit.contain,
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      25.0, 0.0, 0.0, 0.0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 0.0, 0.0),
                                   child: Text(
                                     item[index]['name'],
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
                                   ),
                                 ),
                               ],

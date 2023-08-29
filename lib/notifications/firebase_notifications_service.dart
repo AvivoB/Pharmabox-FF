@@ -23,8 +23,7 @@ Future<void> setupFlutterNotifications() async {
   channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    description:
-        'This channel is used for important notifications.', // description
+    description: 'This channel is used for important notifications.', // description
     importance: Importance.high,
   );
 
@@ -34,10 +33,7 @@ Future<void> setupFlutterNotifications() async {
   ///
   /// We use this channel in the `AndroidManifest.xml` file to override the
   /// default FCM channel to enable heads up notifications.
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
 
   /// Update the iOS foreground notification presentation options to allow
   /// heads up notifications.
@@ -74,7 +70,6 @@ void showFlutterNotification(RemoteMessage message) {
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-
 Future<void> backgroundMessageHandler(RemoteMessage message) async {
   print('A background message was received: ${message.messageId}');
   // Mettez votre logique de traitement ici
@@ -106,22 +101,18 @@ class PushNotificationManager {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       // Handle the received notification when the app is in foreground
-      print(
-          "Received a message while in foreground: ${message.notification?.body}");
+      print("Received a message while in foreground: ${message.notification?.body}");
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       // Handle the notification caused by tapping the notification in the system tray
-      print(
-          "Tapped on a notification to open the app: ${message.notification?.body}");
+      print("Tapped on a notification to open the app: ${message.notification?.body}");
     });
 
     // Handle notification tap when the app is terminated and not in the background
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      print(
-          "Tapped on a notification to open the app from terminated state: ${initialMessage.notification?.body}");
+      print("Tapped on a notification to open the app from terminated state: ${initialMessage.notification?.body}");
     }
   }
 }

@@ -102,9 +102,7 @@ class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
           ...widget.options.map(
             (option) {
               final selected = choiceChipValues.contains(option.label);
-              final style = selected
-                  ? widget.selectedChipStyle
-                  : widget.unselectedChipStyle;
+              final style = selected ? widget.selectedChipStyle : widget.unselectedChipStyle;
               return Container(
                 height: _kChoiceChipsHeight,
                 child: ChoiceChip(
@@ -112,17 +110,13 @@ class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
                   onSelected: widget.onChanged != null
                       ? (isSelected) {
                           if (isSelected) {
-                            widget.multiselect
-                                ? choiceChipValues.add(option.label)
-                                : choiceChipValues = [option.label];
-                            widget.controller.value =
-                                List.from(choiceChipValues);
+                            widget.multiselect ? choiceChipValues.add(option.label) : choiceChipValues = [option.label];
+                            widget.controller.value = List.from(choiceChipValues);
                             setState(() {});
                           } else {
                             if (widget.multiselect) {
                               choiceChipValues.remove(option.label);
-                              widget.controller.value =
-                                  List.from(choiceChipValues);
+                              widget.controller.value = List.from(choiceChipValues);
                               setState(() {});
                             }
                           }
@@ -141,12 +135,8 @@ class _FlutterFlowChoiceChipsState extends State<FlutterFlowChoiceChips> {
                         )
                       : null,
                   elevation: style.elevation,
-                  selectedColor: selected
-                      ? widget.selectedChipStyle.backgroundColor
-                      : null,
-                  backgroundColor: selected
-                      ? null
-                      : widget.unselectedChipStyle.backgroundColor,
+                  selectedColor: selected ? widget.selectedChipStyle.backgroundColor : null,
+                  backgroundColor: selected ? null : widget.unselectedChipStyle.backgroundColor,
                 ),
               );
             },

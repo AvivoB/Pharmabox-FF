@@ -59,25 +59,21 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 40.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 40.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 20.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
                                 child: Text(
                                   'Pharma-box',
-                                  style:
-                                      FlutterFlowTheme.of(context).displaySmall,
+                                  style: FlutterFlowTheme.of(context).displaySmall,
                                 ),
                               ),
                               Text(
@@ -95,15 +91,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.emailController,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
@@ -116,8 +110,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .focusColor,
+                                        color: FlutterFlowTheme.of(context).focusColor,
                                         width: 1.0,
                                       ),
                                       borderRadius: const BorderRadius.only(
@@ -146,22 +139,18 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       ),
                                     ),
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.emailControllerValidator
-                                      .asValidator(context),
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
+                                  validator: _model.emailControllerValidator.asValidator(context),
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.motdepasseController,
                                   obscureText: !_model.motdepasseVisibility,
                                   decoration: InputDecoration(
                                     labelText: 'Mot de passe',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
@@ -204,37 +193,28 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     ),
                                     suffixIcon: InkWell(
                                       onTap: () => setState(
-                                        () => _model.motdepasseVisibility =
-                                            !_model.motdepasseVisibility,
+                                        () => _model.motdepasseVisibility = !_model.motdepasseVisibility,
                                       ),
                                       focusNode: FocusNode(skipTraversal: true),
                                       child: Icon(
-                                        _model.motdepasseVisibility
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
+                                        _model.motdepasseVisibility ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                                         color: Color(0xFF757575),
                                         size: 22.0,
                                       ),
                                     ),
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model
-                                      .motdepasseControllerValidator
-                                      .asValidator(context),
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
+                                  validator: _model.motdepasseControllerValidator.asValidator(context),
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.confirmpasswordController,
-                                  obscureText:
-                                      !_model.confirmpasswordVisibility,
+                                  obscureText: !_model.confirmpasswordVisibility,
                                   decoration: InputDecoration(
                                     labelText: 'Confirmez le mot de passe',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xFFD0D1DE),
@@ -277,29 +257,22 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     ),
                                     suffixIcon: InkWell(
                                       onTap: () => setState(
-                                        () => _model.confirmpasswordVisibility =
-                                            !_model.confirmpasswordVisibility,
+                                        () => _model.confirmpasswordVisibility = !_model.confirmpasswordVisibility,
                                       ),
                                       focusNode: FocusNode(skipTraversal: true),
                                       child: Icon(
-                                        _model.confirmpasswordVisibility
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
+                                        _model.confirmpasswordVisibility ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                                         color: Color(0xFF757575),
                                         size: 22.0,
                                       ),
                                     ),
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model
-                                      .confirmpasswordControllerValidator
-                                      .asValidator(context),
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
+                                  validator: _model.confirmpasswordControllerValidator.asValidator(context),
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                 child: Container(
                                   width: double.infinity,
                                   height: 50.0,
@@ -312,10 +285,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       )
                                     ],
                                     gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFF7CEDAC),
-                                        Color(0xFF42D2FF)
-                                      ],
+                                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
                                       stops: [0.0, 1.0],
                                       begin: AlignmentDirectional(1.0, -1.0),
                                       end: AlignmentDirectional(-1.0, 1.0),
@@ -325,11 +295,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   child: FFButtonWidget(
                                     onPressed: () async {
                                       GoRouter.of(context).prepareAuthEvent();
-                                      if (_model.motdepasseController.text !=
-                                          _model
-                                              .confirmpasswordController.text) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
+                                      if (_model.motdepasseController.text != _model.confirmpasswordController.text) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
                                             content: Text(
                                               'Passwords don\'t match!',
@@ -339,8 +306,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         return;
                                       }
 
-                                      final user = await authManager
-                                          .createAccountWithEmail(
+                                      final user = await authManager.createAccountWithEmail(
                                         context,
                                         _model.emailController.text,
                                         _model.motdepasseController.text,
@@ -349,22 +315,16 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         return;
                                       }
 
-                                      context.goNamedAuth(
-                                          'RegisterStep', mounted);
+                                      context.goNamedAuth('RegisterStep', mounted);
                                     },
                                     text: 'S\'enregistrer',
                                     options: FFButtonOptions(
                                       width: double.infinity,
                                       height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
+                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                       color: Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
+                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                             fontFamily: 'Poppins',
                                             color: Colors.white,
                                             fontSize: 18.0,
@@ -381,8 +341,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                 child: Container(
                                   width: double.infinity,
                                   height: 50.0,
@@ -395,10 +354,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       )
                                     ],
                                     gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFF7CEDAC),
-                                        Color(0xFF42D2FF)
-                                      ],
+                                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
                                       stops: [0.0, 1.0],
                                       begin: AlignmentDirectional(1.0, -1.0),
                                       end: AlignmentDirectional(-1.0, 1.0),
@@ -408,8 +364,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   child: FFButtonWidget(
                                     onPressed: () async {
                                       GoRouter.of(context).prepareAuthEvent();
-                                      final user = await authManager
-                                          .signInWithGoogle(context);
+                                      final user = await authManager.signInWithGoogle(context);
                                       if (user == null) {
                                         return;
                                       }
@@ -419,21 +374,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     text: 'S\'inscire avec Google',
                                     icon: FaIcon(
                                       FontAwesomeIcons.google,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBtnText,
+                                      color: FlutterFlowTheme.of(context).primaryBtnText,
                                     ),
                                     options: FFButtonOptions(
                                       width: double.infinity,
                                       height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
+                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                                       color: Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
+                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                             fontFamily: 'Poppins',
                                             color: Colors.white,
                                             fontSize: 18.0,
@@ -458,17 +407,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           },
                           text: 'Avez-vous déjà un compte? Me connecter',
                           options: FFButtonOptions(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                             color: Color(0x004B39EF),
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
+                            textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Poppins',
-                                  color:
-                                      FlutterFlowTheme.of(context).focusColor,
+                                  color: FlutterFlowTheme.of(context).focusColor,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.normal,
                                 ),

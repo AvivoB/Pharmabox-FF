@@ -89,12 +89,11 @@ class PharmacieModel extends FlutterFlowModel {
   // State field(s) for nonSTOP widget.
   bool nonSTOPValue = false;
 
-
   // Lundi
   bool lundiMatValue1 = false;
   DateTime? datePicked1;
   DateTime? datePicked2;
- 
+
   bool lundiMatValue2 = false;
   DateTime? datePicked3;
   DateTime? datePicked4;
@@ -125,7 +124,7 @@ class PharmacieModel extends FlutterFlowModel {
   bool lundiMatValue8 = false;
   DateTime? datePicked15;
   DateTime? datePicked16;
- 
+
   // Vendredi
   bool lundiMatValue9 = false;
   DateTime? datePicked17;
@@ -134,7 +133,7 @@ class PharmacieModel extends FlutterFlowModel {
   bool lundiMatValue10 = false;
   DateTime? datePicked19;
   DateTime? datePicked20;
-  
+
   // Samedi
   bool lundiMatValue11 = false;
   DateTime? datePicked21;
@@ -151,7 +150,6 @@ class PharmacieModel extends FlutterFlowModel {
   bool lundiMatValue14 = false;
   DateTime? datePicked27;
   DateTime? datePicked28;
-
 
   // State field(s) for TypologieCentrecommercial widget.
   bool typologieCentrecommercialValue = false;
@@ -231,14 +229,13 @@ class PharmacieModel extends FlutterFlowModel {
   TextEditingController? nbEtudiants6emeController;
   String? Function(BuildContext, String?)? nbEtudiants6emeControllerValidator;
 
-   TextEditingController? groupementAutre;
+  TextEditingController? groupementAutre;
 
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
     repeaterFieldModel = createModel(context, () => RepeaterFieldModel());
-    mapsWidgetAdressePharmacieModel =
-        createModel(context, () => MapsWidgetAdressePharmacieModel());
+    mapsWidgetAdressePharmacieModel = createModel(context, () => MapsWidgetAdressePharmacieModel());
   }
 
   void dispose() {

@@ -17,8 +17,7 @@ class FFUploadedFile {
   final String? blurHash;
 
   @override
-  String toString() =>
-      'FFUploadedFile(name: $name, bytes: ${bytes?.length ?? 0}, height: $height, width: $width, blurHash: $blurHash)';
+  String toString() => 'FFUploadedFile(name: $name, bytes: ${bytes?.length ?? 0}, height: $height, width: $width, blurHash: $blurHash)';
 
   String serialize() => jsonEncode(
         {
@@ -52,11 +51,5 @@ class FFUploadedFile {
   int get hashCode => Object.hash(name, bytes, height, width, blurHash);
 
   @override
-  bool operator ==(other) =>
-      other is FFUploadedFile &&
-      name == other.name &&
-      bytes == other.bytes &&
-      height == other.height &&
-      width == other.width &&
-      blurHash == other.blurHash;
+  bool operator ==(other) => other is FFUploadedFile && name == other.name && bytes == other.bytes && height == other.height && width == other.width && blurHash == other.blurHash;
 }

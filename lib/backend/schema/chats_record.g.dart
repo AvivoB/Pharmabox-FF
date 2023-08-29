@@ -15,8 +15,7 @@ class _$ChatsRecordSerializer implements StructuredSerializer<ChatsRecord> {
   final String wireName = 'ChatsRecord';
 
   @override
-  Iterable<Object?> serialize(Serializers serializers, ChatsRecord object,
-      {FullType specifiedType = FullType.unspecified}) {
+  Iterable<Object?> serialize(Serializers serializers, ChatsRecord object, {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[];
     Object? value;
     value = object.users;
@@ -25,47 +24,38 @@ class _$ChatsRecordSerializer implements StructuredSerializer<ChatsRecord> {
         ..add('users')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(BuiltList, const [
-              const FullType(
-                  DocumentReference, const [const FullType.nullable(Object)])
+              const FullType(DocumentReference, const [const FullType.nullable(Object)])
             ])));
     }
     value = object.userA;
     if (value != null) {
       result
         ..add('user_a')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])));
     }
     value = object.userB;
     if (value != null) {
       result
         ..add('user_b')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])));
     }
     value = object.lastMessage;
     if (value != null) {
       result
         ..add('last_message')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(String)));
     }
     value = object.lastMessageTime;
     if (value != null) {
       result
         ..add('last_message_time')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(DateTime)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DateTime)));
     }
     value = object.lastMessageSentBy;
     if (value != null) {
       result
         ..add('last_message_sent_by')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])));
     }
     value = object.lastMessageSeenBy;
     if (value != null) {
@@ -73,24 +63,20 @@ class _$ChatsRecordSerializer implements StructuredSerializer<ChatsRecord> {
         ..add('last_message_seen_by')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(BuiltList, const [
-              const FullType(
-                  DocumentReference, const [const FullType.nullable(Object)])
+              const FullType(DocumentReference, const [const FullType.nullable(Object)])
             ])));
     }
     value = object.ffRef;
     if (value != null) {
       result
         ..add('Document__Reference__Field')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])));
     }
     return result;
   }
 
   @override
-  ChatsRecord deserialize(Serializers serializers, Iterable<Object?> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
+  ChatsRecord deserialize(Serializers serializers, Iterable<Object?> serialized, {FullType specifiedType = FullType.unspecified}) {
     final result = new ChatsRecordBuilder();
 
     final iterator = serialized.iterator;
@@ -102,48 +88,32 @@ class _$ChatsRecordSerializer implements StructuredSerializer<ChatsRecord> {
         case 'users':
           result.users.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltList, const [
-                const FullType(
-                    DocumentReference, const [const FullType.nullable(Object)])
+                const FullType(DocumentReference, const [const FullType.nullable(Object)])
               ]))! as BuiltList<Object?>);
           break;
         case 'user_a':
-          result.userA = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+          result.userA = serializers.deserialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])) as DocumentReference<Object?>?;
           break;
         case 'user_b':
-          result.userB = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+          result.userB = serializers.deserialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])) as DocumentReference<Object?>?;
           break;
         case 'last_message':
-          result.lastMessage = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+          result.lastMessage = serializers.deserialize(value, specifiedType: const FullType(String)) as String?;
           break;
         case 'last_message_time':
-          result.lastMessageTime = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime?;
+          result.lastMessageTime = serializers.deserialize(value, specifiedType: const FullType(DateTime)) as DateTime?;
           break;
         case 'last_message_sent_by':
-          result.lastMessageSentBy = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+          result.lastMessageSentBy = serializers.deserialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])) as DocumentReference<Object?>?;
           break;
         case 'last_message_seen_by':
           result.lastMessageSeenBy.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltList, const [
-                const FullType(
-                    DocumentReference, const [const FullType.nullable(Object)])
+                const FullType(DocumentReference, const [const FullType.nullable(Object)])
               ]))! as BuiltList<Object?>);
           break;
         case 'Document__Reference__Field':
-          result.ffRef = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+          result.ffRef = serializers.deserialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])) as DocumentReference<Object?>?;
           break;
       }
     }
@@ -170,23 +140,12 @@ class _$ChatsRecord extends ChatsRecord {
   @override
   final DocumentReference<Object?>? ffRef;
 
-  factory _$ChatsRecord([void Function(ChatsRecordBuilder)? updates]) =>
-      (new ChatsRecordBuilder()..update(updates))._build();
+  factory _$ChatsRecord([void Function(ChatsRecordBuilder)? updates]) => (new ChatsRecordBuilder()..update(updates))._build();
 
-  _$ChatsRecord._(
-      {this.users,
-      this.userA,
-      this.userB,
-      this.lastMessage,
-      this.lastMessageTime,
-      this.lastMessageSentBy,
-      this.lastMessageSeenBy,
-      this.ffRef})
-      : super._();
+  _$ChatsRecord._({this.users, this.userA, this.userB, this.lastMessage, this.lastMessageTime, this.lastMessageSentBy, this.lastMessageSeenBy, this.ffRef}) : super._();
 
   @override
-  ChatsRecord rebuild(void Function(ChatsRecordBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+  ChatsRecord rebuild(void Function(ChatsRecordBuilder) updates) => (toBuilder()..update(updates)).build();
 
   @override
   ChatsRecordBuilder toBuilder() => new ChatsRecordBuilder()..replace(this);
@@ -239,10 +198,8 @@ class ChatsRecordBuilder implements Builder<ChatsRecord, ChatsRecordBuilder> {
   _$ChatsRecord? _$v;
 
   ListBuilder<DocumentReference<Object?>>? _users;
-  ListBuilder<DocumentReference<Object?>> get users =>
-      _$this._users ??= new ListBuilder<DocumentReference<Object?>>();
-  set users(ListBuilder<DocumentReference<Object?>>? users) =>
-      _$this._users = users;
+  ListBuilder<DocumentReference<Object?>> get users => _$this._users ??= new ListBuilder<DocumentReference<Object?>>();
+  set users(ListBuilder<DocumentReference<Object?>>? users) => _$this._users = users;
 
   DocumentReference<Object?>? _userA;
   DocumentReference<Object?>? get userA => _$this._userA;
@@ -258,22 +215,15 @@ class ChatsRecordBuilder implements Builder<ChatsRecord, ChatsRecordBuilder> {
 
   DateTime? _lastMessageTime;
   DateTime? get lastMessageTime => _$this._lastMessageTime;
-  set lastMessageTime(DateTime? lastMessageTime) =>
-      _$this._lastMessageTime = lastMessageTime;
+  set lastMessageTime(DateTime? lastMessageTime) => _$this._lastMessageTime = lastMessageTime;
 
   DocumentReference<Object?>? _lastMessageSentBy;
-  DocumentReference<Object?>? get lastMessageSentBy =>
-      _$this._lastMessageSentBy;
-  set lastMessageSentBy(DocumentReference<Object?>? lastMessageSentBy) =>
-      _$this._lastMessageSentBy = lastMessageSentBy;
+  DocumentReference<Object?>? get lastMessageSentBy => _$this._lastMessageSentBy;
+  set lastMessageSentBy(DocumentReference<Object?>? lastMessageSentBy) => _$this._lastMessageSentBy = lastMessageSentBy;
 
   ListBuilder<DocumentReference<Object?>>? _lastMessageSeenBy;
-  ListBuilder<DocumentReference<Object?>> get lastMessageSeenBy =>
-      _$this._lastMessageSeenBy ??=
-          new ListBuilder<DocumentReference<Object?>>();
-  set lastMessageSeenBy(
-          ListBuilder<DocumentReference<Object?>>? lastMessageSeenBy) =>
-      _$this._lastMessageSeenBy = lastMessageSeenBy;
+  ListBuilder<DocumentReference<Object?>> get lastMessageSeenBy => _$this._lastMessageSeenBy ??= new ListBuilder<DocumentReference<Object?>>();
+  set lastMessageSeenBy(ListBuilder<DocumentReference<Object?>>? lastMessageSeenBy) => _$this._lastMessageSeenBy = lastMessageSeenBy;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -316,16 +266,7 @@ class ChatsRecordBuilder implements Builder<ChatsRecord, ChatsRecordBuilder> {
   _$ChatsRecord _build() {
     _$ChatsRecord _$result;
     try {
-      _$result = _$v ??
-          new _$ChatsRecord._(
-              users: _users?.build(),
-              userA: userA,
-              userB: userB,
-              lastMessage: lastMessage,
-              lastMessageTime: lastMessageTime,
-              lastMessageSentBy: lastMessageSentBy,
-              lastMessageSeenBy: _lastMessageSeenBy?.build(),
-              ffRef: ffRef);
+      _$result = _$v ?? new _$ChatsRecord._(users: _users?.build(), userA: userA, userB: userB, lastMessage: lastMessage, lastMessageTime: lastMessageTime, lastMessageSentBy: lastMessageSentBy, lastMessageSeenBy: _lastMessageSeenBy?.build(), ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
@@ -335,8 +276,7 @@ class ChatsRecordBuilder implements Builder<ChatsRecord, ChatsRecordBuilder> {
         _$failedField = 'lastMessageSeenBy';
         _lastMessageSeenBy?.build();
       } catch (e) {
-        throw new BuiltValueNestedFieldError(
-            r'ChatsRecord', _$failedField, e.toString());
+        throw new BuiltValueNestedFieldError(r'ChatsRecord', _$failedField, e.toString());
       }
       rethrow;
     }

@@ -36,15 +36,9 @@ class _ReseauWidgetState extends State<ReseauWidget> {
     String currentUserId = await getCurrentUserId();
 
     // Use collection group to make query across all collections
-    QuerySnapshot queryUsers = await FirebaseFirestore.instance
-        .collection('users')
-        .where('reseau', arrayContains: currentUserId)
-        .get();
+    QuerySnapshot queryUsers = await FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: currentUserId).get();
 
-    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance
-        .collection('pharmacies')
-        .where('reseau', arrayContains: currentUserId)
-        .get();
+    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance.collection('pharmacies').where('reseau', arrayContains: currentUserId).get();
 
     for (var doc in queryPharmacies?.docs ?? []) {
       var data = doc.data();
@@ -103,8 +97,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,9 +105,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                         children: [
                           Text(
                             'Mon réseau',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
+                            style: FlutterFlowTheme.of(context).bodyMedium.override(
                                   fontFamily: 'Poppins',
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.w600,
@@ -169,25 +160,12 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 1.0,
                               height: 67,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                  color: Color(0xFFF2FDFF),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Color(0x2b1e5b67),
-                                        blurRadius: 12,
-                                        offset: Offset(10, 10))
-                                  ]),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
                               child: Row(
                                 children: [
-                                  Icon(isExpanded_Titu
-                                      ? Icons.expand_less
-                                      : Icons.expand_more),
+                                  Icon(isExpanded_Titu ? Icons.expand_less : Icons.expand_more),
                                   Text(
-                                    'Membres titulaires (' +
-                                        titulairesNetwork.length.toString() +
-                                        ')',
+                                    'Membres titulaires (' + titulairesNetwork.length.toString() + ')',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18.0,
@@ -199,8 +177,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             ),
                           ),
                           if (isExpanded_Titu)
-                            for (var i in titulairesNetwork)
-                              CardUserWidget(data: i),
+                            for (var i in titulairesNetwork) CardUserWidget(data: i),
                           SizedBox(height: 15),
                           InkWell(
                             onTap: () {
@@ -211,25 +188,12 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 1.0,
                               height: 67,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                  color: Color(0xFFF2FDFF),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Color(0x2b1e5b67),
-                                        blurRadius: 12,
-                                        offset: Offset(10, 10))
-                                  ]),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
                               child: Row(
                                 children: [
-                                  Icon(isExpanded_NonTitu
-                                      ? Icons.expand_less
-                                      : Icons.expand_more),
+                                  Icon(isExpanded_NonTitu ? Icons.expand_less : Icons.expand_more),
                                   Text(
-                                    'Membres (' +
-                                        nonTitulairesNetwork.length.toString() +
-                                        ')',
+                                    'Membres (' + nonTitulairesNetwork.length.toString() + ')',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18.0,
@@ -241,8 +205,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             ),
                           ),
                           if (isExpanded_NonTitu)
-                            for (var i in nonTitulairesNetwork)
-                              CardUserWidget(data: i),
+                            for (var i in nonTitulairesNetwork) CardUserWidget(data: i),
                           SizedBox(height: 15),
                           InkWell(
                             onTap: () {
@@ -253,25 +216,12 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             child: Container(
                               width: MediaQuery.of(context).size.width * 1.0,
                               height: 67,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                  color: Color(0xFFF2FDFF),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Color(0x2b1e5b67),
-                                        blurRadius: 12,
-                                        offset: Offset(10, 10))
-                                  ]),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
                               child: Row(
                                 children: [
-                                  Icon(isExpanded_Pharma
-                                      ? Icons.expand_less
-                                      : Icons.expand_more),
+                                  Icon(isExpanded_Pharma ? Icons.expand_less : Icons.expand_more),
                                   Text(
-                                    'Pharmacies (' +
-                                        pharmaciesNetwork.length.toString() +
-                                        ')',
+                                    'Pharmacies (' + pharmaciesNetwork.length.toString() + ')',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18.0,
@@ -283,8 +233,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                             ),
                           ),
                           if (isExpanded_Pharma)
-                            for (var i in pharmaciesNetwork)
-                              CardPharmacieWidget(data: i),
+                            for (var i in pharmaciesNetwork) CardPharmacieWidget(data: i),
                         ],
                       ),
                     ),

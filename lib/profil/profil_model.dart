@@ -71,7 +71,7 @@ class ProfilModel extends FlutterFlowModel {
 
   List<String> contratType = [];
 
-  List horaireDispoInterim =  [];
+  List horaireDispoInterim = [];
   void addToContratType(String item) {
     if (!contratType.contains(item)) {
       contratType.add(item);
@@ -115,7 +115,6 @@ class ProfilModel extends FlutterFlowModel {
   // State field(s) for NomOffre widget.
   TextEditingController? nomOffreController;
   String? Function(BuildContext, String?)? nomOffreControllerValidator;
-
 
   /// Initialization and disposal methods.
 

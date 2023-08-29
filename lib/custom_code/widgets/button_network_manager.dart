@@ -31,17 +31,14 @@ class ButtonNetworkManager extends StatefulWidget {
   final double radius;
   final double fontSize;
 
-
-
-
   @override
   _ButtonNetworkManagerState createState() => _ButtonNetworkManagerState();
 }
 
 class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
-    bool isInNetwork = false;
+  bool isInNetwork = false;
 
-    // Ajoute au réseau
+  // Ajoute au réseau
   Future<void> updateNetwork(String typeCollection, String docId) async {
     final documentRef = FirebaseFirestore.instance
         .collection(typeCollection) // replace with your collection name
@@ -76,8 +73,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
     DocumentSnapshot documentSnapshot = await documentRef.get();
 
     if (documentSnapshot.exists) {
-      Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
       // Check if 'reseau' array contains the current user's ID
       if (data != null ? data['reseau'].contains(currentUserId) : '') {
@@ -88,7 +84,6 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
 
     return false;
   }
-
 
   @override
   void initState() {
@@ -104,8 +99,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
           await deleteNetwork(widget.typeCollection, widget.docId);
           setState(() {});
         },
-        icon: Icon(Icons.delete_outline,
-            color: redColor), // Specify the color directly for the icon
+        icon: Icon(Icons.delete_outline, color: redColor), // Specify the color directly for the icon
         label: Text(
           'Supprimer',
           style: TextStyle(
@@ -114,8 +108,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
           ), // Specify the color directly for the text
         ),
         style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all<Color>(
-              Colors.grey.withOpacity(0.1)), // Button pressed overlay color
+          overlayColor: MaterialStateProperty.all<Color>(Colors.grey.withOpacity(0.1)), // Button pressed overlay color
         ),
       );
     } else {

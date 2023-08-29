@@ -53,8 +53,7 @@ class FFChatPreview extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
-                    padding:
-                        const EdgeInsetsDirectional.only(start: 0.0, end: 8.0),
+                    padding: const EdgeInsetsDirectional.only(start: 0.0, end: 8.0),
                     child: Container(
                       width: 12.0,
                       height: 12.0,

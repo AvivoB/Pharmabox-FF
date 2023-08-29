@@ -8,8 +8,7 @@ import 'package:flutter/rendering.dart';
 
 const double _kTabHeight = 46.0;
 
-typedef _LayoutCallback = void Function(
-    List<double> xOffsets, TextDirection textDirection, double width);
+typedef _LayoutCallback = void Function(List<double> xOffsets, TextDirection textDirection, double width);
 
 class _TabLabelBarRenderer extends RenderFlex {
   _TabLabelBarRenderer({
@@ -41,8 +40,7 @@ class _TabLabelBarRenderer extends RenderFlex {
     RenderBox? child = firstChild;
     final List<double> xOffsets = <double>[];
     while (child != null) {
-      final FlexParentData childParentData =
-          child.parentData! as FlexParentData;
+      final FlexParentData childParentData = child.parentData! as FlexParentData;
       xOffsets.add(childParentData.offset.dx);
       assert(child.parentData == childParentData);
       child = childParentData.nextSibling;
@@ -92,8 +90,7 @@ class _TabLabelBar extends Flex {
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, _TabLabelBarRenderer renderObject) {
+  void updateRenderObject(BuildContext context, _TabLabelBarRenderer renderObject) {
     super.updateRenderObject(context, renderObject);
     renderObject.onPerformLayout = onPerformLayout;
   }
@@ -144,8 +141,7 @@ class _IndicatorPainter extends CustomPainter {
     assert(_currentTabOffsets!.isNotEmpty);
     assert(tabIndex >= 0);
     assert(tabIndex <= maxTabIndex);
-    return (_currentTabOffsets![tabIndex] + _currentTabOffsets![tabIndex + 1]) /
-        2.0;
+    return (_currentTabOffsets![tabIndex] + _currentTabOffsets![tabIndex + 1]) / 2.0;
   }
 
   @override
@@ -155,11 +151,7 @@ class _IndicatorPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_IndicatorPainter old) {
-    return _needsPaint ||
-        controller != old.controller ||
-        tabKeys.length != old.tabKeys.length ||
-        (!listEquals(_currentTabOffsets, old._currentTabOffsets)) ||
-        _currentTextDirection != old._currentTextDirection;
+    return _needsPaint || controller != old.controller || tabKeys.length != old.tabKeys.length || (!listEquals(_currentTabOffsets, old._currentTabOffsets)) || _currentTextDirection != old._currentTextDirection;
   }
 }
 
@@ -203,12 +195,10 @@ class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
     // ballistic scroll activity.
     if (!_viewportDimensionWasNonZero || _needsPixelsCorrection) {
       _needsPixelsCorrection = false;
-      correctPixels(tabBar._initialScrollOffset(
-          viewportDimension, minScrollExtent, maxScrollExtent));
+      correctPixels(tabBar._initialScrollOffset(viewportDimension, minScrollExtent, maxScrollExtent));
       result = false;
     }
-    return super.applyContentDimensions(minScrollExtent, maxScrollExtent) &&
-        result;
+    return super.applyContentDimensions(minScrollExtent, maxScrollExtent) && result;
   }
 
   void markNeedsPixelsCorrection() {
@@ -224,8 +214,7 @@ class _TabBarScrollController extends ScrollController {
   final _FlutterFlowButtonTabBarState tabBar;
 
   @override
-  ScrollPosition createScrollPosition(ScrollPhysics physics,
-      ScrollContext context, ScrollPosition? oldPosition) {
+  ScrollPosition createScrollPosition(ScrollPhysics physics, ScrollContext context, ScrollPosition? oldPosition) {
     return _TabBarScrollPosition(
       physics: physics,
       context: context,
@@ -236,8 +225,7 @@ class _TabBarScrollController extends ScrollController {
 }
 
 /// A Flutterflow Design widget that displays a horizontal row of tabs.
-class FlutterFlowButtonTabBar extends StatefulWidget
-    implements PreferredSizeWidget {
+class FlutterFlowButtonTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// The [tabs] argument must not be null and its length must match the [controller]'s
   /// [TabController.length].
   ///
@@ -371,17 +359,14 @@ class FlutterFlowButtonTabBar extends StatefulWidget
         maxHeight = math.max(itemHeight, maxHeight);
       }
     }
-    return Size.fromHeight(
-        maxHeight + labelPadding.vertical + buttonMargin.vertical);
+    return Size.fromHeight(maxHeight + labelPadding.vertical + buttonMargin.vertical);
   }
 
   @override
-  State<FlutterFlowButtonTabBar> createState() =>
-      _FlutterFlowButtonTabBarState();
+  State<FlutterFlowButtonTabBar> createState() => _FlutterFlowButtonTabBarState();
 }
 
-class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
-    with TickerProviderStateMixin {
+class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar> with TickerProviderStateMixin {
   ScrollController? _scrollController;
   TabController? _controller;
   _IndicatorPainter? _indicatorPainter;
@@ -405,8 +390,7 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
 
     /// The animation duration is 2/3 of the tab scroll animation duration in
     /// Material design (kTabScrollDuration).
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
 
     // so the buttons start in their "final" state (color)
     _animationController
@@ -424,8 +408,7 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
   bool get _controllerIsValid => _controller?.animation != null;
 
   void _updateTabController() {
-    final TabController? newController =
-        widget.controller ?? DefaultTabController.maybeOf(context);
+    final TabController? newController = widget.controller ?? DefaultTabController.maybeOf(context);
     assert(() {
       if (newController == null) {
         throw FlutterError(
@@ -510,8 +493,7 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
 
   int get maxTabIndex => _indicatorPainter!.maxTabIndex;
 
-  double _tabScrollOffset(
-      int index, double viewportWidth, double minExtent, double maxExtent) {
+  double _tabScrollOffset(int index, double viewportWidth, double minExtent, double maxExtent) {
     if (!widget.isScrollable) {
       return 0.0;
     }
@@ -527,34 +509,27 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
         break;
     }
 
-    return clampDouble(
-        tabCenter + paddingStart - viewportWidth / 2.0, minExtent, maxExtent);
+    return clampDouble(tabCenter + paddingStart - viewportWidth / 2.0, minExtent, maxExtent);
   }
 
   double _tabCenteredScrollOffset(int index) {
     final ScrollPosition position = _scrollController!.position;
-    return _tabScrollOffset(index, position.viewportDimension,
-        position.minScrollExtent, position.maxScrollExtent);
+    return _tabScrollOffset(index, position.viewportDimension, position.minScrollExtent, position.maxScrollExtent);
   }
 
-  double _initialScrollOffset(
-      double viewportWidth, double minExtent, double maxExtent) {
+  double _initialScrollOffset(double viewportWidth, double minExtent, double maxExtent) {
     return _tabScrollOffset(_currentIndex, viewportWidth, minExtent, maxExtent);
   }
 
   void _scrollToCurrentIndex() {
     final double offset = _tabCenteredScrollOffset(_currentIndex);
-    _scrollController!
-        .animateTo(offset, duration: kTabScrollDuration, curve: Curves.ease);
+    _scrollController!.animateTo(offset, duration: kTabScrollDuration, curve: Curves.ease);
   }
 
   void _scrollToControllerValue() {
-    final double? leadingPosition =
-        _currentIndex > 0 ? _tabCenteredScrollOffset(_currentIndex - 1) : null;
+    final double? leadingPosition = _currentIndex > 0 ? _tabCenteredScrollOffset(_currentIndex - 1) : null;
     final double middlePosition = _tabCenteredScrollOffset(_currentIndex);
-    final double? trailingPosition = _currentIndex < maxTabIndex
-        ? _tabCenteredScrollOffset(_currentIndex + 1)
-        : null;
+    final double? trailingPosition = _currentIndex < maxTabIndex ? _tabCenteredScrollOffset(_currentIndex + 1) : null;
 
     final double index = _controller!.index.toDouble();
     final double value = _controller!.animation!.value;
@@ -566,13 +541,9 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
     } else if (value == index) {
       offset = middlePosition;
     } else if (value < index) {
-      offset = leadingPosition == null
-          ? middlePosition
-          : lerpDouble(middlePosition, leadingPosition, index - value)!;
+      offset = leadingPosition == null ? middlePosition : lerpDouble(middlePosition, leadingPosition, index - value)!;
     } else {
-      offset = trailingPosition == null
-          ? middlePosition
-          : lerpDouble(middlePosition, trailingPosition, value - index)!;
+      offset = trailingPosition == null ? middlePosition : lerpDouble(middlePosition, trailingPosition, value - index)!;
     }
 
     _scrollController!.jumpTo(offset);
@@ -610,8 +581,7 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
   }
 
   // Called each time layout completes.
-  void _saveTabOffsets(
-      List<double> tabOffsets, TextDirection textDirection, double width) {
+  void _saveTabOffsets(List<double> tabOffsets, TextDirection textDirection, double width) {
     _tabStripWidth = width;
     _indicatorPainter?.saveTabOffsets(tabOffsets, textDirection);
   }
@@ -635,52 +605,34 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
     }
 
     final TextStyle? textStyle = TextStyle.lerp(
-        (widget.unselectedLabelStyle ??
-                tabBarTheme.labelStyle ??
-                DefaultTextStyle.of(context).style)
-            .copyWith(
+        (widget.unselectedLabelStyle ?? tabBarTheme.labelStyle ?? DefaultTextStyle.of(context).style).copyWith(
           color: widget.unselectedLabelColor,
         ),
-        (widget.labelStyle ??
-                tabBarTheme.labelStyle ??
-                DefaultTextStyle.of(context).style)
-            .copyWith(
+        (widget.labelStyle ?? tabBarTheme.labelStyle ?? DefaultTextStyle.of(context).style).copyWith(
           color: widget.labelColor,
         ),
         animationValue);
 
-    final Color? textColor = Color.lerp(
-        widget.unselectedLabelColor, widget.labelColor, animationValue);
+    final Color? textColor = Color.lerp(widget.unselectedLabelColor, widget.labelColor, animationValue);
 
-    final Color? borderColor = Color.lerp(
-        widget.unselectedBorderColor, widget.borderColor, animationValue);
+    final Color? borderColor = Color.lerp(widget.unselectedBorderColor, widget.borderColor, animationValue);
 
     BoxDecoration? boxDecoration = BoxDecoration.lerp(
         BoxDecoration(
-          color: widget.unselectedDecoration?.color ??
-              widget.unselectedBackgroundColor ??
-              Colors.transparent,
+          color: widget.unselectedDecoration?.color ?? widget.unselectedBackgroundColor ?? Colors.transparent,
           boxShadow: widget.unselectedDecoration?.boxShadow,
           gradient: widget.unselectedDecoration?.gradient,
-          borderRadius: widget.useToggleButtonStyle
-              ? null
-              : BorderRadius.circular(widget.borderRadius),
+          borderRadius: widget.useToggleButtonStyle ? null : BorderRadius.circular(widget.borderRadius),
         ),
         BoxDecoration(
-          color: widget.decoration?.color ??
-              widget.backgroundColor ??
-              Colors.transparent,
+          color: widget.decoration?.color ?? widget.backgroundColor ?? Colors.transparent,
           boxShadow: widget.decoration?.boxShadow,
           gradient: widget.decoration?.gradient,
-          borderRadius: widget.useToggleButtonStyle
-              ? null
-              : BorderRadius.circular(widget.borderRadius),
+          borderRadius: widget.useToggleButtonStyle ? null : BorderRadius.circular(widget.borderRadius),
         ),
         animationValue);
 
-    if (widget.useToggleButtonStyle &&
-        widget.borderWidth > 0 &&
-        boxDecoration != null) {
+    if (widget.useToggleButtonStyle && widget.borderWidth > 0 && boxDecoration != null) {
       if (index == 0) {
         boxDecoration = boxDecoration.copyWith(
           border: Border(
@@ -714,13 +666,11 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
     return Padding(
       key: _tabKeys[index],
       // padding for the buttons
-      padding:
-          widget.useToggleButtonStyle ? EdgeInsets.zero : widget.buttonMargin,
+      padding: widget.useToggleButtonStyle ? EdgeInsets.zero : widget.buttonMargin,
       child: TextButton(
         onPressed: () => _handleTap(index),
         style: ButtonStyle(
-          elevation: MaterialStateProperty.all(
-              widget.useToggleButtonStyle ? 0 : widget.elevation),
+          elevation: MaterialStateProperty.all(widget.useToggleButtonStyle ? 0 : widget.elevation),
 
           /// give a pretty small minimum size
           minimumSize: MaterialStateProperty.all(const Size(10, 10)),
@@ -786,14 +736,11 @@ class _FlutterFlowButtonTabBarState extends State<FlutterFlowButtonTabBar>
 
     if (_controller!.length == 0) {
       return Container(
-        height: _kTabHeight +
-            widget.labelPadding.vertical +
-            widget.buttonMargin.vertical,
+        height: _kTabHeight + widget.labelPadding.vertical + widget.buttonMargin.vertical,
       );
     }
 
-    final List<Widget> wrappedTabs =
-        List<Widget>.generate(widget.tabs.length, (int index) {
+    final List<Widget> wrappedTabs = List<Widget>.generate(widget.tabs.length, (int index) {
       return _buildStyledTab(widget.tabs[index], index);
     });
 

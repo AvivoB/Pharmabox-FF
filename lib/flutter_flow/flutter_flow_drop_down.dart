@@ -56,8 +56,7 @@ class FlutterFlowDropDown<T> extends StatefulWidget {
 class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
   final TextEditingController _textEditingController = TextEditingController();
 
-  void Function() get listener =>
-      () => widget.onChanged(widget.controller.value);
+  void Function() get listener => () => widget.onChanged(widget.controller.value);
 
   @override
   void initState() {
@@ -73,9 +72,7 @@ class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final value = widget.options.contains(widget.controller.value)
-        ? widget.controller.value
-        : null;
+    final value = widget.options.contains(widget.controller.value) ? widget.controller.value : null;
     final items = widget.options
         .asMap()
         .entries
@@ -83,23 +80,15 @@ class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
           (option) => DropdownMenuItem<T>(
             value: option.value,
             child: Text(
-              widget.optionLabels == null ||
-                      widget.optionLabels!.length < option.key + 1
-                  ? option.value.toString()
-                  : widget.optionLabels![option.key],
+              widget.optionLabels == null || widget.optionLabels!.length < option.key + 1 ? option.value.toString() : widget.optionLabels![option.key],
               style: widget.textStyle,
             ),
           ),
         )
         .toList();
-    final hintText = widget.hintText != null
-        ? Text(widget.hintText!, style: widget.textStyle)
-        : null;
-    void Function(T?)? onChanged =
-        !widget.disabled ? (value) => widget.controller.value = value : null;
-    final dropdownWidget = widget.isSearchable
-        ? _buildSearchableDropdown(value, items, onChanged, hintText)
-        : _buildNonSearchableDropdown(value, items, onChanged, hintText);
+    final hintText = widget.hintText != null ? Text(widget.hintText!, style: widget.textStyle) : null;
+    void Function(T?)? onChanged = !widget.disabled ? (value) => widget.controller.value = value : null;
+    final dropdownWidget = widget.isSearchable ? _buildSearchableDropdown(value, items, onChanged, hintText) : _buildNonSearchableDropdown(value, items, onChanged, hintText);
     final childWidget = DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -111,9 +100,7 @@ class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
       ),
       child: Padding(
         padding: widget.margin,
-        child: widget.hidesUnderline
-            ? DropdownButtonHideUnderline(child: dropdownWidget)
-            : dropdownWidget,
+        child: widget.hidesUnderline ? DropdownButtonHideUnderline(child: dropdownWidget) : dropdownWidget,
       ),
     );
     if (widget.height != null || widget.width != null) {
@@ -151,11 +138,8 @@ class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
     void Function(T?)? onChanged,
     Text? hintText,
   ) {
-    final overlayColor = MaterialStateProperty.resolveWith<Color?>((states) =>
-        states.contains(MaterialState.focused) ? Colors.transparent : null);
-    final iconStyleData = widget.icon != null
-        ? IconStyleData(icon: widget.icon!)
-        : const IconStyleData();
+    final overlayColor = MaterialStateProperty.resolveWith<Color?>((states) => states.contains(MaterialState.focused) ? Colors.transparent : null);
+    final iconStyleData = widget.icon != null ? IconStyleData(icon: widget.icon!) : const IconStyleData();
     return DropdownButton2<T>(
       value: value,
       hint: hintText,
@@ -205,10 +189,7 @@ class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
           ),
         ),
         searchMatchFn: (item, searchValue) {
-          return item.value
-              .toString()
-              .toLowerCase()
-              .contains(searchValue.toLowerCase());
+          return item.value.toString().toLowerCase().contains(searchValue.toLowerCase());
         },
       ),
 

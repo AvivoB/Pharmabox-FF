@@ -35,11 +35,7 @@ Future<String> getPharmacyByUserId() async {
 
   String? currentUserId = auth.currentUser?.uid;
 
-  QuerySnapshot querySnapshot = await firestore
-      .collection('pharmacies')
-      .where('user_id', isEqualTo: currentUserId)
-      .limit(1)
-      .get();
+  QuerySnapshot querySnapshot = await firestore.collection('pharmacies').where('user_id', isEqualTo: currentUserId).limit(1).get();
 
   if (querySnapshot.docs.isNotEmpty) {
     DocumentSnapshot document = querySnapshot.docs.first;

@@ -83,8 +83,7 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
+                              color: FlutterFlowTheme.of(context).secondaryBackground,
                               boxShadow: [
                                 BoxShadow(
                                   blurRadius: 4.0,
@@ -112,8 +111,7 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                                   context: context,
                                   builder: (bottomSheetContext) {
                                     return Padding(
-                                      padding: MediaQuery.of(bottomSheetContext)
-                                          .viewInsets,
+                                      padding: MediaQuery.of(bottomSheetContext).viewInsets,
                                       child: PopupNotificationsWidget(),
                                     );
                                   },
@@ -122,37 +120,27 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                             ),
                           ),
                           StreamBuilder<QuerySnapshot>(
-                              stream: FirebaseFirestore.instance
-                                  .collection('notifications')
-                                  .where('for', isEqualTo: currentUser?.uid)
-                                  .snapshots(),
+                              stream: FirebaseFirestore.instance.collection('notifications').where('for', isEqualTo: currentUser?.uid).snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) {
                                   // Display the error message
                                   print('${snapshot.error}');
                                 }
 
-                                final int unreadNotificationsCount =
-                                    snapshot.data?.docs.length ?? 0;
+                                final int unreadNotificationsCount = snapshot.data?.docs.length ?? 0;
                                 if (unreadNotificationsCount > 0) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
+                                      color: FlutterFlowTheme.of(context).alternate,
                                       shape: BoxShape.circle,
                                     ),
                                     child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          8.0, 8.0, 8.0, 8.0),
+                                      padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
                                       child: Text(
                                         unreadNotificationsCount.toString(),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
                                               fontFamily: 'Poppins',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
+                                              color: FlutterFlowTheme.of(context).primaryBackground,
                                               fontSize: 10.0,
                                             ),
                                       ),
@@ -165,8 +153,7 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                         ],
                       ),
                       Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 5.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 5.0, 0.0),
                         child: Stack(
                           alignment: AlignmentDirectional(2.0, -3.5),
                           children: [
@@ -180,10 +167,7 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                                   )
                                 ],
                                 gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFF42D2FF),
-                                    Color(0xFF7CEDAC)
-                                  ],
+                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, -1.0),
                                   end: AlignmentDirectional(-1.0, 1.0),
@@ -197,8 +181,7 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                                 buttonSize: 40.0,
                                 icon: Icon(
                                   Icons.message_outlined,
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
+                                  color: FlutterFlowTheme.of(context).primaryBackground,
                                   size: 25.0,
                                 ),
                                 onPressed: () async {
@@ -207,41 +190,28 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                               ),
                             ),
                             StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collectionGroup('message')
-                                    .where('receiverId',
-                                        isEqualTo: currentUser?.uid)
-                                    .where('isViewed', isEqualTo: false)
-                                    .snapshots(),
+                                stream: FirebaseFirestore.instance.collectionGroup('message').where('receiverId', isEqualTo: currentUser?.uid).where('isViewed', isEqualTo: false).snapshots(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasError) {
                                     // Display the error message
                                     print('${snapshot.error}');
                                   }
 
-                                  final int unreadMessagesCount =
-                                      snapshot.data?.docs.length ?? 0;
+                                  final int unreadMessagesCount = snapshot.data?.docs.length ?? 0;
 
                                   if (unreadMessagesCount > 0) {
                                     return Container(
                                       decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .alternate,
+                                        color: FlutterFlowTheme.of(context).alternate,
                                         shape: BoxShape.circle,
                                       ),
                                       child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  8.0, 8.0, 8.0, 8.0),
+                                          padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
                                           child: Text(
                                             unreadMessagesCount.toString(),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
+                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                   fontFamily: 'Poppins',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
+                                                  color: FlutterFlowTheme.of(context).primaryBackground,
                                                   fontSize: 10.0,
                                                 ),
                                           )),

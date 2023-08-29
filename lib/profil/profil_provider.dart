@@ -17,10 +17,8 @@ class ProviderProfilUser extends ChangeNotifier {
   List get selectedExperiences => _selectedExperiences;
   Map get searchSaved => _searchSaved;
 
-  void setSearchSaved (search) {
-    
-  }
-  
+  void setSearchSaved(search) {}
+
   void setCompetence(competences) {
     _selectedCompetences = competences;
     // notifyListeners();
@@ -101,11 +99,7 @@ class ProviderProfilUser extends ChangeNotifier {
   }
 
   void addExperiences(nom_pharmacie, annee_debut, annee_fin) {
-    _selectedExperiences.add({
-      "nom_pharmacie": nom_pharmacie,
-      "annee_debut": annee_debut,
-      "annee_fin": annee_fin
-    });
+    _selectedExperiences.add({"nom_pharmacie": nom_pharmacie, "annee_debut": annee_debut, "annee_fin": annee_fin});
     notifyListeners();
   }
 

@@ -12,8 +12,7 @@ class PopupEnregistrerOffreModel extends FlutterFlowModel {
   List<String> lgoTabRegister = [];
   void addToLgoTabRegister(String item) => lgoTabRegister.add(item);
   void removeFromLgoTabRegister(String item) => lgoTabRegister.remove(item);
-  void removeAtIndexFromLgoTabRegister(int index) =>
-      lgoTabRegister.removeAt(index);
+  void removeAtIndexFromLgoTabRegister(int index) => lgoTabRegister.removeAt(index);
 
   ///  State fields for stateful widgets in this component.
 
@@ -30,5 +29,4 @@ class PopupEnregistrerOffreModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
-
 }

@@ -41,8 +41,7 @@ class RegisterModel extends FlutterFlowModel {
   TextEditingController? confirmpasswordController;
   late bool confirmpasswordVisibility;
   String? Function(BuildContext, String?)? confirmpasswordControllerValidator;
-  String? _confirmpasswordControllerValidator(
-      BuildContext context, String? val) {
+  String? _confirmpasswordControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Confirmez votre mot de passe';
     }
@@ -67,5 +66,4 @@ class RegisterModel extends FlutterFlowModel {
   }
 
   /// Additional helper methods are added here.
-
 }

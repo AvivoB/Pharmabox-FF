@@ -57,25 +57,24 @@ Future<List<SelectedMedia>?> selectMediaWithSourceBottomSheet({
   bool includeDimensions = false,
   bool includeBlurHash = false,
 }) async {
-  final createUploadMediaListTile =
-      (String label, MediaSource mediaSource) => ListTile(
-            title: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.getFont(
-                pickerFontFamily,
-                color: textColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-              ),
-            ),
-            tileColor: backgroundColor,
-            dense: false,
-            onTap: () => Navigator.pop(
-              context,
-              mediaSource,
-            ),
-          );
+  final createUploadMediaListTile = (String label, MediaSource mediaSource) => ListTile(
+        title: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.getFont(
+            pickerFontFamily,
+            color: textColor,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+        ),
+        tileColor: backgroundColor,
+        dense: false,
+        onTap: () => Navigator.pop(
+          context,
+          mediaSource,
+        ),
+      );
   final mediaSource = await showModalBottomSheet<MediaSource>(
       context: context,
       backgroundColor: backgroundColor,
@@ -140,8 +139,7 @@ Future<List<SelectedMedia>?> selectMediaWithSourceBottomSheet({
     maxWidth: maxWidth,
     maxHeight: maxHeight,
     imageQuality: imageQuality,
-    isVideo: mediaSource == MediaSource.videoGallery ||
-        (mediaSource == MediaSource.camera && allowVideo && !allowPhoto),
+    isVideo: mediaSource == MediaSource.videoGallery || (mediaSource == MediaSource.camera && allowVideo && !allowPhoto),
     mediaSource: mediaSource,
     includeDimensions: includeDimensions,
     includeBlurHash: includeBlurHash,
@@ -191,9 +189,7 @@ Future<List<SelectedMedia>?> selectMedia({
     }));
   }
 
-  final source = mediaSource == MediaSource.camera
-      ? ImageSource.camera
-      : ImageSource.gallery;
+  final source = mediaSource == MediaSource.camera ? ImageSource.camera : ImageSource.gallery;
   final pickedMediaFuture = isVideo
       ? picker.pickVideo(source: source)
       : picker.pickImage(
@@ -270,8 +266,7 @@ Future<MediaDimensions> _getImageDimensions(Uint8List mediaBytes) async {
 }
 
 Future<MediaDimensions> _getVideoDimensions(String path) async {
-  final VideoPlayerController videoPlayerController =
-      VideoPlayerController.asset(path);
+  final VideoPlayerController videoPlayerController = VideoPlayerController.asset(path);
   await videoPlayerController.initialize();
   final size = videoPlayerController.value.size;
   return MediaDimensions(width: size.width, height: size.height);
@@ -300,8 +295,7 @@ String getSignatureStoragePath([String? pathPrefix]) {
   return '$pathPrefix/signature_$timestamp.png';
 }
 
-void showUploadMessage(BuildContext context, String message,
-    {bool showLoading = false}) {
+void showUploadMessage(BuildContext context, String message, {bool showLoading = false}) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
@@ -320,8 +314,6 @@ void showUploadMessage(BuildContext context, String message,
     );
 }
 
-String? _removeTrailingSlash(String? path) => path != null && path.endsWith('/')
-    ? path.substring(0, path.length - 1)
-    : path;
+String? _removeTrailingSlash(String? path) => path != null && path.endsWith('/') ? path.substring(0, path.length - 1) : path;
 
 String _firebasePathPrefix() => 'users/$currentUserUid/uploads';

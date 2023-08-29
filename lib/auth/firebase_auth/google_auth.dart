@@ -15,8 +15,7 @@ Future<UserCredential?> googleSignInFunc() async {
   if (auth == null) {
     return null;
   }
-  final credential = GoogleAuthProvider.credential(
-      idToken: auth.idToken, accessToken: auth.accessToken);
+  final credential = GoogleAuthProvider.credential(idToken: auth.idToken, accessToken: auth.accessToken);
   return FirebaseAuth.instance.signInWithCredential(credential);
 }
 

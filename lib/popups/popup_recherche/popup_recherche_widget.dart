@@ -42,8 +42,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
 
     _model.localisationController ??= TextEditingController();
     _model.dureMoisController ??= TextEditingController();
-    _model.debutContratController ??=
-        TextEditingController(text: dateTimeFormat('d/M/y', _model.datePicked));
+    _model.debutContratController ??= TextEditingController(text: dateTimeFormat('d/M/y', _model.datePicked));
     _model.salaireMensuelNetController ??= TextEditingController();
     _model.rayonController ??= TextEditingController();
     _model.nomOffreController ??= TextEditingController();
@@ -60,18 +59,15 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
 
-    final CollectionReference<Map<String, dynamic>> usersRef =
-        FirebaseFirestore.instance.collection('users');
+    final CollectionReference<Map<String, dynamic>> usersRef = FirebaseFirestore.instance.collection('users');
 
-    List<Map<String, dynamic>> grilleHoraireNetsed =
-        _model.grilleHoraire.map((semaine) {
+    List<Map<String, dynamic>> grilleHoraireNetsed = _model.grilleHoraire.map((semaine) {
       return {
         'semaine': semaine,
       };
     }).toList();
 
-    List<Map<String, dynamic>> grilleHoraireImpaireNetsed =
-        _model.grilleHoraireImpaire.map((semaine) {
+    List<Map<String, dynamic>> grilleHoraireImpaireNetsed = _model.grilleHoraireImpaire.map((semaine) {
       return {
         'semaine': semaine,
       };
@@ -92,7 +88,9 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
       'grille_pair_impaire_identique': _model.pairImpaireValue,
       'grille_horaire_impaire': grilleHoraireImpaireNetsed,
       'horaire_dispo_interim': _model.horaireDispoInterim,
-      'user_id': currentUser?.uid
+      'user_id': currentUser?.uid,
+      'date_created': Timestamp.now(),
+      'isActive': true
     };
 
     firestore.collection('recherches').add(createRecherche).then((docRef) {
@@ -152,13 +150,11 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       ),
                     ],
                   ),
-                  custom_widgets.PredictionOffreRechercheLocalisation(
-                      onPlaceSelected: (value) {
+                  custom_widgets.PredictionOffreRechercheLocalisation(onPlaceSelected: (value) {
                     _model.localisationController.text = value;
                   }),
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                        0.0, 10.0, 0.0, 10.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                     child: TextFormField(
                       controller: _model.rayonController,
                       obscureText: false,
@@ -205,8 +201,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                     decoration: BoxDecoration(),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                     child: Container(
                       height: 50.0,
                       decoration: BoxDecoration(
@@ -220,33 +215,23 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                             child: SvgPicture.asset(
                               'assets/icons/Contrat.svg',
                               width: 20,
-                              colorFilter: ColorFilter.mode(
-                                  Color(0xFF595A71), BlendMode.srcIn),
+                              colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                             child: Text(
                               'Contrat',
                               style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
                           ),
                           FlutterFlowDropDown<String>(
-                            controller: _model.contratValueController ??=
-                                FormFieldController<String>(null),
-                            options: [
-                              'CDI',
-                              'CDD',
-                              'Stage',
-                              'Alternance',
-                              'Intérimaire'
-                            ],
+                            controller: _model.contratValueController ??= FormFieldController<String>(null),
+                            options: ['CDI', 'CDD', 'Stage', 'Alternance', 'Intérimaire'],
                             onChanged: (val) async {
                               setState(() => _model.contratValue = val);
                               setState(() {
@@ -255,9 +240,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                             },
                             width: MediaQuery.of(context).size.width * 0.6,
                             height: 50.0,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
+                            textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                   fontFamily: 'Poppins',
                                   color: Colors.black,
                                 ),
@@ -267,8 +250,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                             borderColor: Colors.transparent,
                             borderWidth: 0.0,
                             borderRadius: 0.0,
-                            margin: EdgeInsetsDirectional.fromSTEB(
-                                12.0, 4.0, 12.0, 4.0),
+                            margin: EdgeInsetsDirectional.fromSTEB(12.0, 4.0, 12.0, 4.0),
                             hidesUnderline: true,
                             isSearchable: false,
                           ),
@@ -282,29 +264,23 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: selectedContrats.map((e) {
                         return Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 0.0, 5.0, 5.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 5.0),
                           child: Container(
                             decoration: BoxDecoration(
                               color: Color(0xFFEFF6F7),
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  5.0, 5.0, 5.0, 5.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 10.0, 0.0),
+                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
                                     child: Text(
                                       e,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -335,16 +311,13 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       }).toList(),
                     ),
                   ),
-                  if (!_model.contratType.contains('CDI') &&
-                      !_model.contratType.contains('Intérimaire'))
+                  if (!_model.contratType.contains('CDI') && !_model.contratType.contains('Intérimaire'))
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: Container(
                         height: 50.0,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(4.0),
                           border: Border.all(
                             color: Color(0xFFD0D1DE),
@@ -354,32 +327,27 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  5.0, 0.0, 0.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                               child: Icon(
                                 Icons.calendar_month,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
+                                color: FlutterFlowTheme.of(context).secondaryText,
                                 size: 24.0,
                               ),
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width * 0.7,
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                               ),
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 0.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                                 child: TextFormField(
                                   textAlign: TextAlign.center,
                                   controller: _model.dureMoisController,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     hintText: 'Durée',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
@@ -421,11 +389,9 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                       ),
                                     ),
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
                                   keyboardType: TextInputType.number,
-                                  validator: _model.dureMoisControllerValidator
-                                      .asValidator(context),
+                                  validator: _model.dureMoisControllerValidator.asValidator(context),
                                 ),
                               ),
                             ),
@@ -439,13 +405,11 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                     ),
                   if (!_model.contratType.contains('Intérimaire'))
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: Container(
                         height: 50.0,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(4.0),
                           border: Border.all(
                             color: Color(0xFFD0D1DE),
@@ -455,31 +419,20 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  5.0, 0.0, 0.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                               child: Icon(
                                 Icons.access_time,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
+                                color: FlutterFlowTheme.of(context).secondaryText,
                                 size: 24.0,
                               ),
                             ),
                             FlutterFlowDropDown<String>(
-                              controller:
-                                  _model.tempspleinpartielValueController ??=
-                                      FormFieldController<String>(null),
-                              options: [
-                                'Temps plein',
-                                'Temps partiel',
-                                'Dépannage'
-                              ],
-                              onChanged: (val) => setState(
-                                  () => _model.tempspleinpartielValue = val),
+                              controller: _model.tempspleinpartielValueController ??= FormFieldController<String>(null),
+                              options: ['Temps plein', 'Temps partiel', 'Dépannage'],
+                              onChanged: (val) => setState(() => _model.tempspleinpartielValue = val),
                               width: MediaQuery.of(context).size.width * 0.8,
                               height: 50.0,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+                              textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: Colors.black,
                                   ),
@@ -489,8 +442,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                               borderColor: Colors.transparent,
                               borderWidth: 0.0,
                               borderRadius: 0.0,
-                              margin: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 4.0, 12.0, 4.0),
+                              margin: EdgeInsetsDirectional.fromSTEB(12.0, 4.0, 12.0, 4.0),
                               hidesUnderline: true,
                               isSearchable: false,
                             ),
@@ -500,8 +452,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                     ),
                   if (!_model.contratType.contains('Intérimaire'))
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -511,12 +462,10 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 10.0, 0.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
                                 child: Icon(
                                   Icons.calendar_today_rounded,
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
+                                  color: FlutterFlowTheme.of(context).secondaryText,
                                   size: 24.0,
                                 ),
                               ),
@@ -529,8 +478,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                           Switch.adaptive(
                             value: _model.debutImmediateValue ??= false,
                             onChanged: (newValue) async {
-                              setState(
-                                  () => _model.debutImmediateValue = newValue!);
+                              setState(() => _model.debutImmediateValue = newValue!);
                             },
                             activeColor: Color(0xFF7CEDAC),
                           ),
@@ -543,8 +491,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       child: Visibility(
                         visible: _model.debutImmediateValue == false,
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
                             controller: _model.debutContratController,
                             onTap: () async {
@@ -563,16 +510,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                     _datePickedDate.day,
                                   );
 
-                                  _model.debutContratController.text =
-                                      _datePickedDate.day
-                                              .toString()
-                                              .padLeft(2, '0') +
-                                          '/' +
-                                          _datePickedDate.month
-                                              .toString()
-                                              .padLeft(2, '0') +
-                                          '/' +
-                                          _datePickedDate.year.toString();
+                                  _model.debutContratController.text = _datePickedDate.day.toString().padLeft(2, '0') + '/' + _datePickedDate.month.toString().padLeft(2, '0') + '/' + _datePickedDate.year.toString();
                                 });
                               }
                             },
@@ -594,8 +532,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color:
-                                      FlutterFlowTheme.of(context).focusColor,
+                                  color: FlutterFlowTheme.of(context).focusColor,
                                   width: 1.0,
                                 ),
                                 borderRadius: const BorderRadius.only(
@@ -625,20 +562,17 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                               ),
                               prefixIcon: Icon(
                                 Icons.calendar_today_rounded,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
+                                color: FlutterFlowTheme.of(context).secondaryText,
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
-                            validator: _model.debutContratControllerValidator
-                                .asValidator(context),
+                            validator: _model.debutContratControllerValidator.asValidator(context),
                           ),
                         ),
                       ),
                     ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                     child: Container(
                       height: 50.0,
                       decoration: BoxDecoration(
@@ -653,8 +587,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 0.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                             child: Icon(
                               Icons.payments_outlined,
                               color: FlutterFlowTheme.of(context).secondaryText,
@@ -664,26 +597,19 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                           Container(
                             width: MediaQuery.of(context).size.width * 0.6,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
+                              color: FlutterFlowTheme.of(context).secondaryBackground,
                             ),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  10.0, 0.0, 0.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 1.0,
                                 child: TextFormField(
                                   textAlign: TextAlign.center,
-                                  controller:
-                                      _model.salaireMensuelNetController,
+                                  controller: _model.salaireMensuelNetController,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    hintText: _model.contratType
-                                            .contains('Intérimaire')
-                                        ? 'Salaire souhaité'
-                                        : 'Salaire mensuel net',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodySmall,
+                                    hintText: _model.contratType.contains('Intérimaire') ? 'Salaire souhaité' : 'Salaire mensuel net',
+                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
@@ -725,36 +651,25 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                       ),
                                     ),
                                   ),
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
                                   keyboardType: TextInputType.number,
-                                  validator: _model
-                                      .salaireMensuelNetControllerValidator
-                                      .asValidator(context),
+                                  validator: _model.salaireMensuelNetControllerValidator.asValidator(context),
                                 ),
                               ),
                             ),
                           ),
                           Text(
-                            _model.contratType.contains('Intérimaire')
-                                ? '€ TTC / H'
-                                : '€ / mois',
+                            _model.contratType.contains('Intérimaire') ? '€ TTC / H' : '€ / mois',
                             style: FlutterFlowTheme.of(context).bodyMedium,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  if (_model.contratType.contains('Intérimaire'))
-                    Text('Vos disponibilités',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Poppins',
-                            color: blackColor,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w600)),
+                  if (_model.contratType.contains('Intérimaire')) Text('Vos disponibilités', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                   if (_model.contratType.contains('Intérimaire'))
                     Container(
-                      height: 350,
+                      height: 390,
                       child: DateSelector(
                         onDatesChanged: (selectedDates) {
                           // Faites ce que vous voulez avec selectedDates ici
@@ -784,13 +699,11 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 10.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 10.0,
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
                               ),
                               child: Text(
                                 'Grille horaire',
@@ -804,8 +717,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                             },
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 10.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -816,16 +728,14 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                   children: [
                                     Text(
                                       'Semaines paires / impaires identiques',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodySmall,
+                                      style: FlutterFlowTheme.of(context).bodySmall,
                                     ),
                                   ],
                                 ),
                                 Switch.adaptive(
                                   value: _model.pairImpaireValue ??= true,
                                   onChanged: (newValue) async {
-                                    setState(() =>
-                                        _model.pairImpaireValue = newValue!);
+                                    setState(() => _model.pairImpaireValue = newValue!);
                                   },
                                   activeColor: Color(0xFF7CEDAC),
                                 ),
@@ -834,32 +744,27 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                           ),
                           if (_model.pairImpaireValue == false)
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 10.0,
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
                                 ),
                                 child: Text(
                                   'Grille horaire semaines impaires',
-                                  style:
-                                      FlutterFlowTheme.of(context).bodyMedium,
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
                                 ),
                               ),
                             ),
                           if (_model.pairImpaireValue == false)
-                            custom_widgets.GrilleHoraire(
-                                onSelectionChanged: (value) {
+                            custom_widgets.GrilleHoraire(onSelectionChanged: (value) {
                               _model.grilleHoraireImpaire = value;
                             })
                         ],
                       ),
                     ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                     child: TextFormField(
                       controller: _model.nomOffreController,
                       obscureText: false,
@@ -898,13 +803,11 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       style: FlutterFlowTheme.of(context).bodyMedium,
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
-                      validator: _model.nomOffreControllerValidator
-                          .asValidator(context),
+                      validator: _model.nomOffreControllerValidator.asValidator(context),
                     ),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                     child: Container(
                       width: double.infinity,
                       height: 50.0,
@@ -933,18 +836,15 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                         options: FFButtonOptions(
                           width: double.infinity,
                           height: 40.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                           color: Color(0x00FFFFFF),
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                          textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w600,
+                              ),
                           elevation: 0.0,
                           borderSide: BorderSide(
                             color: Colors.transparent,

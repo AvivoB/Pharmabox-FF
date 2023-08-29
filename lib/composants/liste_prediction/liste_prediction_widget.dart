@@ -91,8 +91,7 @@ class _ListePredictionWidgetState extends State<ListePredictionWidget> {
                   ),
                 ),
                 style: FlutterFlowTheme.of(context).bodyMedium,
-                validator:
-                    _model.nomFamilleControllerValidator.asValidator(context),
+                validator: _model.nomFamilleControllerValidator.asValidator(context),
               ),
             ),
           ),

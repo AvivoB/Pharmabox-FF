@@ -11,12 +11,10 @@ class MapsWidgetAdressePharmacieWidget extends StatefulWidget {
   const MapsWidgetAdressePharmacieWidget({Key? key}) : super(key: key);
 
   @override
-  _MapsWidgetAdressePharmacieWidgetState createState() =>
-      _MapsWidgetAdressePharmacieWidgetState();
+  _MapsWidgetAdressePharmacieWidgetState createState() => _MapsWidgetAdressePharmacieWidgetState();
 }
 
-class _MapsWidgetAdressePharmacieWidgetState
-    extends State<MapsWidgetAdressePharmacieWidget> {
+class _MapsWidgetAdressePharmacieWidgetState extends State<MapsWidgetAdressePharmacieWidget> {
   late MapsWidgetAdressePharmacieModel _model;
 
   LatLng? currentUserLocationValue;
@@ -32,8 +30,7 @@ class _MapsWidgetAdressePharmacieWidgetState
     super.initState();
     _model = createModel(context, () => MapsWidgetAdressePharmacieModel());
 
-    getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
-        .then((loc) => setState(() => currentUserLocationValue = loc));
+    getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true).then((loc) => setState(() => currentUserLocationValue = loc));
   }
 
   @override
@@ -68,8 +65,7 @@ class _MapsWidgetAdressePharmacieWidgetState
       ),
       child: FlutterFlowGoogleMap(
         controller: _model.googleMapsController,
-        onCameraIdle: (latLng) =>
-            setState(() => _model.googleMapsCenter = latLng),
+        onCameraIdle: (latLng) => setState(() => _model.googleMapsCenter = latLng),
         initialLocation: _model.googleMapsCenter ??= currentUserLocationValue!,
         markerColor: GoogleMarkerColor.red,
         mapType: MapType.normal,

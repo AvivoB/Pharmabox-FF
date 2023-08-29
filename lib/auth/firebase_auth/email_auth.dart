@@ -4,8 +4,7 @@ Future<UserCredential?> emailSignInFunc(
   String email,
   String password,
 ) =>
-    FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email.trim(), password: password);
+    FirebaseAuth.instance.signInWithEmailAndPassword(email: email.trim(), password: password);
 
 Future<UserCredential?> emailCreateAccountFunc(
   String email,

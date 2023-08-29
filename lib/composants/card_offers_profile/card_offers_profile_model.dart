@@ -10,12 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class PopupRechercheModel extends FlutterFlowModel {
+class CardOfferProfilModel extends FlutterFlowModel {
   ///  Local state fields for this component.
 
-  List<String> contratType = [];
+  List contratType = [];
 
   List horaireDispoInterim = [];
+
+  bool? isActive;
   void addToContratType(String item) {
     if (!contratType.contains(item)) {
       contratType.add(item);
@@ -27,6 +29,9 @@ class PopupRechercheModel extends FlutterFlowModel {
 
   ///  State fields for stateful widgets in this component.
 
+  // State field(s) for Poste widget.
+  String? posteValue;
+  FormFieldController<String>? posteValueController;
   // State field(s) for Localisation widget.
   TextEditingController? localisationController;
   String? Function(BuildContext, String?)? localisationControllerValidator;
@@ -45,17 +50,28 @@ class PopupRechercheModel extends FlutterFlowModel {
   TextEditingController? debutContratController;
   String? Function(BuildContext, String?)? debutContratControllerValidator;
   DateTime? datePicked;
+  // State field(s) for SalaireNegocierSwitc widget.
+  bool? salaireNegocierSwitcValue;
   // State field(s) for SalaireMensuelNet widget.
   TextEditingController? salaireMensuelNetController;
   String? Function(BuildContext, String?)? salaireMensuelNetControllerValidator;
+  // State field(s) for PosteAresponsa widget.
+  String? posteAresponsaValue;
+  FormFieldController<List<String>>? posteAresponsaValueController;
+  // State field(s) for Avantages widget.
+  List<String>? avantagesValues;
+  FormFieldController<List<String>>? avantagesValueController;
   // State field(s) for PairImpaire widget.
   bool? pairImpaireValue;
+
+  bool? enregistrerOffre;
 
   List grilleHoraire = [];
   List grilleHoraireImpaire = [];
 
-  TextEditingController? rayonController;
-  String? Function(BuildContext, String?)? rayonControllerValidator;
+  // State field(s) for DescriptionOffre widget.
+  TextEditingController? descriptionOffreController;
+  String? Function(BuildContext, String?)? descriptionOffreControllerValidator;
   // State field(s) for NomOffre widget.
   TextEditingController? nomOffreController;
   String? Function(BuildContext, String?)? nomOffreControllerValidator;
@@ -69,8 +85,53 @@ class PopupRechercheModel extends FlutterFlowModel {
     dureMoisController?.dispose();
     debutContratController?.dispose();
     salaireMensuelNetController?.dispose();
-    rayonController?.dispose();
+    descriptionOffreController?.dispose();
     nomOffreController?.dispose();
+  }
+
+  bool validateFormFields() {
+    // Vérification du champ 'poste'
+    if (posteValue == '') {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Vérification du champ 'localisation'
+    if (localisationController.text.isEmpty) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    if (tempspleinpartielValue == '') {
+      return false;
+    }
+
+    // Vérification du champ 'debut_contrat'
+    if (debutContratController.text.isEmpty && debutImmediateValue == false) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Vérification du champ 'salaire_mensuel'
+    if (salaireMensuelNetController.text.isEmpty && salaireNegocierSwitcValue == false) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Vérification du champ 'description_offre'
+    if (descriptionOffreController.text.isEmpty) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Vérification du champ 'nom'
+    if (nomOffreController.text.isEmpty) {
+      // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
+      return false;
+    }
+
+    // Tous les champs sont valides
+    return true;
   }
 
   /// Additional helper methods are added here.

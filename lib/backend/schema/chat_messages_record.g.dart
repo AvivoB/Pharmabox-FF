@@ -6,74 +6,59 @@ part of 'chat_messages_record.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<ChatMessagesRecord> _$chatMessagesRecordSerializer =
-    new _$ChatMessagesRecordSerializer();
+Serializer<ChatMessagesRecord> _$chatMessagesRecordSerializer = new _$ChatMessagesRecordSerializer();
 
-class _$ChatMessagesRecordSerializer
-    implements StructuredSerializer<ChatMessagesRecord> {
+class _$ChatMessagesRecordSerializer implements StructuredSerializer<ChatMessagesRecord> {
   @override
   final Iterable<Type> types = const [ChatMessagesRecord, _$ChatMessagesRecord];
   @override
   final String wireName = 'ChatMessagesRecord';
 
   @override
-  Iterable<Object?> serialize(
-      Serializers serializers, ChatMessagesRecord object,
-      {FullType specifiedType = FullType.unspecified}) {
+  Iterable<Object?> serialize(Serializers serializers, ChatMessagesRecord object, {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[];
     Object? value;
     value = object.user;
     if (value != null) {
       result
         ..add('user')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])));
     }
     value = object.chat;
     if (value != null) {
       result
         ..add('chat')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])));
     }
     value = object.text;
     if (value != null) {
       result
         ..add('text')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(String)));
     }
     value = object.image;
     if (value != null) {
       result
         ..add('image')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(String)));
     }
     value = object.timestamp;
     if (value != null) {
       result
         ..add('timestamp')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(DateTime)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DateTime)));
     }
     value = object.ffRef;
     if (value != null) {
       result
         ..add('Document__Reference__Field')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+        ..add(serializers.serialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])));
     }
     return result;
   }
 
   @override
-  ChatMessagesRecord deserialize(
-      Serializers serializers, Iterable<Object?> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
+  ChatMessagesRecord deserialize(Serializers serializers, Iterable<Object?> serialized, {FullType specifiedType = FullType.unspecified}) {
     final result = new ChatMessagesRecordBuilder();
 
     final iterator = serialized.iterator;
@@ -83,34 +68,22 @@ class _$ChatMessagesRecordSerializer
       final Object? value = iterator.current;
       switch (key) {
         case 'user':
-          result.user = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+          result.user = serializers.deserialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])) as DocumentReference<Object?>?;
           break;
         case 'chat':
-          result.chat = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+          result.chat = serializers.deserialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])) as DocumentReference<Object?>?;
           break;
         case 'text':
-          result.text = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+          result.text = serializers.deserialize(value, specifiedType: const FullType(String)) as String?;
           break;
         case 'image':
-          result.image = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+          result.image = serializers.deserialize(value, specifiedType: const FullType(String)) as String?;
           break;
         case 'timestamp':
-          result.timestamp = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime?;
+          result.timestamp = serializers.deserialize(value, specifiedType: const FullType(DateTime)) as DateTime?;
           break;
         case 'Document__Reference__Field':
-          result.ffRef = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+          result.ffRef = serializers.deserialize(value, specifiedType: const FullType(DocumentReference, const [const FullType.nullable(Object)])) as DocumentReference<Object?>?;
           break;
       }
     }
@@ -133,33 +106,20 @@ class _$ChatMessagesRecord extends ChatMessagesRecord {
   @override
   final DocumentReference<Object?>? ffRef;
 
-  factory _$ChatMessagesRecord(
-          [void Function(ChatMessagesRecordBuilder)? updates]) =>
-      (new ChatMessagesRecordBuilder()..update(updates))._build();
+  factory _$ChatMessagesRecord([void Function(ChatMessagesRecordBuilder)? updates]) => (new ChatMessagesRecordBuilder()..update(updates))._build();
 
-  _$ChatMessagesRecord._(
-      {this.user, this.chat, this.text, this.image, this.timestamp, this.ffRef})
-      : super._();
+  _$ChatMessagesRecord._({this.user, this.chat, this.text, this.image, this.timestamp, this.ffRef}) : super._();
 
   @override
-  ChatMessagesRecord rebuild(
-          void Function(ChatMessagesRecordBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
+  ChatMessagesRecord rebuild(void Function(ChatMessagesRecordBuilder) updates) => (toBuilder()..update(updates)).build();
 
   @override
-  ChatMessagesRecordBuilder toBuilder() =>
-      new ChatMessagesRecordBuilder()..replace(this);
+  ChatMessagesRecordBuilder toBuilder() => new ChatMessagesRecordBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ChatMessagesRecord &&
-        user == other.user &&
-        chat == other.chat &&
-        text == other.text &&
-        image == other.image &&
-        timestamp == other.timestamp &&
-        ffRef == other.ffRef;
+    return other is ChatMessagesRecord && user == other.user && chat == other.chat && text == other.text && image == other.image && timestamp == other.timestamp && ffRef == other.ffRef;
   }
 
   @override
@@ -188,8 +148,7 @@ class _$ChatMessagesRecord extends ChatMessagesRecord {
   }
 }
 
-class ChatMessagesRecordBuilder
-    implements Builder<ChatMessagesRecord, ChatMessagesRecordBuilder> {
+class ChatMessagesRecordBuilder implements Builder<ChatMessagesRecord, ChatMessagesRecordBuilder> {
   _$ChatMessagesRecord? _$v;
 
   DocumentReference<Object?>? _user;
@@ -249,14 +208,7 @@ class ChatMessagesRecordBuilder
   ChatMessagesRecord build() => _build();
 
   _$ChatMessagesRecord _build() {
-    final _$result = _$v ??
-        new _$ChatMessagesRecord._(
-            user: user,
-            chat: chat,
-            text: text,
-            image: image,
-            timestamp: timestamp,
-            ffRef: ffRef);
+    final _$result = _$v ?? new _$ChatMessagesRecord._(user: user, chat: chat, text: text, image: image, timestamp: timestamp, ffRef: ffRef);
     replace(_$result);
     return _$result;
   }

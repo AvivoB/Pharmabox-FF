@@ -15,13 +15,7 @@ class ProviderPharmacieRegister extends ChangeNotifier {
   String _selectedAdressFromName = '';
   List _selectedAdressePharma = [];
   List _tendences = [
-    {
-      'Ordonances': 0,
-      'Cosmétiques': 0,
-      'Phyto / aroma': 0,
-      'Nutrition': 0,
-      'Conseil': 0
-    }
+    {'Ordonances': 0, 'Cosmétiques': 0, 'Phyto / aroma': 0, 'Nutrition': 0, 'Conseil': 0}
   ];
 
   dynamic _selectedHoraires;
@@ -66,13 +60,7 @@ class ProviderPharmacieRegister extends ChangeNotifier {
 
   void setAdresse(postcode, rue, ville, region, arrondissement) {
     _selectedAdressePharma = [
-      {
-        'rue': rue,
-        'postcode': postcode,
-        'ville': ville,
-        'region': region,
-        'arrondissement': arrondissement
-      }
+      {'rue': rue, 'postcode': postcode, 'ville': ville, 'region': region, 'arrondissement': arrondissement}
     ];
     notifyListeners();
   }

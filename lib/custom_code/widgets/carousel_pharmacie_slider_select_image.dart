@@ -13,47 +13,35 @@ class CarouselPharmacieSliderSelect extends StatefulWidget {
   final Function(List<String>) onImagesSelected;
   final List<String>? initialImagesSelected;
 
-  CarouselPharmacieSliderSelect(
-      {required this.onImagesSelected, this.initialImagesSelected});
+  CarouselPharmacieSliderSelect({required this.onImagesSelected, this.initialImagesSelected});
 
   @override
-  _CarouselPharmacieSliderSelectState createState() =>
-      _CarouselPharmacieSliderSelectState();
+  _CarouselPharmacieSliderSelectState createState() => _CarouselPharmacieSliderSelectState();
 }
 
-class _CarouselPharmacieSliderSelectState
-    extends State<CarouselPharmacieSliderSelect> {
+class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderSelect> {
   final List<File> _selectedImages = [];
   List<String>? _initialImagesSelected;
   List<String> urls = <String>[];
 
   @override
-    void initState() {
-      super.initState(); // Don't forget to call super.initState()
-       urls = widget.initialImagesSelected ?? <String>[];  // Assign value to urls here
-    }
-
-
+  void initState() {
+    super.initState(); // Don't forget to call super.initState()
+    urls = widget.initialImagesSelected ?? <String>[]; // Assign value to urls here
+  }
 
   Future<void> _selectImages() async {
-    final pickedImages =
-        await ImagePicker().pickMultiImage(imageQuality: 50, maxWidth: 800);
+    final pickedImages = await ImagePicker().pickMultiImage(imageQuality: 50, maxWidth: 800);
 
     if (pickedImages != null) {
-      for (var imageFile
-          in pickedImages.map((pickedImage) => File(pickedImage.path))) {
+      for (var imageFile in pickedImages.map((pickedImage) => File(pickedImage.path))) {
         final croppedImage = await ImageCropper().cropImage(
           sourcePath: imageFile.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           compressQuality: 50,
           compressFormat: ImageCompressFormat.jpg,
           uiSettings: [
-            AndroidUiSettings(
-                toolbarTitle: 'Redimensionner l\'image',
-                toolbarColor: blueColor,
-                toolbarWidgetColor: Colors.white,
-                initAspectRatio: CropAspectRatioPreset.original,
-                lockAspectRatio: false),
+            AndroidUiSettings(toolbarTitle: 'Redimensionner l\'image', toolbarColor: blueColor, toolbarWidgetColor: Colors.white, initAspectRatio: CropAspectRatioPreset.original, lockAspectRatio: false),
             IOSUiSettings(
               title: 'Redimensionner l\'image',
             ),
@@ -71,8 +59,7 @@ class _CarouselPharmacieSliderSelectState
         final storage = FirebaseStorage.instance;
 
         for (var image in _selectedImages) {
-          final ref = storage.ref().child(
-              'pharmacie_pictures/${DateTime.now().millisecondsSinceEpoch}');
+          final ref = storage.ref().child('pharmacie_pictures/${DateTime.now().millisecondsSinceEpoch}');
           await ref.putFile(image);
           final url = await ref.getDownloadURL();
           urls.add(url);
@@ -97,11 +84,7 @@ class _CarouselPharmacieSliderSelectState
                 height: MediaQuery.of(context).size.height * 0.3,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF7F7FD5),
-                      Color(0xFF86A8E7),
-                      Color(0xFF91EAE4)
-                    ],
+                    colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
                     stops: [0, 0.5, 1],
                     begin: AlignmentDirectional(1, 0),
                     end: AlignmentDirectional(-1, 0),
@@ -137,8 +120,7 @@ class _CarouselPharmacieSliderSelectState
                                       ),
                                     ),
                                     child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          7, 7, 7, 7),
+                                      padding: EdgeInsetsDirectional.fromSTEB(7, 7, 7, 7),
                                       child: Container(
                                         width: 150,
                                         height: 150,
@@ -163,8 +145,7 @@ class _CarouselPharmacieSliderSelectState
                                       fillColor: Colors.white,
                                       icon: Icon(
                                         Icons.add_a_photo_outlined,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                        color: FlutterFlowTheme.of(context).primaryText,
                                         size: 30,
                                       ),
                                       onPressed: _selectImages,
@@ -206,15 +187,13 @@ class _CarouselPharmacieSliderSelectState
                                   fillColor: Colors.white,
                                   icon: Icon(
                                     Icons.add_a_photo_outlined,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
+                                    color: FlutterFlowTheme.of(context).primaryText,
                                     size: 22,
                                   ),
                                   onPressed: _selectImages,
                                 ),
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                   child: FlutterFlowIconButton(
                                     borderColor: Colors.transparent,
                                     borderRadius: 30,
@@ -223,15 +202,12 @@ class _CarouselPharmacieSliderSelectState
                                     fillColor: Colors.white,
                                     icon: Icon(
                                       Icons.delete_outline,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
+                                      color: FlutterFlowTheme.of(context).primaryText,
                                       size: 22,
                                     ),
                                     onPressed: () async {
                                       try {
-                                        await FirebaseStorage.instance
-                                            .refFromURL(urls[index].toString())
-                                            .delete();
+                                        await FirebaseStorage.instance.refFromURL(urls[index].toString()).delete();
                                         urls.removeAt(index);
                                       } catch (e) {
                                         print('Error deleting photo: $e');

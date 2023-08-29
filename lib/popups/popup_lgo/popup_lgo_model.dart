@@ -25,7 +25,6 @@ class PopupLgoModel extends FlutterFlowModel {
 
   // Recupere les LGO dans le stockage local
   static selectLGO() {
-
     List<Map> listLGO = [
       {"image": "ActiPharm.jpg", "name": "ActiPharm", "niveau": 0},
       {"image": "CADUCIEL.jpg", "name": "CADUCIEL", "niveau": 0},

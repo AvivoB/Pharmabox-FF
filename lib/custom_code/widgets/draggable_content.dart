@@ -11,10 +11,9 @@ import 'package:flutter/material.dart';
 // boilerplate code using the button on the right!
 
 class DraggableContent extends StatelessWidget {
-   DraggableContent({Key? key});
+  DraggableContent({Key? key});
 
-  DraggableScrollableController dragController =
-      DraggableScrollableController();
+  DraggableScrollableController dragController = DraggableScrollableController();
 
   @override
   Widget build(BuildContext context) {

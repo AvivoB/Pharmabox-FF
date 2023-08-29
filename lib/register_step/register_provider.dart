@@ -61,11 +61,7 @@ class ProviderUserRegister extends ChangeNotifier {
 
   /* Option langues */
   void addExperiences(nom_pharmacie, annee_debut, annee_fin) {
-    _selectedExperiences.add({
-      "nom_pharmacie": nom_pharmacie,
-      "annee_debut": annee_debut,
-      "annee_fin": annee_fin
-    });
+    _selectedExperiences.add({"nom_pharmacie": nom_pharmacie, "annee_debut": annee_debut, "annee_fin": annee_fin});
     notifyListeners();
   }
 

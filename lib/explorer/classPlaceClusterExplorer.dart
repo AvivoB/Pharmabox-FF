@@ -5,7 +5,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 
 import 'package:latlong2/latlong.dart' as latlong;
 
-
 class Place with ClusterItem {
   final String name;
   final LatLng latLng;

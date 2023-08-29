@@ -112,8 +112,7 @@ class PopupOffreModel extends FlutterFlowModel {
     }
 
     // Vérification du champ 'salaire_mensuel'
-    if (salaireMensuelNetController.text.isEmpty &&
-        salaireNegocierSwitcValue == false) {
+    if (salaireMensuelNetController.text.isEmpty && salaireNegocierSwitcValue == false) {
       // Le champ est vide, afficher un message d'erreur ou effectuer une action appropriée
       return false;
     }
