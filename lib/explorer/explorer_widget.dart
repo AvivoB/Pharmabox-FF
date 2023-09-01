@@ -52,7 +52,10 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   String? searchTerms;
   List searchResults = [];
   List selectedItem = [];
-  var _currentCameraPosition;
+  CameraPosition _currentCameraPosition = CameraPosition(
+          target: LatLng(0, 0),
+          zoom: 16.0,
+        );
 
   Future<void> getCurrentPosition() async {
     bool isLocationPermissionGranted = await requestLocationPermission();

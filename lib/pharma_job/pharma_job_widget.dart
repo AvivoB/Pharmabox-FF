@@ -47,7 +47,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   Set<Marker> markers = Set();
   String? searchTerms;
 
-  final CameraPosition _parisCameraPosition = CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
+  final CameraPosition _parisCameraPosition =
+      CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
 
   List<Place> items = [];
   List pharmacieInPlace = [];
@@ -55,32 +56,57 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List recherches = [];
   List foundedOffres = [];
   List foundedRecherches = [];
+    CameraPosition _currentCameraPosition = CameraPosition(
+          target: LatLng(0, 0),
+          zoom: 16.0,
+        );
 
-  Future<void> getPharmaciesLocations({searchTerm}) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('pharmacies').get();
+  Future<void> getCurrentPosition() async {
+    bool isLocationPermissionGranted = await requestLocationPermission();
 
-    // Boucle à travers les documents
-    for (DocumentSnapshot doc in querySnapshot.docs) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      String documentId = doc.reference.id.toString();
+    if (isLocationPermissionGranted) {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
 
-      data['documentId'] = documentId;
-
-      // Récupération du nom de la pharmacie
-      String name = data['situation_geographique']['adresse'];
-
-      List location = data['situation_geographique']['lat_lng'];
-
-      // Création d'un objet Place
-      Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
-
-      // Ajout de l'objet Place à la liste des places
       setState(() {
-        items.add(place);
-        pharmacieInPlace.add(data);
+        _currentCameraPosition = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 16.0,
+        );
       });
+    } else {
+      // Handle the case when the user denies the location permission
+      // Add your own logic or show a message to the user
     }
   }
+
+  // Future<void> getPharmaciesLocations({searchTerm}) async {
+  //   QuerySnapshot querySnapshot =
+  //       await FirebaseFirestore.instance.collection('pharmacies').get();
+
+  //   // Boucle à travers les documents
+  //   for (DocumentSnapshot doc in querySnapshot.docs) {
+  //     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  //     String documentId = doc.reference.id.toString();
+
+  //     data['documentId'] = documentId;
+
+  //     // Récupération du nom de la pharmacie
+  //     String name = data['situation_geographique']['adresse'];
+
+  //     List location = data['situation_geographique']['lat_lng'];
+
+  //     // Création d'un objet Place
+  //     Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
+
+  //     // Ajout de l'objet Place à la liste des places
+  //     setState(() {
+  //       items.add(place);
+  //       pharmacieInPlace.add(data);
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
@@ -89,14 +115,15 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     _model.searchJobController ??= TextEditingController();
     _model.searchJobController ??= TextEditingController();
     _manager = _initClusterManager();
-    getPharmaciesLocations();
+    // getPharmaciesLocations();
     checkTitulaireStatus();
     getOffres();
     getRecherche();
   }
 
   ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder);
+    return ClusterManager<Place>(items, _updateMarkers,
+        markerBuilder: _markerBuilder);
   }
 
   void _updateMarkers(Set<Marker> markers) {
@@ -120,32 +147,62 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     });
   }
 
-  void getOffres() async {
-    offres.clear();
-    String pharmacieId = await getPharmacyByUserId();
-
-    final Query query = FirebaseFirestore.instance.collection('offres').where('pharmacie_id', isEqualTo: pharmacieId);
-
-    final QuerySnapshot querySnapshot = await query.get();
-
-    querySnapshot.docs.forEach((doc) {
-      offres.add(doc.data());
-      print(doc.data());
+  void _findRecherche(filters) async {
+    var data = await PharmaJobSearchData().filterOffreToFindRecherches(filters);
+    setState(() {
+      foundedRecherches.clear();
+      foundedRecherches = data;
     });
   }
 
-  void getRecherche() async {
-    offres.clear();
-    String pharmacieId = await getCurrentUserId();
+  void _findOffres(filters) async {
+    foundedOffres.clear();
+    items.clear();
+    var data = await PharmaJobSearchData().filterRechercheToFindOffre(filters);
+    setState(() {
+      foundedOffres = data;
 
-    final Query query = FirebaseFirestore.instance.collection('recherches').where('user_id', isEqualTo: pharmacieId);
+      for (var job in data) {
+        List<dynamic> location =
+            job['pharma_data']['situation_geographique']['lat_lng'];
+        Place place =
+            Place(name: job['pharma_data']['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]));
+        setState(() {
+          items.add(place);
+        });
 
-    final QuerySnapshot querySnapshot = await query.get();
-
-    querySnapshot.docs.forEach((doc) {
-      recherches.add(doc.data());
-      print(doc.data());
+      }
+    _manager.setItems(items);
+    _manager.updateMap();
     });
+  }
+
+  void getOffres() async {
+    // offres.clear();
+    // String pharmacieId = await getPharmacyByUserId();
+
+    // final Query query = FirebaseFirestore.instance.collection('offres').where('pharmacie_id', isEqualTo: pharmacieId);
+
+    // final QuerySnapshot querySnapshot = await query.get();
+
+    // querySnapshot.docs.forEach((doc) {
+    //   offres.add(doc.data());
+    //   print(doc.data());
+    // });
+  }
+
+  void getRecherche() async {
+    // offres.clear();
+    // String pharmacieId = await getCurrentUserId();
+
+    // final Query query = FirebaseFirestore.instance.collection('recherches').where('user_id', isEqualTo: pharmacieId);
+
+    // final QuerySnapshot querySnapshot = await query.get();
+
+    // querySnapshot.docs.forEach((doc) {
+    //   recherches.add(doc.data());
+    //   print(doc.data());
+    // });
   }
 
   @override
@@ -310,7 +367,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                           ],
                         ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                         child: Container(
                           width: double.infinity,
                           height: 50.0,
@@ -341,41 +399,37 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                               await showModalBottomSheet(
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
-                                enableDrag: false,
+                                enableDrag: true,
                                 context: context,
                                 builder: (bottomSheetContext) {
                                   return Padding(
-                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                    padding: MediaQuery.of(bottomSheetContext)
+                                        .viewInsets,
                                     child: isTitulaire
                                         ? PopupOffreWidget(
-                                            onFilter: (filters) => {
-                                              setState(() async {
-                                                foundedRecherches.clear();
-                                                foundedRecherches = await PharmaJobSearchData().filterOffreToFindRecherches(filters);
-                                                
-                                              })
-                                            },
+                                            onFilter: (filters) =>
+                                                {_findRecherche(filters)},
                                           )
                                         : PopupRechercheWidget(
-                                            onFilter: (filters) => {
-                                              setState(() async {
-                                                foundedOffres.clear();
-                                                foundedOffres = await PharmaJobSearchData().filterRechercheToFindOffre(filters);
-                                              })
-                                            },
+                                            onFilter: (filters) =>
+                                                {_findOffres(filters)},
                                           ),
                                   );
                                 },
-                              ).then((value) => setState(() {}));
+                              );
                             },
                             text: 'Nouvelle recherche',
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 20.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
                               color: Color(0x00FFFFFF),
-                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .titleSmall
+                                  .override(
                                     fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontSize: 16.0,
@@ -396,16 +450,18 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
             ),
             Container(
               width: MediaQuery.of(context).size.width * 1.0,
-              height: offres.isNotEmpty || recherches.isNotEmpty ? MediaQuery.of(context).size.height * 0.61 : MediaQuery.of(context).size.height * 0.67,
+              height: offres.isNotEmpty || recherches.isNotEmpty
+                  ? MediaQuery.of(context).size.height * 0.61
+                  : MediaQuery.of(context).size.height * 0.67,
               child: Stack(children: [
                 Container(
                   child: GoogleMap(
                       mapType: MapType.normal,
-                      initialCameraPosition: _parisCameraPosition,
+                      initialCameraPosition: _currentCameraPosition,
                       markers: markers,
                       myLocationEnabled: true,
                       zoomGesturesEnabled: true,
-                      zoomControlsEnabled: false,
+                      zoomControlsEnabled: true,
                       onMapCreated: (GoogleMapController controller) {
                         _controller.complete(controller);
                         _manager.setMapId(controller.mapId);
@@ -418,9 +474,14 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                 DraggableScrollableSheet(
                   minChildSize: 0.09,
                   initialChildSize: 0.09,
-                  builder: (BuildContext context, ScrollController scrollController) {
+                  builder: (BuildContext context,
+                      ScrollController scrollController) {
                     return Container(
-                        decoration: BoxDecoration(color: Color(0xFFEFF6F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+                        decoration: BoxDecoration(
+                            color: Color(0xFFEFF6F7),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15))),
                         child: SingleChildScrollView(
                           controller: scrollController,
                           child: Padding(
@@ -430,21 +491,32 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 SvgPicture.asset(
                                   'assets/icons/Home-Indicator.svg',
                                   width: 60,
-                                  colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
+                                  colorFilter: ColorFilter.mode(
+                                      Color(0xFFD0D1DE), BlendMode.srcIn),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(isTitulaire ? foundedRecherches.length.toString() + ' résultats' : foundedOffres.length.toString() + ' résultats',
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                  child: Text(
+                                      isTitulaire
+                                          ? foundedRecherches.length
+                                                  .toString() +
+                                              ' résultats'
+                                          : foundedOffres.length.toString() +
+                                              ' résultats',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),
                                             fontSize: 14.0,
                                           )),
                                 ),
-                                if(foundedOffres.isNotEmpty)
-                                  for (var i in foundedOffres) CardPharmacieOffreRechercheWidget(data: i),
-                                if(foundedRecherches.isNotEmpty)
-                                  for (var i in foundedRecherches) CardUserWidget(data: i),
+                                if (foundedOffres.isNotEmpty)
+                                  for (var i in foundedOffres)
+                                    CardPharmacieOffreRechercheWidget(data: i),
+                                if (foundedRecherches.isNotEmpty)
+                                  for (var i in foundedRecherches)
+                                    CardUserWidget(data: i),
                               ],
                             ),
                           ),
@@ -459,7 +531,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     );
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
+  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
+      (cluster) async {
         return Marker(
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
@@ -501,7 +574,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     }
 
     final img = await pictureRecorder.endRecording().toImage(size, size);
-    final data = await img.toByteData(format: ui.ImageByteFormat.png) as ByteData;
+    final data =
+        await img.toByteData(format: ui.ImageByteFormat.png) as ByteData;
 
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }

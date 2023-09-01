@@ -940,17 +940,22 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                                     await showModalBottomSheet(
                                                       isScrollControlled: true,
                                                       backgroundColor: Colors.transparent,
-                                                      enableDrag: false,
+                                                      enableDrag: true,
                                                       context: context,
                                                       builder: (bottomSheetContext) {
-                                                        return GestureDetector(
-                                                          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                          child: Padding(
-                                                            padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                            child: PopupSpecialisationWidget(
-                                                              onTap: (specialisation) => {providerProfilUser.addSelectedSpecialisation(specialisation)},
-                                                            ),
-                                                          ),
+                                                        return DraggableScrollableSheet(
+                                                          initialChildSize: 0.75,
+                                                          builder: (BuildContext context, ScrollController scrollController) {
+                                                            return GestureDetector(
+                                                              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                                              child: Padding(
+                                                                padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                                child: PopupSpecialisationWidget(
+                                                                  onTap: (specialisation) => {providerProfilUser.addSelectedSpecialisation(specialisation)},
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }
                                                         );
                                                       },
                                                     ).then((value) => setState(() {}));
@@ -1090,17 +1095,22 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                                         await showModalBottomSheet(
                                                           isScrollControlled: true,
                                                           backgroundColor: Colors.transparent,
-                                                          enableDrag: false,
+                                                          enableDrag: true,
                                                           context: context,
                                                           builder: (bottomSheetContext) {
-                                                            return GestureDetector(
-                                                              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                              child: Padding(
-                                                                padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                                child: PopupLgoWidget(
-                                                                  onTap: (lgo) => {providerProfilUser.addSelectedLgo(lgo)},
-                                                                ),
-                                                              ),
+                                                            return DraggableScrollableSheet(
+                                                              initialChildSize: 0.80,
+                                                              builder: (BuildContext context, ScrollController scrollController) {
+                                                                return GestureDetector(
+                                                                  onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                                                  child: Padding(
+                                                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                                    child: PopupLgoWidget(
+                                                                      onTap: (lgo) => {providerProfilUser.addSelectedLgo(lgo)},
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
                                                             );
                                                           },
                                                         ).then((value) => setState(() {}));
@@ -1457,17 +1467,22 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                                         await showModalBottomSheet(
                                                           isScrollControlled: true,
                                                           backgroundColor: Colors.transparent,
-                                                          enableDrag: false,
+                                                          enableDrag: true,
                                                           context: context,
                                                           builder: (bottomSheetContext) {
-                                                            return GestureDetector(
-                                                              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                              child: Padding(
-                                                                padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                                child: PopupLanguesWidget(
-                                                                  onTap: (langue) => {providerProfilUser.addLangues(langue)},
-                                                                ),
-                                                              ),
+                                                            return DraggableScrollableSheet(
+                                                              initialChildSize: 0.75,
+                                                              builder: (BuildContext context, ScrollController scrollController) {
+                                                                return GestureDetector(
+                                                                  onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                                                  child: Padding(
+                                                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                                    child: PopupLanguesWidget(
+                                                                      onTap: (langue) => {providerProfilUser.addLangues(langue)},
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
                                                             );
                                                           },
                                                         ).then((value) => setState(() {}));

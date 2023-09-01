@@ -106,13 +106,18 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                               onPressed: () async {
                                 await showModalBottomSheet(
                                   isScrollControlled: true,
+                                  enableDrag: true,
                                   backgroundColor: Colors.transparent,
-                                  enableDrag: false,
                                   context: context,
                                   builder: (bottomSheetContext) {
-                                    return Padding(
-                                      padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                      child: PopupNotificationsWidget(),
+                                    return DraggableScrollableSheet(
+                                      initialChildSize: 0.75,
+                                      builder: (BuildContext context, ScrollController scrollController) {
+                                        return Padding(
+                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                          child: PopupNotificationsWidget(),
+                                        );
+                                      }
                                     );
                                   },
                                 ).then((value) => setState(() {}));

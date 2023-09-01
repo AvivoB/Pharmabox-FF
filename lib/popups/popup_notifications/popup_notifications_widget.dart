@@ -48,7 +48,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.5,
+          height: MediaQuery.of(context).size.height * 0.70,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -90,7 +90,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                     ],
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.23,
+                    height: MediaQuery.of(context).size.height * 0.60,
                     child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                       stream: FirebaseFirestore.instance.collection('notifications').snapshots(),
                       builder: (context, snapshot) {

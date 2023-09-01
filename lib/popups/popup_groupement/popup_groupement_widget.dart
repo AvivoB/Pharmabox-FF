@@ -53,7 +53,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.6,
+          height: MediaQuery.of(context).size.height * 0.70,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -164,7 +164,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.50,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -185,15 +185,18 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                             children: [
                               Image.asset(
                                 'assets/groupements/' + item[index]['image'],
-                                width: 120.0,
+                                width: MediaQuery.of(context).size.width * 0.35,
                                 height: 60.0,
                                 fit: BoxFit.contain,
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  item[index]['name'],
-                                  style: FlutterFlowTheme.of(context).bodyMedium,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.50,
+                                  child: Text(
+                                    item[index]['name'],
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
                                 ),
                               ),
                             ],
