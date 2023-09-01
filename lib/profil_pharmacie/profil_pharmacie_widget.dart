@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pharmabox/composants/card_offers_profile/card_offers_profile.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
 import 'package:pharmabox/profil_pharmacie/profil_pharmacie_model.dart';
@@ -59,7 +60,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
   final _unfocusNode = FocusNode();
 
   var userData;
-
+  List offresPharma = [];
   bool isExpanded_Titu = false;
   bool isExpanded_NonTitu = false;
   bool isExpanded_Pharma = false;
@@ -137,8 +138,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
       return;
     }
 
-    Query query = FirebaseFirestore.instance.collection('pharmacies').where('user_id', isEqualTo: user.uid);
-    QuerySnapshot querySnapshot = await query.get();
+    // Query query = FirebaseFirestore.instance.collection('pharmacies').where('user_id', isEqualTo: user.uid);
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('pharmacies').where('user_id', isEqualTo: user.uid).get();
+    QuerySnapshot offres = await FirebaseFirestore.instance.collection('offres').where('user_id', isEqualTo: user.uid).get();
 
     // Accéder aux données du document.
     var data = querySnapshot.docs;
@@ -146,6 +148,14 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
       for (var doc in data) {
         userData = doc.data();
         userData['documentId'] = doc.id;
+      }
+      for (var doc in offres.docs) {
+        var docData = doc.data() as Map<String, dynamic>;
+
+        docData['doc_id'] = doc.id;
+
+        print(docData);
+        offresPharma.add(docData);
       }
     });
   }
@@ -281,6 +291,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     _model.busController.text = userData != null ? userData['accessibilite']['bus'] : '';
     _model.tramwayController1.text = userData != null ? userData['accessibilite']['tram'] : '';
     _model.tramwayController2.text = userData != null ? userData['accessibilite']['gare'] : '';
+    _model.parkingValue = userData != null ? userData['accessibilite']['stationnement'] : '';
     _model.nbPharmaciensController.text = userData != null ? userData['equipe']['nb_pharmaciens'] : '';
     _model.nbPreparateurController.text = userData != null ? userData['equipe']['nb_preparateurs'] : '';
     _model.nbRayonnistesController.text = userData != null ? userData['equipe']['nb_rayonnistes'] : '';
@@ -1231,10 +1242,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                             ),
                                           ),
                                           FlutterFlowDropDown<String>(
-                                            controller: _model.parkingValueController ??= FormFieldController<String>(null),
+                                            controller: _model.parkingValueController ??= FormFieldController<String>(''),
                                             options: ['Gratuit ', 'Payant'],
                                             onChanged: (val) => setState(() => _model.parkingValue = val),
-                                            width: MediaQuery.of(context).size.width * 0.75,
+                                            width: MediaQuery.of(context).size.width * 0.73,
                                             height: 50,
                                             textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                                   fontFamily: 'Poppins',
@@ -3109,6 +3120,11 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                         ),
                       ),
                     ),
+                  if (_selectedIndex == 2 && offresPharma.isNotEmpty)
+                    for (var searchI in offresPharma)
+                      CardOfferProfilWidget(
+                        searchI: searchI,
+                      )
                 ],
               ),
             ),

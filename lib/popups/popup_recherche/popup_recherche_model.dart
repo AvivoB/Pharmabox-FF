@@ -16,6 +16,8 @@ class PopupRechercheModel extends FlutterFlowModel {
   List<String> contratType = [];
 
   List horaireDispoInterim = [];
+
+  bool? saveSearch;
   void addToContratType(String item) {
     if (!contratType.contains(item)) {
       contratType.add(item);

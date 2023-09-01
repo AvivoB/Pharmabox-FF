@@ -40,14 +40,11 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
     _model = createModel(context, () => CardOfferProfilModel());
 
     _model.posteValue = widget.searchI['poste'];
-    // _model.localisationController ??= TextEditingController(text: widget.searchI['localisation']);
     _model.dureMoisController ??= TextEditingController(text: widget.searchI['duree']);
-    // _model.debutContratController ??= TextEditingController(text: widget.searchI['debut_contrat']);
     _model.salaireNegocierSwitcValue = widget.searchI['salaire_negocier_ensemble'];
     _model.tempspleinpartielValue = widget.searchI['temps'];
     _model.salaireMensuelNetController ??= TextEditingController(text: widget.searchI['salaire_mensuel']);
     _model.debutContratController ??= TextEditingController(text: widget.searchI['debut_contrat']);
-    // _model.nomOffreController ??= TextEditingController(text: widget.searchI['nom']);
     _model.contratType = widget.searchI['contrats'];
     _model.tempspleinpartielValue = widget.searchI['temps'];
     _model.debutImmediateValue = widget.searchI['debut_immediat'];
@@ -102,7 +99,6 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
       'nom': _model.nomOffreController.text,
       'user_id': currentUser?.uid,
       'pharmacie_id': pharmacieId,
-      'date_created': Timestamp.now(),
       'isActive': _model.isActive
     };
 
@@ -186,6 +182,8 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                               ),
                           ],
                         ),
+                        SizedBox(width: 10, height: 10),
+                        Text('Offre valable 1 mois à partir du ' + DateFormat('dd/MM/yyyy').format(widget.searchI['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodySmall),
                         if (isExpendedSearchOffer)
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
@@ -740,11 +738,12 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                   Container(
                                     decoration: BoxDecoration(),
                                   ),
-                                  if (_model.contratType.contains('Intérimaire')) Text('Vos disponibilités', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                                  if (_model.contratType.contains('Intérimaire')) Text('Disponibilités', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                                   if (_model.contratType.contains('Intérimaire'))
                                     Container(
                                       height: 390,
                                       child: DateSelector(
+                                        initialSelectedDates: widget.searchI['proposition_dispo_interim'] != null ? (widget.searchI['proposition_dispo_interim'] as List).map((item) => (item as Timestamp).toDate()).toList() : <DateTime>[],
                                         onDatesChanged: (selectedDates) {
                                           _model.horaireDispoInterim = selectedDates;
                                         },
@@ -794,7 +793,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                               multiselect: false,
                                               alignment: WrapAlignment.start,
                                               controller: _model.posteAresponsaValueController ??= FormFieldController<List<String>>(
-                                                [widget.searchI['poste_responsabilite']],
+                                                [widget.searchI['poste_responsabilite'] != null ? widget.searchI['poste_responsabilite'] : ''],
                                               ),
                                             ),
                                           ],
@@ -854,7 +853,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                               initialized: _model.avantagesValues != null,
                                               alignment: WrapAlignment.start,
                                               controller: _model.avantagesValueController ??= FormFieldController<List<String>>(
-                                                (widget.searchI['avantages'] as List).map((item) => item.toString()).toList(),
+                                                widget.searchI['avantages'] != null ? (widget.searchI['avantages'] as List).map((item) => item.toString()).toList() : [],
                                               ),
                                             ),
                                           ],
@@ -1012,54 +1011,54 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                       validator: _model.nomOffreControllerValidator.asValidator(context),
                                     ),
                                   ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                                      child: Container(
-                                        width: double.infinity,
-                                        height: 50.0,
-                                        decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 4.0,
-                                              color: Color(0x301F5C67),
-                                              offset: Offset(0.0, 4.0),
-                                            )
-                                          ],
-                                          gradient: LinearGradient(
-                                            colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                            stops: [0.0, 1.0],
-                                            begin: AlignmentDirectional(1.0, -1.0),
-                                            end: AlignmentDirectional(-1.0, 1.0),
-                                          ),
-                                          borderRadius: BorderRadius.circular(5.0),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 50.0,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 4.0,
+                                            color: Color(0x301F5C67),
+                                            offset: Offset(0.0, 4.0),
+                                          )
+                                        ],
+                                        gradient: LinearGradient(
+                                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                                          stops: [0.0, 1.0],
+                                          begin: AlignmentDirectional(1.0, -1.0),
+                                          end: AlignmentDirectional(-1.0, 1.0),
                                         ),
-                                        child: FFButtonWidget(
-                                          onPressed: () async {
-                                            saveOffre(widget.searchI['doc_id']);
-                                          },
-                                          text: 'Enregistrer',
-                                          options: FFButtonOptions(
-                                            width: double.infinity,
-                                            height: 40.0,
-                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                            iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                            color: Color(0x00FFFFFF),
-                                            textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.white,
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                            elevation: 0.0,
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                              width: 1.0,
-                                            ),
-                                            borderRadius: BorderRadius.circular(0.0),
+                                        borderRadius: BorderRadius.circular(5.0),
+                                      ),
+                                      child: FFButtonWidget(
+                                        onPressed: () async {
+                                          saveOffre(widget.searchI['doc_id']);
+                                        },
+                                        text: 'Enregistrer',
+                                        options: FFButtonOptions(
+                                          width: double.infinity,
+                                          height: 40.0,
+                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                          iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                          color: Color(0x00FFFFFF),
+                                          textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                                fontFamily: 'Poppins',
+                                                color: Colors.white,
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                          elevation: 0.0,
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1.0,
                                           ),
+                                          borderRadius: BorderRadius.circular(0.0),
                                         ),
                                       ),
                                     ),
+                                  ),
                                 ],
                               ),
                             ),

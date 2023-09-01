@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pharmabox/custom_code/widgets/carousel_widget_pharma.dart';
+
 import '../../custom_code/widgets/like_button.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -10,15 +13,18 @@ import 'card_pharmacie_offre_recherche_model.dart';
 export 'card_pharmacie_offre_recherche_model.dart';
 
 class CardPharmacieOffreRechercheWidget extends StatefulWidget {
-  const CardPharmacieOffreRechercheWidget({Key? key, this.data}) : super(key: key);
+  const CardPharmacieOffreRechercheWidget({Key? key, this.data})
+      : super(key: key);
 
   final data;
 
   @override
-  _CardPharmacieOffreRechercheWidgetState createState() => _CardPharmacieOffreRechercheWidgetState();
+  _CardPharmacieOffreRechercheWidgetState createState() =>
+      _CardPharmacieOffreRechercheWidgetState();
 }
 
-class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRechercheWidget> {
+class _CardPharmacieOffreRechercheWidgetState
+    extends State<CardPharmacieOffreRechercheWidget> {
   late CardPharmacieOffreRechercheModel _model;
 
   @override
@@ -42,6 +48,7 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
 
   @override
   Widget build(BuildContext context) {
+    int lengthAvantages = widget.data['offre']['avantages']?.length ?? 0;
     return Padding(
       padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
       child: Container(
@@ -68,38 +75,12 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                 height: 120.0,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: Image.network(
-                      'https://www.pharmanity.com/assets/img/pharmacies/cover/20479/head_image_20479_0.png',
-                    ).image,
-                  ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
-                      child: Image.asset(
-                        'assets/images/Badge.png',
-                        width: 40.0,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 10.0),
-                      child: Image.asset(
-                        'assets/images/Badge2.png',
-                        width: 40.0,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                child:ImageSliderWidget(
+                    imageNames: widget.data['pharma_data']['photo_url'],
+                  ),
+              ),),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
               child: Row(
@@ -117,8 +98,15 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Grande Pharmacie d’Aulnay',
-                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            widget.data['pharma_data']
+                                        ['situation_geographique'] !=
+                                    null
+                                ? widget.data['pharma_data']
+                                    ['situation_geographique']['adresse']
+                                : '',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
                                   fontFamily: 'Poppins',
                                   color: Color(0xFF161730),
                                   fontSize: 18.0,
@@ -149,13 +137,26 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                         size: 35.0,
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          '95200, Paris',
-                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF595A71),
-                              ),
+                          widget.data['pharma_data']
+                                      ['situation_geographique'] !=
+                                  null
+                              ? widget.data['pharma_data']
+                                          ['situation_geographique']['data']
+                                      ['postcode'] +
+                                  ', ' +
+                                  widget.data['pharma_data']
+                                          ['situation_geographique']['data']
+                                      ['ville']
+                              : '',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF595A71),
+                                  ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -163,22 +164,11 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Image.network(
-                        'https://picsum.photos/seed/113/600',
-                        width: 80.0,
-                        height: 40.0,
+                      Image.asset(
+                        'assets/groupements/' + widget.data['pharma_data']['groupement'][0]['image'].toString(),
+                        width: 150.0,
+                        height: 50.0,
                         fit: BoxFit.cover,
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                        child: Text(
-                          'Groupement',
-                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF595A71),
-                                fontSize: 14.0,
-                              ),
-                        ),
                       ),
                     ],
                   ),
@@ -197,17 +187,19 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                     children: [
                       Icon(
                         Icons.work_outline_outlined,
-                        color: Color(0xFF595A71),
+                        color: widget.data['offre']['avantages'] != null && lengthAvantages >= 5  ? Color(0xFFFFF492) : Color(0xFF595A71),
                         size: 35.0,
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          'Assistant Pharmacien',
-                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF595A71),
-                              ),
+                          widget.data['offre']['poste'],
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF595A71),
+                                  ),
                         ),
                       ),
                     ],
@@ -236,7 +228,8 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                         width: 100.0,
                         height: 50.0,
                         decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).secondaryBackground,
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(50.0),
                         ),
                         child: LikeButtonWidget(documentId: 'fjf')),
@@ -249,11 +242,15 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 5.0, 0.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                  colors: [
+                                    Color(0xFF42D2FF),
+                                    Color(0xFF7CEDAC)
+                                  ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),
@@ -261,7 +258,8 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    2.0, 2.0, 2.0, 2.0),
                                 child: FlutterFlowIconButton(
                                   borderColor: Color(0x0042D2FF),
                                   borderRadius: 30.0,
@@ -281,11 +279,15 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 5.0, 0.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                  colors: [
+                                    Color(0xFF42D2FF),
+                                    Color(0xFF7CEDAC)
+                                  ],
                                   stops: [0.0, 1.0],
                                   begin: AlignmentDirectional(1.0, 0.0),
                                   end: AlignmentDirectional(-1.0, 0),
@@ -293,7 +295,8 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    2.0, 2.0, 2.0, 2.0),
                                 child: FlutterFlowIconButton(
                                   borderColor: Color(0x0042D2FF),
                                   borderRadius: 30.0,
@@ -323,7 +326,8 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                               shape: BoxShape.circle,
                             ),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  2.0, 2.0, 2.0, 2.0),
                               child: FlutterFlowIconButton(
                                 borderColor: Color(0x0042D2FF),
                                 borderRadius: 30.0,

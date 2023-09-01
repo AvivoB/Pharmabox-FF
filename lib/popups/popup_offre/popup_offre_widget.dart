@@ -21,7 +21,8 @@ import 'popup_offre_model.dart';
 export 'popup_offre_model.dart';
 
 class PopupOffreWidget extends StatefulWidget {
-  const PopupOffreWidget({Key? key}) : super(key: key);
+  const PopupOffreWidget({Key? key, this.onFilter}) : super(key: key);
+  final Function(dynamic)? onFilter;
 
   @override
   _PopupOffreWidgetState createState() => _PopupOffreWidgetState();
@@ -96,13 +97,15 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
       'description_offre': _model.descriptionOffreController.text,
       'nom': _model.nomOffreController.text,
       'user_id': currentUser?.uid,
-      'pharmacie_id': pharmacieId
+      'pharmacie_id': pharmacieId,
+      'date_created': Timestamp.now(),
+      'isActive': true,
     };
+    widget.onFilter!(createOffre);
 
-    // if(PopupOffreModel().validateFormFields()) {
-    firestore.collection('offres').add(createOffre);
-    Navigator.pop(context);
-    // }
+    if (_model.enregistrerOffre == true) {
+      firestore.collection('offres').add(createOffre);
+    }
   }
 
   @override
@@ -701,7 +704,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                   Container(
                     decoration: BoxDecoration(),
                   ),
-                  if (_model.contratType.contains('Intérimaire')) Text('Vos disponibilités', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                  if (_model.contratType.contains('Intérimaire')) Text('Disponibilités', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                   if (_model.contratType.contains('Intérimaire'))
                     Container(
                       height: 390,
@@ -882,7 +885,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                   if (_model.pairImpaireValue == false)
                     custom_widgets.GrilleHoraire(
                       onSelectionChanged: (selected) {
-                        _model.grilleHoraire = selected;
+                        _model.grilleHoraireImpaire = selected;
                       },
                     ),
                   Padding(
@@ -1024,6 +1027,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                         child: FFButtonWidget(
                           onPressed: () async {
                             saveOffre(context);
+                            Navigator.pop(context);
                           },
                           text: 'Enregistrer mon offre et rechercher',
                           options: FFButtonOptions(
@@ -1072,7 +1076,8 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                         ),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            // saveOffre(context);
+                            saveOffre(context);
+                            Navigator.pop(context);
                           },
                           text: 'Rechercher',
                           options: FFButtonOptions(

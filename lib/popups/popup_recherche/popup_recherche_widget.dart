@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
 
 import '../../constant.dart';
 import '../../custom_code/widgets/date_selector_interimaire.dart';
@@ -20,7 +21,8 @@ export 'popup_recherche_model.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 
 class PopupRechercheWidget extends StatefulWidget {
-  const PopupRechercheWidget({Key? key}) : super(key: key);
+  const PopupRechercheWidget({Key? key, this.onFilter}) : super(key: key);
+  final Function(dynamic)? onFilter;
 
   @override
   _PopupRechercheWidgetState createState() => _PopupRechercheWidgetState();
@@ -28,6 +30,7 @@ class PopupRechercheWidget extends StatefulWidget {
 
 class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
   late PopupRechercheModel _model;
+  Map<String, dynamic> userData = {};
 
   @override
   void setState(VoidCallback callback) {
@@ -46,6 +49,10 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
     _model.salaireMensuelNetController ??= TextEditingController();
     _model.rayonController ??= TextEditingController();
     _model.nomOffreController ??= TextEditingController();
+
+    final CollectionReference<Map<String, dynamic>> usersRef = FirebaseFirestore.instance.collection('users');
+
+    usersRef.doc(currentUser?.uid).get().then((snapshot) => userData = snapshot.data()!).catchError((error) => print("Error fetching user data: $error"));
   }
 
   @override
@@ -58,8 +65,6 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
   void saveRecherche() {
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
-
-    final CollectionReference<Map<String, dynamic>> usersRef = FirebaseFirestore.instance.collection('users');
 
     List<Map<String, dynamic>> grilleHoraireNetsed = _model.grilleHoraire.map((semaine) {
       return {
@@ -75,7 +80,8 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
 
     // Données à enregistrer
     final createRecherche = {
-      'nom': _model.nomOffreController.text,
+      'poste': userData['poste'],
+      'nom': userData['poste'],
       'localisation': _model.localisationController.text,
       'rayon': _model.rayonController.text,
       'contrats': _model.contratType.toList().take(5).toList(),
@@ -87,17 +93,20 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
       'grille_horaire': grilleHoraireNetsed,
       'grille_pair_impaire_identique': _model.pairImpaireValue,
       'grille_horaire_impaire': grilleHoraireImpaireNetsed,
-      'horaire_dispo_interim': _model.horaireDispoInterim,
+      'horaire_dispo_interim': _model.horaireDispoInterim.map((date) => Timestamp.fromDate(date)).toList(),
       'user_id': currentUser?.uid,
       'date_created': Timestamp.now(),
       'isActive': true
     };
+    widget.onFilter!(createRecherche);
 
+    // if (_model.saveSearch == true) {
     firestore.collection('recherches').add(createRecherche).then((docRef) {
       print('Données enregistrées avec succès ! ID du document : ${docRef.id}');
     }).catchError((error) {
       print('Erreur lors de l\'enregistrement des données : $error');
     });
+    // }
   }
 
   @override
@@ -764,46 +773,29 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       ),
                     ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                    child: TextFormField(
-                      controller: _model.nomOffreController,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: 'Nom de ma recherche',
-                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFFD0D1DE),
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(4.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'Enregistrer la recherche ?',
+                              style: FlutterFlowTheme.of(context).bodySmall,
+                            ),
+                          ],
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: FlutterFlowTheme.of(context).focusColor,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(4.0),
+                        Switch.adaptive(
+                          value: _model.saveSearch ??= false,
+                          onChanged: (newValue) async {
+                            setState(() => _model.saveSearch = newValue!);
+                          },
+                          activeColor: Color(0xFF7CEDAC),
                         ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0x00000000),
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                      ),
-                      style: FlutterFlowTheme.of(context).bodyMedium,
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      validator: _model.nomOffreControllerValidator.asValidator(context),
+                      ],
                     ),
                   ),
                   Padding(
@@ -829,10 +821,10 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                       ),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          Navigator.pop(context);
                           saveRecherche();
+                          Navigator.pop(context);
                         },
-                        text: 'Enregistrer ma recherche',
+                        text: _model.saveSearch == true ? 'Enregistrer ma recherche' : 'Rechercher',
                         options: FFButtonOptions(
                           width: double.infinity,
                           height: 40.0,

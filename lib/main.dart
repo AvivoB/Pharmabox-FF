@@ -180,11 +180,25 @@ class _NavBarPageState extends State<NavBarPage> {
             customWidget: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.search,
-                  color: currentIndex == 0 ? Color(0xFF7CEDAC) : greyColor,
-                  size: 24.0,
-                ),
+                currentIndex == 0
+                    ? ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                          stops: [0.0, 1.0],
+                        ).createShader(bounds),
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                          size: 24.0,
+                        ),
+                      )
+                    : Icon(
+                        Icons.search,
+                        color: greyColor,
+                        size: 24.0,
+                      ),
                 Text(
                   'Explorer',
                   overflow: TextOverflow.ellipsis,
@@ -201,11 +215,25 @@ class _NavBarPageState extends State<NavBarPage> {
             customWidget: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.campaign_outlined,
-                  color: currentIndex == 1 ? Color(0xFF7CEDAC) : greyColor,
-                  size: 24.0,
-                ),
+                currentIndex == 1
+                    ? ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                          stops: [0.0, 1.0],
+                        ).createShader(bounds),
+                        child: Icon(
+                          Icons.campaign_outlined,
+                          color: Colors.white,
+                          size: 24.0,
+                        ),
+                      )
+                    : Icon(
+                        Icons.campaign_outlined,
+                        color: greyColor,
+                        size: 24.0,
+                      ),
                 Text(
                   'PharmaJob',
                   overflow: TextOverflow.ellipsis,
@@ -222,11 +250,25 @@ class _NavBarPageState extends State<NavBarPage> {
             customWidget: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.people_alt_outlined,
-                  color: currentIndex == 2 ? Color(0xFF7CEDAC) : greyColor,
-                  size: 24.0,
-                ),
+                currentIndex == 2
+                    ? ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                          stops: [0.0, 1.0],
+                        ).createShader(bounds),
+                        child: Icon(
+                          Icons.people_alt_outlined,
+                          color: Colors.white,
+                          size: 24.0,
+                        ),
+                      )
+                    : Icon(
+                        Icons.people_alt_outlined,
+                        color: greyColor,
+                        size: 24.0,
+                      ),
                 Text(
                   'Réseau',
                   overflow: TextOverflow.ellipsis,
@@ -243,16 +285,30 @@ class _NavBarPageState extends State<NavBarPage> {
             customWidget: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.account_circle_outlined,
-                  color: currentIndex == 3 || currentIndex == 4 ? Color(0xFF7CEDAC) : greyColor,
-                  size: 24.0,
-                ),
+                currentIndex == 3 || currentIndex == -1
+                    ? ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                          stops: [0.0, 1.0],
+                        ).createShader(bounds),
+                        child: Icon(
+                          Icons.account_circle_outlined,
+                          color: Colors.white,
+                          size: 24.0,
+                        ),
+                      )
+                    : Icon(
+                        Icons.account_circle_outlined,
+                        color: greyColor,
+                        size: 24.0,
+                      ),
                 Text(
                   'Profil',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 3 || currentIndex == 4 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: currentIndex == 3 || currentIndex == -1 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),

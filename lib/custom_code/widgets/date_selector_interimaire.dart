@@ -41,7 +41,7 @@ class _DateSelectorState extends State<DateSelector> {
     super.initState();
 
     print(widget.initialSelectedDates);
-    selectedDates = widget.initialSelectedDates;
+    selectedDates = List.from(widget.initialSelectedDates);
   }
 
   @override

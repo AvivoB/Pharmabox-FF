@@ -3,10 +3,12 @@ import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pharmabox/composants/card_user/card_user_widget.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pharmabox/pharma_job/pharmaJobSearchData.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
@@ -51,6 +53,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List pharmacieInPlace = [];
   List offres = [];
   List recherches = [];
+  List foundedOffres = [];
+  List foundedRecherches = [];
 
   Future<void> getPharmaciesLocations({searchTerm}) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('pharmacies').get();
@@ -242,7 +246,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Ma dernière recherche', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                            /*  Text('Ma dernière recherche', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                             Container(
                               width: MediaQuery.of(context).size.width * 1.0,
                               decoration: BoxDecoration(
@@ -262,20 +266,21 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(offres[0]['nom'], overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                    Text(offres[0]['poste'] ?? '' + ' - ' + offres[0]['temps'] + ' - ' + offres[0]['salaire_mensuel'] + '€ / mois',
-                                        overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
+                                    // Text(offres[0]['nom'], overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
+                                    // Text(offres[0]['poste'] ?? '' + ' - ' + offres[0]['temps'] + ' - ' + offres[0]['salaire_mensuel'] + '€ / mois',
+                                    //     overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
                                   ],
                                 ),
                               ),
                             ),
+                           */
                           ],
                         ),
                       if (recherches.isNotEmpty)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Ma dernière recherche', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                            /*  Text('Ma dernière recherche', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                             Container(
                               width: MediaQuery.of(context).size.width * 1.0,
                               decoration: BoxDecoration(
@@ -301,6 +306,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 ),
                               ),
                             ),
+                           */
                           ],
                         ),
                       Padding(
@@ -340,7 +346,24 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 builder: (bottomSheetContext) {
                                   return Padding(
                                     padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                    child: isTitulaire ? PopupOffreWidget() : PopupRechercheWidget(),
+                                    child: isTitulaire
+                                        ? PopupOffreWidget(
+                                            onFilter: (filters) => {
+                                              setState(() async {
+                                                foundedRecherches.clear();
+                                                foundedRecherches = await PharmaJobSearchData().filterOffreToFindRecherches(filters);
+                                                
+                                              })
+                                            },
+                                          )
+                                        : PopupRechercheWidget(
+                                            onFilter: (filters) => {
+                                              setState(() async {
+                                                foundedOffres.clear();
+                                                foundedOffres = await PharmaJobSearchData().filterRechercheToFindOffre(filters);
+                                              })
+                                            },
+                                          ),
                                   );
                                 },
                               ).then((value) => setState(() {}));
@@ -411,14 +434,17 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(pharmacieInPlace.length.toString() + ' résultats',
+                                  child: Text(isTitulaire ? foundedRecherches.length.toString() + ' résultats' : foundedOffres.length.toString() + ' résultats',
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),
                                             fontSize: 14.0,
                                           )),
                                 ),
-                                for (var i in pharmacieInPlace) CardPharmacieOffreRechercheWidget(data: i),
+                                if(foundedOffres.isNotEmpty)
+                                  for (var i in foundedOffres) CardPharmacieOffreRechercheWidget(data: i),
+                                if(foundedRecherches.isNotEmpty)
+                                  for (var i in foundedRecherches) CardUserWidget(data: i),
                               ],
                             ),
                           ),

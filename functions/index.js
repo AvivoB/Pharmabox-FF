@@ -54,6 +54,36 @@ exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite
   
     return result;
   }
+
+  function formatDateToDDMMYYYY(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JS
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
+  function flattenDataOffres(data) {
+    const flattenedData = {};
+
+    flattenedData.nom = data.nom || "";
+    flattenedData.localisation = data.localisation || "";
+    flattenedData.rayon = data.rayon || "";
+    flattenedData.contrats = data.contrats.join(", ") || "";
+    flattenedData.duree = data.duree || "";
+    flattenedData.temps = data.temps || "";
+    flattenedData.debut_immediat = data.debut_immediat;
+    flattenedData.debut_contrat = data.debut_contrat || "";
+    flattenedData.salaire_mensuel = data.salaire_mensuel || "";
+    flattenedData.grille_horaire = data.grille_horaire.map(week => week.semaine.join(", ")).join(" | ");
+    flattenedData.grille_pair_impaire_identique = data.grille_pair_impaire_identique;
+    flattenedData.grille_horaire_impaire = data.grille_horaire_impaire.map(week => week.semaine.join(", ")).join(" | ");
+    flattenedData.proposition_dispo_interim = data.proposition_dispo_interim.map(dateTime => formatDateToDDMMYYYY(dateTime.toDate())).join(", ");
+    flattenedData.user_id = data.user_id || "";
+    flattenedData.date_created = data.date_created; // Assuming you keep this as a timestamp for querying purposes
+    flattenedData.isActive = data.isActive;
+  
+    return flattenedData;
+  }
   
   exports.searchDataPharmacie = functions.firestore.document('pharmacies/{pharmacieId}').onWrite((change, context) => {
       // Get the document
@@ -69,6 +99,46 @@ exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite
           .doc(context.params.pharmacieId)
           .collection('searchDataPharmacie')
           .doc(context.params.pharmacieId)
+          .set(searchData);
+      } else {
+        return null;
+      }
+  });
+
+  exports.searchDataRecherche = functions.firestore.document('recherches/{rechercheId}').onWrite((change, context) => {
+      // Get the document
+      const document = change.after.exists ? change.after.data() : null;
+  
+      // Proceed if the document exists
+      if (document) {
+        const searchData = flattenData(document);
+  
+        // Update the document's search data in a subcollection
+        return admin.firestore()
+          .collection('recherches')
+          .doc(context.params.rechercheId)
+          .collection('searchDataRecherche')
+          .doc(context.params.rechercheId)
+          .set(searchData);
+      } else {
+        return null;
+      }
+  });
+
+  exports.searchDataOffre = functions.firestore.document('offres/{offreId}').onWrite((change, context) => {
+      // Get the document
+      const document = change.after.exists ? change.after.data() : null;
+  
+      // Proceed if the document exists
+      if (document) {
+        const searchData = flattenDataOffres(document);
+  
+        // Update the document's search data in a subcollection
+        return admin.firestore()
+          .collection('offres')
+          .doc(context.params.offreId)
+          .collection('searchDataOffre')
+          .doc(context.params.offreId)
           .set(searchData);
       } else {
         return null;

@@ -80,11 +80,9 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Stack(children: [
-                  ImageSliderWidget(
+                child:ImageSliderWidget(
                     imageNames: widget.data['photo_url'],
                   ),
-                ]),
               ),
             ),
             Padding(
