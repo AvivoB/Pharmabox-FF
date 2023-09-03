@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:pharmabox/composants/card_user/card_user_widget.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
@@ -29,6 +30,7 @@ export 'pharma_job_model.dart';
 import 'classPlaceClusterPharmaJob.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class PharmaJobWidget extends StatefulWidget {
   const PharmaJobWidget({Key? key}) : super(key: key);
@@ -60,7 +62,12 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
           target: LatLng(0, 0),
           zoom: 16.0,
         );
+  Future<bool> requestLocationPermission() async {
+    PermissionStatus status = await Permission.location.request();
 
+    return status == PermissionStatus.granted;
+  }
+  
   Future<void> getCurrentPosition() async {
     bool isLocationPermissionGranted = await requestLocationPermission();
 

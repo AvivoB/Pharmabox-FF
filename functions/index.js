@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const FieldValue = admin.firestore.FieldValue;
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 
 admin.initializeApp();
 
@@ -202,61 +203,67 @@ exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite
 
 
 
-/* ENVOI DES EMAILS */
-// Configuration du serveur SMTP
-// let transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//       type: 'OAuth2',
-//       user: 'pharmaboxdb@gmail.com',
-//       clientId: '402993811587-37kvqs20k7hseum2r0c3spchjnpjn3e7.apps.googleusercontent.com',
-//       clientSecret: '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',
-//   }
-// });
 
-// const htmlPath = path.join(__dirname, '/email_template/code_validation.html');
-// const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-// // Envoi du code de verification du compte
-// exports.sendVerificationCode = functions.firestore
-//   .document('users/{userId}')
-//   .onCreate((snap, context) => {
-//     const user = snap.data();
+const htmlPath = path.join(__dirname, '/email_template/code_validation.html');
+const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-//     // Vérification du champ 'poste'
-//     if (user.poste !== 'Pharmacien(ne) titulaire') {
-//         console.log('Pas un titulaire, skipping email');
-//         return null;
-//     }
+// Envoi du code de verification du compte
+exports.sendVerificationCode = functions.firestore
+  .document('users/{userId}')
+  .onCreate((snap, context) => {
+    const user = snap.data();
 
-//     // Génère un code de validation
-//     let verificationCode = Math.floor(1000 + Math.random() * 9000);
+    /* ENVOI DES EMAILS */
+    // Configuration du serveur SMTP
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+          // type: 'OAuth2',
+          user: 'pharmaboxdb@gmail.com',
+          pass: 'avkjycgnhzignnqc',
+      }
+  });
 
-//     // Mise à jour du document utilisateur avec le code de validation
-//     return admin.firestore().collection('users').doc(snap.id).update({
-//         verificationCode: verificationCode,
-//         isVerified: false
-//     }).then(() => {
-//         // Construire le courriel
-//         const mailOptions = {
-//             from: 'pharmaboxdb@gmail.com',
-//             to: user.email,
-//             subject: 'Votre code de vérification',
-//             html: htmlContent.replace('{{code}}', verificationCode)
-//         };        
 
-//         // Envoie le mail
-//         return transporter.sendMail(mailOptions, (error, data) => {
-//             if (error) {
-//                 console.log(error);
-//                 throw new functions.https.HttpsError('internal', 'Failed to send email.');
-//             }
-//         });
-//     }).catch((error) => {
-//         console.log(error);
-//         throw new functions.https.HttpsError('internal', 'Failed to update user document.');
-//     });
-// });
+    // Vérification du champ 'poste'
+    if (user.poste !== 'Pharmacien(ne) titulaire') {
+        console.log('Pas un titulaire, skipping email');
+        return null;
+    }
+
+    // Génère un code de validation
+    let verificationCode = Math.floor(1000 + Math.random() * 9000);
+
+
+    // Mise à jour du document utilisateur avec le code de validation
+    return admin.firestore().collection('users').doc(snap.id).update({
+        verificationCode: verificationCode,
+        isVerified: false
+    }).then(() => {
+        // Construire le courriel
+        const mailOptions = {
+            from: 'PHARMABOX <pharmaboxdb@gmail.com>',
+            to: user.email,
+            subject: 'Votre code de vérification',
+            html: htmlContent.replace('{{code}}', verificationCode)
+        };        
+
+        // Envoie le mail
+        return transporter.sendMail(mailOptions, (error, data) => {
+            if (error) {
+                console.log(error);
+                throw new functions.https.HttpsError('internal', 'Failed to send email.');
+            }
+        });
+    }).catch((error) => {
+        console.log(error);
+        throw new functions.https.HttpsError('internal', 'Failed to update user document.');
+    });
+});
 
 
 

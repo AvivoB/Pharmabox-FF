@@ -1,5 +1,18 @@
 {
   "functions": {
     "source": "functions"
+  },
+  "emulators": {
+    "functions": {
+      "port": 4200
+    },
+    "firestore": {
+      "port": 4100
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
+    "singleProjectMode": true
   }
 }
