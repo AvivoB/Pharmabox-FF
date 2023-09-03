@@ -4,7 +4,6 @@ const nodemailer = require('nodemailer');
 const FieldValue = admin.firestore.FieldValue;
 const path = require('path');
 const fs = require('fs');
-const axios = require('axios');
 
 admin.initializeApp();
 
@@ -180,28 +179,23 @@ exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite
 });
 
 
-    exports.notifyOnLike = functions.firestore.document('likes/{likeId}').onCreate(async (snapshot, context) => {
-        // Récupère les données du document créé
-        const data = snapshot.data();
-        // Accède à Firestore
-        const db = admin.firestore();
+  exports.notifyOnLike = functions.firestore.document('likes/{likeId}').onCreate(async (snapshot, context) => {
+      // Récupère les données du document créé
+      const data = snapshot.data();
+      // Accède à Firestore
+      const db = admin.firestore();
 
-        // Crée un nouveau document dans la collection 'notifications'
-        const notificationData = {
-          addedToNetwork: false,
-          liked: true,
-          by_user: data.liked_by,
-          for: data.document_id,
-          timestamp: FieldValue.serverTimestamp(),
-        };
+      // Crée un nouveau document dans la collection 'notifications'
+      const notificationData = {
+        addedToNetwork: false,
+        liked: true,
+        by_user: data.liked_by,
+        for: data.document_id,
+        timestamp: FieldValue.serverTimestamp(),
+      };
 
-        return db.collection('notifications').add(notificationData);
-    });
-
-
-
-
-
+      return db.collection('notifications').add(notificationData);
+  });
 
 
 

@@ -25,21 +25,21 @@ import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await FirebaseMessaging.instance.getToken();
-  print("Handling a background message: ${message.messageId}");
-}
+// @pragma('vm:entry-point')
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   // If you're going to use other Firebase services in the background, such as Firestore,
+//   // make sure you call `initializeApp` before using other Firebase services.
+//   await FirebaseMessaging.instance.getToken();
+//   print("Handling a background message: ${message.messageId}");
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
   await FlutterFlowTheme.initialize();
-  final RemoteMessage? remoteMessage = await FirebaseMessaging.instance.getInitialMessage();
-  print(remoteMessage);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // final RemoteMessage? remoteMessage = await FirebaseMessaging.instance.getInitialMessage();
+  // print(remoteMessage);
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
 }
 
