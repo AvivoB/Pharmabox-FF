@@ -5,8 +5,9 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 
 class LevelProgressBar extends StatelessWidget {
   final int level;
+  final bool isUser;
 
-  LevelProgressBar({required this.level});
+  LevelProgressBar({required this.level, this.isUser = true});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +15,7 @@ class LevelProgressBar extends StatelessWidget {
         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
         child: Column(
           children: [
+            if(isUser)
             Text(
               level == 0
                   ? 'Maîtrise basique'

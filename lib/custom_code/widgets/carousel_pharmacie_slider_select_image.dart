@@ -12,8 +12,9 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 class CarouselPharmacieSliderSelect extends StatefulWidget {
   final Function(List<String>) onImagesSelected;
   final List<String>? initialImagesSelected;
+  final bool isEditable;
 
-  CarouselPharmacieSliderSelect({required this.onImagesSelected, this.initialImagesSelected});
+  CarouselPharmacieSliderSelect({required this.onImagesSelected, this.initialImagesSelected, this.isEditable = true});
 
   @override
   _CarouselPharmacieSliderSelectState createState() => _CarouselPharmacieSliderSelectState();
@@ -135,22 +136,23 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                       ),
                                     ),
                                   ),
-                                  Align(
-                                    alignment: AlignmentDirectional(0.65, 1),
-                                    child: FlutterFlowIconButton(
-                                      borderColor: Colors.transparent,
-                                      borderRadius: 30,
-                                      borderWidth: 1,
-                                      buttonSize: 60,
-                                      fillColor: Colors.white,
-                                      icon: Icon(
-                                        Icons.add_a_photo_outlined,
-                                        color: FlutterFlowTheme.of(context).primaryText,
-                                        size: 30,
+                                  if (widget.isEditable)
+                                    Align(
+                                      alignment: AlignmentDirectional(0.65, 1),
+                                      child: FlutterFlowIconButton(
+                                        borderColor: Colors.transparent,
+                                        borderRadius: 30,
+                                        borderWidth: 1,
+                                        buttonSize: 60,
+                                        fillColor: Colors.white,
+                                        icon: Icon(
+                                          Icons.add_a_photo_outlined,
+                                          color: FlutterFlowTheme.of(context).primaryText,
+                                          size: 30,
+                                        ),
+                                        onPressed: _selectImages,
                                       ),
-                                      onPressed: _selectImages,
                                     ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -179,43 +181,45 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                             left: 10,
                             child: Row(
                               children: [
-                                FlutterFlowIconButton(
-                                  borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  borderWidth: 1,
-                                  buttonSize: 45,
-                                  fillColor: Colors.white,
-                                  icon: Icon(
-                                    Icons.add_a_photo_outlined,
-                                    color: FlutterFlowTheme.of(context).primaryText,
-                                    size: 22,
-                                  ),
-                                  onPressed: _selectImages,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: FlutterFlowIconButton(
+                                if (widget.isEditable)
+                                  FlutterFlowIconButton(
                                     borderColor: Colors.transparent,
                                     borderRadius: 30,
                                     borderWidth: 1,
                                     buttonSize: 45,
                                     fillColor: Colors.white,
                                     icon: Icon(
-                                      Icons.delete_outline,
+                                      Icons.add_a_photo_outlined,
                                       color: FlutterFlowTheme.of(context).primaryText,
                                       size: 22,
                                     ),
-                                    onPressed: () async {
-                                      try {
-                                        await FirebaseStorage.instance.refFromURL(urls[index].toString()).delete();
-                                        urls.removeAt(index);
-                                      } catch (e) {
-                                        print('Error deleting photo: $e');
-                                      }
-                                      setState(() {});
-                                    },
+                                    onPressed: _selectImages,
                                   ),
-                                ),
+                                if (widget.isEditable)
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    child: FlutterFlowIconButton(
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 30,
+                                      borderWidth: 1,
+                                      buttonSize: 45,
+                                      fillColor: Colors.white,
+                                      icon: Icon(
+                                        Icons.delete_outline,
+                                        color: FlutterFlowTheme.of(context).primaryText,
+                                        size: 22,
+                                      ),
+                                      onPressed: () async {
+                                        try {
+                                          await FirebaseStorage.instance.refFromURL(urls[index].toString()).delete();
+                                          urls.removeAt(index);
+                                        } catch (e) {
+                                          print('Error deleting photo: $e');
+                                        }
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ),
                               ],
                             ))
                       ],

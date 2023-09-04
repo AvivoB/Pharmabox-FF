@@ -53,9 +53,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   List searchResults = [];
   List selectedItem = [];
   CameraPosition _currentCameraPosition = CameraPosition(
-          target: LatLng(0, 0),
-          zoom: 16.0,
-        );
+    target: LatLng(0, 0),
+    zoom: 16.0,
+  );
 
   Future<void> getCurrentPosition() async {
     bool isLocationPermissionGranted = await requestLocationPermission();

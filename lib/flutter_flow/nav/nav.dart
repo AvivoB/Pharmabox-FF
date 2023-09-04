@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:pharmabox/profil_view_pharmacie/profil_view_pharmacie.dart';
 import '../../profil_pharmacie/profil_pharmacie_widget.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
@@ -136,6 +137,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 ),
         ),
         FFRoute(name: 'PharmacieProfil', path: '/pharmacieProfil', builder: (context, params) => NavBarPage(initialPage: 'PharmacieProfil', page: ProfilPharmacie())),
+        FFRoute(
+          name: 'PharmacieProfilView',
+          path: '/pharmacieProfilView',
+          builder: (context, params) => PharmacieProfilView(
+            pharmacieId: params.getParam('pharmacieId', ParamType.String),
+          ),
+        ),
         FFRoute(
           name: 'ProfilView',
           path: '/profilView',

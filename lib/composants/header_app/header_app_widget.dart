@@ -111,14 +111,13 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                                   context: context,
                                   builder: (bottomSheetContext) {
                                     return DraggableScrollableSheet(
-                                      initialChildSize: 0.75,
-                                      builder: (BuildContext context, ScrollController scrollController) {
-                                        return Padding(
-                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                          child: PopupNotificationsWidget(),
-                                        );
-                                      }
-                                    );
+                                        initialChildSize: 0.75,
+                                        builder: (BuildContext context, ScrollController scrollController) {
+                                          return Padding(
+                                            padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                            child: PopupNotificationsWidget(),
+                                          );
+                                        });
                                   },
                                 ).then((value) => setState(() {}));
                               },

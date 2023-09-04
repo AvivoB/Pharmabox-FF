@@ -75,8 +75,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                               ),
                             ),
                             child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(7, 7, 7, 7),
+                              padding: EdgeInsetsDirectional.fromSTEB(7, 7, 7, 7),
                               child: Container(
                                 width: 150,
                                 height: 150,
@@ -91,7 +90,6 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                               ),
                             ),
                           ),
-                          
                         ],
                       ),
                     ),

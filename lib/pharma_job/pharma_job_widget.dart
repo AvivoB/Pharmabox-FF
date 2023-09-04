@@ -49,8 +49,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   Set<Marker> markers = Set();
   String? searchTerms;
 
-  final CameraPosition _parisCameraPosition =
-      CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
+  final CameraPosition _parisCameraPosition = CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
 
   List<Place> items = [];
   List pharmacieInPlace = [];
@@ -58,16 +57,16 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List recherches = [];
   List foundedOffres = [];
   List foundedRecherches = [];
-    CameraPosition _currentCameraPosition = CameraPosition(
-          target: LatLng(0, 0),
-          zoom: 16.0,
-        );
+  CameraPosition _currentCameraPosition = CameraPosition(
+    target: LatLng(0, 0),
+    zoom: 16.0,
+  );
   Future<bool> requestLocationPermission() async {
     PermissionStatus status = await Permission.location.request();
 
     return status == PermissionStatus.granted;
   }
-  
+
   Future<void> getCurrentPosition() async {
     bool isLocationPermissionGranted = await requestLocationPermission();
 
@@ -129,8 +128,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   }
 
   ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers,
-        markerBuilder: _markerBuilder);
+    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder);
   }
 
   void _updateMarkers(Set<Marker> markers) {
@@ -170,17 +168,14 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
       foundedOffres = data;
 
       for (var job in data) {
-        List<dynamic> location =
-            job['pharma_data']['situation_geographique']['lat_lng'];
-        Place place =
-            Place(name: job['pharma_data']['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]));
+        List<dynamic> location = job['pharma_data']['situation_geographique']['lat_lng'];
+        Place place = Place(name: job['pharma_data']['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]));
         setState(() {
           items.add(place);
         });
-
       }
-    _manager.setItems(items);
-    _manager.updateMap();
+      _manager.setItems(items);
+      _manager.updateMap();
     });
   }
 
@@ -374,8 +369,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                           ],
                         ),
                       Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                         child: Container(
                           width: double.infinity,
                           height: 50.0,
@@ -410,16 +404,13 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 context: context,
                                 builder: (bottomSheetContext) {
                                   return Padding(
-                                    padding: MediaQuery.of(bottomSheetContext)
-                                        .viewInsets,
+                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
                                     child: isTitulaire
                                         ? PopupOffreWidget(
-                                            onFilter: (filters) =>
-                                                {_findRecherche(filters)},
+                                            onFilter: (filters) => {_findRecherche(filters)},
                                           )
                                         : PopupRechercheWidget(
-                                            onFilter: (filters) =>
-                                                {_findOffres(filters)},
+                                            onFilter: (filters) => {_findOffres(filters)},
                                           ),
                                   );
                                 },
@@ -429,14 +420,10 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 20.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                               color: Color(0x00FFFFFF),
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
+                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                                     fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontSize: 16.0,
@@ -457,9 +444,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
             ),
             Container(
               width: MediaQuery.of(context).size.width * 1.0,
-              height: offres.isNotEmpty || recherches.isNotEmpty
-                  ? MediaQuery.of(context).size.height * 0.61
-                  : MediaQuery.of(context).size.height * 0.67,
+              height: offres.isNotEmpty || recherches.isNotEmpty ? MediaQuery.of(context).size.height * 0.61 : MediaQuery.of(context).size.height * 0.67,
               child: Stack(children: [
                 Container(
                   child: GoogleMap(
@@ -481,14 +466,9 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                 DraggableScrollableSheet(
                   minChildSize: 0.09,
                   initialChildSize: 0.09,
-                  builder: (BuildContext context,
-                      ScrollController scrollController) {
+                  builder: (BuildContext context, ScrollController scrollController) {
                     return Container(
-                        decoration: BoxDecoration(
-                            color: Color(0xFFEFF6F7),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15))),
+                        decoration: BoxDecoration(color: Color(0xFFEFF6F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
                         child: SingleChildScrollView(
                           controller: scrollController,
                           child: Padding(
@@ -498,32 +478,21 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 SvgPicture.asset(
                                   'assets/icons/Home-Indicator.svg',
                                   width: 60,
-                                  colorFilter: ColorFilter.mode(
-                                      Color(0xFFD0D1DE), BlendMode.srcIn),
+                                  colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      isTitulaire
-                                          ? foundedRecherches.length
-                                                  .toString() +
-                                              ' résultats'
-                                          : foundedOffres.length.toString() +
-                                              ' résultats',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
+                                  child: Text(isTitulaire ? foundedRecherches.length.toString() + ' résultats' : foundedOffres.length.toString() + ' résultats',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),
                                             fontSize: 14.0,
                                           )),
                                 ),
                                 if (foundedOffres.isNotEmpty)
-                                  for (var i in foundedOffres)
-                                    CardPharmacieOffreRechercheWidget(data: i),
+                                  for (var i in foundedOffres) CardPharmacieOffreRechercheWidget(data: i),
                                 if (foundedRecherches.isNotEmpty)
-                                  for (var i in foundedRecherches)
-                                    CardUserWidget(data: i),
+                                  for (var i in foundedRecherches) CardUserWidget(data: i),
                               ],
                             ),
                           ),
@@ -538,8 +507,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     );
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
-      (cluster) async {
+  Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
         return Marker(
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
@@ -581,8 +549,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     }
 
     final img = await pictureRecorder.endRecording().toImage(size, size);
-    final data =
-        await img.toByteData(format: ui.ImageByteFormat.png) as ByteData;
+    final data = await img.toByteData(format: ui.ImageByteFormat.png) as ByteData;
 
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }

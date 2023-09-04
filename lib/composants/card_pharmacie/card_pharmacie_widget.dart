@@ -80,55 +80,66 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child:ImageSliderWidget(
-                    imageNames: widget.data['photo_url'],
-                  ),
+                child: ImageSliderWidget(
+                  imageNames: widget.data['photo_url'],
+                ),
               ),
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: Text(
-                              widget.data['situation_geographique']['adresse'].toString(),
-                              overflow: TextOverflow.ellipsis,
-                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF161730),
-                                    fontSize: 16.0,
-                                  ),
-                            ),
-                          )
-                        ],
+            GestureDetector(
+              onTap: () => {
+                context.pushNamed('PharmacieProfilView',
+                    queryParams: {
+                      'pharmacieId': serializeParam(
+                        widget.data['documentId'],
+                        ParamType.String,
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Image.asset(
-                        'assets/groupements/' + widget.data['groupement'][0]['image'].toString(),
-                        width: 150.0,
-                        height: 50.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ],
+                    }.withoutNulls)
+              },
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: Text(
+                                widget.data['situation_geographique']['adresse'].toString(),
+                                overflow: TextOverflow.ellipsis,
+                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                      fontFamily: 'Poppins',
+                                      color: Color(0xFF161730),
+                                      fontSize: 16.0,
+                                    ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Image.asset(
+                          'assets/groupements/' + widget.data['groupement'][0]['image'].toString(),
+                          width: 150.0,
+                          height: 50.0,
+                          fit: BoxFit.cover,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(
