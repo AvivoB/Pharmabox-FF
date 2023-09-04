@@ -26,9 +26,9 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
   @override
   void initState() {
     super.initState();
-    print(widget.onInitialValue);
+
     // ignore: unrelated_type_equality_checks
-    selectedOptions = widget.onInitialValue != null ? transformInitialValue(widget.onInitialValue!) : List.generate(daysOfWeek.length, (_) => List.generate(periods.length, (_) => 'Obligatoire'));
+    selectedOptions = widget.onInitialValue!.isNotEmpty ? transformInitialValue(widget.onInitialValue!) : List.generate(daysOfWeek.length, (_) => List.generate(periods.length, (_) => 'Obligatoire'));
   }
 
   void _toggleOption(int row, int col) {

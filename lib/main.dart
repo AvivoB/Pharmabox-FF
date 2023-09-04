@@ -24,6 +24,7 @@ import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.da
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -36,6 +37,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
   await FlutterFlowTheme.initialize();
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.initialize("ce23a4c1-57e3-4379-913d-388977c0e0da");
+  // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  OneSignal.Notifications.requestPermission(true);
   runApp(MyApp());
 }
 
