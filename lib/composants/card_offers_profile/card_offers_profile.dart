@@ -1659,7 +1659,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                               Padding(padding:const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                   child: Row(children: [Icon(Icons.cottage_outlined,color: greyColor,size: 28.0,),SizedBox(width: 10),Text('Hébergement',style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily:'Poppins',color: FlutterFlowTheme.of(context).primaryText,fontSize: 16))]),
                               ),
-                              if(widget.searchI['grille_horaire'] != null && widget.searchI['grille_horaire'] != '')
+                              if(!widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['grille_horaire'] != null && widget.searchI['grille_horaire'] != '')
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                 child: Text('Horaires', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily:'Poppins',color: FlutterFlowTheme.of(context).primaryText,fontSize: 16, fontWeight: FontWeight.w600)),

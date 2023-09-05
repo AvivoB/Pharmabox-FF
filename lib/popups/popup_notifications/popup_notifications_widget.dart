@@ -98,7 +98,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                         String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
                         // Filtering out documents where 'for' does not equal the current user's ID.
-                        List<DocumentSnapshot<Map<String, dynamic>>> documents = snapshot.data!.docs.where((doc) => doc.data()['for'] == currentUserId).toList();
+                        List<DocumentSnapshot<Map<String, dynamic>>> documents = snapshot.data != null ? snapshot.data!.docs.where((doc) => doc.data()['for'] == currentUserId).toList() : [];
 
                         if (documents.isEmpty) {
                           return Center(
@@ -144,7 +144,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                                               shape: BoxShape.circle,
                                             ),
                                             child: FadeInImage.assetNetwork(
-                                              image: userData!['photoUrl'] != null ? userData!['photoUrl'] : '',
+                                              image: userData != null && userData!['photoUrl'] != null ? userData!['photoUrl'] : '',
                                               placeholder: 'assets/images/Group_18.png',
                                               fit: BoxFit.cover,
                                               imageErrorBuilder: (context, error, stackTrace) {
@@ -164,8 +164,9 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                                               mainAxisSize: MainAxisSize.max,
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
+                                                if(userData != null)
                                                 Text(
-                                                  data!['addedToNetwork'] ? userData!['prenom'] + ' ' + userData['nom'] + ' vous a ajouté à son réseau' : userData!['prenom'] + ' ' + userData['nom'] + ' a aimé votre profil',
+                                                  data!['addedToNetwork'] && userData != null ? userData!['prenom'] + ' ' + userData['nom'] + ' vous a ajouté à son réseau' : userData!['prenom'] + ' ' + userData['nom'] + ' a aimé votre profil',
                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                         fontFamily: 'Poppins',
                                                         color: Color(0xFF595A71),

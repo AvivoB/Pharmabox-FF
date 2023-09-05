@@ -26,12 +26,7 @@ import 'index.dart';
 import 'constant.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
-  print('Notification Message: ${message.data}');
-}
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +36,12 @@ void main() async {
   OneSignal.initialize("ce23a4c1-57e3-4379-913d-388977c0e0da");
   // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.Notifications.requestPermission(true);
+  OneSignal.login(await getCurrentUserId());
+  // OneSignal.User.pushSubscription.addObserver((state) {
+  //     print(state.current.jsonRepresentation());
+  //   });
+
+
   runApp(MyApp());
 }
 
@@ -49,15 +50,14 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 
-  static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>()!;
+  static _MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>()!;
 }
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final FirebaseMessaging messaging = FirebaseMessaging.instance;
-  final PushNotificationManager _notificationManager = PushNotificationManager();
 
   late Stream<BaseAuthUser> userStream;
 
@@ -70,9 +70,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _appStateNotifier = AppStateNotifier();
-    _notificationManager.initNotifications();
     _router = createRouter(_appStateNotifier);
-    userStream = pharmaboxFirebaseUserStream()..listen((user) => _appStateNotifier.update(user));
+    userStream = pharmaboxFirebaseUserStream()
+      ..listen((user) => _appStateNotifier.update(user));
     jwtTokenStream.listen((_) {});
     Future.delayed(
       Duration(seconds: 1),
@@ -157,6 +157,18 @@ class _NavBarPageState extends State<NavBarPage> {
       'Profil': ProfilWidget(),
       'Pharmacie': ProfilPharmacie(),
     };
+
+    OneSignal.Notifications.addClickListener((event) {
+        String fromId = event.notification.additionalData!['fromId'].toString() ?? '';
+        print('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: ${fromId}');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DiscussionUserWidget(toUser: fromId),
+          ),
+        );
+    });
+
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
       body: _currentPage ?? tabs[_currentPageName],
@@ -186,7 +198,10 @@ class _NavBarPageState extends State<NavBarPage> {
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                          colors: [
+                            Color(0xFF7CEDAC),
+                            Color(0xFF42D2FF)
+                          ], // changez les couleurs comme vous le souhaitez
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
@@ -204,7 +219,8 @@ class _NavBarPageState extends State<NavBarPage> {
                   'Explorer',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 0 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight:
+                        currentIndex == 0 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -221,7 +237,10 @@ class _NavBarPageState extends State<NavBarPage> {
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                          colors: [
+                            Color(0xFF7CEDAC),
+                            Color(0xFF42D2FF)
+                          ], // changez les couleurs comme vous le souhaitez
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
@@ -239,7 +258,8 @@ class _NavBarPageState extends State<NavBarPage> {
                   'PharmaJob',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 1 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight:
+                        currentIndex == 1 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -256,7 +276,10 @@ class _NavBarPageState extends State<NavBarPage> {
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                          colors: [
+                            Color(0xFF7CEDAC),
+                            Color(0xFF42D2FF)
+                          ], // changez les couleurs comme vous le souhaitez
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
@@ -274,7 +297,8 @@ class _NavBarPageState extends State<NavBarPage> {
                   'Réseau',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 2 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight:
+                        currentIndex == 2 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -291,7 +315,10 @@ class _NavBarPageState extends State<NavBarPage> {
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                          colors: [
+                            Color(0xFF7CEDAC),
+                            Color(0xFF42D2FF)
+                          ], // changez les couleurs comme vous le souhaitez
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
@@ -309,7 +336,9 @@ class _NavBarPageState extends State<NavBarPage> {
                   'Profil',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 3 || currentIndex == -1 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: currentIndex == 3 || currentIndex == -1
+                        ? FontWeight.w600
+                        : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),

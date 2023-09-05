@@ -26,29 +26,29 @@ class PharmaJobSearchData {
       filteredQuery = filteredQuery.where('debut_immediat', isEqualTo: filters['debut_immediat']);
     }
 
-    if (filters['duree'] != '') {
-      filteredQuery = filteredQuery.where('duree', isEqualTo: filters['duree']);
-    }
+    // if (filters['duree'] != '') {
+    //   filteredQuery = filteredQuery.where('duree', isEqualTo: filters['duree']);
+    // }
 
-    if (filters['grille_horaire'] != '') {
-      filteredQuery = filteredQuery.where('grille_horaire', isEqualTo: filters['grille_horaire']);
-    }
+    // if (filters['grille_horaire'] != '') {
+    //   filteredQuery = filteredQuery.where('grille_horaire', isEqualTo: filters['grille_horaire']);
+    // }
 
-    if (filters['grille_horaire_impaire'] != '') {
-      filteredQuery = filteredQuery.where('grille_horaire_impaire', isEqualTo: filters['grille_horaire_impaire']);
-    }
+    // if (filters['grille_horaire_impaire'] != '') {
+    //   filteredQuery = filteredQuery.where('grille_horaire_impaire', isEqualTo: filters['grille_horaire_impaire']);
+    // }
 
-    if (filters['grille_pair_impaire_identique'] != false) {
-      filteredQuery = filteredQuery.where('grille_pair_impaire_identique', isEqualTo: filters['grille_pair_impaire_identique']);
-    }
+    // if (filters['grille_pair_impaire_identique'] != false) {
+    //   filteredQuery = filteredQuery.where('grille_pair_impaire_identique', isEqualTo: filters['grille_pair_impaire_identique']);
+    // }
 
     if (filters['horaire_dispo_interim'] != null && filters['horaire_dispo_interim'].isNotEmpty && filters['contrats'].contains('Intérimaire')) {
       filteredQuery = filteredQuery.where('proposition_dispo_interim', arrayContainsAny: filters['horaire_dispo_interim']);
     }
 
-    if (filters['salaire_mensuel'] != '') {
-      filteredQuery = filteredQuery.where('salaire_mensuel', isEqualTo: filters['salaire_mensuel']);
-    }
+    // if (filters['salaire_mensuel'] != '') {
+    //   filteredQuery = filteredQuery.where('salaire_mensuel', isEqualTo: filters['salaire_mensuel']);
+    // }
 
     if (filters['temps'] != '') {
       filteredQuery = filteredQuery.where('temps', isEqualTo: filters['temps']);
@@ -97,29 +97,29 @@ class PharmaJobSearchData {
       filteredQuery = filteredQuery.where('debut_immediat', isEqualTo: filters['debut_immediat']);
     }
 
-    if (filters['duree'] != '') {
-      filteredQuery = filteredQuery.where('duree', isEqualTo: filters['duree']);
-    }
+    // if (filters['duree'] != '') {
+    //   filteredQuery = filteredQuery.where('duree', isEqualTo: filters['duree']);
+    // }
 
-    if (filters['grille_horaire'] != '') {
-      filteredQuery = filteredQuery.where('grille_horaire', isEqualTo: filters['grille_horaire']);
-    }
+    // if (filters['grille_horaire'] != '') {
+    //   filteredQuery = filteredQuery.where('grille_horaire', isEqualTo: filters['grille_horaire']);
+    // }
 
-    if (filters['grille_horaire_impaire'] != '') {
-      filteredQuery = filteredQuery.where('grille_horaire_impaire', isEqualTo: filters['grille_horaire_impaire']);
-    }
+    // if (filters['grille_horaire_impaire'] != '') {
+    //   filteredQuery = filteredQuery.where('grille_horaire_impaire', isEqualTo: filters['grille_horaire_impaire']);
+    // }
 
-    if (filters['grille_pair_impaire_identique'] != false) {
-      filteredQuery = filteredQuery.where('grille_pair_impaire_identique', isEqualTo: filters['grille_pair_impaire_identique']);
-    }
+    // if (filters['grille_pair_impaire_identique'] != false) {
+    //   filteredQuery = filteredQuery.where('grille_pair_impaire_identique', isEqualTo: filters['grille_pair_impaire_identique']);
+    // }
 
     if (filters['proposition_dispo_interim'] != null && filters['proposition_dispo_interim'].isNotEmpty && filters['contrats'].contains('Intérimaire')) {
       filteredQuery = filteredQuery.where('horaire_dispo_interim', arrayContainsAny: filters['horaire_dispo_interim']);
     }
 
-    if (filters['salaire_mensuel'] != '') {
-      filteredQuery = filteredQuery.where('salaire_mensuel', isEqualTo: filters['salaire_mensuel']);
-    }
+    // if (filters['salaire_mensuel'] != '') {
+    //   filteredQuery = filteredQuery.where('salaire_mensuel', isEqualTo: filters['salaire_mensuel']);
+    // }
 
     if (filters['temps'] != '') {
       filteredQuery = filteredQuery.where('temps', isEqualTo: filters['temps']);

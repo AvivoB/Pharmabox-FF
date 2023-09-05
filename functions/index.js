@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const FieldValue = admin.firestore.FieldValue;
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 
 admin.initializeApp();
 
@@ -257,6 +258,50 @@ exports.sendVerificationCode = functions.firestore
         throw new functions.https.HttpsError('internal', 'Failed to update user document.');
     });
 });
+
+
+const ONESIGNAL_APP_ID = 'ce23a4c1-57e3-4379-913d-388977c0e0da'; 
+const ONESIGNAL_API_KEY = 'YjE0NjlmNjYtMjE1NS00MThmLWJlZTItYTFhYTJiNmYwZGU4';
+
+exports.sendNotificationOnMessage = functions.firestore
+    .document('messages/{messageId}/message/{docId}')
+    .onCreate(async (snap, context) => {
+        const data = snap.data();
+
+        if(data.isViewed == false) {
+            const receiverId = data.receiverId;
+            const messageContent = data.message;
+    
+            // Metadata
+            const metadata = {
+              'receiverId': data.receiverId,
+              'fromId': data.fromId
+          };
+    
+            const notificationContent = {
+              app_id: ONESIGNAL_APP_ID,
+              headings: { "en": "Nouveau message" },
+              contents: { "en": messageContent },
+              include_external_user_ids: [receiverId],
+              'data': metadata
+          };
+    
+          try {
+              const response = await axios.post('https://onesignal.com/api/v1/notifications', notificationContent, {
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Basic ${ONESIGNAL_API_KEY}`
+                  }
+              });
+    
+              console.log('Notification sent', response.data);
+          } catch (e) {
+              console.error('Error sending notification', e);
+          }
+        }
+
+        return null;
+    });
 
 
 

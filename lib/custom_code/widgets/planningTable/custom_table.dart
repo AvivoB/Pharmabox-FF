@@ -5,10 +5,10 @@ import '../../../flutter_flow/flutter_flow_theme.dart';
 
 class GrilleHoraire extends StatefulWidget {
   final Function(List) onSelectionChanged;
-  final List? onInitialValue;
+  List onInitialValue;
   final bool isEditable;
 
-  GrilleHoraire({Key? key, required this.onSelectionChanged, this.onInitialValue, this.isEditable = true}) : super(key: key);
+  GrilleHoraire({Key? key, required this.onSelectionChanged, this.onInitialValue = const [], this.isEditable = true}) : super(key: key);
 
   @override
   _GrilleHoraireState createState() => _GrilleHoraireState();
@@ -28,7 +28,8 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
     super.initState();
 
     // ignore: unrelated_type_equality_checks
-    selectedOptions = widget.onInitialValue!.isNotEmpty ? transformInitialValue(widget.onInitialValue!) : List.generate(daysOfWeek.length, (_) => List.generate(periods.length, (_) => 'Obligatoire'));
+    selectedOptions = widget.onInitialValue.isNotEmpty ? transformInitialValue(widget.onInitialValue) : List.generate(daysOfWeek.length, (_) => List.generate(periods.length, (_) => 'Obligatoire'));
+    print('GRILLE VALUE : '+ selectedOptions.toString());
   }
 
   void _toggleOption(int row, int col) {
