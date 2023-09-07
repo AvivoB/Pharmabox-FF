@@ -40,7 +40,8 @@ class ExplorerWidget extends StatefulWidget {
   _ExplorerWidgetState createState() => _ExplorerWidgetState();
 }
 
-class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStateMixin {
+class _ExplorerWidgetState extends State<ExplorerWidget>
+    with TickerProviderStateMixin {
   TabController? _tabController;
   int currentTAB = 0;
   late ExplorerModel _model;
@@ -52,7 +53,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   Set<Marker> markers = Set();
   String? searchTerms;
   List searchResults = [];
-  List selectedItem = [];
+  int? selectedItem;
   // CameraPosition _currentCameraPosition = CameraPosition(
   //   target: LatLng(0, 0),
   //   zoom: 16.0,
@@ -95,7 +96,11 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    QuerySnapshot querySnapshot = await _firestore.collection('pharmacies').where('user_id', isNotEqualTo: await getCurrentUserId()).get();
+    QuerySnapshot querySnapshot = await _firestore
+        .collection('pharmacies')
+        .where('user_id', isNotEqualTo: await getCurrentUserId())
+        .get();
+    int countArray = 0;
     for (var doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
@@ -108,11 +113,17 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       String name = dataWithId['situation_geographique']['adresse'];
       List<dynamic> location = dataWithId['situation_geographique']['lat_lng'];
       String groupementDataPlace = dataWithId['groupement'][0]['name'];
-      Place place = Place(name: name, latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace);
+      Place place = Place(
+          name: name,
+          latLng: LatLng(location[0], location[1]),
+          groupement: groupementDataPlace,
+          id: countArray++);
       setState(() {
         items.add(place);
         pharmacieInPlace.add(dataWithId);
       });
+      _manager.setItems(items);
+      _manager.updateMap();
     }
   }
 
@@ -125,7 +136,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     final pharmacieRef = FirebaseFirestore.instance.collection('pharmacies');
 
     // Start by getting all users
-    final pharmacieSnapshot = await pharmacieRef.where('user_id', isNotEqualTo: await getCurrentUserId()).get();
+    final pharmacieSnapshot = await pharmacieRef
+        .where('user_id', isNotEqualTo: await getCurrentUserId())
+        .get();
 
     // Prepare to launch search queries for each field
     final fields = [
@@ -141,48 +154,71 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
     pharmacieSnapshot.docs.forEach((userDoc) {
       fields.forEach((field) {
-        searchDataFutures.add(userDoc.reference.collection('searchDataPharmacie').where(field, isGreaterThanOrEqualTo: lowerCaseQuery).where(field, isLessThan: lowerCaseQuery + '\uf8ff').get());
+        searchDataFutures.add(userDoc.reference
+            .collection('searchDataPharmacie')
+            .where(field, isGreaterThanOrEqualTo: lowerCaseQuery)
+            .where(field, isLessThan: lowerCaseQuery + '\uf8ff')
+            .get());
       });
     });
 
     // Wait for all searchData queries to complete
-    final List<QuerySnapshot> searchDataSnapshots = await Future.wait(searchDataFutures);
+    final List<QuerySnapshot> searchDataSnapshots =
+        await Future.wait(searchDataFutures);
 
     // Now, get the parent user documents for each searchData document that matches the query
-    final List pharmacieFuture = searchDataSnapshots.expand((searchDataSnapshot) {
+    final List pharmacieFuture =
+        searchDataSnapshots.expand((searchDataSnapshot) {
       return searchDataSnapshot.docs.map((searchDataDoc) {
         return pharmacieRef.doc(searchDataDoc.id).get();
       });
     }).toList();
 
     // Wait for all user queries to complete
-    List<DocumentSnapshot> userDocs = await Future.wait(pharmacieFuture as Iterable<Future<DocumentSnapshot<Object?>>>);
+    List<DocumentSnapshot> userDocs = await Future.wait(
+        pharmacieFuture as Iterable<Future<DocumentSnapshot<Object?>>>);
 
     // Remove duplicate users and convert to list of user data
     final Set<String> addedUserIds = {}; // Set to keep track of added user IDs
     final List<Map<String, dynamic>> uniquePharmacie = [];
     final List<Place> uniqueItem = []; // List to store unique user data
+
+    int countArray = 0;
     userDocs.forEach((pharmacieDoc) {
       final String pharmacieId = pharmacieDoc.id;
-      final Map<String, dynamic> userData = pharmacieDoc.data() as Map<String, dynamic>;
+      final Map<String, dynamic> userData =
+          pharmacieDoc.data() as Map<String, dynamic>;
       if (!addedUserIds.contains(pharmacieId)) {
         userData['documentId'] = pharmacieId;
         print(userData);
         List<dynamic> location = userData['situation_geographique']['lat_lng'];
-        Place place = Place(name: userData['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]));
+        String groupementDataPlace = userData['groupement'][0]['name'];
+        Place place = Place(
+            name: userData['situation_geographique']['adresse'],
+            latLng: LatLng(location[0], location[1]),
+            groupement: groupementDataPlace,
+            id: countArray++);
 
         uniqueItem.add(place);
         uniquePharmacie.add(userData);
       }
+      setState(() {
+        items.clear();
+        pharmacieInPlace.clear();
+
+        for (var un in uniqueItem) {
+          items.add(un);
+        }
+
+        for (var pharma in uniquePharmacie) {
+          pharmacieInPlace.add(pharma);
+        }
+      });
+      _manager.setItems(items);
+      _manager.updateMap();
     });
 
-    setState(() {
-      items = uniqueItem;
-      pharmacieInPlace = uniquePharmacie;
-    });
-
-    _manager.setItems(items);
-    _manager.updateMap();
+    // print(uniqueItem);
   }
 
   @override
@@ -206,7 +242,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   }
 
   ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder);
+    return ClusterManager<Place>(items, _updateMarkers,
+        markerBuilder: _markerBuilder);
   }
 
   void _updateMarkers(Set<Marker> markers) {
@@ -280,14 +317,16 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyMedium,
-                          validator: _model.textControllerValidator.asValidator(context),
+                          validator: _model.textControllerValidator
+                              .asValidator(context),
                           onChanged: (query) async {
                             setState(() async {
                               if (currentTAB == 1) {
                                 if (query.isEmpty) {
                                   userSearch.clear();
                                 } else {
-                                  userSearch = await ExplorerSearchData().searchUsers(query);
+                                  userSearch = await ExplorerSearchData()
+                                      .searchUsers(query);
                                 }
                               }
 
@@ -323,16 +362,23 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                         onTap: (value) async {
                           currentTAB = value;
                           setState(() {
-                            selectedItem.clear();
+                            selectedItem = null;
                             // items.clear();
                           });
                         },
-                        unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Poppins',
-                              color: Color(0xFF595A71),
-                              fontSize: 14.0,
-                            ),
-                        labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
+                        unselectedLabelStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.override(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF595A71),
+                                  fontSize: 14.0,
+                                ),
+                        labelStyle: FlutterFlowTheme.of(context)
+                            .bodyMedium
+                            .override(
+                                fontFamily: 'Poppins',
+                                color: blackColor,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600),
                         tabs: [
                           Tab(text: 'Pharmacies'),
                           Tab(text: 'Membres'),
@@ -355,16 +401,25 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: userSearch.length == 1
-                                  ? Text(userSearch.length.toString() + ' résultat',
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                  ? Text(
+                                      userSearch.length.toString() +
+                                          ' résultat',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),
                                             fontSize: 14.0,
                                           ))
-                                  : Text(userSearch.length.toString() + ' résultats',
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                  : Text(
+                                      userSearch.length.toString() +
+                                          ' résultats',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),
                                             fontSize: 14.0,
@@ -386,7 +441,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                     Container(
                       child: GoogleMap(
                           mapType: MapType.normal,
-                          initialCameraPosition: _currentCameraPosition ?? CameraPosition(target: LatLng(0, 0), zoom: 16.0),
+                          initialCameraPosition: _currentCameraPosition ??
+                              CameraPosition(target: LatLng(0, 0), zoom: 16.0),
                           markers: markers,
                           myLocationEnabled: true,
                           zoomGesturesEnabled: true,
@@ -395,34 +451,33 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             _controller.complete(controller);
                             _manager.setMapId(controller.mapId);
                           },
-                          // onCameraMove: (position) {
-                          //   setState(() {
-                          //     selectedItem.clear();
-                          //   });
-                          // },
-                          onCameraMove: _manager.onCameraMove,
+                          onCameraMove: (position) {
+                            _manager.onCameraMove(position);
+                            setState(() {
+                              selectedItem = null;
+                            });
+                          },
+                          // onCameraMove: _manager.onCameraMove,
                           onCameraIdle: _manager.updateMap),
                     ),
 
-                    if (selectedItem.isNotEmpty)
+                    if (selectedItem != null)
                       Positioned(
                         bottom: 60.0,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              for (var i in selectedItem) CardPharmacieWidget(data: pharmacieInPlace[i]),
-                            ],
-                          ),
-                        ),
+                        child: CardPharmacieWidget(data: pharmacieInPlace[selectedItem!]),
                       ),
                     // Afficher les resulats
                     DraggableScrollableSheet(
                       minChildSize: 0.09,
                       initialChildSize: 0.09,
-                      builder: (BuildContext context, ScrollController scrollController) {
+                      builder: (BuildContext context,
+                          ScrollController scrollController) {
                         return Container(
-                            decoration: BoxDecoration(color: Color(0xFFEFF6F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFEFF6F7),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15))),
                             child: SingleChildScrollView(
                               controller: scrollController,
                               child: Padding(
@@ -432,23 +487,39 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                     SvgPicture.asset(
                                       'assets/icons/Home-Indicator.svg',
                                       width: 60,
-                                      colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
+                                      colorFilter: ColorFilter.mode(
+                                          Color(0xFFD0D1DE), BlendMode.srcIn),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0, bottom: 8.0),
                                       child: pharmacieInPlace.length == 1
-                                          ? Text(pharmacieInPlace.length.toString() + ' résultat',
-                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                    fontFamily: 'Poppins',
-                                                    color: Color(0xFF595A71),
-                                                    fontSize: 14.0,
-                                                  ))
-                                          : Text(pharmacieInPlace.length.toString() + ' résultats',
-                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                    fontFamily: 'Poppins',
-                                                    color: Color(0xFF595A71),
-                                                    fontSize: 14.0,
-                                                  )),
+                                          ? Text(
+                                              pharmacieInPlace.length
+                                                      .toString() +
+                                                  ' résultat',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            Color(0xFF595A71),
+                                                        fontSize: 14.0,
+                                                      ))
+                                          : Text(
+                                              pharmacieInPlace.length
+                                                      .toString() +
+                                                  ' résultats',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            Color(0xFF595A71),
+                                                        fontSize: 14.0,
+                                                      )),
                                     ),
                                     if (currentTAB == 1)
                                       for (var user in userSearch)
@@ -475,22 +546,36 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     );
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
+  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
+      (cluster) async {
         return Marker(
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
           onTap: () {
-            // print('---- $cluster');
-            // cluster.items.forEach((p) => print(p));
+            print('---- $cluster');
+            setState(() {
+              cluster.isMultiple ?
+              selectedItem = null :
+              selectedItem = cluster.items.first.id;
+            });
+            //
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, text: cluster.isMultiple ? cluster.count.toString() : cluster.count.toString(), icons: cluster.items.first.groupement.toString()),
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
+              text: cluster.isMultiple
+                  ? cluster.count.toString()
+                  : cluster.count.toString(),
+              icons: cluster.items.first.groupement.toString()),
         );
       };
 
-  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text = '', icons = ''}) async {
+  Future<BitmapDescriptor> _getMarkerBitmap(int size,
+      {String text = '', icons = ''}) async {
     print('icconss groupement' + icons);
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
+    final Canvas canvas = Canvas(
+        pictureRecorder,
+        Rect.fromPoints(
+            Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
 
     if (text == '1') {
       final double markerSize = 120.0;
@@ -498,7 +583,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
       // Starting a new drawing on a canvas
       final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-      final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(markerSize, markerSize + radius))); // Extra space for the pointy bottom
+      final Canvas canvas = Canvas(
+          pictureRecorder,
+          Rect.fromPoints(
+              Offset(0, 0),
+              Offset(markerSize,
+                  markerSize + radius))); // Extra space for the pointy bottom
 
       // Drawing gradient circle
       final Paint paint = Paint()
@@ -510,8 +600,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       canvas.drawCircle(Offset(radius, radius), radius, paint);
 
       // Drawing a white circle
-      final Paint bgWhite = Paint()
-          ..color = Color(0xFFFFFFFF);
+      final Paint bgWhite = Paint()..color = Color(0xFFFFFFFF);
       canvas.drawCircle(Offset(radius, radius), radius - 10, bgWhite);
 
       // Load and resize the image
@@ -521,9 +610,11 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       // Largeur souhaitée
       const double desiredWidth = 150.0;
 
-      final ByteData data = await rootBundle.load('assets/groupements/' + icons + '.jpg');
+      final ByteData data =
+          await rootBundle.load('assets/groupements/' + icons + '.jpg');
       final Uint8List bytes = Uint8List.view(data.buffer);
-      final Codec codec = await ui.instantiateImageCodec(bytes); // Load original image first
+      final Codec codec =
+          await ui.instantiateImageCodec(bytes); // Load original image first
       final FrameInfo frameInfo = await codec.getNextFrame();
 
       // Calculate the scale factor based on desired width
@@ -534,18 +625,21 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       double newHeight = frameInfo.image.height.toDouble() * scaleFactor;
 
       // Re-decode the image with the new dimensions
-      final Codec resizedCodec = await ui.instantiateImageCodec(bytes, targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
+      final Codec resizedCodec = await ui.instantiateImageCodec(bytes,
+          targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
       final FrameInfo resizedFrameInfo = await resizedCodec.getNextFrame();
 
       // Calculate the proper offset to center the image within the circle
-      final Offset imageOffset = Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
+      final Offset imageOffset =
+          Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
 
       // Clip the canvas to make sure the image is drawn inside the circle
-      final Path clipOvalPath = Path()..addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
+      final Path clipOvalPath = Path()
+        ..addOval(
+            Rect.fromCircle(center: Offset(radius, radius), radius: radius));
       canvas.clipPath(clipOvalPath);
 
       canvas.drawImage(resizedFrameInfo.image, imageOffset, Paint());
-
 
       // Remove clipping so we can draw the bottom part
       canvas.restore();
@@ -554,13 +648,17 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       final path = Path()
         ..moveTo(radius / 2, markerSize)
         ..lineTo(markerSize - (radius / 2), markerSize)
-        ..lineTo(radius, markerSize + radius / 1.5) // Makes the triangle more pointy
+        ..lineTo(
+            radius, markerSize + radius / 1.5) // Makes the triangle more pointy
         ..close();
 
       canvas.drawPath(path, paint);
 
       // Converting the canvas into a PNG
-      final img = await pictureRecorder.endRecording().toImage(markerSize.toInt(), (markerSize + radius / 1.5).toInt()); // Adjust height based on pointiness
+      final img = await pictureRecorder.endRecording().toImage(
+          markerSize.toInt(),
+          (markerSize + radius / 1.5)
+              .toInt()); // Adjust height based on pointiness
       final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
 
       // Creating a BitmapDescriptor from the PNG

@@ -222,13 +222,6 @@ exports.sendVerificationCode = functions.firestore
           pass: 'avkjycgnhzignnqc',
       }
   });
-
-    // // Vérification du champ 'poste'
-    // if (user.poste !== 'Pharmacien(ne) titulaire') {
-    //     console.log('Pas un titulaire, skipping email');
-    //     return null;
-    // }
-
     // Génère un code de validation
     let verificationCode = Math.floor(1000 + Math.random() * 9000);
 
