@@ -8,9 +8,11 @@ import 'package:latlong2/latlong.dart' as latlong;
 class Place with ClusterItem {
   final String name;
   final LatLng latLng;
+  String groupement = '';
 
-  Place({required this.name, required this.latLng});
+  Place({required this.name, required this.latLng, this.groupement = ''});
 
   @override
   LatLng get location => latLng;
+  String get groupementData => groupement;
 }

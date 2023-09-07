@@ -58,7 +58,7 @@ class ExplorerSearchData {
     final pharmacieRef = FirebaseFirestore.instance.collection('pharmacies');
 
     // Start by getting all users
-    final pharmacieSnapshot = await pharmacieRef.where(FieldPath.documentId, isNotEqualTo: await getCurrentUserId()).get();
+    final pharmacieSnapshot = await pharmacieRef.where('user_id', isNotEqualTo: await getCurrentUserId()).get();
 
     // Prepare to launch search queries for each field
     final fields = [

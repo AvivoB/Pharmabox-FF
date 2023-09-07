@@ -15,19 +15,19 @@ class LevelProgressBar extends StatelessWidget {
         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
         child: Column(
           children: [
-            if(isUser)
-            Text(
-              level == 0
-                  ? 'Maîtrise basique'
-                  : level == 1
-                      ? 'Maîtrise moyenne'
-                      : 'Maîtrise complète',
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Color(0xFF595A71),
-                  ),
-            ),
+            if (isUser)
+              Text(
+                level == 0
+                    ? 'Maîtrise basique'
+                    : level == 1
+                        ? 'Maîtrise moyenne'
+                        : 'Maîtrise complète',
+                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      color: Color(0xFF595A71),
+                    ),
+              ),
             Slider(
                 value: level.toDouble(),
                 min: 0,

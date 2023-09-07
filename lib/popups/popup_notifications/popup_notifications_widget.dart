@@ -164,14 +164,14 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                                               mainAxisSize: MainAxisSize.max,
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                if(userData != null)
-                                                Text(
-                                                  data!['addedToNetwork'] && userData != null ? userData!['prenom'] + ' ' + userData['nom'] + ' vous a ajouté à son réseau' : userData!['prenom'] + ' ' + userData['nom'] + ' a aimé votre profil',
-                                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                        fontFamily: 'Poppins',
-                                                        color: Color(0xFF595A71),
-                                                      ),
-                                                ),
+                                                if (userData != null)
+                                                  Text(
+                                                    data!['addedToNetwork'] && userData != null ? userData!['prenom'] + ' ' + userData['nom'] + ' vous a ajouté à son réseau' : userData!['prenom'] + ' ' + userData['nom'] + ' a aimé votre profil',
+                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                          fontFamily: 'Poppins',
+                                                          color: Color(0xFF595A71),
+                                                        ),
+                                                  ),
                                                 Text(
                                                   DateFormat('dd/MM/yyyy', 'fr_FR').format(data!['timestamp'].toDate()) ?? 'N/A', // Assuming your notification timestamp is a DateTime type stored with key 'timestamp'
                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(

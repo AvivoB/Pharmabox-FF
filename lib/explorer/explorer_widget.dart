@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui' as ui;
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
@@ -52,10 +53,11 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   String? searchTerms;
   List searchResults = [];
   List selectedItem = [];
-  CameraPosition _currentCameraPosition = CameraPosition(
-    target: LatLng(0, 0),
-    zoom: 16.0,
-  );
+  // CameraPosition _currentCameraPosition = CameraPosition(
+  //   target: LatLng(0, 0),
+  //   zoom: 16.0,
+  // );
+  CameraPosition? _currentCameraPosition;
 
   Future<void> getCurrentPosition() async {
     bool isLocationPermissionGranted = await requestLocationPermission();
@@ -105,7 +107,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
       String name = dataWithId['situation_geographique']['adresse'];
       List<dynamic> location = dataWithId['situation_geographique']['lat_lng'];
-      Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
+      String groupementDataPlace = dataWithId['groupement'][0]['name'];
+      Place place = Place(name: name, latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace);
       setState(() {
         items.add(place);
         pharmacieInPlace.add(dataWithId);
@@ -280,7 +283,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                           validator: _model.textControllerValidator.asValidator(context),
                           onChanged: (query) async {
                             setState(() async {
-                              if (currentTAB == 0) {
+                              if (currentTAB == 1) {
                                 if (query.isEmpty) {
                                   userSearch.clear();
                                 } else {
@@ -288,7 +291,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                 }
                               }
 
-                              if (currentTAB == 1) {
+                              if (currentTAB == 0) {
                                 if (query.isEmpty) {
                                   items.clear();
                                   pharmacieInPlace.clear();
@@ -331,15 +334,15 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             ),
                         labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                         tabs: [
-                          Tab(text: 'Membres'),
                           Tab(text: 'Pharmacies'),
+                          Tab(text: 'Membres'),
                         ],
                       ),
                     ],
                   ),
                 ),
               ),
-              if (currentTAB == 0)
+              if (currentTAB == 1)
                 Container(
                     decoration: BoxDecoration(
                       color: Color(0xFFEFF6F7),
@@ -375,28 +378,29 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                         ),
                       ),
                     )),
-              if (currentTAB == 1)
+              if (currentTAB == 0)
                 Container(
                   width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.67,
+                  height: MediaQuery.of(context).size.height * 0.66,
                   child: Stack(children: [
                     Container(
                       child: GoogleMap(
                           mapType: MapType.normal,
-                          initialCameraPosition: _currentCameraPosition,
+                          initialCameraPosition: _currentCameraPosition ?? CameraPosition(target: LatLng(0, 0), zoom: 16.0),
                           markers: markers,
                           myLocationEnabled: true,
                           zoomGesturesEnabled: true,
-                          zoomControlsEnabled: false,
+                          zoomControlsEnabled: true,
                           onMapCreated: (GoogleMapController controller) {
                             _controller.complete(controller);
                             _manager.setMapId(controller.mapId);
                           },
-                          onCameraMove: (position) {
-                            setState(() {
-                              selectedItem.clear();
-                            });
-                          },
+                          // onCameraMove: (position) {
+                          //   setState(() {
+                          //     selectedItem.clear();
+                          //   });
+                          // },
+                          onCameraMove: _manager.onCameraMove,
                           onCameraIdle: _manager.updateMap),
                     ),
 
@@ -446,12 +450,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                                     fontSize: 14.0,
                                                   )),
                                     ),
-                                    if (currentTAB == 0)
+                                    if (currentTAB == 1)
                                       for (var user in userSearch)
                                         CardUserWidget(
                                           data: user,
                                         ),
-                                    if (currentTAB == 1)
+                                    if (currentTAB == 0)
                                       for (var pharmacie in pharmacieInPlace)
                                         CardPharmacieWidget(
                                           data: pharmacie,
@@ -476,44 +480,121 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
           onTap: () {
-            // selectedItem = cluster.items.first;
-            cluster.items.forEach((p) => selectedItem.add(1));
-            _playAnimation();
+            // print('---- $cluster');
+            // cluster.items.forEach((p) => print(p));
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, text: cluster.count.toString()),
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, text: cluster.isMultiple ? cluster.count.toString() : cluster.count.toString(), icons: cluster.items.first.groupement.toString()),
         );
       };
-  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {
-    if (kIsWeb) size = (size / 2).floor();
 
+  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text = '', icons = ''}) async {
+    print('icconss groupement' + icons);
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
-    final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
-    final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
+    final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
 
-    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
-    canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
+    if (text == '1') {
+      final double markerSize = 120.0;
+      final double radius = markerSize / 2;
 
-    if (text != null) {
-      TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
-      painter.text = TextSpan(
-        text: text,
-        style: FlutterFlowTheme.of(context).bodyMedium.override(
-              fontFamily: 'Poppins',
-              color: Color(0xFFFFFFFF),
-              fontSize: size / 3,
-            ),
-      );
-      painter.layout();
-      painter.paint(
-        canvas,
-        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
-      );
+      // Starting a new drawing on a canvas
+      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+      final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(markerSize, markerSize + radius))); // Extra space for the pointy bottom
+
+      // Drawing gradient circle
+      final Paint paint = Paint()
+        ..shader = ui.Gradient.linear(
+          Offset(0, 0),
+          Offset(markerSize, markerSize),
+          [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+        );
+      canvas.drawCircle(Offset(radius, radius), radius, paint);
+
+      // Drawing a white circle
+      final Paint bgWhite = Paint()
+          ..color = Color(0xFFFFFFFF);
+      canvas.drawCircle(Offset(radius, radius), radius - 10, bgWhite);
+
+      // Load and resize the image
+      const double padding = 10.0;
+      double imageSize = 2 * (radius - padding);
+
+      // Largeur souhaitée
+      const double desiredWidth = 150.0;
+
+      final ByteData data = await rootBundle.load('assets/groupements/' + icons + '.jpg');
+      final Uint8List bytes = Uint8List.view(data.buffer);
+      final Codec codec = await ui.instantiateImageCodec(bytes); // Load original image first
+      final FrameInfo frameInfo = await codec.getNextFrame();
+
+      // Calculate the scale factor based on desired width
+      double scaleFactor = desiredWidth / frameInfo.image.width.toDouble();
+
+      // New width and height based on the scale factor
+      double newWidth = frameInfo.image.width.toDouble() * scaleFactor;
+      double newHeight = frameInfo.image.height.toDouble() * scaleFactor;
+
+      // Re-decode the image with the new dimensions
+      final Codec resizedCodec = await ui.instantiateImageCodec(bytes, targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
+      final FrameInfo resizedFrameInfo = await resizedCodec.getNextFrame();
+
+      // Calculate the proper offset to center the image within the circle
+      final Offset imageOffset = Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
+
+      // Clip the canvas to make sure the image is drawn inside the circle
+      final Path clipOvalPath = Path()..addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
+      canvas.clipPath(clipOvalPath);
+
+      canvas.drawImage(resizedFrameInfo.image, imageOffset, Paint());
+
+
+      // Remove clipping so we can draw the bottom part
+      canvas.restore();
+
+      // Draw the pointy bottom
+      final path = Path()
+        ..moveTo(radius / 2, markerSize)
+        ..lineTo(markerSize - (radius / 2), markerSize)
+        ..lineTo(radius, markerSize + radius / 1.5) // Makes the triangle more pointy
+        ..close();
+
+      canvas.drawPath(path, paint);
+
+      // Converting the canvas into a PNG
+      final img = await pictureRecorder.endRecording().toImage(markerSize.toInt(), (markerSize + radius / 1.5).toInt()); // Adjust height based on pointiness
+      final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
+
+      // Creating a BitmapDescriptor from the PNG
+      return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
+    } else {
+      // Code for cluster icon with numbers
+      final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
+      final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
+
+      canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+      canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
+
+      if (text != '1') {
+        TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
+        painter.text = TextSpan(
+          text: text,
+          style: TextStyle(
+            // Using TextStyle for now, adjust as per your theme and requirements
+            fontFamily: 'Poppins',
+            color: Color(0xFFFFFFFF),
+            fontSize: size / 3,
+          ),
+        );
+        painter.layout();
+        painter.paint(
+          canvas,
+          Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+        );
+      }
     }
 
     final img = await pictureRecorder.endRecording().toImage(size, size);
-    final data = await img.toByteData(format: ui.ImageByteFormat.png) as ByteData;
+    final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
 
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+    return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
   }
 }

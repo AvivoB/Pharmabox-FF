@@ -41,7 +41,6 @@ void main() async {
   //     print(state.current.jsonRepresentation());
   //   });
 
-
   runApp(MyApp());
 }
 
@@ -50,8 +49,7 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 
-  static _MyAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>()!;
+  static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>()!;
 }
 
 class _MyAppState extends State<MyApp> {
@@ -71,8 +69,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _appStateNotifier = AppStateNotifier();
     _router = createRouter(_appStateNotifier);
-    userStream = pharmaboxFirebaseUserStream()
-      ..listen((user) => _appStateNotifier.update(user));
+    userStream = pharmaboxFirebaseUserStream()..listen((user) => _appStateNotifier.update(user));
     jwtTokenStream.listen((_) {});
     Future.delayed(
       Duration(seconds: 1),
@@ -159,14 +156,14 @@ class _NavBarPageState extends State<NavBarPage> {
     };
 
     OneSignal.Notifications.addClickListener((event) {
-        String fromId = event.notification.additionalData!['fromId'].toString() ?? '';
-        print('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: ${fromId}');
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DiscussionUserWidget(toUser: fromId),
-          ),
-        );
+      String fromId = event.notification.additionalData!['fromId'].toString() ?? '';
+      print('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: ${fromId}');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DiscussionUserWidget(toUser: fromId),
+        ),
+      );
     });
 
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -198,10 +195,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF7CEDAC),
-                            Color(0xFF42D2FF)
-                          ], // changez les couleurs comme vous le souhaitez
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
@@ -219,8 +213,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   'Explorer',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight:
-                        currentIndex == 0 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: currentIndex == 0 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -237,10 +230,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF7CEDAC),
-                            Color(0xFF42D2FF)
-                          ], // changez les couleurs comme vous le souhaitez
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
@@ -258,8 +248,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   'PharmaJob',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight:
-                        currentIndex == 1 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: currentIndex == 1 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -276,10 +265,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF7CEDAC),
-                            Color(0xFF42D2FF)
-                          ], // changez les couleurs comme vous le souhaitez
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
@@ -297,8 +283,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   'Réseau',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight:
-                        currentIndex == 2 ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: currentIndex == 2 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),
@@ -315,10 +300,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF7CEDAC),
-                            Color(0xFF42D2FF)
-                          ], // changez les couleurs comme vous le souhaitez
+                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
@@ -336,9 +318,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   'Profil',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: currentIndex == 3 || currentIndex == -1
-                        ? FontWeight.w600
-                        : FontWeight.w400,
+                    fontWeight: currentIndex == 3 || currentIndex == -1 ? FontWeight.w600 : FontWeight.w400,
                     color: greyColor,
                     fontSize: 11.0,
                   ),

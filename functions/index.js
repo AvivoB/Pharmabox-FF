@@ -267,6 +267,8 @@ exports.sendNotificationOnMessage = functions.firestore
     .document('messages/{messageId}/message/{docId}')
     .onCreate(async (snap, context) => {
         const data = snap.data();
+        // retarde la fonction de 1.5s pour verifier si l'utilisateur est sur la discussion
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         if(data.isViewed == false) {
             const receiverId = data.receiverId;
