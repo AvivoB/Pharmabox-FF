@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/animation.dart';
+import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
 import '../composants/card_user/card_user_widget.dart';
@@ -54,6 +55,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
   String? searchTerms;
   List searchResults = [];
   int? selectedItem;
+  bool isLoading = true;
   // CameraPosition _currentCameraPosition = CameraPosition(
   //   target: LatLng(0, 0),
   //   zoom: 16.0,
@@ -61,6 +63,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
   CameraPosition? _currentCameraPosition;
 
   Future<void> getCurrentPosition() async {
+    isLoading = true;
     bool isLocationPermissionGranted = await requestLocationPermission();
 
     if (isLocationPermissionGranted) {
@@ -68,15 +71,18 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      setState(() {
+     setState(() {
         _currentCameraPosition = CameraPosition(
           target: LatLng(position.latitude, position.longitude),
           zoom: 16.0,
         );
+        isLoading = false;
       });
     } else {
       // Handle the case when the user denies the location permission
       // Add your own logic or show a message to the user
+      isLoading = false;
+      setState(() {});
     }
   }
 
@@ -438,6 +444,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                   width: MediaQuery.of(context).size.width * 1.0,
                   height: MediaQuery.of(context).size.height * 0.66,
                   child: Stack(children: [
+                    isLoading ? ProgressIndicatorPharmabox()
+                    :
                     Container(
                       child: GoogleMap(
                           mapType: MapType.normal,
@@ -446,7 +454,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           markers: markers,
                           myLocationEnabled: true,
                           zoomGesturesEnabled: true,
-                          zoomControlsEnabled: true,
+                          zoomControlsEnabled: false,
+                          myLocationButtonEnabled: false,
                           onMapCreated: (GoogleMapController controller) {
                             _controller.complete(controller);
                             _manager.setMapId(controller.mapId);
@@ -570,7 +579,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
 
   Future<BitmapDescriptor> _getMarkerBitmap(int size,
       {String text = '', icons = ''}) async {
-    print('icconss groupement' + icons);
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(
         pictureRecorder,

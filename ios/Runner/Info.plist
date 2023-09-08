@@ -54,13 +54,13 @@
 	<true/>
 
 	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>In order to search nearby, this app requires access to your current location.</string>
+    <string>Pour effectuer une recherche à proximité, cette application nécessite l'accès à votre position actuelle.</string>
 	<key>NSCameraUsageDescription</key>
-    <string>In order to take a picture or video, this app requires permission to access the camera.</string>
+    <string>Pour prendre une photo ou une vidéo, cette application nécessite une autorisation d'accès à l'appareil photo.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>In order to upload data, this app requires permission to access the photo library.</string>
+    <string>Pour pouvoir télécharger des données, cette application nécessite l'autorisation d'accéder à la photothèque.</string>
 	<key>PermissionGroupNotification</key>
-    <string>Pharmabox souhaites pouvoir vous envoer des notifications</string>
+    <string>Pharmabox souhaites pouvoir vous envoyer des notifications</string>
 	<key>NSContactsUsageDescription</key>
     <string>Pharmabox souhaites acceder a vos contacts</string>
 
