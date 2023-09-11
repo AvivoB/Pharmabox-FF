@@ -101,43 +101,28 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              child: Text(
-                                widget.data['situation_geographique']['adresse'].toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                      fontFamily: 'Poppins',
-                                      color: Color(0xFF161730),
-                                      fontSize: 16.0,
-                                    ),
-                              ),
-                            )
-                          ],
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.50,
+                      child: Text(
+                        widget.data['situation_geographique']['adresse'].toString(),
+                        overflow: TextOverflow.clip,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Poppins',
+                          color: Color(0xFF161730),
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
+                      ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Image.asset(
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.32,
+                      child: Image.asset(
                           'assets/groupements/' + widget.data['groupement'][0]['image'].toString(),
                           width: 150.0,
                           height: 50.0,
                           fit: BoxFit.cover,
-                        ),
-                      ],
-                    ),
+                      ),
+                    )
                   ],
                 ),
               ),

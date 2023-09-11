@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui' as ui;
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +11,7 @@ import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/pharma_job/pharmaJobSearchData.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
@@ -49,7 +52,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   Set<Marker> markers = Set();
   String? searchTerms;
 
-  final CameraPosition _parisCameraPosition = CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
+  final CameraPosition _parisCameraPosition =
+      CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
 
   List<Place> items = [];
   List pharmacieInPlace = [];
@@ -57,17 +61,12 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List recherches = [];
   List foundedOffres = [];
   List foundedRecherches = [];
-  CameraPosition _currentCameraPosition = CameraPosition(
-    target: LatLng(0, 0),
-    zoom: 16.0,
-  );
-  Future<bool> requestLocationPermission() async {
-    PermissionStatus status = await Permission.location.request();
-
-    return status == PermissionStatus.granted;
-  }
+  bool isLoading = true;
+  CameraPosition? _currentCameraPosition;
+  List selectedPharmaciesJobs = [];
 
   Future<void> getCurrentPosition() async {
+    isLoading = true;
     bool isLocationPermissionGranted = await requestLocationPermission();
 
     if (isLocationPermissionGranted) {
@@ -80,55 +79,37 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
           target: LatLng(position.latitude, position.longitude),
           zoom: 16.0,
         );
+        isLoading = false;
       });
     } else {
       // Handle the case when the user denies the location permission
       // Add your own logic or show a message to the user
+      isLoading = false;
+      setState(() {});
     }
   }
 
-  // Future<void> getPharmaciesLocations({searchTerm}) async {
-  //   QuerySnapshot querySnapshot =
-  //       await FirebaseFirestore.instance.collection('pharmacies').get();
+  Future<bool> requestLocationPermission() async {
+    PermissionStatus status = await Permission.location.request();
 
-  //   // Boucle à travers les documents
-  //   for (DocumentSnapshot doc in querySnapshot.docs) {
-  //     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-  //     String documentId = doc.reference.id.toString();
-
-  //     data['documentId'] = documentId;
-
-  //     // Récupération du nom de la pharmacie
-  //     String name = data['situation_geographique']['adresse'];
-
-  //     List location = data['situation_geographique']['lat_lng'];
-
-  //     // Création d'un objet Place
-  //     Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
-
-  //     // Ajout de l'objet Place à la liste des places
-  //     setState(() {
-  //       items.add(place);
-  //       pharmacieInPlace.add(data);
-  //     });
-  //   }
-  // }
+    return status == PermissionStatus.granted;
+  }
 
   @override
   void initState() {
     super.initState();
+    getCurrentPosition();
     _model = createModel(context, () => PharmaJobModel());
     _model.searchJobController ??= TextEditingController();
     _model.searchJobController ??= TextEditingController();
     _manager = _initClusterManager();
     // getPharmaciesLocations();
     checkTitulaireStatus();
-    getOffres();
-    getRecherche();
   }
 
   ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder);
+    return ClusterManager<Place>(items, _updateMarkers,
+        markerBuilder: _markerBuilder);
   }
 
   void _updateMarkers(Set<Marker> markers) {
@@ -162,14 +143,21 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
 
   void _findOffres(filters) async {
     foundedOffres.clear();
+    selectedPharmaciesJobs.clear();
     items.clear();
     var data = await PharmaJobSearchData().filterRechercheToFindOffre(filters);
     setState(() {
       foundedOffres = data;
+      int countArray = 0;
 
       for (var job in data) {
-        List<dynamic> location = job['pharma_data']['situation_geographique']['lat_lng'];
-        Place place = Place(name: job['pharma_data']['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]));
+        List<dynamic> location =
+            job['pharma_data']['situation_geographique']['lat_lng'];
+        Place place = Place(
+            name: job['pharma_data']['situation_geographique']['adresse'],
+            latLng: LatLng(location[0], location[1]),
+            groupement: job['pharma_data']['groupement'][0]['name'],
+            id: countArray++);
         setState(() {
           items.add(place);
         });
@@ -177,34 +165,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
       _manager.setItems(items);
       _manager.updateMap();
     });
-  }
-
-  void getOffres() async {
-    // offres.clear();
-    // String pharmacieId = await getPharmacyByUserId();
-
-    // final Query query = FirebaseFirestore.instance.collection('offres').where('pharmacie_id', isEqualTo: pharmacieId);
-
-    // final QuerySnapshot querySnapshot = await query.get();
-
-    // querySnapshot.docs.forEach((doc) {
-    //   offres.add(doc.data());
-    //   print(doc.data());
-    // });
-  }
-
-  void getRecherche() async {
-    // offres.clear();
-    // String pharmacieId = await getCurrentUserId();
-
-    // final Query query = FirebaseFirestore.instance.collection('recherches').where('user_id', isEqualTo: pharmacieId);
-
-    // final QuerySnapshot querySnapshot = await query.get();
-
-    // querySnapshot.docs.forEach((doc) {
-    //   recherches.add(doc.data());
-    //   print(doc.data());
-    // });
   }
 
   @override
@@ -369,7 +329,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                           ],
                         ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                         child: Container(
                           width: double.infinity,
                           height: 50.0,
@@ -404,13 +365,16 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 context: context,
                                 builder: (bottomSheetContext) {
                                   return Padding(
-                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                    padding: MediaQuery.of(bottomSheetContext)
+                                        .viewInsets,
                                     child: isTitulaire
                                         ? PopupOffreWidget(
-                                            onFilter: (filters) => {_findRecherche(filters)},
+                                            onFilter: (filters) =>
+                                                {_findRecherche(filters)},
                                           )
                                         : PopupRechercheWidget(
-                                            onFilter: (filters) => {_findOffres(filters)},
+                                            onFilter: (filters) =>
+                                                {_findOffres(filters)},
                                           ),
                                   );
                                 },
@@ -420,10 +384,14 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 20.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
                               color: Color(0x00FFFFFF),
-                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .titleSmall
+                                  .override(
                                     fontFamily: 'Poppins',
                                     color: Colors.white,
                                     fontSize: 16.0,
@@ -442,33 +410,114 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                     ],
                   )),
             ),
+
+            if(isTitulaire)
+            Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFEFF6F7),
+                    ),
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.67,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              child: foundedRecherches.length == 1
+                                  ? Text(
+                                      foundedRecherches.length.toString() +
+                                          ' résultat',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            color: Color(0xFF595A71),
+                                            fontSize: 14.0,
+                                          ))
+                                  : Text(
+                                      foundedRecherches.length.toString() +
+                                          ' résultats',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            color: Color(0xFF595A71),
+                                            fontSize: 14.0,
+                                          )),
+                            ),
+                            for (var user in foundedRecherches)
+                              CardUserWidget(
+                                data: user,
+                              ),
+                          ],
+                        ),
+                      ),
+                    )),
+            if(!isTitulaire)
             Container(
               width: MediaQuery.of(context).size.width * 1.0,
-              height: offres.isNotEmpty || recherches.isNotEmpty ? MediaQuery.of(context).size.height * 0.61 : MediaQuery.of(context).size.height * 0.67,
+              height: offres.isNotEmpty || recherches.isNotEmpty
+                  ? MediaQuery.of(context).size.height * 0.61
+                  : MediaQuery.of(context).size.height * 0.67,
               child: Stack(children: [
-                Container(
-                  child: GoogleMap(
-                      mapType: MapType.normal,
-                      initialCameraPosition: _currentCameraPosition,
-                      markers: markers,
-                      myLocationEnabled: true,
-                      zoomGesturesEnabled: true,
-                      zoomControlsEnabled: true,
-                      onMapCreated: (GoogleMapController controller) {
-                        _controller.complete(controller);
-                        _manager.setMapId(controller.mapId);
-                      },
-                      onCameraMove: _manager.onCameraMove,
-                      onCameraIdle: _manager.updateMap),
-                ),
+                isLoading
+                    ? ProgressIndicatorPharmabox()
+                    : Container(
+                        child: GoogleMap(
+                            mapType: MapType.normal,
+                            initialCameraPosition: _currentCameraPosition ??
+                                CameraPosition(
+                                    target: LatLng(0, 0), zoom: 16.0),
+                            markers: markers,
+                            myLocationEnabled: true,
+                            zoomGesturesEnabled: true,
+                            zoomControlsEnabled: false,
+                            myLocationButtonEnabled: false,
+                            onMapCreated: (GoogleMapController controller) {
+                              _controller.complete(controller);
+                              _manager.setMapId(controller.mapId);
+                            },
+                            onCameraMove: (position) {
+                              _manager.onCameraMove(position);
+                              setState(() {
+                                selectedPharmaciesJobs.clear();
+                              });
+                            },
+                            onCameraIdle: _manager.updateMap),
+                      ),
+
+                if (selectedPharmaciesJobs.isNotEmpty)
+                  Positioned(
+                    bottom: 60.0,
+                    child: Container(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (var i in selectedPharmaciesJobs)
+                              CardPharmacieOffreRechercheWidget(data: foundedOffres[i])
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
 
                 // Afficher les resulats
                 DraggableScrollableSheet(
                   minChildSize: 0.09,
                   initialChildSize: 0.09,
-                  builder: (BuildContext context, ScrollController scrollController) {
+                  builder: (BuildContext context,
+                      ScrollController scrollController) {
                     return Container(
-                        decoration: BoxDecoration(color: Color(0xFFEFF6F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+                        decoration: BoxDecoration(
+                            color: Color(0xFFEFF6F7),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15))),
                         child: SingleChildScrollView(
                           controller: scrollController,
                           child: Padding(
@@ -478,21 +527,32 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 SvgPicture.asset(
                                   'assets/icons/Home-Indicator.svg',
                                   width: 60,
-                                  colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
+                                  colorFilter: ColorFilter.mode(
+                                      Color(0xFFD0D1DE), BlendMode.srcIn),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text(isTitulaire ? foundedRecherches.length.toString() + ' résultats' : foundedOffres.length.toString() + ' résultats',
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                  child: Text(
+                                      isTitulaire
+                                          ? foundedRecherches.length
+                                                  .toString() +
+                                              ' résultats'
+                                          : foundedOffres.length.toString() +
+                                              ' résultats',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),
                                             fontSize: 14.0,
                                           )),
                                 ),
                                 if (foundedOffres.isNotEmpty)
-                                  for (var i in foundedOffres) CardPharmacieOffreRechercheWidget(data: i),
+                                  for (var i in foundedOffres)
+                                    CardPharmacieOffreRechercheWidget(data: i),
                                 if (foundedRecherches.isNotEmpty)
-                                  for (var i in foundedRecherches) CardUserWidget(data: i),
+                                  for (var i in foundedRecherches)
+                                    CardUserWidget(data: i),
                               ],
                             ),
                           ),
@@ -507,39 +567,148 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     );
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
+  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
+      (cluster) async {
+        bool isSamePoint = false;
+        cluster.items.forEach((p) {
+          double distance = haversineDistance(p.location, cluster.location);
+          print('--- FOREACH ITEMS : ' +
+              (distance < 10 ? 'VRAI' : 'FAUX')); // Seuil de 10 mètres
+          distance < 10 ? isSamePoint = true : isSamePoint = false;
+        });
+        // bool isSamePoint = false;
         return Marker(
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
           onTap: () {
-            print('---- $cluster');
-            cluster.items.forEach((p) => print(p));
+            setState(() {
+              selectedPharmaciesJobs.clear();
+              cluster.items.forEach((p) {
+                selectedPharmaciesJobs.add(p.id);
+                print(selectedPharmaciesJobs);
+              });
+            });
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-              text: /* cluster.isMultiple ? */
-                  cluster.count.toString() /* : null */),
+          icon: await _getMarkerBitmap(
+              cluster.isMultiple ? 125 : 75, isSamePoint,
+              text: cluster.isMultiple
+                  ? cluster.count.toString()
+                  : cluster.count.toString(),
+              icons: cluster.items.first.groupement.toString()),
         );
       };
-  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {
-    if (kIsWeb) size = (size / 2).floor();
-
+  Future<BitmapDescriptor> _getMarkerBitmap(int size, bool isSamePoint,
+      {String text = '', icons = ''}) async {
+    print(isSamePoint);
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
-    final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
-    final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
+    final Canvas canvas = Canvas(
+        pictureRecorder,
+        Rect.fromPoints(
+            Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
 
-    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
-    canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
+    if (isSamePoint) {
+      print('IS SAME POINT');
+      final double markerSize = 120.0;
+      final double radius = markerSize / 2;
 
-    if (text != null) {
+      // Starting a new drawing on a canvas
+      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+      final Canvas canvas = Canvas(
+          pictureRecorder,
+          Rect.fromPoints(
+              Offset(0, 0),
+              Offset(markerSize,
+                  markerSize + radius))); // Extra space for the pointy bottom
+
+      // Drawing gradient circle
+      final Paint paint = Paint()
+        ..shader = ui.Gradient.linear(
+          Offset(0, 0),
+          Offset(markerSize, markerSize),
+          [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+        );
+      canvas.drawCircle(Offset(radius, radius), radius, paint);
+
+      // Drawing a white circle
+      final Paint bgWhite = Paint()..color = Color(0xFFFFFFFF);
+      canvas.drawCircle(Offset(radius, radius), radius - 10, bgWhite);
+
+      // Load and resize the image
+      const double padding = 10.0;
+      double imageSize = 2 * (radius - padding);
+
+      // Largeur souhaitée
+      const double desiredWidth = 150.0;
+
+      final ByteData data =
+          await rootBundle.load('assets/groupements/' + icons + '.jpg');
+      final Uint8List bytes = Uint8List.view(data.buffer);
+      final Codec codec =
+          await ui.instantiateImageCodec(bytes); // Load original image first
+      final FrameInfo frameInfo = await codec.getNextFrame();
+
+      // Calculate the scale factor based on desired width
+      double scaleFactor = desiredWidth / frameInfo.image.width.toDouble();
+
+      // New width and height based on the scale factor
+      double newWidth = frameInfo.image.width.toDouble() * scaleFactor;
+      double newHeight = frameInfo.image.height.toDouble() * scaleFactor;
+
+      // Re-decode the image with the new dimensions
+      final Codec resizedCodec = await ui.instantiateImageCodec(bytes,
+          targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
+      final FrameInfo resizedFrameInfo = await resizedCodec.getNextFrame();
+
+      // Calculate the proper offset to center the image within the circle
+      final Offset imageOffset =
+          Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
+
+      // Clip the canvas to make sure the image is drawn inside the circle
+      final Path clipOvalPath = Path()
+        ..addOval(
+            Rect.fromCircle(center: Offset(radius, radius), radius: radius));
+      canvas.clipPath(clipOvalPath);
+
+      canvas.drawImage(resizedFrameInfo.image, imageOffset, Paint());
+
+      // Remove clipping so we can draw the bottom part
+      canvas.restore();
+
+      // Draw the pointy bottom
+      final path = Path()
+        ..moveTo(radius / 2, markerSize)
+        ..lineTo(markerSize - (radius / 2), markerSize)
+        ..lineTo(
+            radius, markerSize + radius / 1.5) // Makes the triangle more pointy
+        ..close();
+
+      canvas.drawPath(path, paint);
+
+      // Converting the canvas into a PNG
+      final img = await pictureRecorder.endRecording().toImage(
+          markerSize.toInt(),
+          (markerSize + radius / 1.5)
+              .toInt()); // Adjust height based on pointiness
+      final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
+
+      // Creating a BitmapDescriptor from the PNG
+      return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
+    } else {
+      // Code for cluster icon with numbers
+      final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
+      final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
+
+      canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+      canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
       TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
       painter.text = TextSpan(
         text: text,
-        style: FlutterFlowTheme.of(context).bodyMedium.override(
-              fontFamily: 'Poppins',
-              color: Color(0xFFFFFFFF),
-              fontSize: size / 3,
-            ),
+        style: TextStyle(
+          // Using TextStyle for now, adjust as per your theme and requirements
+          fontFamily: 'Poppins',
+          color: Color(0xFFFFFFFF),
+          fontSize: size / 3,
+        ),
       );
       painter.layout();
       painter.paint(
@@ -549,8 +718,22 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     }
 
     final img = await pictureRecorder.endRecording().toImage(size, size);
-    final data = await img.toByteData(format: ui.ImageByteFormat.png) as ByteData;
+    final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
 
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+    return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
+  }
+
+  double haversineDistance(LatLng p1, LatLng p2) {
+    const R = 6371000; // rayon de la Terre en mètres
+    var lat1Rad = p1.latitude * (pi / 180);
+    var lat2Rad = p2.latitude * (pi / 180);
+    var deltaLat = (p2.latitude - p1.latitude) * (pi / 180);
+    var deltaLon = (p2.longitude - p1.longitude) * (pi / 180);
+
+    var a = sin(deltaLat / 2) * sin(deltaLat / 2) +
+        cos(lat1Rad) * cos(lat2Rad) * sin(deltaLon / 2) * sin(deltaLon / 2);
+    var c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    return R * c;
   }
 }

@@ -97,6 +97,7 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                         children: [
                           Text(
                             widget.data['pharma_data']['situation_geographique'] != null ? widget.data['pharma_data']['situation_geographique']['adresse'] : '',
+                            overflow: TextOverflow.clip,
                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                   fontFamily: 'Poppins',
                                   color: Color(0xFF161730),
@@ -117,39 +118,43 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.location_on_outlined,
-                        color: Color(0xFF595A71),
-                        size: 35.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                        child: Text(
-                          widget.data['pharma_data']['situation_geographique'] != null ? widget.data['pharma_data']['situation_geographique']['data']['postcode'] + ', ' + widget.data['pharma_data']['situation_geographique']['data']['ville'] : '',
-                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                fontFamily: 'Poppins',
-                                color: Color(0xFF595A71),
-                              ),
-                          overflow: TextOverflow.ellipsis,
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.50,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          color: Color(0xFF595A71),
+                          size: 35.0,
                         ),
-                      ),
-                    ],
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                            child: Text(
+                              widget.data['pharma_data']['situation_geographique'] != null ? widget.data['pharma_data']['situation_geographique']['data']['postcode'] + ', ' + widget.data['pharma_data']['situation_geographique']['data']['ville'] : '',
+                              overflow: TextOverflow.clip,
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF595A71),
+                                  ),
+                              // overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Image.asset(
-                        'assets/groupements/' + widget.data['pharma_data']['groupement'][0]['image'].toString(),
-                        width: 150.0,
-                        height: 50.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.32,
+                    child: Image.asset(
+                      'assets/groupements/' + widget.data['pharma_data']['groupement'][0]['image'].toString(),
+                      width: 150.0,
+                      height: 50.0,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ],
               ),
@@ -172,7 +177,7 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          widget.data['offre']['poste'],
+                          widget.data['offre']['poste'] != null ? widget.data['offre']['poste'] : '',
                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                 fontFamily: 'Poppins',
                                 color: Color(0xFF595A71),
