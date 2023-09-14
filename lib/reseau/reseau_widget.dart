@@ -29,8 +29,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List titulairesNetwork = [];
-  List nonTitulairesNetwork = [];
-  List pharmaciesNetwork = [];
+  List userNetwork = [];
 
   Future<void> getNetworkData() async {
     String currentUserId = await getCurrentUserId();
@@ -40,27 +39,26 @@ class _ReseauWidgetState extends State<ReseauWidget> {
 
     QuerySnapshot queryPharmacies = await FirebaseFirestore.instance.collection('pharmacies').where('reseau', arrayContains: currentUserId).get();
 
+    List listUserNetwork = [];
+
     for (var doc in queryPharmacies?.docs ?? []) {
       var data = doc.data();
       data['documentId'] = doc.id;
-      pharmaciesNetwork.add(data);
+      data['type'] = 'pharmacie';
+      listUserNetwork.add(data);
     }
 
-    List fTitulaireNetwork = [];
-    List fnonTitulairesNetwork = [];
     // Split users based on their 'poste' field
-    for (var doc in queryUsers.docs) {
-      var data = doc.data() as Map<String, dynamic>;
-      if (data != null && data['poste'] == 'Pharmacien(ne) titulaire') {
-        fTitulaireNetwork.add(data);
-      } else {
-        fnonTitulairesNetwork.add(data);
-      }
+    for (var doc in queryUsers?.docs ?? []) {
+      var data = doc.data();
+      data['type'] = 'user';
+      listUserNetwork.add(data);
     }
+
+    print(listUserNetwork);
 
     setState(() {
-      titulairesNetwork = fTitulaireNetwork;
-      nonTitulairesNetwork = fnonTitulairesNetwork;
+      userNetwork = listUserNetwork;
     });
   }
 
@@ -128,21 +126,20 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                               ),
                               shape: BoxShape.circle,
                             ),
-                            // child: FlutterFlowIconButton(
-                            //   borderColor: Colors.transparent,
-                            //   borderRadius: 30.0,
-                            //   borderWidth: 1.0,
-                            //   buttonSize: 40.0,
-                            //   icon: Icon(
-                            //     Icons.add,
-                            //     color: FlutterFlowTheme.of(context)
-                            //         .secondaryBackground,
-                            //     size: 20.0,
-                            //   ),
-                            //   onPressed: () {
-                            //     print('IconButton pressed ...');
-                            //   },
-                            // ),
+                            child: FlutterFlowIconButton(
+                              borderColor: Colors.transparent,
+                              borderRadius: 30.0,
+                              borderWidth: 1.0,
+                              buttonSize: 40.0,
+                              icon: Icon(
+                                Icons.add,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
+                                size: 20.0,
+                              ),
+                              onPressed: () {
+                                print('IconButton pressed ...');
+                              },
+                            ),
                           ),
                         ],
                       ),
@@ -151,89 +148,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                isExpanded_Titu = !isExpanded_Titu;
-                              });
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 1.0,
-                              height: 67,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                              child: Row(
-                                children: [
-                                  Icon(isExpanded_Titu ? Icons.expand_less : Icons.expand_more),
-                                  Text(
-                                    'Membres titulaires (' + titulairesNetwork.length.toString() + ')',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18.0,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (isExpanded_Titu)
-                            for (var i in titulairesNetwork) CardUserWidget(data: i),
-                          SizedBox(height: 15),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                isExpanded_NonTitu = !isExpanded_NonTitu;
-                              });
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 1.0,
-                              height: 67,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                              child: Row(
-                                children: [
-                                  Icon(isExpanded_NonTitu ? Icons.expand_less : Icons.expand_more),
-                                  Text(
-                                    'Membres (' + nonTitulairesNetwork.length.toString() + ')',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18.0,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (isExpanded_NonTitu)
-                            for (var i in nonTitulairesNetwork) CardUserWidget(data: i),
-                          SizedBox(height: 15),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                isExpanded_Pharma = !isExpanded_Pharma;
-                              });
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 1.0,
-                              height: 67,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                              child: Row(
-                                children: [
-                                  Icon(isExpanded_Pharma ? Icons.expand_less : Icons.expand_more),
-                                  Text(
-                                    'Pharmacies (' + pharmaciesNetwork.length.toString() + ')',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18.0,
-                                      fontFamily: 'Poppins',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (isExpanded_Pharma)
-                            for (var i in pharmaciesNetwork) CardPharmacieWidget(data: i),
+                          for (var i in userNetwork) i['type'] == 'user' ? CardUserWidget(data: i) : CardPharmacieWidget(data: i),
                         ],
                       ),
                     ),

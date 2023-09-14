@@ -101,11 +101,11 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
     widget.onFilter!(createRecherche);
 
     if (_model.saveSearch == true) {
-    firestore.collection('recherches').add(createRecherche).then((docRef) {
-      print('Données enregistrées avec succès ! ID du document : ${docRef.id}');
-    }).catchError((error) {
-      print('Erreur lors de l\'enregistrement des données : $error');
-    });
+      firestore.collection('recherches').add(createRecherche).then((docRef) {
+        print('Données enregistrées avec succès ! ID du document : ${docRef.id}');
+      }).catchError((error) {
+        print('Erreur lors de l\'enregistrement des données : $error');
+      });
     }
   }
 

@@ -113,8 +113,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
         var docData = doc.data() as Map<String, dynamic>;
 
         docData['doc_id'] = doc.id;
-
-        print(docData);
+        docData['localisation_job'] = pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'];
         offresPharma.add(docData);
       }
     } else {
@@ -296,9 +295,6 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                         tabs: [
                           Tab(
                             text: 'Profil',
-                          ),
-                          Tab(
-                            text: 'Réseau',
                           ),
                           Tab(
                             text: 'Offres',
@@ -560,7 +556,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                               size: 28.0,
                                             ),
                                             SizedBox(width: 10, height: 30),
-                                            Text(pharmacieData['accessibilite']['stationnement'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
+                                            Text(pharmacieData['accessibilite']['stationnement'] ?? '', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                           ]),
                                         ),
                                     ],
@@ -1193,103 +1189,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                           ],
                         ),
                       ),
-                    if (_selectedIndex == 1)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 15.0),
-                            child: Column(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      isExpanded_Titu = !isExpanded_Titu;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width * 1.0,
-                                    height: 67,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                                    child: Row(
-                                      children: [
-                                        Icon(isExpanded_Titu ? Icons.expand_less : Icons.expand_more),
-                                        Text(
-                                          'Membres titulaires (' + titulairesNetwork.length.toString() + ')',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18.0,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                if (isExpanded_Titu)
-                                  for (var i in titulairesNetwork) CardUserWidget(data: i),
-                                SizedBox(height: 15),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      isExpanded_NonTitu = !isExpanded_NonTitu;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width * 1.0,
-                                    height: 67,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                                    child: Row(
-                                      children: [
-                                        Icon(isExpanded_NonTitu ? Icons.expand_less : Icons.expand_more),
-                                        Text(
-                                          'Membres (' + nonTitulairesNetwork.length.toString() + ')',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18.0,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                if (isExpanded_NonTitu)
-                                  for (var i in nonTitulairesNetwork) CardUserWidget(data: i),
-                                SizedBox(height: 15),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      isExpanded_Pharma = !isExpanded_Pharma;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width * 1.0,
-                                    height: 67,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                                    child: Row(
-                                      children: [
-                                        Icon(isExpanded_Pharma ? Icons.expand_less : Icons.expand_more),
-                                        Text(
-                                          'Pharmacies (' + pharmaciesNetwork.length.toString() + ')',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18.0,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                if (isExpanded_Pharma)
-                                  for (var i in pharmaciesNetwork) CardPharmacieWidget(data: i),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (_selectedIndex == 2 && offresPharma.isNotEmpty)
+                    if (_selectedIndex == 1 && offresPharma.isNotEmpty)
                       for (var searchI in offresPharma)
                         CardOfferProfilWidget(
                           searchI: searchI,

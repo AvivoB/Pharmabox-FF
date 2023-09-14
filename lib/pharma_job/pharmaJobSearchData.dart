@@ -88,26 +88,27 @@ class PharmaJobSearchData {
     List foundedSearch = [];
     QuerySnapshot snapshot = await filteredQuery.get();
 
-  Set<String> uniqueUserIds = {}; // Pour stocker les userId uniques
-  Set<Map<String, dynamic>> uniqueSearch = {}; // Pour stocker les userData uniques
+    Set<String> uniqueUserIds = {}; // Pour stocker les userId uniques
+    Set<Map<String, dynamic>> uniqueSearch = {}; // Pour stocker les userData uniques
 
-  CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
-  for (var data in snapshot.docs) {
-    print("Document ID: ${data.id}");
-    print("Data: ${data.data()}");
-    print("-----------------------");
+    CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
+    for (var data in snapshot.docs) {
+      print("Document ID: ${data.id}");
+      print("Data: ${data.data()}");
+      print("-----------------------");
 
-    var rechercheData = data.data() as Map<String, dynamic>?;
-    var userId = rechercheData != null ? rechercheData['user_id'] : '';
+      var rechercheData = data.data() as Map<String, dynamic>?;
+      var userId = rechercheData != null ? rechercheData['user_id'] : '';
 
-    if (!uniqueUserIds.contains(userId)) { // Si l'userId n'a pas encore été traité
-      DocumentSnapshot userDoc = await usersRef.doc(userId).get();
-      Map<String, dynamic> userData = userDoc.exists ? userDoc.data() as Map<String, dynamic> : {};
+      if (!uniqueUserIds.contains(userId)) {
+        // Si l'userId n'a pas encore été traité
+        DocumentSnapshot userDoc = await usersRef.doc(userId).get();
+        Map<String, dynamic> userData = userDoc.exists ? userDoc.data() as Map<String, dynamic> : {};
 
-      uniqueSearch.add(userData); // Les Sets n'ajouteront pas de doublons
-      uniqueUserIds.add(userId); // Ajouter l'userId au Set
+        uniqueSearch.add(userData); // Les Sets n'ajouteront pas de doublons
+        uniqueUserIds.add(userId); // Ajouter l'userId au Set
+      }
     }
-  }
-  return uniqueSearch.toList();
+    return uniqueSearch.toList();
   }
 }

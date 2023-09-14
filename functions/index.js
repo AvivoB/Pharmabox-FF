@@ -5,6 +5,7 @@ const FieldValue = admin.firestore.FieldValue;
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
+const env = require('./config');
 
 admin.initializeApp();
 
@@ -204,52 +205,61 @@ const htmlPath = path.join(__dirname, '/email_template/code_validation.html');
 const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
 // Envoi du code de verification du compte
-exports.sendVerificationCode = functions.firestore
+exports.updateUserOnCreate = functions.firestore
   .document('users/{userId}')
   .onCreate((snap, context) => {
-    const user = snap.data();
-
-    /* ENVOI DES EMAILS */
-    // Configuration du serveur SMTP
-    let transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-          // type: 'OAuth2',
-          user: 'pharmaboxdb@gmail.com',
-          pass: 'avkjycgnhzignnqc',
-      }
-  });
-    // Génère un code de validation
-    let verificationCode = Math.floor(1000 + Math.random() * 9000);
-
 
     // Mise à jour du document utilisateur avec le code de validation
     return admin.firestore().collection('users').doc(snap.id).update({
-        verificationCode: verificationCode,
-        isVerified: false
+        isVerified: false,
+        isComplete: false,
+        isValid: false,
     }).then(() => {
-        // Construire le courriel
-        const mailOptions = {
-            from: 'PHARMABOX <pharmaboxdb@gmail.com>',
-            to: user.email,
-            subject: 'Votre code de vérification',
-            html: htmlContent.replace('{{code}}', verificationCode)
-        };        
 
-        // Envoie le mail
-        return transporter.sendMail(mailOptions, (error, data) => {
-            if (error) {
-                console.log(error);
-                throw new functions.https.HttpsError('internal', 'Failed to send email.');
-            }
-        });
     }).catch((error) => {
         console.log(error);
         throw new functions.https.HttpsError('internal', 'Failed to update user document.');
     });
+});
+
+
+exports.sendCodeVerification = functions.https.onRequest((req, res) => {
+  // Vérifiez que vous avez l'ID de l'utilisateur dans la demande
+  if (!req.body.userId) {
+      res.status(400).send('User ID is required');
+      return;
+  }
+  const userId = req.body.userId;
+
+  // Génère un nouveau code de validation
+  let newVerificationCode = Math.floor(1000 + Math.random() * 9000);
+
+  admin.firestore().collection('users').doc(userId).update({
+      verificationCode: newVerificationCode,
+  }).then(() => {
+      return admin.firestore().collection('users').doc(userId).get();
+  }).then(doc => {
+      if (!doc.exists) {
+          throw new Error('User not found');
+      }
+      const user = doc.data();
+
+      // Construire le courriel
+      const mailOptions = {
+          from: env.fromEmail, // utilisez votre configuration d'environnement
+          to: user.email,
+          subject: 'Votre code de validation Pharmabox',
+          html: htmlContent.replace('{{code}}', newVerificationCode)
+      };        
+
+      // Envoie le mail
+      return env.transporter.sendMail(mailOptions); // utilisez votre configuration d'environnement
+  }).then(() => {
+      res.status(200).send('Verification code resent successfully');
+  }).catch((error) => {
+      console.log(error);
+      res.status(500).send('Failed to resend verification code');
+  });
 });
 
 
@@ -296,7 +306,7 @@ exports.sendNotificationOnMessage = functions.firestore
         }
 
         return null;
-    });
+});
 
 
 

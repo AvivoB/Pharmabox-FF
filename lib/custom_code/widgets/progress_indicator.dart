@@ -6,15 +6,19 @@ class ProgressIndicatorPharmabox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Container(
+      color: Colors.white, // Arrière-plan blanc
+      child: Center(
         child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Image.asset('assets/icons/logo-pharma-box.png', width: 100, height: 100),
-        SizedBox(width: 10, height: 20),
-        CircularProgressIndicator(color: blueColor),
-      ],
-    ));
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/icons/logo-pharma-box.png', width: 100, height: 100),
+            SizedBox(width: 10, height: 20),
+            CircularProgressIndicator(color: blueColor),
+          ],
+        ),
+      ),
+    );
   }
 }

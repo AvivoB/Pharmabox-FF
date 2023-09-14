@@ -407,6 +407,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                               width: MediaQuery.of(context).size.width * 0.60,
                                               child: TextFormField(
                                                 controller: _model.groupementAutre,
+                                                initialValue: providerPharmacieUser.selectedGroupement[0]['name'],
                                                 onChanged: (value) {
                                                   providerPharmacieUser.selectGroupement({"name": "${value}", "image": "Autre.jpg"});
                                                 },
@@ -615,40 +616,6 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                     validator: _model.presentationControllerValidator.asValidator(context),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                            child: Icon(
-                                              Icons.school_sharp,
-                                              color: Color(0xFF595A71),
-                                              size: 28,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Pharmacie maître de stage',
-                                            style: FlutterFlowTheme.of(context).bodyMedium,
-                                          ),
-                                        ],
-                                      ),
-                                      Switch.adaptive(
-                                        value: _model.comptencesTestCovidValue ??= false,
-                                        onChanged: (newValue) async {
-                                          setState(() => _model.comptencesTestCovidValue = newValue);
-                                        },
-                                        activeColor: Color(0xFF7CEDAC),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -693,9 +660,6 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                       tabs: [
                         Tab(
                           text: 'Profil',
-                        ),
-                        Tab(
-                          text: 'Réseau',
                         ),
                         Tab(
                           text: 'Offres',
@@ -3032,103 +2996,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                         ),
                       ),
                     ])),
-                  if (_selectedIndex == 1)
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 15.0),
-                          child: Column(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    isExpanded_Titu = !isExpanded_Titu;
-                                  });
-                                },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 1.0,
-                                  height: 67,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                                  child: Row(
-                                    children: [
-                                      Icon(isExpanded_Titu ? Icons.expand_less : Icons.expand_more),
-                                      Text(
-                                        'Membres titulaires (' + titulairesNetwork.length.toString() + ')',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18.0,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              if (isExpanded_Titu)
-                                for (var i in titulairesNetwork) CardUserWidget(data: i),
-                              SizedBox(height: 15),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    isExpanded_NonTitu = !isExpanded_NonTitu;
-                                  });
-                                },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 1.0,
-                                  height: 67,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                                  child: Row(
-                                    children: [
-                                      Icon(isExpanded_NonTitu ? Icons.expand_less : Icons.expand_more),
-                                      Text(
-                                        'Membres (' + nonTitulairesNetwork.length.toString() + ')',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18.0,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              if (isExpanded_NonTitu)
-                                for (var i in nonTitulairesNetwork) CardUserWidget(data: i),
-                              SizedBox(height: 15),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    isExpanded_Pharma = !isExpanded_Pharma;
-                                  });
-                                },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 1.0,
-                                  height: 67,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Color(0xFFF2FDFF), boxShadow: [BoxShadow(color: Color(0x2b1e5b67), blurRadius: 12, offset: Offset(10, 10))]),
-                                  child: Row(
-                                    children: [
-                                      Icon(isExpanded_Pharma ? Icons.expand_less : Icons.expand_more),
-                                      Text(
-                                        'Pharmacies (' + pharmaciesNetwork.length.toString() + ')',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18.0,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              if (isExpanded_Pharma)
-                                for (var i in pharmaciesNetwork) CardPharmacieWidget(data: i),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  if (_selectedIndex == 2 && offresPharma.isNotEmpty)
+                  if (_selectedIndex == 1 && offresPharma.isNotEmpty)
                     for (var searchI in offresPharma)
                       CardOfferProfilWidget(
                         searchI: searchI,

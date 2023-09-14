@@ -10,11 +10,7 @@ class Place with ClusterItem {
   final LatLng latLng;
   String groupement = '';
   int id = 0;
-  Place(
-      {required this.name,
-      required this.latLng,
-      this.groupement = '',
-      this.id = 0});
+  Place({required this.name, required this.latLng, this.groupement = '', this.id = 0});
 
   @override
   LatLng get location => latLng;

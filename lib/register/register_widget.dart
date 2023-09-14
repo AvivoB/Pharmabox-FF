@@ -299,7 +299,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
                                             content: Text(
-                                              'Passwords don\'t match!',
+                                              'Les mots de passes ne correspondent pas',
                                             ),
                                           ),
                                         );

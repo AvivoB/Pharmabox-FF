@@ -77,7 +77,7 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
           obscureText: false,
           onChanged: _onSearchChanged,
           decoration: InputDecoration(
-            labelText: 'Nom de la pharmacie',
+            labelText: 'Nom de la pharmacie *',
             hintStyle: FlutterFlowTheme.of(context).bodySmall,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(

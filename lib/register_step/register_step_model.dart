@@ -23,6 +23,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:flutter/material.dart';
 
 class RegisterStepModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
@@ -130,7 +131,7 @@ class RegisterStepModel extends FlutterFlowModel {
     }
 
     if (nomFamille != '' && prenom != '' && postcode != '' && city != '' && poste != null && allowCGU && allowNotifs) {
-      usersRef.doc(currentUser?.uid).set({
+      usersRef.doc(currentUser?.uid).update({
         'id': currentUser?.uid,
         'nom': nomFamille,
         'prenom': prenom,
@@ -149,13 +150,14 @@ class RegisterStepModel extends FlutterFlowModel {
         'langues': providerUserRegister.selectedLangues,
         'experiences': providerUserRegister.selectedExperiences,
         'photoUrl': imageURL,
+        'isComplete': true,
       });
 
       return true;
     } else {
       return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Pour continuer, vous devez compléter votre compte et vous devez accepter les CGU'),
+          content: Text('Pour continuer, vous devez compléter votre compte et vous devez accepter les CGU', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryBackground)),
           backgroundColor: redColor,
         ),
       );

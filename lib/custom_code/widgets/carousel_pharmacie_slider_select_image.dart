@@ -32,7 +32,46 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
   }
 
   Future<void> _selectImages() async {
-    final pickedImages = await ImagePicker().pickMultiImage(imageQuality: 50, maxWidth: 800);
+    final option = await showModalBottomSheet<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: Text('Prendre une photo', style: FlutterFlowTheme.of(context).bodyMedium),
+              onTap: () {
+                Navigator.pop(context, 'camera');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.image),
+              title: Text('Sélectionner depuis la galerie', style: FlutterFlowTheme.of(context).bodyMedium),
+              onTap: () {
+                Navigator.pop(context, 'gallery');
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    List<XFile>? pickedImages;
+
+    if (option == 'camera') {
+      final pickedImage = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 50,
+        maxWidth: 800,
+      );
+      if (pickedImage != null) pickedImages = [pickedImage];
+    } else if (option == 'gallery') {
+      pickedImages = await ImagePicker().pickMultiImage(
+        imageQuality: 50,
+        maxWidth: 800,
+      );
+    }
 
     if (pickedImages != null) {
       for (var imageFile in pickedImages.map((pickedImage) => File(pickedImage.path))) {
@@ -74,6 +113,50 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
       }
     }
   }
+
+  // Future<void> _selectImages() async {
+  //   final pickedImages = await ImagePicker().pickMultiImage(imageQuality: 50, maxWidth: 800);
+
+  //   if (pickedImages != null) {
+  //     for (var imageFile in pickedImages.map((pickedImage) => File(pickedImage.path))) {
+  //       final croppedImage = await ImageCropper().cropImage(
+  //         sourcePath: imageFile.path,
+  //         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+  //         compressQuality: 50,
+  //         compressFormat: ImageCompressFormat.jpg,
+  //         uiSettings: [
+  //           AndroidUiSettings(toolbarTitle: 'Redimensionner l\'image', toolbarColor: blueColor, toolbarWidgetColor: Colors.white, initAspectRatio: CropAspectRatioPreset.original, lockAspectRatio: false),
+  //           IOSUiSettings(
+  //             title: 'Redimensionner l\'image',
+  //           ),
+  //         ],
+  //       );
+
+  //       if (croppedImage != null) {
+  //         setState(() {
+  //           _selectedImages.add(File(croppedImage.path));
+  //         });
+  //       }
+  //     }
+
+  //     if (_selectedImages.isNotEmpty) {
+  //       final storage = FirebaseStorage.instance;
+
+  //       for (var image in _selectedImages) {
+  //         final ref = storage.ref().child('pharmacie_pictures/${DateTime.now().millisecondsSinceEpoch}');
+  //         await ref.putFile(image);
+  //         final url = await ref.getDownloadURL();
+  //         urls.add(url);
+  //       }
+
+  //       widget.onImagesSelected(urls);
+
+  //       setState(() {
+  //         _selectedImages.clear();
+  //       });
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

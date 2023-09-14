@@ -51,6 +51,7 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
       width: MediaQuery.of(context).size.width * 1,
       height: 350,
       child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: _selectedHour.keys.length,
         itemBuilder: (context, index) {
           String day = _selectedHour.keys.elementAt(index);
@@ -62,11 +63,11 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Text(day, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w500)),
+                    child: Text(day, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w500)),
                   ),
                 ),
                 height: 50,
-                width: MediaQuery.of(context).size.width * 0.25,
+                width: 80,
                 decoration: BoxDecoration(
                   color: Color(0xFFEFF6F7),
                 ),
