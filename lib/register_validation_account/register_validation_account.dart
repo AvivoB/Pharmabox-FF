@@ -24,29 +24,18 @@ class _ValidateAccountState extends State<ValidateAccount> {
   Future<bool> isVerificationCodeValid() async {
     await Future.delayed(Duration(seconds: 2));
     // Concaténez les valeurs des contrôleurs pour obtenir le code saisi par l'utilisateur
-    String enteredCode = _controller1.text +
-        _controller2.text +
-        _controller3.text +
-        _controller4.text;
+    String enteredCode = _controller1.text + _controller2.text + _controller3.text + _controller4.text;
 
     String currentUserId = await getCurrentUserId();
 
     // Obtenez le document de l'utilisateur actuel
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUserId)
-        .get();
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(currentUserId).get();
 
     // Vérifiez si le document existe et comparez les codes
     if (userDoc.exists && userDoc.data() != null) {
-      if ((userDoc.data()! as Map<String, dynamic>)['verificationCode']
-              .toString() ==
-          enteredCode) {
+      if ((userDoc.data()! as Map<String, dynamic>)['verificationCode'].toString() == enteredCode) {
         // Mettez à jour les champs isVerified et isValid à true pour cet utilisateur
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(currentUserId)
-            .update({'isVerified': true, 'isValid': true});
+        await FirebaseFirestore.instance.collection('users').doc(currentUserId).update({'isVerified': true, 'isValid': true});
 
         return true; // le code est correct
       }
@@ -58,8 +47,7 @@ class _ValidateAccountState extends State<ValidateAccount> {
     String currentUserId = await getCurrentUserId();
     try {
       final response = await http.post(
-        Uri.parse(
-            'https://us-central1-pharmaff-dab40.cloudfunctions.net/sendCodeVerification'),
+        Uri.parse('https://us-central1-pharmaff-dab40.cloudfunctions.net/sendCodeVerification'),
         body: {'userId': currentUserId},
       );
 
@@ -96,26 +84,13 @@ class _ValidateAccountState extends State<ValidateAccount> {
                   children: [
                     Image.asset('assets/icons/logo-pharma-box.png', width: 30),
                     SizedBox(height: 10, width: 10),
-                    Text('Validation de votre compte',
-                        style: FlutterFlowTheme.of(context)
-                            .headlineMedium
-                            .override(
-                                fontFamily: 'Poppins',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600)),
+                    Text('Validation de votre compte', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 18, fontWeight: FontWeight.w600)),
                   ],
                 ),
                 SizedBox(height: 50, width: 100),
-                Text(
-                    'Afin de valider votre compte, merci d\'entrer le code reçu par email',
-                    style: FlutterFlowTheme.of(context).bodySmall,
-                    textAlign: TextAlign.center),
+                Text('Afin de valider votre compte, merci d\'entrer le code reçu par email', style: FlutterFlowTheme.of(context).bodySmall, textAlign: TextAlign.center),
                 SizedBox(height: 50, width: 100),
-                if (_resendMessage.isNotEmpty)
-                  Text(_resendMessage['message'].toString(),
-                      style: FlutterFlowTheme.of(context).bodySmall,
-                      textAlign: TextAlign.center),
+                if (_resendMessage.isNotEmpty) Text(_resendMessage['message'].toString(), style: FlutterFlowTheme.of(context).bodySmall, textAlign: TextAlign.center),
                 if (_resendMessage.isNotEmpty) SizedBox(height: 50, width: 100),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -131,24 +106,16 @@ class _ValidateAccountState extends State<ValidateAccount> {
                     onPressed: () async {
                       if (await _sendCodeVerification()) {
                         setState(() {
-                          _resendMessage = {
-                            'type': 'success',
-                            'message': 'Votre nouveau code vous a été envoyé'
-                          };
+                          _resendMessage = {'type': 'success', 'message': 'Votre nouveau code vous a été envoyé'};
                         });
                       } else {
                         setState(() {
-                          _resendMessage = {
-                            'type': 'error',
-                            'message': 'Error d\'envoi du code de validation'
-                          };
+                          _resendMessage = {'type': 'error', 'message': 'Error d\'envoi du code de validation'};
                         });
                       }
                     },
                     child: Text('Code non reçu ? Renvoyer le code',
-                        style: FlutterFlowTheme.of(context)
-                            .headlineMedium
-                            .override(
+                        style: FlutterFlowTheme.of(context).headlineMedium.override(
                               fontFamily: 'Poppins',
                               color: blueColor,
                               fontSize: 14,
@@ -182,14 +149,7 @@ class _ValidateAccountState extends State<ValidateAccount> {
                           // Le code est incorrect
                           return ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(
-                                  'Le code est incorrect, merci d\'entrer un code valide',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                          fontFamily: 'Poppins',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBackground)),
+                              content: Text('Le code est incorrect, merci d\'entrer un code valide', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryBackground)),
                               backgroundColor: redColor,
                             ),
                           );
@@ -203,13 +163,12 @@ class _ValidateAccountState extends State<ValidateAccount> {
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                         iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                         color: Color(0x00FFFFFF),
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
                         borderSide: BorderSide(
                           color: Colors.transparent,
                           width: 1,

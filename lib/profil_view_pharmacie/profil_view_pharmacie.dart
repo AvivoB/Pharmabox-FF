@@ -241,12 +241,23 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                   Text('Groupement', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 18.0, fontWeight: FontWeight.w600)),
                                   SizedBox(height: 15),
-                                  Image.asset(
-                                    'assets/groupements/' + pharmacieData['groupement'][0]['image'].toString(),
-                                    width: 150.0,
-                                    height: 50.0,
-                                    fit: BoxFit.cover,
-                                  ),
+                                  if (pharmacieData['groupement'][0]['image'].toString() != 'Autre.jpg')
+                                    Image.asset(
+                                      'assets/groupements/' + pharmacieData['groupement'][0]['image'].toString(),
+                                      width: 150.0,
+                                      height: 50.0,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  if (pharmacieData['groupement'][0]['image'].toString() == 'Autre.jpg')
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15.0),
+                                      child: Text(pharmacieData['groupement'][0]['name'].toString(),
+                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                fontFamily: 'Poppins',
+                                                color: blackColor,
+                                                fontSize: 14.0,
+                                              )),
+                                    )
                                 ]),
                               )
                             ],

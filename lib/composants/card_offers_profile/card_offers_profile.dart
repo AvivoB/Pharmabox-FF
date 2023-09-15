@@ -8,6 +8,7 @@ import 'package:pharmabox/backend/backend.dart';
 import 'package:pharmabox/composants/card_offers_profile/card_offers_profile_model.dart';
 import 'package:pharmabox/custom_code/widgets/planningTable/custom_table.dart';
 import 'package:pharmabox/custom_code/widgets/prediction_localisation_offre_recherches.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_choice_chips.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_drop_down.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_icon_button.dart';
@@ -1036,7 +1037,9 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                             ),
                                             child: FFButtonWidget(
                                               onPressed: () async {
+                                                await Future.delayed(Duration(seconds: 2));
                                                 saveOffre(widget.searchI['doc_id']);
+                                                showCustomSnackBar(context, 'Offre mise à jour');
                                               },
                                               text: 'Enregistrer',
                                               options: FFButtonOptions(

@@ -127,7 +127,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
       confort.add('Comité d\'entreprise');
     }
 
-    pharmaciesRef.doc().set({
+    pharmaciesRef.doc(currentUser?.uid).set({
       'user_id': currentUser!.uid,
       'photo_url': _model.imagePharmacie,
       'name': providerPharmacieRegister.selectedPharmacieAdresse,
@@ -160,7 +160,9 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
         'nb_apprentis': (_model.nbApprentiController.text != '') ? _model.nbApprentiController.text : '0',
         'nb_etudiants': (_model.nbEtudiantsController.text != '') ? _model.nbEtudiantsController.text : '0',
         'nb_etudiants_6eme_annee': (_model.nbEtudiants6emeController.text != '') ? _model.nbEtudiants6emeController.text : '0',
-      }
+      },
+      'isComplete': true,
+      'isValid': true,
     });
   }
 
@@ -2739,6 +2741,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                         ),
                         child: FFButtonWidget(
                           onPressed: () async {
+                            await Future.delayed(Duration(seconds: 2));
                             createPharmacie(context);
                             context.pushNamed('ValidateAccount');
                           },

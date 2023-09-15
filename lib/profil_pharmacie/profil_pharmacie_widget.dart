@@ -7,6 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/composants/card_offers_profile/card_offers_profile.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
 import 'package:pharmabox/profil_pharmacie/profil_pharmacie_model.dart';
 import 'package:pharmabox/profil_pharmacie/profil_pharmacie_provider.dart';
@@ -53,7 +55,8 @@ class ProfilPharmacie extends StatefulWidget {
   _ProfilPharmacieState createState() => _ProfilPharmacieState();
 }
 
-class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProviderStateMixin {
+class _ProfilPharmacieState extends State<ProfilPharmacie>
+    with SingleTickerProviderStateMixin {
   late PharmacieModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -68,6 +71,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
   List titulairesNetwork = [];
   List nonTitulairesNetwork = [];
   List pharmaciesNetwork = [];
+  bool _isLoading = false;
 
   TabController? _tabController;
   int _selectedIndex = 0;
@@ -110,9 +114,15 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
   Future<void> getNetworkData() async {
     String pharmacieID = userData != null ? userData['documentId'] : '';
     // Use collection group to make query across all collections
-    QuerySnapshot queryUsers = await FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: pharmacieID).get();
+    QuerySnapshot queryUsers = await FirebaseFirestore.instance
+        .collection('users')
+        .where('reseau', arrayContains: pharmacieID)
+        .get();
 
-    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance.collection('pharmacies').where('reseau', arrayContains: pharmacieID).get();
+    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance
+        .collection('pharmacies')
+        .where('reseau', arrayContains: pharmacieID)
+        .get();
 
     for (var doc in queryPharmacies?.docs ?? []) {
       var data = doc.data();
@@ -132,6 +142,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
   }
 
   getUserData() async {
+    setState(() {
+      _isLoading = true;
+    });
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       // Gérer le cas où l'utilisateur n'est pas connecté.
@@ -139,8 +152,14 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     }
 
     // Query query = FirebaseFirestore.instance.collection('pharmacies').where('user_id', isEqualTo: user.uid);
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('pharmacies').where('user_id', isEqualTo: user.uid).get();
-    QuerySnapshot offres = await FirebaseFirestore.instance.collection('offres').where('user_id', isEqualTo: user.uid).get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('pharmacies')
+        .where('user_id', isEqualTo: user.uid)
+        .get();
+    QuerySnapshot offres = await FirebaseFirestore.instance
+        .collection('offres')
+        .where('user_id', isEqualTo: user.uid)
+        .get();
 
     // Accéder aux données du document.
     var data = querySnapshot.docs;
@@ -158,6 +177,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
         offresPharma.add(docData);
       }
     });
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   // Enregistrement dans la base
@@ -165,10 +187,15 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
 
-    final CollectionReference<Map<String, dynamic>> pharmaciesRef = FirebaseFirestore.instance.collection('pharmacies');
+    final CollectionReference<Map<String, dynamic>> pharmaciesRef =
+        FirebaseFirestore.instance.collection('pharmacies');
 
     String doc_id = '';
-    final Future<QuerySnapshot<Map<String, dynamic>>> pharmaciesQuery = FirebaseFirestore.instance.collection('pharmacies').where('user_id', isEqualTo: userData['user_id']).get();
+    final Future<QuerySnapshot<Map<String, dynamic>>> pharmaciesQuery =
+        FirebaseFirestore.instance
+            .collection('pharmacies')
+            .where('user_id', isEqualTo: userData['user_id'])
+            .get();
 
     // Attendre que la Future soit complétée
     final QuerySnapshot<Map<String, dynamic>> snapshot = await pharmaciesQuery;
@@ -178,7 +205,15 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
       doc_id = doc.id;
     }
 
-    final providerPharmacieUser = Provider.of<ProviderPharmacieUser>(context, listen: false);
+    final providerPharmacieUser =
+        Provider.of<ProviderPharmacieUser>(context, listen: false);
+
+    if (providerPharmacieUser.selectedPharmacieAdresseRue == '') {
+      showCustomSnackBar(
+          context, 'Le nom de la pharmacie ne peut pas être vide',
+          isError: true);
+      return;
+    }
 
     List missions = [];
     if (_model.missioTestCovidValue) {
@@ -244,7 +279,14 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
         'lat_lng': providerPharmacieUser.selectedPharmacieLocation,
         "data": providerPharmacieUser.selectedAdressePharma[0],
       },
-      'accessibilite': {'rer': _model.rerController.text, 'metro': _model.metroController.text, 'bus': _model.busController.text, 'tram': _model.tramwayController1.text, 'gare': _model.tramwayController2.text, 'stationnement': _model.parkingValue},
+      'accessibilite': {
+        'rer': _model.rerController.text,
+        'metro': _model.metroController.text,
+        'bus': _model.busController.text,
+        'tram': _model.tramwayController1.text,
+        'gare': _model.tramwayController2.text,
+        'stationnement': _model.parkingValue
+      },
       'horaires': providerPharmacieUser.selectedHoraires,
       'Non-stop': (_model.nonSTOPValue) ? true : false,
       'typologie': typologie,
@@ -255,15 +297,31 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
       'confort': confort,
       'tendances': providerPharmacieUser.tendences,
       'equipe': {
-        'nb_pharmaciens': (_model.nbPharmaciensController.text != '') ? _model.nbPharmaciensController.text : '0',
-        'nb_preparateurs': (_model.nbPreparateursController.text != '') ? _model.nbPreparateursController.text : '0',
-        'nb_rayonnistes': (_model.nbRayonnistesController.text != '') ? _model.nbRayonnistesController.text : '0',
-        'nb_conseillers': (_model.nbConseillersController.text != '') ? _model.nbConseillersController.text : '0',
-        'nb_apprentis': (_model.nbApprentiController.text != '') ? _model.nbApprentiController.text : '0',
-        'nb_etudiants': (_model.nbEtudiantsController.text != '') ? _model.nbEtudiantsController.text : '0',
-        'nb_etudiants_6eme_annee': (_model.nbEtudiants6emeController.text != '') ? _model.nbEtudiants6emeController.text : '0',
+        'nb_pharmaciens': (_model.nbPharmaciensController.text != '')
+            ? _model.nbPharmaciensController.text
+            : '0',
+        'nb_preparateurs': (_model.nbPreparateursController.text != '')
+            ? _model.nbPreparateursController.text
+            : '0',
+        'nb_rayonnistes': (_model.nbRayonnistesController.text != '')
+            ? _model.nbRayonnistesController.text
+            : '0',
+        'nb_conseillers': (_model.nbConseillersController.text != '')
+            ? _model.nbConseillersController.text
+            : '0',
+        'nb_apprentis': (_model.nbApprentiController.text != '')
+            ? _model.nbApprentiController.text
+            : '0',
+        'nb_etudiants': (_model.nbEtudiantsController.text != '')
+            ? _model.nbEtudiantsController.text
+            : '0',
+        'nb_etudiants_6eme_annee': (_model.nbEtudiants6emeController.text != '')
+            ? _model.nbEtudiants6emeController.text
+            : '0',
       }
     });
+
+    showCustomSnackBar(context, 'Vos informations ont été enregistrés');
   }
 
   @override
@@ -278,285 +336,1997 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
   Widget build(BuildContext context) {
     final providerPharmacieUser = Provider.of<ProviderPharmacieUser>(context);
 
-    _model.imagePharmacie = userData != null ? List<String>.from(userData['photo_url']) : [];
+    _model.imagePharmacie =
+        userData != null ? List<String>.from(userData['photo_url']) : [];
 
-    _model.nomdelapharmacieController1.text = userData?['situation_geographique']?['adresse'] ?? '';
+    _model.nomdelapharmacieController1.text =
+        userData?['situation_geographique']?['adresse'] ?? '';
 
-    _model.nomdelapharmacieController2.text = userData != null ? userData['titulaire_principal'] : '';
-    _model.presentationController.text = userData != null ? userData['presentation'] : '';
-    _model.emailPharmacieController.text = userData != null ? userData['contact_pharma']['email'] : '';
-    _model.phonePharmacieController1.text = userData != null ? userData['contact_pharma']['telephone'] : '';
-    _model.rerController.text = userData != null ? userData['accessibilite']['rer'] : '';
-    _model.metroController.text = userData != null ? userData['accessibilite']['metro'] : '';
-    _model.busController.text = userData != null ? userData['accessibilite']['bus'] : '';
-    _model.tramwayController1.text = userData != null ? userData['accessibilite']['tram'] : '';
-    _model.tramwayController2.text = userData != null ? userData['accessibilite']['gare'] : '';
-    _model.parkingValue = userData != null ? userData['accessibilite']['stationnement'] : '';
-    _model.nbPharmaciensController.text = userData != null ? userData['equipe']['nb_pharmaciens'] : '';
-    _model.nbPreparateurController.text = userData != null ? userData['equipe']['nb_preparateurs'] : '';
-    _model.nbRayonnistesController.text = userData != null ? userData['equipe']['nb_rayonnistes'] : '';
-    _model.nbConseillersController.text = userData != null ? userData['equipe']['nb_conseillers'] : '';
-    _model.nbApprentiController.text = userData != null ? userData['equipe']['nb_apprentis'] : '';
-    _model.nbEtudiantsController.text = userData != null ? userData['equipe']['nb_etudiants'] : '';
-    _model.nbEtudiants6emeController.text = userData != null ? userData['equipe']['nb_etudiants_6eme_annee'] : '';
+    _model.nomdelapharmacieController2.text =
+        userData != null ? userData['titulaire_principal'] : '';
+    _model.presentationController.text =
+        userData != null ? userData['presentation'] : '';
+    _model.emailPharmacieController.text =
+        userData != null ? userData['contact_pharma']['email'] : '';
+    _model.phonePharmacieController1.text =
+        userData != null ? userData['contact_pharma']['telephone'] : '';
+    _model.rerController.text =
+        userData != null ? userData['accessibilite']['rer'] : '';
+    _model.metroController.text =
+        userData != null ? userData['accessibilite']['metro'] : '';
+    _model.busController.text =
+        userData != null ? userData['accessibilite']['bus'] : '';
+    _model.tramwayController1.text =
+        userData != null ? userData['accessibilite']['tram'] : '';
+    _model.tramwayController2.text =
+        userData != null ? userData['accessibilite']['gare'] : '';
+    _model.parkingValue =
+        userData != null ? userData['accessibilite']['stationnement'] : '';
+    _model.nbPharmaciensController.text =
+        userData != null ? userData['equipe']['nb_pharmaciens'] : '';
+    _model.nbPreparateurController.text =
+        userData != null ? userData['equipe']['nb_preparateurs'] : '';
+    _model.nbRayonnistesController.text =
+        userData != null ? userData['equipe']['nb_rayonnistes'] : '';
+    _model.nbConseillersController.text =
+        userData != null ? userData['equipe']['nb_conseillers'] : '';
+    _model.nbApprentiController.text =
+        userData != null ? userData['equipe']['nb_apprentis'] : '';
+    _model.nbEtudiantsController.text =
+        userData != null ? userData['equipe']['nb_etudiants'] : '';
+    _model.nbEtudiants6emeController.text =
+        userData != null ? userData['equipe']['nb_etudiants_6eme_annee'] : '';
     typologie = userData != null ? userData['typologie'] : '';
 
-    providerPharmacieUser.setGroupement(userData != null ? userData['groupement'] : []);
+    providerPharmacieUser
+        .setGroupement(userData != null ? userData['groupement'] : []);
     providerPharmacieUser.setLGO(userData != null ? userData['lgo'] : []);
-    providerPharmacieUser.setMissions(userData != null ? userData['missions'] : []);
-    providerPharmacieUser.setTypologie(userData != null ? userData['typologie'] : '');
-    providerPharmacieUser.setHoraire(userData != null ? userData['horaires'] : '');
-    providerPharmacieUser.setPharmacieLocation(userData != null ? userData['situation_geographique']['lat_lng'][0] : '', userData != null ? userData['situation_geographique']['lat_lng'][1] : '');
+    providerPharmacieUser
+        .setMissions(userData != null ? userData['missions'] : []);
+    providerPharmacieUser
+        .setTypologie(userData != null ? userData['typologie'] : '');
+    providerPharmacieUser
+        .setHoraire(userData != null ? userData['horaires'] : '');
+    providerPharmacieUser.setPharmacieLocation(
+        userData != null
+            ? userData['situation_geographique']['lat_lng'][0]
+            : '',
+        userData != null
+            ? userData['situation_geographique']['lat_lng'][1]
+            : '');
 
     getNetworkData();
-
-    return Consumer<ProviderPharmacieUser>(builder: (context, userRegisterSate, child) {
-      return GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-        child: Scaffold(
-          key: scaffoldKey,
-          backgroundColor: Color(0xFFEFF6F7),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CarouselPharmacieSliderSelect(
-                    onImagesSelected: (urls) {
-                      _model.imagePharmacie = urls;
-                    },
-                    initialImagesSelected: userData != null ? userData['photo_url'].cast<String>() : [''],
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+    if (_isLoading) {
+      return Center(child: ProgressIndicatorPharmabox());
+    } else {
+      return Consumer<ProviderPharmacieUser>(
+          builder: (context, userRegisterSate, child) {
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: Color(0xFFEFF6F7),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CarouselPharmacieSliderSelect(
+                      onImagesSelected: (urls) {
+                        _model.imagePharmacie = urls;
+                      },
+                      initialImagesSelected: userData != null
+                          ? userData['photo_url'].cast<String>()
+                          : [''],
                     ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Form(
-                            key: _model.formKey,
-                            autovalidateMode: AutovalidateMode.disabled,
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Form(
+                              key: _model.formKey,
+                              autovalidateMode: AutovalidateMode.disabled,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: PredictionNomPhamracie(
+                                          initialValue: userData != null
+                                              ? userData[
+                                                      'situation_geographique']
+                                                  ['adresse']
+                                              : '',
+                                          onPlaceSelected: (adresse) {
+                                            providerPharmacieUser
+                                                .setAdresseRue(adresse);
+                                          })),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 0, 10),
+                                    child: TextFormField(
+                                      controller:
+                                          _model.nomdelapharmacieController2,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Titulaire',
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .bodySmall,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFD0D1DE),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .focusColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        prefixIcon: Icon(
+                                          Icons.person,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                        ),
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                      validator: _model
+                                          .nomdelapharmacieController2Validator
+                                          .asValidator(context),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 0, 10),
+                                    child: providerPharmacieUser
+                                                    .selectedGroupement[0]
+                                                ['image'] ==
+                                            'Autre.jpg'
+                                        ? Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.60,
+                                                child: TextFormField(
+                                                  controller:
+                                                      _model.groupementAutre,
+                                                  initialValue:
+                                                      providerPharmacieUser
+                                                              .selectedGroupement[
+                                                          0]['name'],
+                                                  onChanged: (value) {
+                                                    providerPharmacieUser
+                                                        .selectGroupement({
+                                                      "name": "${value}",
+                                                      "image": "Autre.jpg"
+                                                    });
+                                                  },
+                                                  obscureText: false,
+                                                  decoration: InputDecoration(
+                                                    labelText:
+                                                        'Votre groupement',
+                                                    hintStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodySmall,
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Color(0xFFD0D1DE),
+                                                        width: 1,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .focusColor,
+                                                        width: 1,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    errorBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Color(0x00000000),
+                                                        width: 1,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    focusedErrorBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Color(0x00000000),
+                                                        width: 1,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    prefixIcon: Icon(
+                                                      Icons.group_work_outlined,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                    ),
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: true,
+                                                    context: context,
+                                                    builder:
+                                                        (bottomSheetContext) {
+                                                      return DraggableScrollableSheet(
+                                                          initialChildSize:
+                                                              0.75,
+                                                          builder: (BuildContext
+                                                                  context,
+                                                              ScrollController
+                                                                  scrollController) {
+                                                            return GestureDetector(
+                                                              onTap: () => FocusScope
+                                                                      .of(
+                                                                          context)
+                                                                  .requestFocus(
+                                                                      _unfocusNode),
+                                                              child: Padding(
+                                                                padding: MediaQuery.of(
+                                                                        bottomSheetContext)
+                                                                    .viewInsets,
+                                                                child: PopupGroupementWidget(
+                                                                    onTap:
+                                                                        (value) {
+                                                                  var groupement =
+                                                                      context.read<
+                                                                          ProviderPharmacieUser>();
+                                                                  groupement
+                                                                      .selectGroupement(
+                                                                          value);
+                                                                }),
+                                                              ),
+                                                            );
+                                                          });
+                                                    },
+                                                  ).then((value) =>
+                                                      setState(() {}));
+                                                },
+                                                child: Container(
+                                                  width: 100,
+                                                  height: 30,
+                                                  child: GradientTextCustom(
+                                                    width: 100,
+                                                    height: 30,
+                                                    text: 'Modifier',
+                                                    radius: 0.0,
+                                                    fontSize: 12.0,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Image.asset(
+                                                'assets/groupements/' +
+                                                    providerPharmacieUser
+                                                            .selectedGroupement[
+                                                        0]['image'],
+                                                width: 120,
+                                                height: 60,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              Container(
+                                                width: 100,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Groupement',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                    ),
+                                                    Text(
+                                                      providerPharmacieUser
+                                                              .selectedGroupement[
+                                                          0]['name'],
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 11,
+                                                              ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder:
+                                                        (bottomSheetContext) {
+                                                      return DraggableScrollableSheet(
+                                                          builder: (BuildContext
+                                                                  context,
+                                                              ScrollController
+                                                                  scrollController) {
+                                                        return GestureDetector(
+                                                          onTap: () => FocusScope
+                                                                  .of(context)
+                                                              .requestFocus(
+                                                                  _unfocusNode),
+                                                          child: Padding(
+                                                            padding: MediaQuery.of(
+                                                                    bottomSheetContext)
+                                                                .viewInsets,
+                                                            child:
+                                                                PopupGroupementWidget(
+                                                                    onTap:
+                                                                        (value) {
+                                                              print(value);
+                                                              providerPharmacieUser
+                                                                  .selectGroupement(
+                                                                      value);
+                                                            }),
+                                                          ),
+                                                        );
+                                                      });
+                                                    },
+                                                  ).then((value) =>
+                                                      setState(() {}));
+                                                },
+                                                child: Container(
+                                                  width: 100,
+                                                  height: 30,
+                                                  child: GradientTextCustom(
+                                                    width: 100,
+                                                    height: 30,
+                                                    text: 'Modifier',
+                                                    radius: 0.0,
+                                                    fontSize: 12.0,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 0, 10),
+                                    child: TextFormField(
+                                      controller: _model.presentationController,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Présentation',
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .bodySmall,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFD0D1DE),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .focusColor,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                      maxLines: null,
+                                      keyboardType: TextInputType.multiline,
+                                      validator: _model
+                                          .presentationControllerValidator
+                                          .asValidator(context),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      // height: MediaQuery.of(context).size.height * 1,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).primaryBackground,
+                      ),
+                      child: TabBar(
+                        onTap: (value) {
+                          setState(() {
+                            _selectedIndex = value;
+                          });
+                        },
+                        controller: _tabController,
+                        labelColor: blackColor,
+                        unselectedLabelColor: blackColor,
+                        indicator: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xFF7CEDAC),
+                              Color(0xFF42D2FF),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        indicatorWeight: 1,
+                        indicatorPadding: EdgeInsets.only(top: 40),
+                        unselectedLabelStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.override(
+                                  fontFamily: 'Poppins',
+                                  color: Color(0xFF595A71),
+                                  fontSize: 14.0,
+                                ),
+                        labelStyle: FlutterFlowTheme.of(context)
+                            .bodyMedium
+                            .override(
+                                fontFamily: 'Poppins',
+                                color: blackColor,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600),
+                        tabs: [
+                          Tab(
+                            text: 'Profil',
+                          ),
+                          Tab(
+                            text: 'Offres',
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (_selectedIndex == 0)
+                      Container(
+                          child: Column(children: [
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFEFF6F7),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 15),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Contact pharmacie',
+                                            style: FlutterFlowTheme.of(context)
+                                                .headlineMedium
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.emailPharmacieController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Email',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.mail_outlined,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        validator: _model
+                                            .emailPharmacieControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.phonePharmacieController1,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Téléphone',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.local_phone,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType: TextInputType.phone,
+                                        validator: _model
+                                            .phonePharmacieController1Validator
+                                            .asValidator(context),
+                                        inputFormatters: [
+                                          _model.phonePharmacieMask1
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          border: Border.all(
+                                            color: Color(0xFFD0D1DE),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 0, 0, 0),
+                                              child: Icon(
+                                                Icons.settings_outlined,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 24,
+                                              ),
+                                            ),
+                                            FlutterFlowDropDown<String>(
+                                              controller: _model
+                                                      .preferenceContactValueController ??=
+                                                  FormFieldController<
+                                                      String>(userData[
+                                                          'contact_pharma']
+                                                      ['preference_contact']),
+                                              options: [
+                                                'Tous ',
+                                                'Perso',
+                                                'Pharmacie'
+                                              ],
+                                              onChanged: (val) => setState(() =>
+                                                  _model.preferenceContactValue =
+                                                      val),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.75,
+                                              height: 50,
+                                              textStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: Colors.black,
+                                                      ),
+                                              hintText:
+                                                  'Préférences de contact',
+                                              fillColor: Colors.white,
+                                              elevation: 2,
+                                              borderColor: Colors.transparent,
+                                              borderWidth: 0,
+                                              borderRadius: 0,
+                                              margin: EdgeInsetsDirectional
+                                                  .fromSTEB(12, 4, 12, 4),
+                                              hidesUnderline: true,
+                                              isSearchable: false,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 15),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Situation géographique',
+                                            style: FlutterFlowTheme.of(context)
+                                                .headlineMedium
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    MapAdressePharmacie(
+                                        onInitialValue: userData[
+                                                    'situation_geographique']
+                                                ['data']['rue'] +
+                                            ', ' +
+                                            userData['situation_geographique']
+                                                ['data']['ville'] +
+                                            ', ' +
+                                            userData['situation_geographique']
+                                                ['data']['postcode'],
+                                        onAdressSelected: (latitude,
+                                            longitude,
+                                            adresse,
+                                            postcode,
+                                            ville,
+                                            arrondissement,
+                                            region) {
+                                          _model.pharmacieAdresseController
+                                              .text = adresse;
+                                          providerPharmacieUser.setAdresse(
+                                              postcode,
+                                              adresse,
+                                              ville,
+                                              region,
+                                              arrondissement);
+                                        })
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 0, 15),
+                                          child: Text(
+                                            'Accessibilité',
+                                            style: FlutterFlowTheme.of(context)
+                                                .headlineMedium
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller: _model.rerController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'RER',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.train,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        validator: _model.rerControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller: _model.metroController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Métro',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.subway_outlined,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        validator: _model
+                                            .metroControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller: _model.busController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Bus',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.directions_bus_outlined,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        validator: _model.busControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller: _model.tramwayController1,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Tramway',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.tram_outlined,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        validator: _model
+                                            .tramwayController1Validator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller: _model.tramwayController2,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Gare',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.directions_bus_sharp,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        validator: _model
+                                            .tramwayController2Validator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          border: Border.all(
+                                            color: Color(0xFFD0D1DE),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 0, 0, 0),
+                                              child: Icon(
+                                                Icons.local_parking,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 24,
+                                              ),
+                                            ),
+                                            FlutterFlowDropDown<String>(
+                                              controller: _model
+                                                      .parkingValueController ??=
+                                                  FormFieldController<String>(
+                                                      ''),
+                                              options: ['Gratuit ', 'Payant'],
+                                              onChanged: (val) => setState(() =>
+                                                  _model.parkingValue = val),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.73,
+                                              height: 50,
+                                              textStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: Colors.black,
+                                                      ),
+                                              hintText: 'Stationnement',
+                                              fillColor: Colors.white,
+                                              elevation: 2,
+                                              borderColor: Colors.transparent,
+                                              borderWidth: 0,
+                                              borderRadius: 0,
+                                              margin: EdgeInsetsDirectional
+                                                  .fromSTEB(12, 4, 12, 4),
+                                              hidesUnderline: true,
+                                              isSearchable: false,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Horaires',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineMedium
+                                              .override(
+                                                fontFamily: 'Poppins',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/24H.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Non stop',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model.nonSTOPValue !=
+                                                    userData['Non-stop']
+                                                ? false
+                                                : userData['Non-stop'],
+                                            onChanged: (newValue) async {
+                                              setState(() {
+                                                _model.nonSTOPValue = newValue;
+                                              });
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    if (_model.nonSTOPValue == false)
+                                      HorraireSemaineSelect(
+                                        callback: (listHoraire) {
+                                          providerPharmacieUser
+                                              .setHoraire(listHoraire);
+                                        },
+                                        initialHours: providerPharmacieUser
+                                            .selectedHoraires,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Typologie',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineMedium
+                                              .override(
+                                                fontFamily: 'Poppins',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.store_outlined,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Centre commercial',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: providerPharmacieUser
+                                                        .selectedTypologie ==
+                                                    'Centre commercial'
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  providerPharmacieUser
+                                                      .updateTypologie(newValue,
+                                                          'Centre commercial'));
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.apartment,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Centre ville',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: providerPharmacieUser
+                                                        .selectedTypologie ==
+                                                    'Centre ville'
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  providerPharmacieUser
+                                                      .updateTypologie(newValue,
+                                                          'Centre ville'));
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.flight_takeoff,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Aéroport',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: 'Aéroport' !=
+                                                    userData['typologie']
+                                                ? false
+                                                : true,
+                                            onChanged: (newValue) async {
+                                              setState(() => _model
+                                                      .typologieAeroportValue =
+                                                  newValue);
+                                              typologie = 'Aéroport';
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.directions_bus,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Gare',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: typologie == 'Gare'
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.comptencesLaboValue1 =
+                                                      newValue);
+                                              typologie = 'Gare';
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/quartier.svg',
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Quartier',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: typologie == 'Quartier'
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.comptencesLaboValue2 =
+                                                      newValue);
+                                              typologie = 'Quartier';
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.landscape_outlined,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Lieu touristique',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value:
+                                                typologie == 'Lieu touristique'
+                                                    ? true
+                                                    : false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.comptencesLaboValue3 =
+                                                      newValue);
+                                              typologie = 'Lieu touristique';
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.nature_people_outlined,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Zone rurale',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: typologie == 'Zone rurale'
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.comptencesTRODValue =
+                                                      newValue);
+                                              typologie = 'Zone rurale';
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          border: Border.all(
+                                            color: Color(0xFFD0D1DE),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 0, 0, 0),
+                                              child: Icon(
+                                                Icons.group,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 24,
+                                              ),
+                                            ),
+                                            FlutterFlowDropDown<String>(
+                                              controller: _model
+                                                      .patientParJourValueController ??=
+                                                  FormFieldController<String>(
+                                                      null),
+                                              options: [
+                                                '<100 ',
+                                                '100-250',
+                                                '250-400',
+                                                '>400'
+                                              ],
+                                              onChanged: (val) => setState(() =>
+                                                  _model.patientParJourValue =
+                                                      val),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.72,
+                                              height: 50,
+                                              textStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: Colors.black,
+                                                      ),
+                                              hintText:
+                                                  'Nombre de patients par jour',
+                                              fillColor: Colors.white,
+                                              elevation: 2,
+                                              borderColor: Colors.transparent,
+                                              borderWidth: 0,
+                                              borderRadius: 0,
+                                              margin: EdgeInsetsDirectional
+                                                  .fromSTEB(12, 4, 12, 4),
+                                              hidesUnderline: true,
+                                              isSearchable: false,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: PredictionNomPhamracie(
-                                        initialValue: userData != null ? userData['situation_geographique']['adresse'] : '',
-                                        onPlaceSelected: (adresse) {
-                                          providerPharmacieUser.setAdresseRue(adresse);
-                                        })),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                  child: TextFormField(
-                                    controller: _model.nomdelapharmacieController2,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Titulaire',
-                                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context).focusColor,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.person,
-                                        color: FlutterFlowTheme.of(context).secondaryText,
-                                      ),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10, 10, 10, 10),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(15),
+                                      shape: BoxShape.rectangle,
                                     ),
-                                    style: FlutterFlowTheme.of(context).bodyMedium,
-                                    validator: _model.nomdelapharmacieController2Validator.asValidator(context),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                  child: providerPharmacieUser.selectedGroupement[0]['image'] == 'Autre.jpg'
-                                      ? Row(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Container(
-                                              width: MediaQuery.of(context).size.width * 0.60,
-                                              child: TextFormField(
-                                                controller: _model.groupementAutre,
-                                                initialValue: providerPharmacieUser.selectedGroupement[0]['name'],
-                                                onChanged: (value) {
-                                                  providerPharmacieUser.selectGroupement({"name": "${value}", "image": "Autre.jpg"});
-                                                },
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  labelText: 'Votre groupement',
-                                                  hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0xFFD0D1DE),
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(4),
+                                            Text(
+                                              'LGO',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .headlineMedium
+                                                  .override(
+                                                    fontFamily: 'Poppins',
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w600,
                                                   ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: FlutterFlowTheme.of(context).focusColor,
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(4),
-                                                  ),
-                                                  errorBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(4),
-                                                  ),
-                                                  focusedErrorBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: Color(0x00000000),
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(4),
-                                                  ),
-                                                  prefixIcon: Icon(
-                                                    Icons.group_work_outlined,
-                                                    color: FlutterFlowTheme.of(context).secondaryText,
-                                                  ),
-                                                ),
-                                                style: FlutterFlowTheme.of(context).bodyMedium,
-                                              ),
                                             ),
                                             InkWell(
                                               splashColor: Colors.transparent,
                                               focusColor: Colors.transparent,
                                               hoverColor: Colors.transparent,
-                                              highlightColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
                                               onTap: () async {
                                                 await showModalBottomSheet(
                                                   isScrollControlled: true,
-                                                  backgroundColor: Colors.transparent,
-                                                  enableDrag: true,
-                                                  context: context,
-                                                  builder: (bottomSheetContext) {
-                                                    return DraggableScrollableSheet(
-                                                        initialChildSize: 0.75,
-                                                        builder: (BuildContext context, ScrollController scrollController) {
-                                                          return GestureDetector(
-                                                            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                            child: Padding(
-                                                              padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                              child: PopupGroupementWidget(onTap: (value) {
-                                                                var groupement = context.read<ProviderPharmacieUser>();
-                                                                groupement.selectGroupement(value);
-                                                              }),
-                                                            ),
-                                                          );
-                                                        });
-                                                  },
-                                                ).then((value) => setState(() {}));
-                                              },
-                                              child: Container(
-                                                width: 100,
-                                                height: 30,
-                                                child: GradientTextCustom(
-                                                  width: 100,
-                                                  height: 30,
-                                                  text: 'Modifier',
-                                                  radius: 0.0,
-                                                  fontSize: 12.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Image.asset(
-                                              'assets/groupements/' + providerPharmacieUser.selectedGroupement[0]['image'],
-                                              width: 120,
-                                              height: 60,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            Container(
-                                              width: 100,
-                                              decoration: BoxDecoration(
-                                                color: FlutterFlowTheme.of(context).secondaryBackground,
-                                              ),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Groupement',
-                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                          fontFamily: 'Poppins',
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w600,
-                                                        ),
-                                                  ),
-                                                  Text(
-                                                    providerPharmacieUser.selectedGroupement[0]['name'],
-                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                          fontFamily: 'Poppins',
-                                                          fontSize: 11,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor: Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor: Colors.transparent,
+                                                  backgroundColor:
+                                                      Colors.transparent,
                                                   enableDrag: false,
                                                   context: context,
-                                                  builder: (bottomSheetContext) {
-                                                    return DraggableScrollableSheet(builder: (BuildContext context, ScrollController scrollController) {
+                                                  builder:
+                                                      (bottomSheetContext) {
+                                                    return DraggableScrollableSheet(
+                                                        builder: (BuildContext
+                                                                context,
+                                                            ScrollController
+                                                                scrollController) {
                                                       return GestureDetector(
-                                                        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                                        onTap: () => FocusScope
+                                                                .of(context)
+                                                            .requestFocus(
+                                                                _unfocusNode),
                                                         child: Padding(
-                                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                          child: PopupGroupementWidget(onTap: (value) {
-                                                            print(value);
-                                                            providerPharmacieUser.selectGroupement(value);
-                                                          }),
+                                                          padding: MediaQuery.of(
+                                                                  bottomSheetContext)
+                                                              .viewInsets,
+                                                          child: PopupLgoWidget(
+                                                            onTap: (lgo) {
+                                                              providerPharmacieUser
+                                                                  .selectLGO(
+                                                                      lgo);
+                                                            },
+                                                          ),
                                                         ),
                                                       );
                                                     });
                                                   },
-                                                ).then((value) => setState(() {}));
+                                                ).then(
+                                                    (value) => setState(() {}));
                                               },
                                               child: Container(
                                                 width: 100,
@@ -564,7 +2334,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                                 child: GradientTextCustom(
                                                   width: 100,
                                                   height: 30,
-                                                  text: 'Modifier',
+                                                  text: 'Ajouter',
                                                   radius: 0.0,
                                                   fontSize: 12.0,
                                                 ),
@@ -572,2441 +2342,1701 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                             ),
                                           ],
                                         ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                  child: TextFormField(
-                                    controller: _model.presentationController,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Présentation',
-                                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFD0D1DE),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context).focusColor,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      5, 5, 5, 5),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
                                     ),
-                                    style: FlutterFlowTheme.of(context).bodyMedium,
-                                    maxLines: null,
-                                    keyboardType: TextInputType.multiline,
-                                    validator: _model.presentationControllerValidator.asValidator(context),
+                                    child: ListView(
+                                      padding: EdgeInsets.zero,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.8,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/lgo/' +
+                                                        providerPharmacieUser
+                                                                .selectedLgo[0]
+                                                            ['image'],
+                                                    width: 120,
+                                                    height: 60,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                5, 0, 0, 0),
+                                                    child: Text(
+                                                      providerPharmacieUser
+                                                              .selectedLgo[0]
+                                                          ['name'],
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    // height: MediaQuery.of(context).size.height * 1,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                    ),
-                    child: TabBar(
-                      onTap: (value) {
-                        setState(() {
-                          _selectedIndex = value;
-                        });
-                      },
-                      controller: _tabController,
-                      labelColor: blackColor,
-                      unselectedLabelColor: blackColor,
-                      indicator: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF7CEDAC),
-                            Color(0xFF42D2FF),
-                          ],
                         ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      indicatorWeight: 1,
-                      indicatorPadding: EdgeInsets.only(top: 40),
-                      unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Poppins',
-                            color: Color(0xFF595A71),
-                            fontSize: 14.0,
-                          ),
-                      labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
-                      tabs: [
-                        Tab(
-                          text: 'Profil',
-                        ),
-                        Tab(
-                          text: 'Offres',
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (_selectedIndex == 0)
-                    Container(
-                        child: Column(children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFEFF6F7),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                           child: Container(
-                            width: 100,
+                            width: double.infinity,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
                               borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
                             ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                                    child: Row(
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Contact pharmacie',
-                                          style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                          'Missions',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineMedium
+                                              .override(
                                                 fontFamily: 'Poppins',
-                                                color: FlutterFlowTheme.of(context).primaryText,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.emailPharmacieController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Email',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.mail_outlined,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.emailAddress,
-                                      validator: _model.emailPharmacieControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.phonePharmacieController1,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Téléphone',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.local_phone,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.phone,
-                                      validator: _model.phonePharmacieController1Validator.asValidator(context),
-                                      inputFormatters: [_model.phonePharmacieMask1],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                                        borderRadius: BorderRadius.circular(4),
-                                        border: Border.all(
-                                          color: Color(0xFFD0D1DE),
-                                        ),
-                                      ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                                            child: Icon(
-                                              Icons.settings_outlined,
-                                              color: FlutterFlowTheme.of(context).secondaryText,
-                                              size: 24,
-                                            ),
-                                          ),
-                                          FlutterFlowDropDown<String>(
-                                            controller: _model.preferenceContactValueController ??= FormFieldController<String>(userData['contact_pharma']['preference_contact']),
-                                            options: ['Tous ', 'Perso', 'Pharmacie'],
-                                            onChanged: (val) => setState(() => _model.preferenceContactValue = val),
-                                            width: MediaQuery.of(context).size.width * 0.75,
-                                            height: 50,
-                                            textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.coronavirus,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
                                                 ),
-                                            hintText: 'Préférences de contact',
-                                            fillColor: Colors.white,
-                                            elevation: 2,
-                                            borderColor: Colors.transparent,
-                                            borderWidth: 0,
-                                            borderRadius: 0,
-                                            margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
-                                            hidesUnderline: true,
-                                            isSearchable: false,
+                                              ),
+                                              Text(
+                                                'Test COVID',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: providerPharmacieUser
+                                                    .selectedMissions
+                                                    .contains('Test COVID')
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  providerPharmacieUser
+                                                      .updateMissions(newValue,
+                                                          'Test COVID'));
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/Vaccines.svg',
+                                                    width: 20,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Vaccination',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: providerPharmacieUser
+                                                    .selectedMissions
+                                                    .contains('Vaccination')
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  providerPharmacieUser
+                                                      .updateMissions(newValue,
+                                                          'Vaccination'));
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/Entretien.svg',
+                                                    width: 20,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Entretien pharmaceutique',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: providerPharmacieUser
+                                                    .selectedMissions
+                                                    .contains(
+                                                        'Entretien pharmaceutique')
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() => providerPharmacieUser
+                                                  .updateMissions(newValue,
+                                                      'Entretien pharmaceutique'));
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.videocam_outlined,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Borne de télé-médecine',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: providerPharmacieUser
+                                                    .selectedMissions
+                                                    .contains(
+                                                        'Borne de télé-médecine')
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() => providerPharmacieUser
+                                                  .updateMissions(newValue,
+                                                      'Borne de télé-médecine'));
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.local_pharmacy_outlined,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Préparation externalisé',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              )
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: providerPharmacieUser
+                                                    .selectedMissions
+                                                    .contains(
+                                                        'Préparation externalisé')
+                                                ? true
+                                                : false,
+                                            onChanged: (newValue) async {
+                                              setState(() => providerPharmacieUser
+                                                  .updateMissions(newValue,
+                                                      'Préparation externalisé'));
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                           child: Container(
+                            width: double.infinity,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
                               borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
                             ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                                    child: Row(
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Situation géographique',
-                                          style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                          'Confort',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineMedium
+                                              .override(
                                                 fontFamily: 'Poppins',
-                                                color: FlutterFlowTheme.of(context).primaryText,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  MapAdressePharmacie(
-                                      onInitialValue: userData['situation_geographique']['data']['rue'] + ', ' + userData['situation_geographique']['data']['ville'] + ', ' + userData['situation_geographique']['data']['postcode'],
-                                      onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region) {
-                                        _model.pharmacieAdresseController.text = adresse;
-                                        providerPharmacieUser.setAdresse(postcode, adresse, ville, region, arrondissement);
-                                      })
-                                ],
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/Pause.svg',
+                                                    width: 20,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Salle de pause',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model
+                                                    .confortSallePauseValue ??=
+                                                false,
+                                            onChanged: (newValue) async {
+                                              setState(() => _model
+                                                      .confortSallePauseValue =
+                                                  newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/Bot.svg',
+                                                    width: 22,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Robot',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model.confortRobotValue ??=
+                                                false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.confortRobotValue =
+                                                      newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/qrcode.svg',
+                                                    width: 20,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Étiquettes électroniques',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value:
+                                                _model.confortEtiquetteValue ??=
+                                                    false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.confortEtiquetteValue =
+                                                      newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/moneyeur.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              _model.confortMonayeurValue
+                                                  ? Text(
+                                                      'Monnayeur',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    )
+                                                  : Text(
+                                                      'Caisse classique',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    )
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model.confortMonayeurValue,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.confortMonayeurValue =
+                                                      newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/clim.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Climatisation',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model.confortCimValue ??=
+                                                false,
+                                            onChanged: (newValue) async {
+                                              setState(() => _model
+                                                  .confortCimValue = newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/chauffage.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Chauffage',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value:
+                                                _model.confortChauffageValue ??=
+                                                    false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.confortChauffageValue =
+                                                      newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/vigile.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Vigile',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model.confortVigileValue ??=
+                                                false,
+                                            onChanged: (newValue) async {
+                                              setState(() =>
+                                                  _model.confortVigileValue =
+                                                      newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/Groups.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Comité d’entreprise',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model
+                                                    .confortComiteEntrepriseValue ??=
+                                                false,
+                                            onChanged: (newValue) async {
+                                              setState(() => _model
+                                                      .confortComiteEntrepriseValue =
+                                                  newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
                           child: Container(
-                            width: 100,
+                            width: double.infinity,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
                               borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
                             ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                                        child: Text(
-                                          'Accessibilité',
-                                          style: FlutterFlowTheme.of(context).headlineMedium.override(
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Tendances',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineMedium
+                                              .override(
                                                 fontFamily: 'Poppins',
-                                                color: FlutterFlowTheme.of(context).primaryText,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.rerController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'RER',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.train,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      validator: _model.rerControllerValidator.asValidator(context),
+                                      ],
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.metroController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Métro',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.subway_outlined,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      validator: _model.metroControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.busController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Bus',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.directions_bus_outlined,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      validator: _model.busControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.tramwayController1,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Tramway',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.tram_outlined,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      validator: _model.tramwayController1Validator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.tramwayController2,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Gare',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.directions_bus_sharp,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      validator: _model.tramwayController2Validator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                                        borderRadius: BorderRadius.circular(4),
-                                        border: Border.all(
-                                          color: Color(0xFFD0D1DE),
-                                        ),
-                                      ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                                            child: Icon(
-                                              Icons.local_parking,
-                                              color: FlutterFlowTheme.of(context).secondaryText,
-                                              size: 24,
-                                            ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/ordonances.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Ordonances',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
                                           ),
-                                          FlutterFlowDropDown<String>(
-                                            controller: _model.parkingValueController ??= FormFieldController<String>(''),
-                                            options: ['Gratuit ', 'Payant'],
-                                            onChanged: (val) => setState(() => _model.parkingValue = val),
-                                            width: MediaQuery.of(context).size.width * 0.73,
-                                            height: 50,
-                                            textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                            hintText: 'Stationnement',
-                                            fillColor: Colors.white,
-                                            elevation: 2,
-                                            borderColor: Colors.transparent,
-                                            borderWidth: 0,
-                                            borderRadius: 0,
-                                            margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
-                                            hidesUnderline: true,
-                                            isSearchable: false,
-                                          ),
+                                          Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: SliderSimple(
+                                                  slider: userData['tendances']
+                                                          [0]['Ordonances'] ??
+                                                      1,
+                                                  onChanged: (value) {
+                                                    providerPharmacieUser
+                                                        .setTendences(
+                                                            0,
+                                                            'Ordonances',
+                                                            value);
+                                                  })),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Horaires',
-                                        style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                              fontFamily: 'Poppins',
-                                              color: FlutterFlowTheme.of(context).primaryText,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/24H.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Non stop',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.nonSTOPValue != userData['Non-stop'] ? false : userData['Non-stop'],
-                                          onChanged: (newValue) async {
-                                            setState(() {
-                                              _model.nonSTOPValue = newValue;
-                                            });
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (_model.nonSTOPValue == false)
-                                    HorraireSemaineSelect(
-                                      callback: (listHoraire) {
-                                        providerPharmacieUser.setHoraire(listHoraire);
-                                      },
-                                      initialHours: providerPharmacieUser.selectedHoraires,
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Typologie',
-                                        style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                              fontFamily: 'Poppins',
-                                              color: FlutterFlowTheme.of(context).primaryText,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.store_outlined,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Centre commercial',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: providerPharmacieUser.selectedTypologie == 'Centre commercial' ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => providerPharmacieUser.updateTypologie(newValue, 'Centre commercial'));
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.apartment,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Centre ville',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: providerPharmacieUser.selectedTypologie == 'Centre ville' ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => providerPharmacieUser.updateTypologie(newValue, 'Centre ville'));
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.flight_takeoff,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Aéroport',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: 'Aéroport' != userData['typologie'] ? false : true,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.typologieAeroportValue = newValue);
-                                            typologie = 'Aéroport';
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.directions_bus,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Gare',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: typologie == 'Gare' ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.comptencesLaboValue1 = newValue);
-                                            typologie = 'Gare';
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/quartier.svg',
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Quartier',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: typologie == 'Quartier' ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.comptencesLaboValue2 = newValue);
-                                            typologie = 'Quartier';
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.landscape_outlined,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Lieu touristique',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: typologie == 'Lieu touristique' ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.comptencesLaboValue3 = newValue);
-                                            typologie = 'Lieu touristique';
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.nature_people_outlined,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Zone rurale',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: typologie == 'Zone rurale' ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.comptencesTRODValue = newValue);
-                                            typologie = 'Zone rurale';
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                                        borderRadius: BorderRadius.circular(4),
-                                        border: Border.all(
-                                          color: Color(0xFFD0D1DE),
-                                        ),
-                                      ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                                            child: Icon(
-                                              Icons.group,
-                                              color: FlutterFlowTheme.of(context).secondaryText,
-                                              size: 24,
-                                            ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/bebe.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Cosmétiques',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
                                           ),
-                                          FlutterFlowDropDown<String>(
-                                            controller: _model.patientParJourValueController ??= FormFieldController<String>(null),
-                                            options: ['<100 ', '100-250', '250-400', '>400'],
-                                            onChanged: (val) => setState(() => _model.patientParJourValue = val),
-                                            width: MediaQuery.of(context).size.width * 0.72,
-                                            height: 50,
-                                            textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.black,
-                                                ),
-                                            hintText: 'Nombre de patients par jour',
-                                            fillColor: Colors.white,
-                                            elevation: 2,
-                                            borderColor: Colors.transparent,
-                                            borderWidth: 0,
-                                            borderRadius: 0,
-                                            margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
-                                            hidesUnderline: true,
-                                            isSearchable: false,
-                                          ),
+                                          Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: SliderSimple(
+                                                slider: userData['tendances'][0]
+                                                        ['Cosmétiques'] ??
+                                                    1,
+                                                onChanged: (value) {
+                                                  providerPharmacieUser
+                                                      .setTendences(1,
+                                                          'Cosmétiques', value);
+                                                },
+                                              )),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/phyto.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Phyto / aroma',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: SliderSimple(
+                                                  slider: userData['tendances']
+                                                              [0]
+                                                          ['Phyto / aroma'] ??
+                                                      1,
+                                                  onChanged: (value) {
+                                                    providerPharmacieUser
+                                                        .setTendences(
+                                                            2,
+                                                            'Phyto / aroma',
+                                                            value);
+                                                  })),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/nutrition.svg',
+                                                    width: 24,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Nutrition',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: SliderSimple(
+                                                  slider: userData['tendances']
+                                                          [0]['Nutrition'] ??
+                                                      1,
+                                                  onChanged: (value) {
+                                                    providerPharmacieUser
+                                                        .setTendences(3,
+                                                            'Nutrition', value);
+                                                  })),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 5, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 10, 0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/icons/question.svg',
+                                                    width: 22,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Color(0xFF595A71),
+                                                            BlendMode.srcIn),
+                                                  )),
+                                              Text(
+                                                'Conseil',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: SliderSimple(
+                                                  slider: userData['tendances']
+                                                          [0]['Conseil'] ??
+                                                      1,
+                                                  onChanged: (value) {
+                                                    providerPharmacieUser
+                                                        .setTendences(4,
+                                                            'Conseil', value);
+                                                  })),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                                    borderRadius: BorderRadius.circular(15),
-                                    shape: BoxShape.rectangle,
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Row(
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFEFF6F7),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 15),
+                                      child: Row(
                                         mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'LGO',
-                                            style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                            'Notre équipe',
+                                            style: FlutterFlowTheme.of(context)
+                                                .headlineMedium
+                                                .override(
                                                   fontFamily: 'Poppins',
-                                                  color: FlutterFlowTheme.of(context).primaryText,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                           ),
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              await showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                backgroundColor: Colors.transparent,
-                                                enableDrag: false,
-                                                context: context,
-                                                builder: (bottomSheetContext) {
-                                                  return DraggableScrollableSheet(builder: (BuildContext context, ScrollController scrollController) {
-                                                    return GestureDetector(
-                                                      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                      child: Padding(
-                                                        padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                        child: PopupLgoWidget(
-                                                          onTap: (lgo) {
-                                                            providerPharmacieUser.selectLGO(lgo);
-                                                          },
-                                                        ),
-                                                      ),
-                                                    );
-                                                  });
-                                                },
-                                              ).then((value) => setState(() {}));
-                                            },
-                                            child: Container(
-                                              width: 100,
-                                              height: 30,
-                                              child: GradientTextCustom(
-                                                width: 100,
-                                                height: 30,
-                                                text: 'Ajouter',
-                                                radius: 0.0,
-                                                fontSize: 12.0,
-                                              ),
-                                            ),
-                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.nbPharmaciensController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Nombre de pharmaciens',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.groups_2,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType: TextInputType.number,
+                                        validator: _model
+                                            .nbPharmaciensControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.nbPreparateurController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Nombre de préparateurs',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.groups_2,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType: TextInputType.number,
+                                        validator: _model
+                                            .nbPreparateurControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.nbRayonnistesController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Nombre de rayonnistes',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.groups_2,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType: TextInputType.number,
+                                        validator: _model
+                                            .nbRayonnistesControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.nbConseillersController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Nombre de conseillers',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.groups_2,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType: TextInputType.number,
+                                        validator: _model
+                                            .nbConseillersControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller: _model.nbApprentiController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Nombre d\'apprentis',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.groups_2,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType: TextInputType.number,
+                                        validator: _model
+                                            .nbApprentiControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.nbEtudiantsController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              'Nombre d\'étudiants pharmacie',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.groups_2,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType: TextInputType.number,
+                                        validator: _model
+                                            .nbEtudiantsControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 10),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.nbEtudiants6emeController,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              'Nombre d\'étudiants 6ème année',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFD0D1DE),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .focusColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0x00000000),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          prefixIcon: Icon(
+                                            Icons.groups_2,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        keyboardType: TextInputType.number,
+                                        validator: _model
+                                            .nbEtudiants6emeControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                                  ),
-                                  child: ListView(
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.of(context).size.width * 0.8,
-                                            decoration: BoxDecoration(
-                                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Image.asset(
-                                                  'assets/lgo/' + providerPharmacieUser.selectedLgo[0]['image'],
-                                                  width: 120,
-                                                  height: 60,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                                                  child: Text(
-                                                    providerPharmacieUser.selectedLgo[0]['name'],
-                                                    style: FlutterFlowTheme.of(context).bodyMedium,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                          child: Container(
+                            width: double.infinity,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 4,
+                                  color: Color(0x301F5C67),
+                                  offset: Offset(0, 4),
+                                )
+                              ],
+                              gradient: LinearGradient(
+                                colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                                stops: [0, 1],
+                                begin: AlignmentDirectional(1, -1),
+                                end: AlignmentDirectional(-1, 1),
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                await Future.delayed(Duration(seconds: 2));
+                                updatePharmacie(context);
+                              },
+                              text: 'Enregistrer',
+                              options: FFButtonOptions(
+                                elevation: 0,
+                                width: double.infinity,
+                                height: 40,
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                iconPadding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                color: Color(0x00FFFFFF),
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Missions',
-                                        style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                              fontFamily: 'Poppins',
-                                              color: FlutterFlowTheme.of(context).primaryText,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.coronavirus,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Test COVID',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: providerPharmacieUser.selectedMissions.contains('Test COVID') ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => providerPharmacieUser.updateMissions(newValue, 'Test COVID'));
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/Vaccines.svg',
-                                                  width: 20,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Vaccination',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: providerPharmacieUser.selectedMissions.contains('Vaccination') ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => providerPharmacieUser.updateMissions(newValue, 'Vaccination'));
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/Entretien.svg',
-                                                  width: 20,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Entretien pharmaceutique',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: providerPharmacieUser.selectedMissions.contains('Entretien pharmaceutique') ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => providerPharmacieUser.updateMissions(newValue, 'Entretien pharmaceutique'));
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.videocam_outlined,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Borne de télé-médecine',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: providerPharmacieUser.selectedMissions.contains('Borne de télé-médecine') ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => providerPharmacieUser.updateMissions(newValue, 'Borne de télé-médecine'));
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.local_pharmacy_outlined,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Préparation externalisé',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            )
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: providerPharmacieUser.selectedMissions.contains('Préparation externalisé') ? true : false,
-                                          onChanged: (newValue) async {
-                                            setState(() => providerPharmacieUser.updateMissions(newValue, 'Préparation externalisé'));
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Confort',
-                                        style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                              fontFamily: 'Poppins',
-                                              color: FlutterFlowTheme.of(context).primaryText,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/Pause.svg',
-                                                  width: 20,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Salle de pause',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.confortSallePauseValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.confortSallePauseValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/Bot.svg',
-                                                  width: 22,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Robot',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.confortRobotValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.confortRobotValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/qrcode.svg',
-                                                  width: 20,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Étiquettes électroniques',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.confortEtiquetteValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.confortEtiquetteValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/moneyeur.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            _model.confortMonayeurValue
-                                                ? Text(
-                                                    'Monnayeur',
-                                                    style: FlutterFlowTheme.of(context).bodyMedium,
-                                                  )
-                                                : Text(
-                                                    'Caisse classique',
-                                                    style: FlutterFlowTheme.of(context).bodyMedium,
-                                                  )
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.confortMonayeurValue,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.confortMonayeurValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/clim.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Climatisation',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.confortCimValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.confortCimValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/chauffage.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Chauffage',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.confortChauffageValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.confortChauffageValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/vigile.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Vigile',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.confortVigileValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.confortVigileValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/Groups.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Comité d’entreprise',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.confortComiteEntrepriseValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.confortComiteEntrepriseValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Tendances',
-                                        style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                              fontFamily: 'Poppins',
-                                              color: FlutterFlowTheme.of(context).primaryText,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/ordonances.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Ordonances',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                            width: MediaQuery.of(context).size.width * 0.4,
-                                            decoration: BoxDecoration(
-                                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                                            ),
-                                            child: SliderSimple(
-                                                slider: userData['tendances'][0]['Ordonances'] ?? 1,
-                                                onChanged: (value) {
-                                                  providerPharmacieUser.setTendences(0, 'Ordonances', value);
-                                                })),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/bebe.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Cosmétiques',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                            width: MediaQuery.of(context).size.width * 0.4,
-                                            decoration: BoxDecoration(
-                                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                                            ),
-                                            child: SliderSimple(
-                                              slider: userData['tendances'][0]['Cosmétiques'] ?? 1,
-                                              onChanged: (value) {
-                                                providerPharmacieUser.setTendences(1, 'Cosmétiques', value);
-                                              },
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/phyto.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Phyto / aroma',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                            width: MediaQuery.of(context).size.width * 0.4,
-                                            decoration: BoxDecoration(
-                                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                                            ),
-                                            child: SliderSimple(
-                                                slider: userData['tendances'][0]['Phyto / aroma'] ?? 1,
-                                                onChanged: (value) {
-                                                  providerPharmacieUser.setTendences(2, 'Phyto / aroma', value);
-                                                })),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/nutrition.svg',
-                                                  width: 24,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Nutrition',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                            width: MediaQuery.of(context).size.width * 0.4,
-                                            decoration: BoxDecoration(
-                                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                                            ),
-                                            child: SliderSimple(
-                                                slider: userData['tendances'][0]['Nutrition'] ?? 1,
-                                                onChanged: (value) {
-                                                  providerPharmacieUser.setTendences(3, 'Nutrition', value);
-                                                })),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                                child: SvgPicture.asset(
-                                                  'assets/icons/question.svg',
-                                                  width: 22,
-                                                  colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
-                                                )),
-                                            Text(
-                                              'Conseil',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
-                                            ),
-                                          ],
-                                        ),
-                                        Container(
-                                            width: MediaQuery.of(context).size.width * 0.4,
-                                            decoration: BoxDecoration(
-                                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                                            ),
-                                            child: SliderSimple(
-                                                slider: userData['tendances'][0]['Conseil'] ?? 1,
-                                                onChanged: (value) {
-                                                  providerPharmacieUser.setTendences(4, 'Conseil', value);
-                                                })),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFEFF6F7),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Notre équipe',
-                                          style: FlutterFlowTheme.of(context).headlineMedium.override(
-                                                fontFamily: 'Poppins',
-                                                color: FlutterFlowTheme.of(context).primaryText,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.nbPharmaciensController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombre de pharmaciens',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.groups_2,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.number,
-                                      validator: _model.nbPharmaciensControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.nbPreparateurController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombre de préparateurs',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.groups_2,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.number,
-                                      validator: _model.nbPreparateurControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.nbRayonnistesController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombre de rayonnistes',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.groups_2,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.number,
-                                      validator: _model.nbRayonnistesControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.nbConseillersController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombre de conseillers',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.groups_2,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.number,
-                                      validator: _model.nbConseillersControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.nbApprentiController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombre d\'apprentis',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.groups_2,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.number,
-                                      validator: _model.nbApprentiControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.nbEtudiantsController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombre d\'étudiants pharmacie',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.groups_2,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.number,
-                                      validator: _model.nbEtudiantsControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      controller: _model.nbEtudiants6emeController,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombre d\'étudiants 6ème année',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.groups_2,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      keyboardType: TextInputType.number,
-                                      validator: _model.nbEtudiants6emeControllerValidator.asValidator(context),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
-                        child: Container(
-                          width: double.infinity,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 4,
-                                color: Color(0x301F5C67),
-                                offset: Offset(0, 4),
-                              )
-                            ],
-                            gradient: LinearGradient(
-                              colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                              stops: [0, 1],
-                              begin: AlignmentDirectional(1, -1),
-                              end: AlignmentDirectional(-1, 1),
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: FFButtonWidget(
-                            onPressed: () async {
-                              updatePharmacie(context);
-                            },
-                            text: 'Enregistrer',
-                            options: FFButtonOptions(
-                              elevation: 0,
-                              width: double.infinity,
-                              height: 40,
-                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                              color: Color(0x00FFFFFF),
-                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ])),
-                  if (_selectedIndex == 1 && offresPharma.isNotEmpty)
-                    for (var searchI in offresPharma)
-                      CardOfferProfilWidget(
-                        searchI: searchI,
-                      )
-                ],
+                      ])),
+                    if (_selectedIndex == 1 && offresPharma.isNotEmpty)
+                      for (var searchI in offresPharma)
+                        CardOfferProfilWidget(
+                          searchI: searchI,
+                        )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      });
+    }
   }
 }

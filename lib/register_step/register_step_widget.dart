@@ -1600,6 +1600,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                           ),
                           child: FFButtonWidget(
                             onPressed: () async {
+                              await Future.delayed(Duration(seconds: 2));
                               var send_data = RegisterStepModel().createUserToFirebase(
                                   widget_context_provider,
                                   _model.afficherTelephone,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 
 import '../../constant.dart';
 import '../../custom_code/widgets/date_selector_interimaire.dart';
@@ -105,6 +106,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
 
     if (_model.enregistrerOffre == true) {
       firestore.collection('offres').add(createOffre);
+      showCustomSnackBar(context, 'Votre offre a été enregistrée');
     }
   }
 

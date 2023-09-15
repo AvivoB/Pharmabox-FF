@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 
 import '../../constant.dart';
 import '../../custom_code/widgets/date_selector_interimaire.dart';
@@ -102,6 +103,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
 
     if (_model.saveSearch == true) {
       firestore.collection('recherches').add(createRecherche).then((docRef) {
+        showCustomSnackBar(context, 'Votre recherche a été enregistrée');
         print('Données enregistrées avec succès ! ID du document : ${docRef.id}');
       }).catchError((error) {
         print('Erreur lors de l\'enregistrement des données : $error');

@@ -114,15 +114,24 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                             ),
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.32,
-                      child: Image.asset(
-                        'assets/groupements/' + widget.data['groupement'][0]['image'].toString(),
-                        width: 150.0,
-                        height: 50.0,
-                        fit: BoxFit.cover,
+                    if (widget.data['groupement'][0]['image'].toString() != 'Autre.jpg')
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.32,
+                        child: Image.asset(
+                          'assets/groupements/' + widget.data['groupement'][0]['image'].toString(),
+                          width: 150.0,
+                          height: 50.0,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    )
+                    if (widget.data['groupement'][0]['image'].toString() == 'Autre.jpg')
+                      Container(
+                          width: MediaQuery.of(context).size.width * 0.32,
+                          child: Text(widget.data['groupement'][0]['name'].toString(),
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF595A71),
+                                  )))
                   ],
                 ),
               ),

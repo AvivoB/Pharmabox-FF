@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 
 import '../../constant.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -121,7 +122,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                                 future: getUserData(data!['by_user']),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return CircularProgressIndicator(); // or another loading widget
+                                    return Center(child: ProgressIndicatorPharmabox()); // or another loading widget
                                   } else if (snapshot.hasError) {
                                     return Text('Error: ${snapshot.error}');
                                   } else {
