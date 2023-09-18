@@ -72,6 +72,11 @@ class ProfilModel extends FlutterFlowModel {
   List<String> contratType = [];
 
   List horaireDispoInterim = [];
+
+  bool? afficher_email;
+
+  bool? afficher_tel;
+
   void addToContratType(String item) {
     if (!contratType.contains(item)) {
       contratType.add(item);

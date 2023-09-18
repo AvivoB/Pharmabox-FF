@@ -241,7 +241,6 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                                     child: LikeButtonWidget(
                                       documentId: userData != null ? userData['id'] : '',
-                                      isActive: false,
                                     )),
                               ],
                             ),

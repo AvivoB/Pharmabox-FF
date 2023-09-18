@@ -60,10 +60,13 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
     await documentRef.update({
       'reseau': FieldValue.arrayRemove([currentuserid]),
     });
+    setState(() {
+      isInNetwork = false;
+    });
   }
 
 // Verifie si on est dans le réseau
-  Future<bool> verifyInNetwork(String typeCollection, String docId) async {
+  Future<void> verifyInNetwork(String typeCollection, String docId) async {
     String currentUserId = await getCurrentUserId();
 
     DocumentReference documentRef = FirebaseFirestore.instance
@@ -78,11 +81,11 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
       // Check if 'reseau' array contains the current user's ID
       if (data != null ? data['reseau'].contains(currentUserId) : '') {
         // If the current user's ID is found in the 'reseau' array, remove it
-        return isInNetwork = true;
+        setState(() {
+          isInNetwork = true;
+        });
       }
     }
-
-    return false;
   }
 
   @override

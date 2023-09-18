@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pharmabox/popups/popup_import_contact/popup_import_contact_model.dart';
+import 'package:pharmabox/popups/popup_import_contact/popup_import_contact_widget.dart';
 
 import '../constant.dart';
 import '/composants/card_pharmacie/card_pharmacie_widget.dart';
@@ -26,6 +28,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
   bool isExpanded_Titu = false;
   bool isExpanded_NonTitu = false;
   bool isExpanded_Pharma = false;
+  final _unfocusNode = FocusNode();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List titulairesNetwork = [];
@@ -136,8 +139,24 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                 color: FlutterFlowTheme.of(context).secondaryBackground,
                                 size: 20.0,
                               ),
-                              onPressed: () {
-                                print('IconButton pressed ...');
+                              onPressed: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (bottomSheetContext) {
+                                    return GestureDetector(
+                                      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                      child: Padding(
+                                        padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                        child: PopupImportContact(
+                                          onTap: (lgo) => {},
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => setState(() {}));
                               },
                             ),
                           ),

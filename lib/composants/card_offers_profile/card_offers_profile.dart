@@ -1189,8 +1189,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           size: 28.0,
                                         ),
                                         SizedBox(width: 10),
-                                        Text(widget.searchI['contrats'].contains('Intérimaire') ? widget.searchI['salaire_mensuel'] + ' €/mois net' : widget.searchI['salaire_mensuel'] + ' €/H net',
-                                            style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
+                                        Text(widget.searchI['contrats'].contains('Intérimaire') ? widget.searchI['salaire_mensuel'] + ' €/mois net' : widget.searchI['salaire_mensuel'] + ' €/H net', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                       ]),
                                     ),
                                     if (widget.searchI['poste_responsabilite'] != "Non")

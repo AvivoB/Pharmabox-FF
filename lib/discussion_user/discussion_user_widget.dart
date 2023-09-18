@@ -53,13 +53,11 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
     ids.sort();
     final String conversationId = ids.join('-');
 
-    final DocumentReference conversationDoc =
-        FirebaseFirestore.instance.collection('messages').doc(conversationId);
+    final DocumentReference conversationDoc = FirebaseFirestore.instance.collection('messages').doc(conversationId);
 
     try {
       if (_message.text.isNotEmpty) {
-        conversationDoc.set(
-            {'last_message': _message.text, 'last_message_from': currentUser});
+        conversationDoc.set({'last_message': _message.text, 'last_message_from': currentUser});
         // Add a new document to the 'message' subcollection.
         await conversationDoc.collection('message').add({
           'fromId': currentUser,
@@ -81,8 +79,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
     setState(() {
       _isLoading = true;
     });
-    DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
     String currentUserId = await getCurrentUserId();
@@ -101,16 +98,14 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
     final String conversationId = ids.join('-');
 
     if (_isLoading) {
-      return Center(
-          child: ProgressIndicatorPharmabox()); // or another loading widget
+      return Center(child: ProgressIndicatorPharmabox()); // or another loading widget
     } else {
       return Scaffold(
         appBar: AppBar(
           toolbarHeight: 80,
           elevation: 0,
           automaticallyImplyLeading: false,
-          backgroundColor: Colors
-              .transparent, // Définissez la couleur de fond de l'AppBar sur transparent
+          backgroundColor: Colors.transparent, // Définissez la couleur de fond de l'AppBar sur transparent
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -170,22 +165,11 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                         children: <Widget>[
                           Text(
                             userMessage['prenom'] + ' ' + userMessage['nom'],
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600),
+                            style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
                           ),
                           Text(
                             userMessage['poste'],
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 12),
+                            style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.white, fontSize: 12),
                           ),
                         ],
                       ),
@@ -212,12 +196,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
           children: [
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('messages')
-                    .doc(conversationId)
-                    .collection('message')
-                    .orderBy('timestamp', descending: true)
-                    .snapshots(),
+                stream: FirebaseFirestore.instance.collection('messages').doc(conversationId).collection('message').orderBy('timestamp', descending: true).snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Center(child: Text('Une erreur s\'est produite'));
@@ -227,11 +206,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                     return Center(
                         child: Text(
                       'Démarrez une conversation avec ce membre',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Poppins',
-                          color: blackColor,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                     ));
                   }
 
@@ -244,42 +219,21 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                       bool isCurrentUser = doc['fromId'] == currentUser;
 
                       if (doc['receiverId'] == currentUser) {
-                        FirebaseFirestore.instance
-                            .collection('messages')
-                            .doc(conversationId)
-                            .collection('message')
-                            .doc(doc.id)
-                            .update({'isViewed': true})
-                            .then((value) {})
-                            .catchError((error) {
+                        FirebaseFirestore.instance.collection('messages').doc(conversationId).collection('message').doc(doc.id).update({'isViewed': true}).then((value) {}).catchError((error) {
                               print('Error updating document: $error');
                             });
                       }
                       return Container(
-                        padding: EdgeInsets.only(
-                            left: 0, right: 0, top: 10, bottom: 10),
+                        padding: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
                         child: Align(
-                          alignment: (isCurrentUser
-                              ? Alignment.topRight
-                              : Alignment.topLeft),
+                          alignment: (isCurrentUser ? Alignment.topRight : Alignment.topLeft),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color: (isCurrentUser
-                                  ? greenColor
-                                  : Colors.grey.shade200),
+                              color: (isCurrentUser ? greenColor : Colors.grey.shade200),
                             ),
                             padding: EdgeInsets.all(12),
-                            child: Text(doc['message'],
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                        fontFamily: 'Poppins',
-                                        color: isCurrentUser
-                                            ? Colors.white
-                                            : blackColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400)),
+                            child: Text(doc['message'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isCurrentUser ? Colors.white : blackColor, fontSize: 14, fontWeight: FontWeight.w400)),
                           ),
                         ),
                       );

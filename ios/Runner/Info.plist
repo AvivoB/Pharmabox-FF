@@ -63,6 +63,7 @@
     <string>Pharmabox souhaites pouvoir vous envoyer des notifications</string>
 	<key>NSContactsUsageDescription</key>
     <string>Pharmabox souhaites acceder a vos contacts</string>
+	
 
 
 	<key>UILaunchStoryboardName</key>

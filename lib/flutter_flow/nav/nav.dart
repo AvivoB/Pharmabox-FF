@@ -6,6 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/profil_view_pharmacie/profil_view_pharmacie.dart';
 import 'package:pharmabox/register_validation_account/register_validation_account.dart';
+import 'package:pharmabox/reseau/reseau_import_from_phone.dart';
 import '../../profil_pharmacie/profil_pharmacie_widget.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
@@ -170,6 +171,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   page: ReseauWidget(),
                 ),
         ),
+        FFRoute(name: 'ReseauImportFromPhone', path: '/reseauImportFromPhone', builder: (context, params) => NavBarPage(initialPage: 'Reseau', page: ReseauImportFromPhone())),
         FFRoute(
           name: 'Profil',
           path: '/profil',
@@ -179,19 +181,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   tyeRedirect: params.getParam('tyeRedirect', ParamType.String),
                 ),
         ),
-        FFRoute(name: 'PharmacieProfil', path: '/pharmacieProfil', builder: (context, params) => NavBarPage(initialPage: 'PharmacieProfil', page: ProfilPharmacie())),
+        FFRoute(name: 'PharmacieProfil', path: '/pharmacieProfil', builder: (context, params) => NavBarPage(initialPage: 'Profil', page: ProfilPharmacie())),
         FFRoute(
           name: 'PharmacieProfilView',
           path: '/pharmacieProfilView',
-          builder: (context, params) => PharmacieProfilView(
-            pharmacieId: params.getParam('pharmacieId', ParamType.String),
+          builder: (context, params) => NavBarPage(initialPage: 'Reseau', page: PharmacieProfilView(pharmacieId: params.getParam('pharmacieId', ParamType.String)) ,
           ),
         ),
         FFRoute(
           name: 'ProfilView',
           path: '/profilView',
-          builder: (context, params) => ProfilViewWidget(
-            userId: params.getParam('userId', ParamType.String),
+          builder: (context, params) => NavBarPage(initialPage: 'Reseau', page: ProfilViewWidget(userId: params.getParam('userId', ParamType.String),),
           ),
         ),
         FFRoute(

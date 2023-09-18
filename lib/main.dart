@@ -12,6 +12,7 @@ import 'package:pharmabox/profil_pharmacie/profil_pharmacie_widget.dart';
 import 'package:pharmabox/profil_view_pharmacie/profil_view_pharmacie.dart';
 import 'package:pharmabox/register_step/register_provider.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
+import 'package:pharmabox/reseau/reseau_import_from_phone.dart';
 import 'package:provider/provider.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
@@ -148,15 +149,7 @@ class _NavBarPageState extends State<NavBarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = {
-      'Explorer': ExplorerWidget(),
-      'PharmaJob': PharmaJobWidget(),
-      'Reseau': ReseauWidget(),
-      'Profil': ProfilWidget(),
-      'Pharmacie': ProfilPharmacie(),
-      'UserView': ProfilViewWidget(),
-      'PharmacieView': PharmacieProfilView(),
-    };
+    final tabs = {'Explorer': ExplorerWidget(), 'PharmaJob': PharmaJobWidget(), 'Reseau': ReseauWidget(), 'Profil': ProfilWidget(), 'Pharmacie': ProfilPharmacie(),};
 
     OneSignal.Notifications.addClickListener((event) {
       String fromId = event.notification.additionalData!['fromId'].toString() ?? '';

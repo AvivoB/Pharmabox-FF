@@ -45,6 +45,10 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
   }
 
   Future<void> _toggleLike() async {
+    if (widget.isActive == false) {
+      return;
+    }
+
     String currentUserId = await getCurrentUserId();
     if (isLiked) {
       // Query for all 'like' documents by the current user for the current item.
@@ -82,11 +86,6 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
         width: 90,
         child: InkWell(
           focusColor: Color(0xFFFFFFFF),
-          // onTap: () {
-          //   if (widget.isActive) {
-
-          //   }
-          // },
           onTap: _toggleLike,
           child: Padding(
             padding: const EdgeInsets.all(15.0),

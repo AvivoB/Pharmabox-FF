@@ -130,7 +130,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               Container(
                                 width: 135,
                                 child: Text(
-                                  widget.data['poste'],
+                                  widget.data['poste'] ?? '',
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Color(0xFF8D8D97),

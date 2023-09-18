@@ -153,15 +153,7 @@ class _$ChatsRecord extends ChatsRecord {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ChatsRecord &&
-        users == other.users &&
-        userA == other.userA &&
-        userB == other.userB &&
-        lastMessage == other.lastMessage &&
-        lastMessageTime == other.lastMessageTime &&
-        lastMessageSentBy == other.lastMessageSentBy &&
-        lastMessageSeenBy == other.lastMessageSeenBy &&
-        ffRef == other.ffRef;
+    return other is ChatsRecord && users == other.users && userA == other.userA && userB == other.userB && lastMessage == other.lastMessage && lastMessageTime == other.lastMessageTime && lastMessageSentBy == other.lastMessageSentBy && lastMessageSeenBy == other.lastMessageSeenBy && ffRef == other.ffRef;
   }
 
   @override

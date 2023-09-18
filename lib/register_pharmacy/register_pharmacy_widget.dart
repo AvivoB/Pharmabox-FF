@@ -163,6 +163,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
       },
       'isComplete': true,
       'isValid': true,
+      'preference_contact': 'Pharmacie',
     });
   }
 

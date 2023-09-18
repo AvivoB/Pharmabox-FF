@@ -1601,27 +1601,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                           child: FFButtonWidget(
                             onPressed: () async {
                               await Future.delayed(Duration(seconds: 2));
-                              var send_data = RegisterStepModel().createUserToFirebase(
-                                  widget_context_provider,
-                                  _model.afficherTelephone,
-                                  _model.afficherEmail,
-                                  _model.nomFamilleController.text,
-                                  _model.prenomController.text,
-                                  _model.posteValue,
-                                  _model.emailController.text,
-                                  _model.telephoneController.text,
-                                  _model.birthDateController.text,
-                                  _model.postcodeController.text,
-                                  _model.cityController.text,
-                                  _model.presentationController.text,
-                                  _model.comptencesTestCovidValue,
-                                  _model.comptencesVaccinationValue,
-                                  _model.comptencesTiersPayantValue,
-                                  _model.comptencesLaboValue,
-                                  _model.comptencesTRODValue,
-                                  _model.allowNotifsValue,
-                                  _model.allowCGUValue,
-                                  _imageURL!);
+                              var send_data = RegisterStepModel().createUserToFirebase(widget_context_provider, _model.afficherTelephone, _model.afficherEmail, _model.nomFamilleController.text, _model.prenomController.text, _model.posteValue, _model.emailController.text, _model.telephoneController.text, _model.birthDateController.text,
+                                  _model.postcodeController.text, _model.cityController.text, _model.presentationController.text, _model.comptencesTestCovidValue, _model.comptencesVaccinationValue, _model.comptencesTiersPayantValue, _model.comptencesLaboValue, _model.comptencesTRODValue, _model.allowNotifsValue, _model.allowCGUValue, _imageURL!);
                               if (send_data) {
                                 // setState(() {
                                 //   _isLoading = true;

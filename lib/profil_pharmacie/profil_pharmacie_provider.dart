@@ -17,6 +17,7 @@ class ProviderPharmacieUser extends ChangeNotifier {
   ];
 
   List _selectedMissions = [];
+  List _selectedConfort = [];
   String _selectedTypologie = '';
   var _selectedHoraires;
 
@@ -29,6 +30,7 @@ class ProviderPharmacieUser extends ChangeNotifier {
   String get selectedPharmacieAdresseRue => _selectedPharmacieAdresseRue;
   List get selectedAdressePharma => _selectedAdressePharma;
   List get selectedMissions => _selectedMissions;
+  List get selectedConfort => _selectedConfort;
   String get selectedTypologie => _selectedTypologie;
   dynamic get selectedHoraires => _selectedHoraires;
 
@@ -83,6 +85,20 @@ class ProviderPharmacieUser extends ChangeNotifier {
   void setMissions(missions) {
     _selectedMissions = missions;
     // notifyListeners();
+  }
+
+  void setConfort(conforts) {
+    _selectedConfort = conforts;
+    // notifyListeners();
+  }
+
+  void updateConfort(boolean, confort) {
+    if (boolean) {
+      _selectedConfort.add(confort);
+    } else {
+      _selectedConfort.remove(confort);
+    }
+    notifyListeners();
   }
 
   void updateMissions(boolean, mission) {

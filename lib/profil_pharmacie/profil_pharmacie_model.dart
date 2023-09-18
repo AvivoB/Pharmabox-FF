@@ -151,6 +151,7 @@ class PharmacieModel extends FlutterFlowModel {
   DateTime? datePicked27;
   DateTime? datePicked28;
 
+  String typologie = '';
   // State field(s) for TypologieCentrecommercial widget.
   bool typologieCentrecommercialValue = false;
   // State field(s) for TypologieCentreville widget.
