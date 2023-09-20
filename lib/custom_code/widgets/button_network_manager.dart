@@ -76,7 +76,8 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
     DocumentSnapshot documentSnapshot = await documentRef.get();
 
     if (documentSnapshot.exists) {
-      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
 
       // Check if 'reseau' array contains the current user's ID
       if (data != null ? data['reseau'].contains(currentUserId) : '') {
@@ -97,21 +98,29 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
   @override
   Widget build(BuildContext context) {
     if (isInNetwork) {
-      return TextButton.icon(
-        onPressed: () async {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 7,
+              offset: Offset(0, 3),
+            ),
+          ],
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+          icon: Icon(
+            Icons.delete_outline,
+            color: redColor,
+          ),
+          iconSize: 26,
+          onPressed: () async {
           await deleteNetwork(widget.typeCollection, widget.docId);
           setState(() {});
         },
-        icon: Icon(Icons.delete_outline, color: redColor), // Specify the color directly for the icon
-        label: Text(
-          'Supprimer',
-          style: TextStyle(
-            color: redColor,
-            fontSize: this.widget.fontSize,
-          ), // Specify the color directly for the text
-        ),
-        style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all<Color>(Colors.grey.withOpacity(0.1)), // Button pressed overlay color
         ),
       );
     } else {

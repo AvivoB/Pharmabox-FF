@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pharmabox/custom_code/widgets/button_network_manager.dart';
+import 'package:pharmabox/discussion_user/discussion_user_widget.dart';
+import 'package:pharmabox/popups/popup_signalement/popup_signalement_widget.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_user/card_user_widget.dart';
@@ -135,28 +138,28 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              wrapWithModel(
-                model: _model.headerAppModel,
-                updateCallback: () => setState(() {}),
-                child: HeaderAppWidget(),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            wrapWithModel(
+              model: _model.headerAppModel,
+              updateCallback: () => setState(() {}),
+              child: HeaderAppWidget(),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 1.0,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-              ),
-              SingleChildScrollView(
+            ),
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 1.0,
-                      height: MediaQuery.of(context).size.height * 0.30,
+                      // height: MediaQuery.of(context).size.height * 0.30,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
@@ -165,87 +168,279 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                           end: AlignmentDirectional(-1.0, -0.34),
                         ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.50,
-                                height: 150.0,
-                                child: Stack(
-                                  alignment: AlignmentDirectional(0.0, 1.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 7,
+                                          offset: Offset(0, 3),
+                                        ),
+                                      ],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(icon: Icon(Icons.chevron_left), iconSize: 30, onPressed: () {Navigator.pop(context);},),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 7,
+                                                offset: Offset(0, 3),
+                                              ),
+                                            ],
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: IconButton(icon: Icon(Icons.flag_outlined, color: redColor,), iconSize: 30, onPressed: () async {
+
+                                            await showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              backgroundColor: Colors.transparent,
+                                              enableDrag: true,
+                                              context: context,
+                                              builder: (bottomSheetContext) {
+                                                return Padding(
+                                                  padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                  child: PopupSignalement(docId: widget.userId, collectionName: 'users')
+                                                );
+                                              },
+                                            );
+                                          },),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Container(
+                                            child: ButtonNetworkManager(
+                                            width: 30,
+                                            radius: 12.0,
+                                            fontSize: 14,
+                                            text: 'Ajouter',
+                                            height: 25.0,
+                                            typeCollection: 'users',
+                                            docId: widget.userId,
+                                          )
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      width: 150.0,
+                                      width: MediaQuery.of(context).size.width * 0.50,
                                       height: 150.0,
-                                      decoration: BoxDecoration(
-                                        color: Color(0x00FFFFFF),
-                                        borderRadius: BorderRadius.circular(95.0),
-                                        border: Border.all(
-                                          color: Colors.white,
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(7.0, 7.0, 7.0, 7.0),
-                                        child: Container(
+                                      child: Stack(
+                                        alignment: AlignmentDirectional(0.0, 1.0),
+                                        children: [
+                                          Container(
                                             width: 150.0,
                                             height: 150.0,
-                                            clipBehavior: Clip.antiAlias,
                                             decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
+                                              color: Color(0x00FFFFFF),
+                                              borderRadius: BorderRadius.circular(95.0),
+                                              border: Border.all(
+                                                color: Colors.white,
+                                                width: 2.0,
+                                              ),
                                             ),
-                                            child: (userData != null && userData['photoUrl'] != null && userData['photoUrl'].isNotEmpty)
-                                                ? Image.network(
-                                                    userData['photoUrl'],
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Image.asset(
-                                                    'assets/images/Group_18.png',
-                                                    fit: BoxFit.cover,
-                                                  )),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(7.0, 7.0, 7.0, 7.0),
+                                              child: Container(
+                                                  width: 150.0,
+                                                  height: 150.0,
+                                                  clipBehavior: Clip.antiAlias,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: (userData != null && userData['photoUrl'] != null && userData['photoUrl'].isNotEmpty)
+                                                      ? Image.network(
+                                                          userData['photoUrl'],
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.asset(
+                                                          'assets/images/Group_18.png',
+                                                          fit: BoxFit.cover,
+                                                        )),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
+                                    Container(
+                        child: 
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                      stops: [0.0, 1.0],
+                                      begin: AlignmentDirectional(1.0, 0.0),
+                                      end: AlignmentDirectional(-1.0, 0),
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                    child: FlutterFlowIconButton(
+                                      borderColor: Color(0x0042D2FF),
+                                      borderRadius: 30.0,
+                                      borderWidth: 0.0,
+                                      buttonSize: 40.0,
+                                      fillColor: Colors.white,
+                                      icon: Icon(
+                                        Icons.phone,
+                                        color: Color(0xFF42D2FF),
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () {
+                                        print('IconButton pressed ...');
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                      stops: [0.0, 1.0],
+                                      begin: AlignmentDirectional(1.0, 0.0),
+                                      end: AlignmentDirectional(-1.0, 0),
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                    child: FlutterFlowIconButton(
+                                      borderColor: Color(0x0042D2FF),
+                                      borderRadius: 30.0,
+                                      borderWidth: 0.0,
+                                      buttonSize: 40.0,
+                                      fillColor: Colors.white,
+                                      icon: Icon(
+                                        Icons.mail_outline_rounded,
+                                        color: Color(0xFF42D2FF),
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () {
+                                        print('IconButton pressed ...');
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                    stops: [0.0, 1.0],
+                                    begin: AlignmentDirectional(1.0, 0.0),
+                                    end: AlignmentDirectional(-1.0, 0),
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                  child: FlutterFlowIconButton(
+                                    borderColor: Color(0x0042D2FF),
+                                    borderRadius: 30.0,
+                                    borderWidth: 0.0,
+                                    buttonSize: 40.0,
+                                    fillColor: Colors.white,
+                                    icon: Icon(
+                                      Icons.message_outlined,
+                                      color: Color(0xFF42D2FF),
+                                      size: 24.0,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DiscussionUserWidget(toUser: widget.userId),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.50,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  userData != null ? userData['prenom'] + ' ' + userData['nom'] : '',
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                        ),
+                                          ),
+                                  ],
                                 ),
-                                Text(
-                                  userData != null ? userData['poste'] : '',
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
+                                Container(
+                                  width: MediaQuery.of(context).size.width * 0.50,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        userData != null ? userData['prenom'] + ' ' + userData['nom'] : '',
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.white,
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                       ),
+                                      Text(
+                                        userData != null ? userData['poste'] : '',
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.white,
+                                            ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                                          child: LikeButtonWidget(
+                                            documentId: userData != null ? userData['id'] : '',
+                                          )
+                                          
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                                    child: LikeButtonWidget(
-                                      documentId: userData != null ? userData['id'] : '',
-                                    )),
                               ],
                             ),
-                          ),
-                        ],
+                            
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -962,8 +1157,8 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
