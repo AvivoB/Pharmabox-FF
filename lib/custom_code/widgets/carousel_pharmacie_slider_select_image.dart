@@ -5,6 +5,9 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/custom_code/widgets/button_network_manager.dart';
+import 'package:pharmabox/index.dart';
+import 'package:pharmabox/popups/popup_signalement/popup_signalement_widget.dart';
 
 import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
@@ -13,8 +16,9 @@ class CarouselPharmacieSliderSelect extends StatefulWidget {
   final Function(List<String>) onImagesSelected;
   final List<String>? initialImagesSelected;
   final bool isEditable;
+  final String? pharmacieId;
 
-  CarouselPharmacieSliderSelect({required this.onImagesSelected, this.initialImagesSelected, this.isEditable = true});
+  CarouselPharmacieSliderSelect({required this.onImagesSelected, this.initialImagesSelected, this.isEditable = true, this.pharmacieId});
 
   @override
   _CarouselPharmacieSliderSelectState createState() => _CarouselPharmacieSliderSelectState();
@@ -165,7 +169,7 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
         urls.isEmpty
             ? Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.35,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
@@ -175,11 +179,87 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(50, 0, 50, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      if (widget.isEditable == false)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                                shape: BoxShape.circle,
+                              ),
+                              child: IconButton(
+                                icon: Icon(Icons.chevron_left),
+                                iconSize: 30,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 7,
+                                          offset: Offset(0, 3),
+                                        ),
+                                      ],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.flag_outlined,
+                                        color: redColor,
+                                      ),
+                                      iconSize: 30,
+                                      onPressed: () async {
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          enableDrag: true,
+                                          context: context,
+                                          builder: (bottomSheetContext) {
+                                            return Padding(padding: MediaQuery.of(bottomSheetContext).viewInsets, child: PopupSignalement(docId: widget.pharmacieId ?? '', collectionName: 'pharmacies'));
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Container(
+                                      child: ButtonNetworkManager(
+                                    width: 30,
+                                    radius: 12.0,
+                                    fontSize: 14,
+                                    text: 'Ajouter',
+                                    height: 25.0,
+                                    typeCollection: 'pharmacies',
+                                    docId: widget.pharmacieId ?? '',
+                                  )),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(50, 0, 50, 0),
                         child: Column(
@@ -242,6 +322,114 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                           ],
                         ),
                       ),
+                      if (widget.isEditable == false)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                      stops: [0.0, 1.0],
+                                      begin: AlignmentDirectional(1.0, 0.0),
+                                      end: AlignmentDirectional(-1.0, 0),
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                    child: FlutterFlowIconButton(
+                                      borderColor: Color(0x0042D2FF),
+                                      borderRadius: 30.0,
+                                      borderWidth: 0.0,
+                                      buttonSize: 40.0,
+                                      fillColor: Colors.white,
+                                      icon: Icon(
+                                        Icons.phone,
+                                        color: Color(0xFF42D2FF),
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () {
+                                        print('IconButton pressed ...');
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                      stops: [0.0, 1.0],
+                                      begin: AlignmentDirectional(1.0, 0.0),
+                                      end: AlignmentDirectional(-1.0, 0),
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                    child: FlutterFlowIconButton(
+                                      borderColor: Color(0x0042D2FF),
+                                      borderRadius: 30.0,
+                                      borderWidth: 0.0,
+                                      buttonSize: 40.0,
+                                      fillColor: Colors.white,
+                                      icon: Icon(
+                                        Icons.mail_outline_rounded,
+                                        color: Color(0xFF42D2FF),
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () {
+                                        print('IconButton pressed ...');
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                    stops: [0.0, 1.0],
+                                    begin: AlignmentDirectional(1.0, 0.0),
+                                    end: AlignmentDirectional(-1.0, 0),
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                  child: FlutterFlowIconButton(
+                                    borderColor: Color(0x0042D2FF),
+                                    borderRadius: 30.0,
+                                    borderWidth: 0.0,
+                                    buttonSize: 40.0,
+                                    fillColor: Colors.white,
+                                    icon: Icon(
+                                      Icons.message_outlined,
+                                      color: Color(0xFF42D2FF),
+                                      size: 24.0,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DiscussionUserWidget(toUser: 'widget.userId'),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -259,6 +447,201 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                           width: MediaQuery.of(context).size.width * 1,
                           fit: BoxFit.cover,
                         ),
+                        if (widget.isEditable == false)
+                          Positioned(
+                              top: 10,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 7,
+                                              offset: Offset(0, 3),
+                                            ),
+                                          ],
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(Icons.chevron_left),
+                                          iconSize: 30,
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ),
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    spreadRadius: 2,
+                                                    blurRadius: 7,
+                                                    offset: Offset(0, 3),
+                                                  ),
+                                                ],
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  Icons.flag_outlined,
+                                                  color: redColor,
+                                                ),
+                                                iconSize: 30,
+                                                onPressed: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor: Colors.transparent,
+                                                    enableDrag: true,
+                                                    context: context,
+                                                    builder: (bottomSheetContext) {
+                                                      return Padding(padding: MediaQuery.of(bottomSheetContext).viewInsets, child: PopupSignalement(docId:widget.pharmacieId ?? '', collectionName: 'pharmacies'));
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Container(
+                                                child: ButtonNetworkManager(
+                                              width: 30,
+                                              radius: 12.0,
+                                              fontSize: 14,
+                                              text: 'Ajouter',
+                                              height: 25.0,
+                                              typeCollection: 'pharmacies',
+                                              docId: widget.pharmacieId ?? '',
+                                            )),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        if (widget.isEditable == false)
+                          Positioned(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                            stops: [0.0, 1.0],
+                                            begin: AlignmentDirectional(1.0, 0.0),
+                                            end: AlignmentDirectional(-1.0, 0),
+                                          ),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                          child: FlutterFlowIconButton(
+                                            borderColor: Color(0x0042D2FF),
+                                            borderRadius: 30.0,
+                                            borderWidth: 0.0,
+                                            buttonSize: 40.0,
+                                            fillColor: Colors.white,
+                                            icon: Icon(
+                                              Icons.phone,
+                                              color: Color(0xFF42D2FF),
+                                              size: 24.0,
+                                            ),
+                                            onPressed: () {
+                                              print('IconButton pressed ...');
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                            stops: [0.0, 1.0],
+                                            begin: AlignmentDirectional(1.0, 0.0),
+                                            end: AlignmentDirectional(-1.0, 0),
+                                          ),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                          child: FlutterFlowIconButton(
+                                            borderColor: Color(0x0042D2FF),
+                                            borderRadius: 30.0,
+                                            borderWidth: 0.0,
+                                            buttonSize: 40.0,
+                                            fillColor: Colors.white,
+                                            icon: Icon(
+                                              Icons.mail_outline_rounded,
+                                              color: Color(0xFF42D2FF),
+                                              size: 24.0,
+                                            ),
+                                            onPressed: () {
+                                              print('IconButton pressed ...');
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                          stops: [0.0, 1.0],
+                                          begin: AlignmentDirectional(1.0, 0.0),
+                                          end: AlignmentDirectional(-1.0, 0),
+                                        ),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                        child: FlutterFlowIconButton(
+                                          borderColor: Color(0x0042D2FF),
+                                          borderRadius: 30.0,
+                                          borderWidth: 0.0,
+                                          buttonSize: 40.0,
+                                          fillColor: Colors.white,
+                                          icon: Icon(
+                                            Icons.message_outlined,
+                                            color: Color(0xFF42D2FF),
+                                            size: 24.0,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => DiscussionUserWidget(toUser: 'widget.userId'),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              bottom: 10,
+                              left: 10),
                         Positioned(
                             bottom: 10,
                             left: 10,

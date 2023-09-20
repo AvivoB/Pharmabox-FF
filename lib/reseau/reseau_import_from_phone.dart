@@ -22,7 +22,9 @@ import 'package:provider/provider.dart';
 import 'package:contacts_service/contacts_service.dart';
 
 class ReseauImportFromPhone extends StatefulWidget {
-  ReseauImportFromPhone({Key? key, String? type }) : this.type = type ?? '', super(key: key);
+  ReseauImportFromPhone({Key? key, String? type})
+      : this.type = type ?? '',
+        super(key: key);
   final String type;
 
   @override
@@ -146,17 +148,16 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
     });
 
     var users;
-    
-    if(widget.type == 'phone') {
+
+    if (widget.type == 'phone') {
       final phoneNumbers = await fetchContactsPhoneNumbers();
       users = await fetchUsersByPhone(phoneNumbers);
     }
 
-    if(widget.type == 'email') {
+    if (widget.type == 'email') {
       final emails = await fetchContactsEmails();
       users = await fetchUsersByEmails(emails);
     }
-
 
     for (var user in users) {
       Map<String, dynamic> data = user.data() as Map<String, dynamic>;

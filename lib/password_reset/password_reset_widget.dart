@@ -68,9 +68,13 @@ class _PasswordResetWidgetState extends State<PasswordResetWidget> {
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
-                                child: Text(
-                                  'Pharma-box',
-                                  style: FlutterFlowTheme.of(context).displaySmall,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset('assets/icons/logo-pharma-box.png', width: 30),
+                                    SizedBox(height: 10, width: 10),
+                                    Text('Pharma-Box', style: FlutterFlowTheme.of(context).displaySmall),
+                                  ],
                                 ),
                               ),
                               Text(

@@ -76,8 +76,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
     DocumentSnapshot documentSnapshot = await documentRef.get();
 
     if (documentSnapshot.exists) {
-      Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
       // Check if 'reseau' array contains the current user's ID
       if (data != null ? data['reseau'].contains(currentUserId) : '') {
@@ -118,9 +117,9 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
           ),
           iconSize: 26,
           onPressed: () async {
-          await deleteNetwork(widget.typeCollection, widget.docId);
-          setState(() {});
-        },
+            await deleteNetwork(widget.typeCollection, widget.docId);
+            setState(() {});
+          },
         ),
       );
     } else {

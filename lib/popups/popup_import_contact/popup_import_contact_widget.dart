@@ -104,10 +104,7 @@ class _PopupImportContactState extends State<PopupImportContact> {
                     leading: Icon(Icons.mail_outline),
                     title: Text('A partir de vos E-mails enregistrés', style: FlutterFlowTheme.of(context).bodyMedium),
                     onTap: () {
-                      context.pushNamed('ReseauImportFromPhone',
-                          queryParams: {
-                            'type': 'email'
-                          }.withoutNulls);
+                      context.pushNamed('ReseauImportFromPhone', queryParams: {'type': 'email'}.withoutNulls);
                     },
                   ),
                 ],

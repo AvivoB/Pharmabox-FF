@@ -64,25 +64,26 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 40.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
-                                child: Text(
-                                  'Pharma-box',
-                                  style: FlutterFlowTheme.of(context).displaySmall,
-                                ),
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset('assets/icons/logo-pharma-box.png', width: 30),
+                                  SizedBox(height: 10, width: 10),
+                                  Text('Pharma-Box', style: FlutterFlowTheme.of(context).displaySmall),
+                                ],
                               ),
-                              Text(
-                                'Créez votre compte Pharma-Box et rejoignez un réseau dédié à la pharmacie',
-                                textAlign: TextAlign.center,
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
-                            ],
-                          ),
+                            ),
+                            Text(
+                              'Créez votre compte Pharma-Box et rejoignez un réseau dédié à la pharmacie',
+                              textAlign: TextAlign.center,
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                            ),
+                          ],
                         ),
                         Form(
                           key: _model.formKey,

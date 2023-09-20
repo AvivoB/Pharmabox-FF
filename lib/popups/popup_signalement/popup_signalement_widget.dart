@@ -18,8 +18,6 @@ export 'popup_signalement_model.dart';
 import 'package:http/http.dart' as http;
 
 class PopupSignalement extends StatefulWidget {
-
-
   PopupSignalement({Key? key, required this.docId, required this.collectionName}) : super(key: key);
   final String docId;
   var collectionName;
@@ -120,16 +118,13 @@ class _PopupSignalementState extends State<PopupSignalement> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                           child: Container(
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
+                              color: FlutterFlowTheme.of(context).secondaryBackground,
                               borderRadius: BorderRadius.circular(4.0),
                               border: Border.all(
                                 color: Color(0xFFD0D1DE),
@@ -139,35 +134,21 @@ class _PopupSignalementState extends State<PopupSignalement> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5.0, 0.0, 0.0, 0.0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 0.0, 0.0),
                                   child: Icon(
                                     Icons.error_outline,
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
+                                    color: FlutterFlowTheme.of(context).secondaryText,
                                     size: 24.0,
                                   ),
                                 ),
                                 FlutterFlowDropDown<String>(
                                   hintText: 'Type de contenu',
-                                  controller: _model.contentTypeController ??=
-                                      FormFieldController<String>(null),
-                                  options: [
-                                    'Discours haineux',
-                                    'Contenu explicite',
-                                    'Harcèlement ou intimidation',
-                                    'Contenu trompeur',
-                                    'Usurpation',
-                                    'Violence verbale ou menaces'
-                                  ],
-                                  onChanged: (val) =>
-                                      setState(() => _model.contentType = val),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
+                                  controller: _model.contentTypeController ??= FormFieldController<String>(null),
+                                  options: ['Discours haineux', 'Contenu explicite', 'Harcèlement ou intimidation', 'Contenu trompeur', 'Usurpation', 'Violence verbale ou menaces'],
+                                  onChanged: (val) => setState(() => _model.contentType = val),
+                                  width: MediaQuery.of(context).size.width * 0.8,
                                   height: 50.0,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
+                                  textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Colors.black,
                                       ),
@@ -176,8 +157,7 @@ class _PopupSignalementState extends State<PopupSignalement> {
                                   borderColor: Colors.transparent,
                                   borderWidth: 0.0,
                                   borderRadius: 0.0,
-                                  margin: EdgeInsetsDirectional.fromSTEB(
-                                      12.0, 4.0, 12.0, 4.0),
+                                  margin: EdgeInsetsDirectional.fromSTEB(12.0, 4.0, 12.0, 4.0),
                                   hidesUnderline: true,
                                   isSearchable: false,
                                 ),
@@ -263,18 +243,15 @@ class _PopupSignalementState extends State<PopupSignalement> {
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 40.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                         color: Color(0x00FFFFFF),
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600,
+                            ),
                         elevation: 0.0,
                         borderSide: BorderSide(
                           color: Colors.transparent,
