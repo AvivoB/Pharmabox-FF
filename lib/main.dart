@@ -149,7 +149,13 @@ class _NavBarPageState extends State<NavBarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = {'Explorer': ExplorerWidget(), 'PharmaJob': PharmaJobWidget(), 'Reseau': ReseauWidget(), 'Profil': ProfilWidget(), 'Pharmacie': ProfilPharmacie(),};
+    final tabs = {
+      'Explorer': ExplorerWidget(),
+      'PharmaJob': PharmaJobWidget(),
+      'Reseau': ReseauWidget(),
+      'Profil': ProfilWidget(),
+      'Pharmacie': ProfilPharmacie(),
+    };
 
     OneSignal.Notifications.addClickListener((event) {
       String fromId = event.notification.additionalData!['fromId'].toString() ?? '';

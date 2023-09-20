@@ -171,7 +171,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   page: ReseauWidget(),
                 ),
         ),
-        FFRoute(name: 'ReseauImportFromPhone', path: '/reseauImportFromPhone', builder: (context, params) => NavBarPage(initialPage: 'Reseau', page: ReseauImportFromPhone())),
+        FFRoute(name: 'ReseauImportFromPhone', path: '/reseauImportFromPhone', builder: (context, params) => NavBarPage(initialPage: 'Reseau', page: ReseauImportFromPhone(type: params.getParam('type', ParamType.String)))),
         FFRoute(
           name: 'Profil',
           path: '/profil',
@@ -185,13 +185,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'PharmacieProfilView',
           path: '/pharmacieProfilView',
-          builder: (context, params) => NavBarPage(initialPage: 'Reseau', page: PharmacieProfilView(pharmacieId: params.getParam('pharmacieId', ParamType.String)) ,
+          builder: (context, params) => NavBarPage(
+            initialPage: 'Reseau',
+            page: PharmacieProfilView(pharmacieId: params.getParam('pharmacieId', ParamType.String)),
           ),
         ),
         FFRoute(
           name: 'ProfilView',
           path: '/profilView',
-          builder: (context, params) => NavBarPage(initialPage: 'Reseau', page: ProfilViewWidget(userId: params.getParam('userId', ParamType.String),),
+          builder: (context, params) => NavBarPage(
+            initialPage: 'Reseau',
+            page: ProfilViewWidget(
+              userId: params.getParam('userId', ParamType.String),
+            ),
           ),
         ),
         FFRoute(

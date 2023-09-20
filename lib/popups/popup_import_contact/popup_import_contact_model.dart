@@ -8,15 +8,9 @@ import 'package:provider/provider.dart';
 class PopupImportContactModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this component.
 
-  // State field(s) for LgoFilter widget.
-  TextEditingController? lgoFilterController;
-  String? Function(BuildContext, String?)? lgoFilterControllerValidator;
-
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}
 
-  void dispose() {
-    lgoFilterController?.dispose();
-  }
+  void dispose() {}
 }

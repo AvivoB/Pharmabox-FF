@@ -29,8 +29,6 @@ class _PopupImportContactState extends State<PopupImportContact> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PopupImportContactModel());
-
-    _model.lgoFilterController ??= TextEditingController();
   }
 
   @override
@@ -48,7 +46,7 @@ class _PopupImportContactState extends State<PopupImportContact> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.30,
+          height: MediaQuery.of(context).size.height * 0.25,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -93,21 +91,23 @@ class _PopupImportContactState extends State<PopupImportContact> {
                     leading: Icon(Icons.phone),
                     title: Text('Depuis vos numéros de téléphone', style: FlutterFlowTheme.of(context).bodyMedium),
                     onTap: () {
-                      context.pushNamed('ReseauImportFromPhone');
+                      context.pushNamed('ReseauImportFromPhone',
+                          queryParams: {
+                            'type': serializeParam(
+                              'phone',
+                              ParamType.String,
+                            ),
+                          }.withoutNulls);
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.mail_outline),
                     title: Text('A partir de vos E-mails enregistrés', style: FlutterFlowTheme.of(context).bodyMedium),
                     onTap: () {
-                      Navigator.of(context).pop(); // Fermer le BottomSheet
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.mail_outline),
-                    title: Text('Envoyer des invitations par mail', style: FlutterFlowTheme.of(context).bodyMedium),
-                    onTap: () {
-                      // Fermer le BottomSheet
+                      context.pushNamed('ReseauImportFromPhone',
+                          queryParams: {
+                            'type': 'email'
+                          }.withoutNulls);
                     },
                   ),
                 ],
