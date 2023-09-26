@@ -24,6 +24,13 @@ class PharmaBlablaModel extends FlutterFlowModel {
 
   var searchPost;
 
+  List<Map> selectedLGO = [
+    {"image": "Autre.jpg", "name": "Par LGO"}
+  ];
+  List<Map> selectedGroupement = [
+    {"image": "Autre.jpg", "name": "Par groupement"}
+  ];
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {

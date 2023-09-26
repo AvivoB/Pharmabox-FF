@@ -67,6 +67,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
           ],
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
             Padding(
@@ -91,7 +92,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                               shape: BoxShape.circle,
                             ),
                             child: FadeInImage.assetNetwork(
-                              image: widget.data != null ? widget.data['photoUrl'] : '',
+                              image: widget.data != null ? widget.data['user']['photoUrl'] : '',
                               placeholder: 'assets/images/Group_18.png',
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {
@@ -110,13 +111,13 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.30,
                                 child: Text(
-                                  widget.data['nom'] + ' ' + widget.data['prenom'],
+                                  widget.data['user']['nom'] + ' ' + widget.data['user']['prenom'],
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
                                 ),
                               ),
                               Container(
                                 child: Text(
-                                  widget.data['poste'] ?? '',
+                                  widget.data['user']['poste'] ?? '',
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Color(0xFF8D8D97),
@@ -138,7 +139,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                 child: Text(
-                  widget.data['post_content'],
+                  widget.data['post']['post_content'],
                   style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 15.0),
                 ),
               ),
@@ -162,12 +163,12 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                   children: [
                     Container(
                       child: LikeButtonWidget(
-                        documentId: widget.data['id'],
+                        documentId: widget.data['postId'],
                       ),
                     ),
                     Container(
                       child: LikeButtonWidget(
-                        documentId: widget.data['id'],
+                        documentId: widget.data['postId'],
                       ),
                     ),
                   ],

@@ -309,19 +309,19 @@ exports.sendNotificationOnMessage = functions.firestore
 });
 
 
-exports.extractKeywords = functions.firestore
-    .document('pharmablabla/{documentId}')
-    .onCreate(async (snap, context) => {
-        const originalContent = snap.data().post_content;
+// exports.extractKeywords = functions.firestore
+//     .document('pharmablabla/{documentId}')
+//     .onCreate(async (snap, context) => {
+//         const originalContent = snap.data().post_content;
         
-        // Ceci est un exemple très basique et devrait être remplacé par votre logique d'extraction de mots-clés.
-        const wordsWithoutStopWords = originalContent.toLowerCase().split(' ').filter(word => word.length > 3);
+//         // Ceci est un exemple très basique et devrait être remplacé par votre logique d'extraction de mots-clés.
+//         const wordsWithoutStopWords = originalContent.toLowerCase().split(' ').filter(word => word.length > 3);
         
-        const keywords = wordsWithoutStopWords.map(word => word);
+//         const keywords = wordsWithoutStopWords.map(word => word);
         
-        // Mettre à jour le document avec les mots clés extraits.
-        return snap.ref.update({ search_terms: keywords });
-    });
+//         // Mettre à jour le document avec les mots clés extraits.
+//         return snap.ref.update({ search_terms: keywords });
+//     });
 
 
 

@@ -182,7 +182,7 @@ class _PopupPharmaBlablaState extends State<PopupPharmaBlabla> {
                           FlutterFlowDropDown<String>(
                             hintText: 'Tout Pharmabox',
                             controller: _model.posteValueController ??= FormFieldController<String>('Tout Pharmabox'),
-                            options: ['Tout Pharmabox','Uniquement mon réseau'],
+                            options: ['Tout Pharmabox', 'Uniquement mon réseau'],
                             onChanged: (val) => setState(() => _model.posteValue = val),
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: 50.0,
@@ -229,7 +229,7 @@ class _PopupPharmaBlablaState extends State<PopupPharmaBlabla> {
                           FlutterFlowDropDown<String>(
                             hintText: 'Tous',
                             controller: _model.posteValueController ??= FormFieldController<String>('Tous'),
-                            options: ['Tous','Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien(ne)'],
+                            options: ['Tous', 'Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien(ne)'],
                             onChanged: (val) => setState(() => _model.posteValue = val),
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: 50.0,
@@ -297,53 +297,53 @@ class _PopupPharmaBlablaState extends State<PopupPharmaBlabla> {
                     ),
                   ),
                   Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.50,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: listGroupement.length,
-                    itemBuilder: (context, index) {
-                      final item = listGroupement;
-                      return Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-                        child: GestureDetector(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Image.asset(
-                                'assets/groupements/' + item[index]['image'],
-                                width: MediaQuery.of(context).size.width * 0.35,
-                                height: 60.0,
-                                fit: BoxFit.contain,
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 0.0, 0.0),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.50,
-                                  child: Text(
-                                    item[index]['name'],
-                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    height: MediaQuery.of(context).size.height * 0.50,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: listGroupement.length,
+                      itemBuilder: (context, index) {
+                        final item = listGroupement;
+                        return Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+                          child: GestureDetector(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  'assets/groupements/' + item[index]['image'],
+                                  width: MediaQuery.of(context).size.width * 0.35,
+                                  height: 60.0,
+                                  fit: BoxFit.contain,
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.50,
+                                    child: Text(
+                                      item[index]['name'],
+                                      style: FlutterFlowTheme.of(context).bodyMedium,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                            onTap: () {
+                              // widget.onTap(item[index]);
+                              // Navigator.pop(context);
+                            },
                           ),
-                          onTap: () {
-                            // widget.onTap(item[index]);
-                            // Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
                 ],
               ),
             ),
