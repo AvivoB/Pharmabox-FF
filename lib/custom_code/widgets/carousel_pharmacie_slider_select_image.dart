@@ -507,7 +507,7 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                                     enableDrag: true,
                                                     context: context,
                                                     builder: (bottomSheetContext) {
-                                                      return Padding(padding: MediaQuery.of(bottomSheetContext).viewInsets, child: PopupSignalement(docId:widget.pharmacieId ?? '', collectionName: 'pharmacies'));
+                                                      return Padding(padding: MediaQuery.of(bottomSheetContext).viewInsets, child: PopupSignalement(docId: widget.pharmacieId ?? '', collectionName: 'pharmacies'));
                                                     },
                                                   );
                                                 },

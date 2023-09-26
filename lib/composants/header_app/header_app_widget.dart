@@ -184,7 +184,7 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                                 borderWidth: 1.0,
                                 buttonSize: 40.0,
                                 icon: Icon(
-                                  Icons.message_outlined,
+                                  Icons.send_outlined,
                                   color: FlutterFlowTheme.of(context).primaryBackground,
                                   size: 25.0,
                                 ),

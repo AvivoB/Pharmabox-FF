@@ -117,18 +117,14 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.40,
                                 child: Text(
                                   widget.data['nom'] + ' ' + widget.data['prenom'],
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                        fontFamily: 'Poppins',
-                                        color: Color(0xFF595A71),
-                                        fontSize: 14.0,
-                                      ),
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
                                 ),
                               ),
                               Container(
-                                width: 135,
+                                width: MediaQuery.of(context).size.width * 0.44,
                                 child: Text(
                                   widget.data['poste'] ?? '',
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(

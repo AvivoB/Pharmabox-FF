@@ -39,8 +39,7 @@ class PharmacieProfilView extends StatefulWidget {
   _PharmacieProfilViewState createState() => _PharmacieProfilViewState();
 }
 
-class _PharmacieProfilViewState extends State<PharmacieProfilView>
-    with SingleTickerProviderStateMixin {
+class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTickerProviderStateMixin {
   late PharmacieProfilViewModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -62,15 +61,9 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
 
   Future<void> getNetworkData() async {
     // Use collection group to make query across all collections
-    QuerySnapshot queryUsers = await FirebaseFirestore.instance
-        .collection('users')
-        .where('reseau', arrayContains: widget.pharmacieId)
-        .get();
+    QuerySnapshot queryUsers = await FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: widget.pharmacieId).get();
 
-    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance
-        .collection('pharmacies')
-        .where('reseau', arrayContains: widget.pharmacieId)
-        .get();
+    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance.collection('pharmacies').where('reseau', arrayContains: widget.pharmacieId).get();
 
     for (var doc in queryPharmacies?.docs ?? []) {
       var data = doc.data();
@@ -111,15 +104,9 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
     setState(() {
       _isLoading = true;
     });
-    QuerySnapshot offres = await FirebaseFirestore.instance
-        .collection('offres')
-        .where('pharmacie_id', isEqualTo: widget.pharmacieId)
-        .get();
+    QuerySnapshot offres = await FirebaseFirestore.instance.collection('offres').where('pharmacie_id', isEqualTo: widget.pharmacieId).get();
 
-    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
-        .collection('pharmacies')
-        .doc(widget.pharmacieId)
-        .get();
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('pharmacies').doc(widget.pharmacieId).get();
 
     if (docSnapshot.exists) {
       // Accéder aux données du document.
@@ -131,12 +118,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
         var docData = doc.data() as Map<String, dynamic>;
 
         docData['doc_id'] = doc.id;
-        docData['localisation_job'] = pharmacieData['situation_geographique']
-                ['data']['rue'] +
-            ', ' +
-            pharmacieData['situation_geographique']['data']['ville'] +
-            ', ' +
-            pharmacieData['situation_geographique']['data']['postcode'];
+        docData['localisation_job'] = pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'];
         offresPharma.add(docData);
       }
     } else {
@@ -149,8 +131,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
   }
 
   getuserData(String userId) async {
-    DocumentSnapshot docSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
     if (docSnapshot.exists) {
       // Accéder aux données du document.
@@ -197,17 +178,13 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                       CarouselPharmacieSliderSelect(
                         onImagesSelected: (urls) {},
                         isEditable: false,
-                        initialImagesSelected: pharmacieData != null &&
-                                pharmacieData['photo_url'] != ''
-                            ? pharmacieData['photo_url'].cast<String>()
-                            : [''],
+                        initialImagesSelected: pharmacieData != null && pharmacieData['photo_url'] != '' ? pharmacieData['photo_url'].cast<String>() : [''],
                         pharmacieId: widget.pharmacieId,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 1.0,
                         decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryBackground,
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -220,29 +197,17 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('Titulaire',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: blackColor,
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.w600)),
+                                      Text('Titulaire', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 18.0, fontWeight: FontWeight.w600)),
                                       SizedBox(height: 15),
                                       Row(
                                         mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 10.0, 0.0),
+                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
                                             child: Container(
                                               width: 50.0,
                                               height: 50.0,
@@ -251,47 +216,28 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 shape: BoxShape.circle,
                                               ),
                                               child: FadeInImage.assetNetwork(
-                                                image: userData != null &&
-                                                        userData['photoUrl'] !=
-                                                            ''
-                                                    ? userData['photoUrl']
-                                                    : '',
-                                                placeholder:
-                                                    'assets/images/Group_18.png',
+                                                image: userData != null && userData['photoUrl'] != '' ? userData['photoUrl'] : '',
+                                                placeholder: 'assets/images/Group_18.png',
                                                 fit: BoxFit.cover,
-                                                imageErrorBuilder: (context,
-                                                    error, stackTrace) {
-                                                  return Image.asset(
-                                                      'assets/images/Group_18.png');
+                                                imageErrorBuilder: (context, error, stackTrace) {
+                                                  return Image.asset('assets/images/Group_18.png');
                                                 },
                                               ),
                                             ),
                                           ),
                                           Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.30,
+                                            width: MediaQuery.of(context).size.width * 0.30,
                                             child: Text(
-                                              userData != null
-                                                  ? userData['nom'] +
-                                                      ' ' +
-                                                      userData['prenom']
-                                                  : '',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color: blackColor,
-                                                        fontSize: 14.0,
-                                                      ),
+                                              userData != null ? userData['nom'] + ' ' + userData['prenom'] : '',
+                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                    fontFamily: 'Poppins',
+                                                    color: blackColor,
+                                                    fontSize: 14.0,
+                                                  ),
                                             ),
                                           ),
                                           Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    15.0, 0.0, 0.0, 0.0),
+                                            padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
                                             child: Icon(
                                               FFIcons.kbadgeOr,
                                               color: Color(0xFFFFF492),
@@ -305,65 +251,34 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                                 Container(
                                   // width: MediaQuery.of(context).size.width * 0.50,
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Groupement',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                    fontFamily: 'Poppins',
-                                                    color: blackColor,
-                                                    fontSize: 18.0,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                        SizedBox(height: 15),
-                                        if (pharmacieData['groupement'][0]
-                                                    ['image']
-                                                .toString() !=
-                                            'Autre.jpg')
-                                          Image.asset(
-                                            'assets/groupements/' +
-                                                pharmacieData['groupement'][0]
-                                                        ['image']
-                                                    .toString(),
-                                            width: 150.0,
-                                            height: 50.0,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        if (pharmacieData['groupement'][0]
-                                                    ['image']
-                                                .toString() ==
-                                            'Autre.jpg')
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 15.0),
-                                            child: Text(
-                                                pharmacieData['groupement'][0]
-                                                        ['name']
-                                                    .toString(),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: blackColor,
-                                                          fontSize: 14.0,
-                                                        )),
-                                          )
-                                      ]),
+                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                    Text('Groupement', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 18.0, fontWeight: FontWeight.w600)),
+                                    SizedBox(height: 15),
+                                    if (pharmacieData['groupement'][0]['image'].toString() != 'Autre.jpg')
+                                      Image.asset(
+                                        'assets/groupements/' + pharmacieData['groupement'][0]['image'].toString(),
+                                        width: 150.0,
+                                        height: 50.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    if (pharmacieData['groupement'][0]['image'].toString() == 'Autre.jpg')
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 15.0),
+                                        child: Text(pharmacieData['groupement'][0]['name'].toString(),
+                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                  fontFamily: 'Poppins',
+                                                  color: blackColor,
+                                                  fontSize: 14.0,
+                                                )),
+                                      )
+                                  ]),
                                 )
                               ],
                             ),
                             SizedBox(
                               height: 25,
                             ),
-                            Text(
-                                pharmacieData != null
-                                    ? pharmacieData['presentation']
-                                    : '',
-                                style: FlutterFlowTheme.of(context).bodyMedium)
+                            Text(pharmacieData != null ? pharmacieData['presentation'] : '', style: FlutterFlowTheme.of(context).bodyMedium)
                           ]),
                         ),
                       ),
@@ -395,19 +310,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                           ),
                           indicatorWeight: 1,
                           indicatorPadding: EdgeInsets.only(top: 40),
-                          unselectedLabelStyle:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF595A71),
-                                    fontSize: 14.0,
-                                  ),
-                          labelStyle: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                  fontFamily: 'Poppins',
-                                  color: blackColor,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w600),
+                          unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                                fontFamily: 'Poppins',
+                                color: Color(0xFF595A71),
+                                fontSize: 14.0,
+                              ),
+                          labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                           tabs: [
                             Tab(
                               text: 'Profil',
@@ -424,8 +332,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Color(0xFFEFF6F7),
@@ -440,38 +347,28 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                   ),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
+                                      color: FlutterFlowTheme.of(context).secondaryBackground,
                                       borderRadius: BorderRadius.circular(15),
                                       shape: BoxShape.rectangle,
                                     ),
                                     child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10, 10, 10, 10),
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Row(
                                             mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 'Contact',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .headlineMedium
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
+                                                style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                                      fontFamily: 'Poppins',
+                                                      color: FlutterFlowTheme.of(context).primaryText,
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -479,10 +376,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                        0.0, 15.0, 15.0, 0.0),
+                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                                 child: Row(children: [
                                                   Icon(
                                                     Icons.mail_outline,
@@ -490,27 +384,11 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                     size: 28.0,
                                                   ),
                                                   SizedBox(width: 10),
-                                                  Text(
-                                                      pharmacieData[
-                                                              'contact_pharma']
-                                                          ['email'],
-                                                      style: FlutterFlowTheme.of(
-                                                              context)
-                                                          .headlineMedium
-                                                          .override(
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primaryText,
-                                                              fontSize: 16))
+                                                  Text(pharmacieData['contact_pharma']['email'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                                 ]),
                                               ),
                                               Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                        0.0, 15.0, 15.0, 0.0),
+                                                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                                 child: Row(children: [
                                                   Icon(
                                                     Icons.phone,
@@ -518,20 +396,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                     size: 28.0,
                                                   ),
                                                   SizedBox(width: 10),
-                                                  Text(
-                                                      pharmacieData[
-                                                              'contact_pharma'][
-                                                          'telephone'],
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .headlineMedium
-                                                          .override(
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primaryText,
-                                                              fontSize: 16))
+                                                  Text(pharmacieData['contact_pharma']['telephone'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                                 ]),
                                               )
                                             ],
@@ -543,12 +408,10 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 12,
@@ -562,14 +425,11 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            10, 10, 10, 10),
+                                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
+                                            color: FlutterFlowTheme.of(context).secondaryBackground,
+                                            borderRadius: BorderRadius.circular(15),
                                             shape: BoxShape.rectangle,
                                           ),
                                           child: Column(
@@ -577,25 +437,16 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                             children: [
                                               Row(
                                                 mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     'Situation géographique',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .headlineMedium
-                                                        .override(
+                                                    style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                           fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
+                                                          color: FlutterFlowTheme.of(context).primaryText,
                                                           fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w600,
+                                                          fontWeight: FontWeight.w600,
                                                         ),
                                                   ),
                                                 ],
@@ -609,25 +460,8 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                         child: Container(
                                           child: MapAdressePharmacie(
                                             isEditable: false,
-                                            onAdressSelected: (latitude,
-                                                    longitude,
-                                                    adresse,
-                                                    postcode,
-                                                    ville,
-                                                    arrondissement,
-                                                    region) =>
-                                                {},
-                                            onInitialValue: pharmacieData[
-                                                        'situation_geographique']
-                                                    ['data']['rue'] +
-                                                ', ' +
-                                                pharmacieData[
-                                                        'situation_geographique']
-                                                    ['data']['ville'] +
-                                                ', ' +
-                                                pharmacieData[
-                                                        'situation_geographique']
-                                                    ['data']['postcode'],
+                                            onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region) => {},
+                                            onInitialValue: pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'],
                                           ),
                                         ),
                                       )
@@ -636,12 +470,10 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 12,
@@ -653,40 +485,29 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                     shape: BoxShape.rectangle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Accessibilité',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                     fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: FlutterFlowTheme.of(context).primaryText,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                             ),
                                           ],
                                         ),
-                                        if (pharmacieData['accessibilite']
-                                                ['bus'] !=
-                                            '')
+                                        if (pharmacieData['accessibilite']['bus'] != '')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.directions_bus,
@@ -694,26 +515,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text(
-                                                  pharmacieData['accessibilite']
-                                                      ['bus'],
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text(pharmacieData['accessibilite']['bus'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['accessibilite']
-                                                ['gare'] !=
-                                            '')
+                                        if (pharmacieData['accessibilite']['gare'] != '')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.departure_board,
@@ -721,26 +528,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text(
-                                                  pharmacieData['accessibilite']
-                                                      ['gare'],
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text(pharmacieData['accessibilite']['gare'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['accessibilite']
-                                                ['metro'] !=
-                                            '')
+                                        if (pharmacieData['accessibilite']['metro'] != '')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.subway_outlined,
@@ -748,26 +541,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text(
-                                                  pharmacieData['accessibilite']
-                                                      ['metro'],
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text(pharmacieData['accessibilite']['metro'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['accessibilite']
-                                                ['rer'] !=
-                                            '')
+                                        if (pharmacieData['accessibilite']['rer'] != '')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.train,
@@ -775,26 +554,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10),
-                                              Text(
-                                                  pharmacieData['accessibilite']
-                                                      ['rer'],
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text(pharmacieData['accessibilite']['rer'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['accessibilite']
-                                                ['tram'] !=
-                                            '')
+                                        if (pharmacieData['accessibilite']['tram'] != '')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.tram_outlined,
@@ -802,26 +567,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text(
-                                                  pharmacieData['accessibilite']
-                                                      ['tram'],
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text(pharmacieData['accessibilite']['tram'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['accessibilite']
-                                                ['stationnement'] !=
-                                            '')
+                                        if (pharmacieData['accessibilite']['stationnement'] != '')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.local_parking,
@@ -829,19 +580,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text(
-                                                  pharmacieData['accessibilite']
-                                                          ['stationnement'] ??
-                                                      '',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text(pharmacieData['accessibilite']['stationnement'] ?? '', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
                                       ],
@@ -850,12 +589,10 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 12,
@@ -867,28 +604,20 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                     shape: BoxShape.rectangle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Horaires',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                     fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: FlutterFlowTheme.of(context).primaryText,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                   ),
@@ -897,8 +626,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                         ),
                                         HorraireSemaineSelect(
                                           isEditable: false,
-                                          initialHours:
-                                              pharmacieData['horaires'],
+                                          initialHours: pharmacieData['horaires'],
                                           callback: (listHoraire) {},
                                         ),
                                       ],
@@ -907,12 +635,10 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 12,
@@ -924,41 +650,29 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                     shape: BoxShape.rectangle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Typologie',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                     fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: FlutterFlowTheme.of(context).primaryText,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                             ),
                                           ],
                                         ),
-                                        if (pharmacieData['typologie'] !=
-                                                null &&
-                                            pharmacieData['typologie'] ==
-                                                'Quartier')
+                                        if (pharmacieData['typologie'] != null && pharmacieData['typologie'] == 'Quartier')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.holiday_village_outlined,
@@ -966,25 +680,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Quartier',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Quartier', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['typologie'] !=
-                                                null &&
-                                            pharmacieData['typologie'] ==
-                                                'Centre ville')
+                                        if (pharmacieData['typologie'] != null && pharmacieData['typologie'] == 'Centre ville')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.apartment_outlined,
@@ -992,25 +693,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Centre ville',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Centre ville', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['typologie'] !=
-                                                null &&
-                                            pharmacieData['typologie'] ==
-                                                'Aéroport')
+                                        if (pharmacieData['typologie'] != null && pharmacieData['typologie'] == 'Aéroport')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.flight_takeoff,
@@ -1018,25 +706,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Aéroport',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Aéroport', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['typologie'] !=
-                                                null &&
-                                            pharmacieData['typologie'] ==
-                                                'Gare')
+                                        if (pharmacieData['typologie'] != null && pharmacieData['typologie'] == 'Gare')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.train,
@@ -1044,52 +719,25 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10),
-                                              Text('Gare',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Gare', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['typologie'] !=
-                                                null &&
-                                            pharmacieData['typologie'] ==
-                                                'Centre commercial')
+                                        if (pharmacieData['typologie'] != null && pharmacieData['typologie'] == 'Centre commercial')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
-                                                Icons
-                                                    .store_mall_directory_outlined,
+                                                Icons.store_mall_directory_outlined,
                                                 color: greyColor,
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Centre commercial',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Centre commercial', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['typologie'] !=
-                                                null &&
-                                            pharmacieData['typologie'] ==
-                                                'Lieu touristique')
+                                        if (pharmacieData['typologie'] != null && pharmacieData['typologie'] == 'Lieu touristique')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.landscape_outlined,
@@ -1097,25 +745,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Lieu touristique',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Lieu touristique', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['typologie'] !=
-                                                null &&
-                                            pharmacieData['typologie'] ==
-                                                'Zone rurale')
+                                        if (pharmacieData['typologie'] != null && pharmacieData['typologie'] == 'Zone rurale')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.nature_people_outlined,
@@ -1123,26 +758,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Zone rurale',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Zone rurale', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['nb_patient_jour'] !=
-                                                null &&
-                                            pharmacieData['nb_patient_jour'] !=
-                                                '')
+                                        if (pharmacieData['nb_patient_jour'] != null && pharmacieData['nb_patient_jour'] != '')
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                0.0, 15.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.groups,
@@ -1150,19 +771,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text(
-                                                  pharmacieData[
-                                                          'nb_patient_jour'] +
-                                                      ' patients par jour',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text(pharmacieData['nb_patient_jour'] + ' patients par jour', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
                                       ],
@@ -1171,12 +780,10 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 12,
@@ -1188,41 +795,29 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                     shape: BoxShape.rectangle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Missions',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                     fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: FlutterFlowTheme.of(context).primaryText,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                             ),
                                           ],
                                         ),
-                                        if (pharmacieData['missions'] != '' &&
-                                            pharmacieData['missions']
-                                                .contains('Test COVID'))
+                                        if (pharmacieData['missions'] != '' && pharmacieData['missions'].contains('Test COVID'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                0.0, 15.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.coronavirus_outlined,
@@ -1230,24 +825,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Test COVID',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Test COVID', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['missions'] != '' &&
-                                            pharmacieData['missions']
-                                                .contains('Vaccination'))
+                                        if (pharmacieData['missions'] != '' && pharmacieData['missions'].contains('Vaccination'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.vaccines,
@@ -1255,50 +838,25 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Vaccination',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Vaccination', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['missions'] != '' &&
-                                            pharmacieData['missions'].contains(
-                                                'Entretien pharmaceutique'))
+                                        if (pharmacieData['missions'] != '' && pharmacieData['missions'].contains('Entretien pharmaceutique'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
-                                                Icons
-                                                    .health_and_safety_outlined,
+                                                Icons.health_and_safety_outlined,
                                                 color: greyColor,
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Entretien pharmaceutique',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Entretien pharmaceutique', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['missions'] != '' &&
-                                            pharmacieData['missions'].contains(
-                                                'Borne de télé-médecine'))
+                                        if (pharmacieData['missions'] != '' && pharmacieData['missions'].contains('Borne de télé-médecine'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.local_pharmacy_outlined,
@@ -1306,24 +864,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Borne de télé-médecine',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Borne de télé-médecine', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['missions'] != '' &&
-                                            pharmacieData['missions']
-                                                .contains('externalisé'))
+                                        if (pharmacieData['missions'] != '' && pharmacieData['missions'].contains('externalisé'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.videocam_outlined,
@@ -1331,16 +877,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Préparation externalisé',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Préparation externalisé', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
                                       ],
@@ -1349,12 +886,10 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 12,
@@ -1366,28 +901,20 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                     shape: BoxShape.rectangle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'LGO',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                     fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: FlutterFlowTheme.of(context).primaryText,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                   ),
@@ -1396,44 +923,28 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                         ),
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.8,
+                                              width: MediaQuery.of(context).size.width * 0.8,
                                               decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
+                                                color: FlutterFlowTheme.of(context).secondaryBackground,
                                               ),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
                                                   Image.asset(
-                                                    'assets/lgo/' +
-                                                        pharmacieData['lgo'][0]
-                                                            ['image'],
+                                                    'assets/lgo/' + pharmacieData['lgo'][0]['image'],
                                                     width: 120,
                                                     height: 60,
                                                     fit: BoxFit.contain,
                                                   ),
                                                   Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                5, 0, 0, 0),
+                                                    padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                                                     child: Text(
-                                                      pharmacieData['lgo'][0]
-                                                          ['name'],
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium,
+                                                      pharmacieData['lgo'][0]['name'],
+                                                      style: FlutterFlowTheme.of(context).bodyMedium,
                                                     ),
                                                   ),
                                                 ],
@@ -1447,12 +958,10 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 12,
@@ -1464,41 +973,29 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                     shape: BoxShape.rectangle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Confort',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                     fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: FlutterFlowTheme.of(context).primaryText,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                             ),
                                           ],
                                         ),
-                                        if (pharmacieData['confort'] != '' &&
-                                            pharmacieData['confort']
-                                                .contains('Salle de pause'))
+                                        if (pharmacieData['confort'] != '' && pharmacieData['confort'].contains('Salle de pause'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                0.0, 15.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.self_improvement,
@@ -1506,24 +1003,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Salle de pause',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Salle de pause', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['confort'] != '' &&
-                                            pharmacieData['confort']
-                                                .contains('Robot'))
+                                        if (pharmacieData['confort'] != '' && pharmacieData['confort'].contains('Robot'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.smart_toy_outlined,
@@ -1531,24 +1016,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Robot',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Robot', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['confort'] != '' &&
-                                            pharmacieData['confort'].contains(
-                                                'Etiquettes éléctroniques'))
+                                        if (pharmacieData['confort'] != '' && pharmacieData['confort'].contains('Etiquettes éléctroniques'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.qr_code_outlined,
@@ -1556,24 +1029,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Etiquettes éléctroniques',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Etiquettes éléctroniques', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['confort'] != '' &&
-                                            pharmacieData['confort']
-                                                .contains('Monnayeur'))
+                                        if (pharmacieData['confort'] != '' && pharmacieData['confort'].contains('Monnayeur'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.point_of_sale,
@@ -1581,24 +1042,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Monnayeur',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Monnayeur', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['confort'] != '' &&
-                                            pharmacieData['confort']
-                                                .contains('Climatisation'))
+                                        if (pharmacieData['confort'] != '' && pharmacieData['confort'].contains('Climatisation'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.ac_unit,
@@ -1606,24 +1055,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Climatisation',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Climatisation', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['confort'] != '' &&
-                                            pharmacieData['confort']
-                                                .contains('Chauffage'))
+                                        if (pharmacieData['confort'] != '' && pharmacieData['confort'].contains('Chauffage'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.light_mode_outlined,
@@ -1631,24 +1068,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Chauffage',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Chauffage', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['confort'] != '' &&
-                                            pharmacieData['confort']
-                                                .contains('Vigile'))
+                                        if (pharmacieData['confort'] != '' && pharmacieData['confort'].contains('Vigile'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.local_police_outlined,
@@ -1656,24 +1081,12 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Vigile',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Vigile', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['confort'] != '' &&
-                                            pharmacieData['confort'].contains(
-                                                'Comité d\'entreprise'))
+                                        if (pharmacieData['confort'] != '' && pharmacieData['confort'].contains('Comité d\'entreprise'))
                                           Padding(
-                                            padding: const EdgeInsetsDirectional
-                                                .fromSTEB(0.0, 0.0, 15.0, 15.0),
+                                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
                                                 Icons.groups,
@@ -1681,16 +1094,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                                 size: 28.0,
                                               ),
                                               SizedBox(width: 10, height: 30),
-                                              Text('Comité d\'entreprise',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                          fontFamily: 'Poppins',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16))
+                                              Text('Comité d\'entreprise', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
                                       ],
@@ -1699,12 +1103,10 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, bottom: 8.0),
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
                                         blurRadius: 12,
@@ -1716,28 +1118,20 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                     shape: BoxShape.rectangle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 10),
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Tendances',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
                                                     fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: FlutterFlowTheme.of(context).primaryText,
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.w600,
                                                   ),
@@ -1751,45 +1145,22 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                             size: 28.0,
                                           ),
                                           SizedBox(width: 10, height: 30),
-                                          Text('Ordonnances',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
-                                                      fontFamily: 'Poppins',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      fontSize: 16)),
+                                          Text('Ordonnances', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
                                           LevelProgressBar(
-                                            level: pharmacieData['tendances'][0]
-                                                ['Ordonances'],
+                                            level: pharmacieData['tendances'][0]['Ordonances'],
                                             isUser: false,
                                           )
                                         ]),
                                         Row(children: [
                                           Icon(
-                                            Icons
-                                                .face_retouching_natural_outlined,
+                                            Icons.face_retouching_natural_outlined,
                                             color: greyColor,
                                             size: 28.0,
                                           ),
                                           SizedBox(width: 10, height: 30),
-                                          Text('Cosmétiques',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
-                                                      fontFamily: 'Poppins',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      fontSize: 16)),
+                                          Text('Cosmétiques', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
                                           LevelProgressBar(
-                                            level: pharmacieData['tendances'][0]
-                                                ['Cosmétiques'],
+                                            level: pharmacieData['tendances'][0]['Cosmétiques'],
                                             isUser: false,
                                           )
                                         ]),
@@ -1800,20 +1171,9 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                             size: 28.0,
                                           ),
                                           SizedBox(width: 10, height: 30),
-                                          Text('Phyto / aroma',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
-                                                      fontFamily: 'Poppins',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      fontSize: 16)),
+                                          Text('Phyto / aroma', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
                                           LevelProgressBar(
-                                            level: pharmacieData['tendances'][0]
-                                                ['Phyto / aroma'],
+                                            level: pharmacieData['tendances'][0]['Phyto / aroma'],
                                             isUser: false,
                                           )
                                         ]),
@@ -1824,20 +1184,9 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                             size: 28.0,
                                           ),
                                           SizedBox(width: 10, height: 30),
-                                          Text('Nutrition',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
-                                                      fontFamily: 'Poppins',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      fontSize: 16)),
+                                          Text('Nutrition', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
                                           LevelProgressBar(
-                                            level: pharmacieData['tendances'][0]
-                                                ['Nutrition'],
+                                            level: pharmacieData['tendances'][0]['Nutrition'],
                                             isUser: false,
                                           )
                                         ]),
@@ -1849,20 +1198,9 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView>
                                               size: 28.0,
                                             ),
                                             SizedBox(width: 10, height: 30),
-                                            Text('Conseil',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .headlineMedium
-                                                    .override(
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 16)),
+                                            Text('Conseil', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
                                             LevelProgressBar(
-                                              level: pharmacieData['tendances']
-                                                  [0]['Conseil'],
+                                              level: pharmacieData['tendances'][0]['Conseil'],
                                               isUser: false,
                                             )
                                           ],

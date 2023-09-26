@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 
 class ProgressIndicatorPharmabox extends StatelessWidget {
   const ProgressIndicatorPharmabox({Key? key});
@@ -13,7 +14,7 @@ class ProgressIndicatorPharmabox extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/icons/logo-pharma-box.png', width: 100, height: 100),
+            PharmaboxLogo(width: 100),
             SizedBox(width: 10, height: 20),
             CircularProgressIndicator(color: blueColor),
           ],

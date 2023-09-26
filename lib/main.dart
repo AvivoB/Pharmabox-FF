@@ -28,6 +28,8 @@ import 'index.dart';
 import 'constant.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
+import 'pharmablabla/pharmablabla_widget.dart';
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -152,7 +154,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'Explorer': ExplorerWidget(),
       'PharmaJob': PharmaJobWidget(),
-      'PharmaBlabla': Container(),
+      'PharmaBlabla': PharmaBlabla(),
       'Reseau': ReseauWidget(),
       'Profil': ProfilWidget(),
       'Pharmacie': ProfilPharmacie(),
@@ -212,11 +214,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         color: greyColor,
                         size: 24.0,
                       ),
-                Text(
-                  'Explorer',
-                  overflow: TextOverflow.ellipsis,
-                  style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 0 ? FontWeight.w500 : FontWeight.w400)
-                ),
+                Text('Explorer', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 0 ? FontWeight.w500 : FontWeight.w400)),
               ],
             ),
           ),
@@ -243,11 +241,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         color: greyColor,
                         size: 24.0,
                       ),
-                Text(
-                  'Jobs',
-                  overflow: TextOverflow.ellipsis,
-                  style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 1 ? FontWeight.w500 : FontWeight.w400)
-                ),
+                Text('Jobs', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 1 ? FontWeight.w500 : FontWeight.w400)),
               ],
             ),
           ),
@@ -274,11 +268,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         color: greyColor,
                         size: 24.0,
                       ),
-                Text(
-                  'Blabla',
-                  overflow: TextOverflow.ellipsis,
-                  style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400)
-                ),
+                Text('Blabla', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400)),
               ],
             ),
           ),
@@ -305,11 +295,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         color: greyColor,
                         size: 24.0,
                       ),
-                Text(
-                  'Réseau',
-                  overflow: TextOverflow.ellipsis,
-                  style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400)
-                ),
+                Text('Réseau', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400)),
               ],
             ),
           ),
@@ -336,11 +322,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         color: greyColor,
                         size: 24.0,
                       ),
-                Text(
-                  'Profil',
-                  overflow: TextOverflow.ellipsis,
-                  style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 4 ? FontWeight.w500 : FontWeight.w400)
-                ),
+                Text('Profil', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 4 ? FontWeight.w500 : FontWeight.w400)),
               ],
             ),
           ),
