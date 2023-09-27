@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_add_post_widget.dart';
+import 'package:pharmabox/pharmablabla/pharmablabla_single_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_widget.dart';
 import 'package:pharmabox/profil_view_pharmacie/profil_view_pharmacie.dart';
 import 'package:pharmabox/register_validation_account/register_validation_account.dart';
@@ -165,6 +166,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         ),
         FFRoute(name: 'PharmaBlablaAddPost', path: '/pharmaBlablaAddPost', builder: (context, params) => NavBarPage(initialPage: 'PharmaBlabla', page: PharmaBlablaAddPost())),
         FFRoute(name: 'PharmaBlabla', path: '/pharmaBlabla', builder: (context, params) => NavBarPage(initialPage: 'PharmaBlabla', page: PharmaBlabla())),
+        FFRoute(
+            name: 'PharmaBlablaSinglePost',
+            path: '/pharmaBlablaSinglePost',
+            builder: (context, params) => NavBarPage(
+                initialPage: 'PharmaBlabla',
+                page: PharmaBlablaSinglePost(
+                  postId: params.getParam('postId', ParamType.String),
+                ))),
         FFRoute(
           name: 'Reseau',
           path: '/reseau',

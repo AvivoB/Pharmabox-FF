@@ -70,8 +70,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
       setState(() {
         _isLoading = true;
       });
-      List<Map<String, dynamic>> posts =
-          await PharmaBlablaSearchData().filterPosts(query);
+      List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().filterPosts(query);
       setState(() {
         searchResults = posts;
         _isLoading = false;
@@ -81,8 +80,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
       setState(() {
         _isLoading = true;
       });
-      List<Map<String, dynamic>> posts =
-          await PharmaBlablaSearchData().getAllPosts();
+      List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().getAllPosts();
       setState(() {
         searchResults = posts;
         _isLoading = false;
@@ -97,16 +95,6 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
     super.dispose();
   }
 
-  Map<String, dynamic> testData = {
-    'poste': 'Pharmacien(ne)',
-    'nom': 'Berrebi',
-    'prenom': 'Aviel',
-    'post_content':
-        'Comment faire pour accéder à un compte utilisateur sur le logiciel LGO Winpharma ?',
-    'id': 'dggdgdgdzg',
-    'photoUrl': ''
-  };
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,112 +102,129 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
       resizeToAvoidBottomInset: false,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              wrapWithModel(
-                model: _model.headerAppModel,
-                updateCallback: () => setState(() {}),
-                child: HeaderAppWidget(),
+        child: Column(
+          children: [
+            wrapWithModel(
+              model: _model.headerAppModel,
+              updateCallback: () => setState(() {}),
+              child: HeaderAppWidget(),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 1.0,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextFormField(
-                    controller: _model.searchPost,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      hintText: 'Rechercher...',
-                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                      contentPadding: EdgeInsets.all(15.0),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFD0D1DE),
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(48.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFD0D1DE),
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(28.0),
-                      ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        size: 24.0,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  controller: _model.searchPost,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    hintText: 'Rechercher...',
+                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                    contentPadding: EdgeInsets.all(15.0),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
                         color: Color(0xFFD0D1DE),
+                        width: 1,
                       ),
+                      borderRadius: BorderRadius.circular(48.0),
                     ),
-                    style: FlutterFlowTheme.of(context).bodyMedium,
-                    onChanged: (value) => getDataPost(query: value),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFD0D1DE),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(28.0),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      size: 24.0,
+                      color: Color(0xFFD0D1DE),
+                    ),
                   ),
+                  style: FlutterFlowTheme.of(context).bodyMedium,
+                  onChanged: (value) => getDataPost(query: value),
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
-                child: Row(
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'PharmaBlabla',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Poppins',
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w600,
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'PharmaBlabla',
+                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 4.0,
-                            color: Color(0x33000000),
-                            offset: Offset(0.0, 2.0),
-                          )
+                          Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 4.0,
+                                  color: Color(0x33000000),
+                                  offset: Offset(0.0, 2.0),
+                                )
+                              ],
+                              gradient: LinearGradient(
+                                colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                                stops: [0.0, 1.0],
+                                begin: AlignmentDirectional(1.0, -1.0),
+                                end: AlignmentDirectional(-1.0, 1.0),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: FlutterFlowIconButton(
+                              borderColor: Colors.transparent,
+                              borderRadius: 30.0,
+                              borderWidth: 1.0,
+                              buttonSize: 40.0,
+                              icon: Icon(
+                                Icons.send_outlined,
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
+                                size: 24.0,
+                              ),
+                              onPressed: () async {
+                                context.pushNamed('PharmaBlablaAddPost');
+                              },
+                            ),
+                          ),
                         ],
-                        gradient: LinearGradient(
-                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                          stops: [0.0, 1.0],
-                          begin: AlignmentDirectional(1.0, -1.0),
-                          end: AlignmentDirectional(-1.0, 1.0),
-                        ),
-                        shape: BoxShape.circle,
-                      ),
-                      child: FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 30.0,
-                        borderWidth: 1.0,
-                        buttonSize: 40.0,
-                        icon: Icon(
-                          Icons.send_outlined,
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          size: 24.0,
-                        ),
-                        onPressed: () async {
-                          context.pushNamed('PharmaBlablaAddPost');
-                        },
                       ),
                     ),
+                    for (var data in searchResults)
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: GestureDetector(
+                            child: CardPharmablabla(data: data),
+                            onTap: () {
+                              context.pushNamed(
+                                'PharmaBlablaSinglePost',
+                                queryParams: {
+                                  'postId': serializeParam(
+                                    data['postId'],
+                                    ParamType.String,
+                                  ),
+                                }.withoutNulls,
+                              );
+                            }),
+                      )
                   ],
                 ),
               ),
-              for (var data in searchResults)
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: CardPharmablabla(data: data),
-                )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
