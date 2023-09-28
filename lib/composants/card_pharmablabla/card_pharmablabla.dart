@@ -167,10 +167,32 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                       ),
                     ),
                     Container(
-                      child: LikeButtonWidget(
-                        documentId: widget.data['postId'],
+                        child: Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        width: 90,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.notes_outlined, color: greyColor),
+                              SizedBox(width: 8),
+                              Text(
+                                widget.data['post']['count_comment'].toString(),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: greyColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                    )),
                   ],
                 ),
               ),

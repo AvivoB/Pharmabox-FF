@@ -251,37 +251,74 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                       bool isCurrentUser = doc['fromId'] == currentUser?.uid;
 
                       return FutureBuilder<DocumentSnapshot>(
-                        future: FirebaseFirestore.instance.collection('users').doc(doc['fromId']).get(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Center(child: CircularProgressIndicator()); // Montrez un loader pendant que les données de l'utilisateur sont récupérées
-                          }
+                          future: FirebaseFirestore.instance.collection('users').doc(doc['fromId']).get(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(child: CircularProgressIndicator()); // Montrez un loader pendant que les données de l'utilisateur sont récupérées
+                            }
 
-                          Map<String, dynamic> userData = snapshot.data!.data() as Map<String, dynamic>;
-                          
-                          return Container(
-                            padding: EdgeInsets.only(left: 0, right: 0, top: 5, bottom: 5),
-                            child: Align(
-                              alignment: (isCurrentUser ? Alignment.topRight : Alignment.topLeft),
-                              child: Column(
-                                crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: (isCurrentUser ? blueColor : Colors.grey.shade200),
+                            if (snapshot.hasError) {
+                              return Center(child: Text('Une erreur s\'est produite'));
+                            }
+
+                            Map<String, dynamic>? userData = snapshot.data!.data() as Map<String, dynamic>?; // Cast en toute sécurité
+                            return Container(
+                              padding: EdgeInsets.only(left: 0, right: 0, top: 5, bottom: 5),
+                              child: Align(
+                                alignment: (isCurrentUser ? Alignment.topRight : Alignment.topLeft),
+                                child: Column(
+                                  crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth: MediaQuery.of(context).size.width * 0.8, // Ajustez la valeur selon vos besoins
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: (Colors.grey.shade200),
+                                      ),
+                                      padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+                                      child: Column(
+                                        crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                                        children: [
+                                          if (!isCurrentUser)
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                                                  child: Container(
+                                                    width: 20.0,
+                                                    height: 20.0,
+                                                    clipBehavior: Clip.antiAlias,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: FadeInImage.assetNetwork(
+                                                      image: userData != null ? userData['photoUrl'] : '',
+                                                      placeholder: 'assets/images/Group_18.png',
+                                                      fit: BoxFit.cover,
+                                                      imageErrorBuilder: (context, error, stackTrace) {
+                                                        return Image.asset('assets/images/Group_18.png');
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(userData != null ? userData['nom'] ?? '' + ' ' + userData['prenom'] : 'Utilisateur', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w600)),
+                                              ],
+                                            ),
+                                          if (isCurrentUser) Text('Vous', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w600)),
+                                          SizedBox(height: 10),
+                                          Text(doc['message'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14, fontWeight: FontWeight.w400)),
+                                          SizedBox(height: 10),
+                                          Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
+                                        ],
+                                      ),
                                     ),
-                                    padding: EdgeInsets.all(12),
-                                    child: Text(doc['message'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isCurrentUser ? Colors.white : blackColor, fontSize: 14, fontWeight: FontWeight.w400)),
-                                  ),
-                                  Text(DateFormat('dd/MM/yyyy', 'fr_FR').format(doc['timestamp'].toDate()), style:  FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
-                                  Text(userData != null ? userData['nom'] : 'Utilisateur', style:  FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0))
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      );
+                            );
+                          });
                     }).toList(),
                   );
                 },

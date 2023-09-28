@@ -91,11 +91,7 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
             padding: const EdgeInsets.all(15.0),
             child: Row(
               children: [
-                SvgPicture.asset(
-                  'assets/icons/Like.svg',
-                  width: 22,
-                  colorFilter: ColorFilter.mode(isLiked ? blueColor : greyColor, BlendMode.srcIn),
-                ),
+                Icon(Icons.thumb_up_alt_outlined, color: isLiked ? blueColor : greyColor),
                 SizedBox(width: 8),
                 Text(
                   likesCount.toString(),

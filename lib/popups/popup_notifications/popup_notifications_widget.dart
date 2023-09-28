@@ -95,6 +95,9 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                     child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                       stream: FirebaseFirestore.instance.collection('notifications').snapshots(),
                       builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: ProgressIndicatorPharmabox()); // or another loading widget
+                        }
                         // Assuming `currentUserId` contains the ID of the current user.
                         String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -121,9 +124,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                             return FutureBuilder<Map<String, dynamic>?>(
                                 future: getUserData(data!['by_user']),
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return Center(child: ProgressIndicatorPharmabox()); // or another loading widget
-                                  } else if (snapshot.hasError) {
+                                   if (snapshot.hasError) {
                                     return Text('Error: ${snapshot.error}');
                                   } else {
                                     Map<String, dynamic>? userData = snapshot.data;
