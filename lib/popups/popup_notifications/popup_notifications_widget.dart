@@ -124,7 +124,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                             return FutureBuilder<Map<String, dynamic>?>(
                                 future: getUserData(data!['by_user']),
                                 builder: (context, snapshot) {
-                                   if (snapshot.hasError) {
+                                  if (snapshot.hasError) {
                                     return Text('Error: ${snapshot.error}');
                                   } else {
                                     Map<String, dynamic>? userData = snapshot.data;

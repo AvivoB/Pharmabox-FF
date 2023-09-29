@@ -180,6 +180,8 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                         isEditable: false,
                         initialImagesSelected: pharmacieData != null && pharmacieData['photo_url'] != '' ? pharmacieData['photo_url'].cast<String>() : [''],
                         pharmacieId: widget.pharmacieId,
+                        data: pharmacieData,
+                        userData: userData,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 1.0,
@@ -201,50 +203,58 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                     children: [
                                       Text('Titulaire', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 18.0, fontWeight: FontWeight.w600)),
                                       SizedBox(height: 15),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                                            child: Container(
-                                              width: 50.0,
-                                              height: 50.0,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: FadeInImage.assetNetwork(
-                                                image: userData != null && userData['photoUrl'] != '' ? userData['photoUrl'] : '',
-                                                placeholder: 'assets/images/Group_18.png',
-                                                fit: BoxFit.cover,
-                                                imageErrorBuilder: (context, error, stackTrace) {
-                                                  return Image.asset('assets/images/Group_18.png');
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.of(context).size.width * 0.30,
-                                            child: Text(
-                                              userData != null ? userData['nom'] + ' ' + userData['prenom'] : '',
-                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                    fontFamily: 'Poppins',
-                                                    color: blackColor,
-                                                    fontSize: 14.0,
+                                      GestureDetector(
+                                        onTap: () => {
+                                          context.pushNamed('ProfilView',
+                                              queryParams: {
+                                                'userId': serializeParam(
+                                                  userData['id'],
+                                                  ParamType.String,
+                                                ),
+                                              }.withoutNulls)
+                                        },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                                              child: Container(
+                                                  width: 50.0,
+                                                  height: 50.0,
+                                                  clipBehavior: Clip.antiAlias,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
                                                   ),
+                                                  child: userData != null && userData['photoUrl'] != ''
+                                                      ? Image.network(
+                                                          userData['photoUrl'],
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.asset('assets/images/Group_18.png', fit: BoxFit.cover)),
                                             ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
-                                            child: Icon(
-                                              FFIcons.kbadgeOr,
-                                              color: Color(0xFFFFF492),
-                                              size: 24.0,
+                                            Container(
+                                              width: MediaQuery.of(context).size.width * 0.30,
+                                              child: Text(
+                                                userData != null ? userData['nom'] + ' ' + userData['prenom'] : '',
+                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                      fontFamily: 'Poppins',
+                                                      color: blackColor,
+                                                      fontSize: 14.0,
+                                                    ),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
+                                              child: Icon(
+                                                FFIcons.kbadgeOr,
+                                                color: Color(0xFFFFF492),
+                                                size: 24.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),

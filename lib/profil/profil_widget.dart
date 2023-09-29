@@ -1288,7 +1288,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                                               'assets/lgo/' + providerProfilUser.selectedLgo[index]['image'],
                                                               width: 120,
                                                               height: 60,
-                                                              fit: BoxFit.cover,
+                                                              fit: BoxFit.contain,
                                                             ),
                                                           ],
                                                         ),

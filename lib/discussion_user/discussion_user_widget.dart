@@ -2,6 +2,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '/backend/backend.dart';
 import '/flutter_flow/chat/index.dart';
@@ -174,18 +175,19 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                         ],
                       ),
                     ),
-                    ClipOval(
-                      child: Material(
-                        elevation: 2,
-                        color: greenColor, // Couleur de l'arrière-plan
-                        child: IconButton(
-                          onPressed: () {
-                            // Logique de l'appel téléphonique
-                          },
-                          icon: Icon(Icons.phone, color: Colors.white),
+                    if (userMessage['afficher_tel'])
+                      ClipOval(
+                        child: Material(
+                          elevation: 2,
+                          color: greenColor, // Couleur de l'arrière-plan
+                          child: IconButton(
+                            onPressed: () async {
+                              await launch('tel:' + userMessage['telephone']);
+                            },
+                            icon: Icon(Icons.phone, color: Colors.white),
+                          ),
                         ),
-                      ),
-                    )
+                      )
                   ],
                 ),
               ),

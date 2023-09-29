@@ -1126,7 +1126,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           size: 28.0,
                                         ),
                                         SizedBox(width: 10),
-                                        Flexible(child: Text(widget.searchI['localisation_job'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)))
+                                        if (widget.searchI != null && widget.searchI['localisation_job'] != null) Flexible(child: Text(widget.searchI['localisation_job'] ?? '', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)))
                                       ]),
                                     ),
                                     for (var contrat in widget.searchI['contrats'] as List)
@@ -1164,7 +1164,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           size: 28.0,
                                         ),
                                         SizedBox(width: 10),
-                                        Text(widget.searchI['debut_immediat'] ? 'Démarrage immédiat' : 'Démarrage le ' + widget.searchI['debut_contrat'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
+                                        Text(widget.searchI['debut_immediat'] && widget.searchI['debut_contrat'] == '' ? 'Démarrage immédiat' : 'Démarrage le ' + widget.searchI['debut_contrat'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                       ]),
                                     ),
                                     if (widget.searchI['duree'] != '')

@@ -102,7 +102,15 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () => {},
+                          onTap: () => {
+                            context.pushNamed('ProfilView',
+                                queryParams: {
+                                  'userId': serializeParam(
+                                    widget.data['user']['id'],
+                                    ParamType.String,
+                                  ),
+                                }.withoutNulls)
+                          },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,

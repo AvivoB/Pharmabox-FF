@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/discussion_user/discussion_user_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../custom_code/widgets/button_network_manager.dart';
 import '../../custom_code/widgets/carousel_widget_pharma.dart';
@@ -30,6 +32,25 @@ class CardPharmacieWidget extends StatefulWidget {
 
 class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   late CardPharmacieModel _model;
+  Map<String, dynamic> _userData = {};
+
+  Future<void> getUserById() async {
+    try {
+      DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(widget.data['user_id']);
+      DocumentSnapshot userDoc = await userRef.get();
+      if (userDoc.exists) {
+        setState(() {
+          _userData = userDoc.data() as Map<String, dynamic>;
+        });
+      } else {
+        print('User not found');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching user: $e');
+      return null;
+    }
+  }
 
   @override
   void setState(VoidCallback callback) {
@@ -41,6 +62,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CardPharmacieModel());
+    getUserById();
   }
 
   @override
@@ -154,7 +176,7 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Container(
-                          width: MediaQuery.of(context).size.width * 0.45,
+                          width: MediaQuery.of(context).size.width * 0.6,
                           child: Text(
                             widget.data['situation_geographique']['data']['ville'].toString() + ', ' + widget.data['situation_geographique']['data']['postcode'].toString(),
                             style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -166,16 +188,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                       ),
                     ],
                   ),
-                  Container(
-                      child: ButtonNetworkManager(
-                    width: 30,
-                    radius: 12.0,
-                    fontSize: 14,
-                    text: 'Ajouter',
-                    height: 25.0,
-                    typeCollection: 'pharmacies',
-                    docId: widget.data['documentId'],
-                  )),
                 ],
               ),
             ),
@@ -234,45 +246,54 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                                     color: Color(0xFF42D2FF),
                                     size: 24.0,
                                   ),
-                                  onPressed: () {
-                                    print('IconButton pressed ...');
+                                  onPressed: () async {
+                                    if (widget.data['contact_pharma']['preference_contact'] == 'Pharmacie') {
+                                      await launch('tel:' + widget.data['contact_pharma']['telephone'].toString());
+                                    } else {
+                                      await launch('tel:' + _userData['telephone'].toString());
+                                    }
                                   },
                                 ),
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
-                                  stops: [0.0, 1.0],
-                                  begin: AlignmentDirectional(1.0, 0.0),
-                                  end: AlignmentDirectional(-1.0, 0),
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
-                                child: FlutterFlowIconButton(
-                                  borderColor: Color(0x0042D2FF),
-                                  borderRadius: 30.0,
-                                  borderWidth: 0.0,
-                                  buttonSize: 40.0,
-                                  fillColor: Colors.white,
-                                  icon: Icon(
-                                    Icons.mail_outline_rounded,
-                                    color: Color(0xFF42D2FF),
-                                    size: 24.0,
+                          if (widget.data['contact_pharma']['email'] != '')
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                    stops: [0.0, 1.0],
+                                    begin: AlignmentDirectional(1.0, 0.0),
+                                    end: AlignmentDirectional(-1.0, 0),
                                   ),
-                                  onPressed: () {
-                                    print('IconButton pressed ...');
-                                  },
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                  child: FlutterFlowIconButton(
+                                    borderColor: Color(0x0042D2FF),
+                                    borderRadius: 30.0,
+                                    borderWidth: 0.0,
+                                    buttonSize: 40.0,
+                                    fillColor: Colors.white,
+                                    icon: Icon(
+                                      Icons.mail_outline_rounded,
+                                      color: Color(0xFF42D2FF),
+                                      size: 24.0,
+                                    ),
+                                    onPressed: () async {
+                                      if (widget.data['contact_pharma']['preference_contact'] == 'Pharmacie') {
+                                        await launch('mailto:' + widget.data['contact_pharma']['email'].toString());
+                                      } else {
+                                        await launch('mailto:' + _userData['email'].toString());
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
                           Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -297,7 +318,12 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                                   size: 24.0,
                                 ),
                                 onPressed: () {
-                                  print('IconButton pressed ...');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DiscussionUserWidget(toUser: widget.data['user_id']),
+                                    ),
+                                  );
                                 },
                               ),
                             ),

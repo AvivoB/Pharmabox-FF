@@ -95,15 +95,26 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.data['pharma_data']['situation_geographique'] != null ? widget.data['pharma_data']['situation_geographique']['adresse'] : '',
-                            overflow: TextOverflow.clip,
-                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                  fontFamily: 'Poppins',
-                                  color: Color(0xFF161730),
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                          GestureDetector(
+                            onTap: () {
+                              context.pushNamed('PharmacieProfilView',
+                                  queryParams: {
+                                    'pharmacieId': serializeParam(
+                                      widget.data['pharma_id'],
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls);
+                            },
+                            child: Text(
+                              widget.data['pharma_data']['situation_geographique'] != null ? widget.data['pharma_data']['situation_geographique']['adresse'] : '',
+                              overflow: TextOverflow.clip,
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF161730),
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
                           ),
                         ],
                       ),

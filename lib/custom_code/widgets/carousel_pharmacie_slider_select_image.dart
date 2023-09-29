@@ -8,6 +8,7 @@ import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/custom_code/widgets/button_network_manager.dart';
 import 'package:pharmabox/index.dart';
 import 'package:pharmabox/popups/popup_signalement/popup_signalement_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
@@ -17,8 +18,10 @@ class CarouselPharmacieSliderSelect extends StatefulWidget {
   final List<String>? initialImagesSelected;
   final bool isEditable;
   final String? pharmacieId;
+  var data;
+  var userData;
 
-  CarouselPharmacieSliderSelect({required this.onImagesSelected, this.initialImagesSelected, this.isEditable = true, this.pharmacieId});
+  CarouselPharmacieSliderSelect({required this.onImagesSelected, this.initialImagesSelected, this.isEditable = true, this.pharmacieId, this.data, this.userData});
 
   @override
   _CarouselPharmacieSliderSelectState createState() => _CarouselPharmacieSliderSelectState();
@@ -244,17 +247,6 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                       },
                                     ),
                                   ),
-                                  SizedBox(width: 10),
-                                  Container(
-                                      child: ButtonNetworkManager(
-                                    width: 30,
-                                    radius: 12.0,
-                                    fontSize: 14,
-                                    text: 'Ajouter',
-                                    height: 25.0,
-                                    typeCollection: 'pharmacies',
-                                    docId: widget.pharmacieId ?? '',
-                                  )),
                                 ],
                               ),
                             ),
@@ -354,8 +346,12 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                         color: Color(0xFF42D2FF),
                                         size: 24.0,
                                       ),
-                                      onPressed: () {
-                                        print('IconButton pressed ...');
+                                      onPressed: () async {
+                                        if (widget.data['contact_pharma']['preference_contact'] == 'Pharmacie') {
+                                          await launch('tel:' + widget.data['contact_pharma']['telephone'].toString());
+                                        } else {
+                                          await launch('tel:' + widget.userData['telephone']);
+                                        }
                                       },
                                     ),
                                   ),
@@ -386,8 +382,12 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                         color: Color(0xFF42D2FF),
                                         size: 24.0,
                                       ),
-                                      onPressed: () {
-                                        print('IconButton pressed ...');
+                                      onPressed: () async {
+                                        if (widget.data['contact_pharma']['preference_contact'] == 'Pharmacie') {
+                                          await launch('mailto:' + widget.data['contact_pharma']['email'].toString());
+                                        } else {
+                                          await launch('mailto:' + widget.userData['email'].toString());
+                                        }
                                       },
                                     ),
                                   ),
@@ -420,7 +420,7 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => DiscussionUserWidget(toUser: 'widget.userId'),
+                                          builder: (context) => DiscussionUserWidget(toUser: widget.data['user_id']),
                                         ),
                                       );
                                     },
@@ -513,17 +513,6 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                                 },
                                               ),
                                             ),
-                                            SizedBox(width: 10),
-                                            Container(
-                                                child: ButtonNetworkManager(
-                                              width: 30,
-                                              radius: 12.0,
-                                              fontSize: 14,
-                                              text: 'Ajouter',
-                                              height: 25.0,
-                                              typeCollection: 'pharmacies',
-                                              docId: widget.pharmacieId ?? '',
-                                            )),
                                           ],
                                         ),
                                       ),
@@ -564,8 +553,12 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                               color: Color(0xFF42D2FF),
                                               size: 24.0,
                                             ),
-                                            onPressed: () {
-                                              print('IconButton pressed ...');
+                                            onPressed: () async {
+                                              if (widget.data['contact_pharma']['preference_contact'] == 'Pharmacie') {
+                                                await launch('tel:' + widget.data['contact_pharma']['telephone'].toString());
+                                              } else {
+                                                await launch('tel:' + widget.userData['telephone'].toString());
+                                              }
                                             },
                                           ),
                                         ),
@@ -596,8 +589,12 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                               color: Color(0xFF42D2FF),
                                               size: 24.0,
                                             ),
-                                            onPressed: () {
-                                              print('IconButton pressed ...');
+                                            onPressed: () async {
+                                              if (widget.data['contact_pharma']['preference_contact'] == 'Pharmacie') {
+                                                await launch('mailto:' + widget.data['contact_pharma']['email'].toString());
+                                              } else {
+                                                await launch('mailto:' + widget.userData['email'].toString());
+                                              }
                                             },
                                           ),
                                         ),
@@ -630,7 +627,7 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => DiscussionUserWidget(toUser: 'widget.userId'),
+                                                builder: (context) => DiscussionUserWidget(toUser: widget.data['user_id']),
                                               ),
                                             );
                                           },
