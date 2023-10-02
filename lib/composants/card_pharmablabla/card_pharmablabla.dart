@@ -139,6 +139,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                       ],
                     ),
                   ),
+                  Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(widget.data['post']['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
                 ],
               ),
             ),

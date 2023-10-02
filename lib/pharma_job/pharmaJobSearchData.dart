@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pharmabox/auth/base_auth_user_provider.dart';
 
 import '../constant.dart';
 
@@ -110,5 +111,21 @@ class PharmaJobSearchData {
       }
     }
     return uniqueSearch.toList();
+  }
+
+  Future<List> getMesRecherches() async {
+    CollectionReference recherches = FirebaseFirestore.instance.collection('recherches');
+    Query queryRecherche = recherches;
+
+    queryRecherche.where('user_id', isEqualTo: currentUser?.uid);
+    QuerySnapshot snapshot = await queryRecherche.get();
+
+    List mySearch = [];
+
+    for (var search in snapshot.docs) {
+      mySearch.add(search.data() as Map<String, dynamic>);
+    }
+
+    return mySearch.toList();
   }
 }

@@ -286,60 +286,59 @@ class _PharmaBlablaAddPostState extends State<PharmaBlablaAddPost> {
                         )),
                   ),
                 ),
-                if (isTitulaire)
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 15.0, 5.0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(4.0),
-                        border: Border.all(
-                          color: Color(0xFFD0D1DE),
-                        ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 15.0, 5.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      borderRadius: BorderRadius.circular(4.0),
+                      border: Border.all(
+                        color: Color(0xFFD0D1DE),
                       ),
-                      height: 50,
-                      child: TextButton(
-                          onPressed: () async {
-                            await showModalBottomSheet(
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              enableDrag: false,
-                              context: context,
-                              builder: (bottomSheetContext) {
-                                return DraggableScrollableSheet(builder: (BuildContext context, ScrollController scrollController) {
-                                  return GestureDetector(
-                                    onTap: () => '',
-                                    child: Padding(
-                                      padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                      child: PopupGroupementWidget(
-                                        onTap: (groupement) {
-                                          setState(() {
-                                            _model.selectedGroupement[0] = groupement;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                });
-                              },
-                            ).then((value) => setState(() {}));
-                          },
-                          child: Row(
-                            children: [
-                              _model.selectedGroupement[0]['name'] == 'Par groupement' ? PharmaboxLogo(width: 25) : Image.asset('assets/groupements/' + _model.selectedGroupement[0]['image']),
-                              SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  _model.selectedGroupement[0]['name'].toString(),
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          )),
                     ),
+                    height: 50,
+                    child: TextButton(
+                        onPressed: () async {
+                          await showModalBottomSheet(
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            enableDrag: false,
+                            context: context,
+                            builder: (bottomSheetContext) {
+                              return DraggableScrollableSheet(builder: (BuildContext context, ScrollController scrollController) {
+                                return GestureDetector(
+                                  onTap: () => '',
+                                  child: Padding(
+                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                    child: PopupGroupementWidget(
+                                      onTap: (groupement) {
+                                        setState(() {
+                                          _model.selectedGroupement[0] = groupement;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                );
+                              });
+                            },
+                          ).then((value) => setState(() {}));
+                        },
+                        child: Row(
+                          children: [
+                            _model.selectedGroupement[0]['name'] == 'Par groupement' ? PharmaboxLogo(width: 25) : Image.asset('assets/groupements/' + _model.selectedGroupement[0]['image']),
+                            SizedBox(width: 5),
+                            Flexible(
+                              child: Text(
+                                _model.selectedGroupement[0]['name'].toString(),
+                                style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        )),
                   ),
+                ),
               ],
             ),
             Padding(

@@ -192,7 +192,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    width: MediaQuery.of(context).size.width * 0.7,
+                                    width: MediaQuery.of(context).size.width * 0.5,
                                     child: Text(
                                       postAndUserData['user']['nom'] + ' ' + postAndUserData['user']['prenom'],
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
@@ -213,6 +213,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                             ],
                           ),
                         ),
+                        Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(postAndUserData['post']['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
                       ],
                     ),
                   ),
@@ -310,7 +311,35 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                                           SizedBox(height: 10),
                                           Text(doc['message'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14, fontWeight: FontWeight.w400)),
                                           SizedBox(height: 10),
-                                          Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
+                                          if (!isCurrentUser)
+                                            Container(
+                                              child: Row(
+                                                mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                                                children: [
+                                                  Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
+                                                  SizedBox(width: 10),
+                                                  LikeButtonWidget(
+                                                    documentId: 'hh',
+                                                    size: 10,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          if (isCurrentUser)
+                                            Container(
+                                              width: 250,
+                                              child: Row(
+                                                mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                                                children: [
+                                                  LikeButtonWidget(
+                                                    documentId: 'hh',
+                                                    size: 10,
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
+                                                ],
+                                              ),
+                                            )
                                         ],
                                       ),
                                     ),

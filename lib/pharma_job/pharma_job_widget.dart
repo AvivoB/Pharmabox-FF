@@ -58,6 +58,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List pharmacieInPlace = [];
   List offres = [];
   List recherches = [];
+
   List foundedOffres = [];
   List foundedRecherches = [];
   bool isLoading = true;
@@ -104,6 +105,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     _manager = _initClusterManager();
     // getPharmaciesLocations();
     checkTitulaireStatus();
+    _getMesRecherches();
   }
 
   ClusterManager _initClusterManager() {
@@ -128,6 +130,16 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
       setState(() {
         this.isTitulaire = isTitulaire;
       });
+    });
+  }
+
+  void _getMesRecherches() async {
+    var mesRecherches = await PharmaJobSearchData().getMesRecherches();
+    setState(() {
+      // mesRecherches.clear();
+      recherches = mesRecherches;
+      print('MYSEARCH . ' + mesRecherches[0].toString());
+      _findOffres(mesRecherches[0]);
     });
   }
 
@@ -292,7 +304,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            /*  Text('Ma dernière recherche', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                            Text('Mes dernières recherche enregistré', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                             Container(
                               width: MediaQuery.of(context).size.width * 1.0,
                               decoration: BoxDecoration(
@@ -318,7 +330,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 ),
                               ),
                             ),
-                           */
                           ],
                         ),
                       Padding(
