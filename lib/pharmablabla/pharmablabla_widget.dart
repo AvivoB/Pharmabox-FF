@@ -67,20 +67,18 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
   Future<void> getDataPost({query = ''}) async {
     if (query != '') {
       searchResults.clear();
-      setState(() {
-        _isLoading = true;
-      });
-      List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().filterPosts(query);
+      List<Map<String, dynamic>> posts =
+          await PharmaBlablaSearchData().filterPosts(query);
       setState(() {
         searchResults = posts;
-        _isLoading = false;
       });
     } else {
       searchResults.clear();
       setState(() {
         _isLoading = true;
       });
-      List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().getAllPosts();
+      List<Map<String, dynamic>> posts =
+          await PharmaBlablaSearchData().getAllPosts();
       setState(() {
         searchResults = posts;
         _isLoading = false;
@@ -148,13 +146,9 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                 ),
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+            Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 15.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,7 +156,9 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                         children: [
                           Text(
                             'PharmaBlabla',
-                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
                                   fontFamily: 'Poppins',
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.w600,
@@ -192,7 +188,8 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                               buttonSize: 40.0,
                               icon: Icon(
                                 Icons.send_outlined,
-                                color: FlutterFlowTheme.of(context).secondaryBackground,
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
                                 size: 24.0,
                               ),
                               onPressed: () async {
@@ -203,7 +200,17 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                         ],
                       ),
                     ),
+            _isLoading ? Expanded(child: ProgressIndicatorPharmabox(background: Colors.transparent,)) : 
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    
+                    
+                    
                     for (var data in searchResults)
+                    
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: GestureDetector(

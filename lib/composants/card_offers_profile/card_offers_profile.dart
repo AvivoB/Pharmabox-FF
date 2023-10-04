@@ -24,10 +24,11 @@ import '../../flutter_flow/flutter_flow_model.dart';
 import '../../flutter_flow/form_field_controller.dart';
 
 class CardOfferProfilWidget extends StatefulWidget {
-  CardOfferProfilWidget({Key? key, required this.searchI, this.isEditable = true});
+  CardOfferProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false});
 
   var searchI;
   final bool isEditable;
+  bool isSelected;
   @override
   State<CardOfferProfilWidget> createState() => _CardOfferProfilWidgetState();
 }
@@ -118,8 +119,18 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
+        decoration: widget.isSelected
+            ? BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // Vos couleurs ici
+                ),
+              )
+            : null,
         child: Padding(
-          padding: const EdgeInsets.only(top: 5.0),
+          padding: const EdgeInsets.all(2.0),
           child: Column(
             children: [
               InkWell(
@@ -372,7 +383,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                                     ),
                                                   ),
                                                   Container(
-                                                    width: MediaQuery.of(context).size.width * 0.7,
+                                                    width: MediaQuery.of(context).size.width * 0.65,
                                                     decoration: BoxDecoration(
                                                       color: FlutterFlowTheme.of(context).secondaryBackground,
                                                     ),

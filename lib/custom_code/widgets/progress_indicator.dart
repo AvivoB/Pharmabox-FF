@@ -3,12 +3,14 @@ import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 
 class ProgressIndicatorPharmabox extends StatelessWidget {
-  const ProgressIndicatorPharmabox({Key? key});
+  Color background;
+
+  ProgressIndicatorPharmabox({Key? key, this.background = Colors.white});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white, // Arrière-plan blanc
+      color: background, // Arrière-plan blanc
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -1738,19 +1738,21 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                                   enableDrag: false,
                                                   context: context,
                                                   builder: (bottomSheetContext) {
-                                                    return DraggableScrollableSheet(builder: (BuildContext context, ScrollController scrollController) {
-                                                      return GestureDetector(
-                                                        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                        child: Padding(
-                                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                          child: PopupLgoWidget(
-                                                            onTap: (lgo) {
-                                                              providerPharmacieUser.selectLGO(lgo);
-                                                            },
-                                                          ),
-                                                        ),
-                                                      );
-                                                    });
+                                                    return DraggableScrollableSheet(
+                                                        initialChildSize: 0.80,
+                                                        builder: (BuildContext context, ScrollController scrollController, {initialChildSize: 0.8}) {
+                                                          return GestureDetector(
+                                                            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                                            child: Padding(
+                                                              padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                              child: PopupLgoWidget(
+                                                                onTap: (lgo) {
+                                                                  providerPharmacieUser.selectLGO(lgo);
+                                                                },
+                                                              ),
+                                                            ),
+                                                          );
+                                                        });
                                                   },
                                                 ).then((value) => setState(() {}));
                                               },
@@ -1801,7 +1803,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                                     'assets/lgo/' + providerPharmacieUser.selectedLgo[0]['image'],
                                                     width: 120,
                                                     height: 60,
-                                                    fit: BoxFit.cover,
+                                                    fit: BoxFit.contain,
                                                   ),
                                                   Padding(
                                                     padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),

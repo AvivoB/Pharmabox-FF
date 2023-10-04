@@ -139,22 +139,21 @@ class _PopupLikedWidgetState extends State<PopupLikedWidget> {
                                             color: FlutterFlowTheme.of(context).secondaryBackground,
                                           ),
                                           child: Container(
-                                            width: 120.0,
-                                            height: 120.0,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child:
-                                            (userData != null && userData['photoUrl'] != null && userData['photoUrl'].isNotEmpty)
-                                                      ? Image.network(
-                                                          userData['photoUrl'],
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : Image.asset(
-                                                          'assets/images/Group_18.png',
-                                                          fit: BoxFit.cover,
-                                                        )),
+                                              width: 120.0,
+                                              height: 120.0,
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: (userData != null && userData['photoUrl'] != null && userData['photoUrl'].isNotEmpty)
+                                                  ? Image.network(
+                                                      userData['photoUrl'],
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.asset(
+                                                      'assets/images/Group_18.png',
+                                                      fit: BoxFit.cover,
+                                                    )),
                                         ),
                                         Padding(
                                           padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 10.0),

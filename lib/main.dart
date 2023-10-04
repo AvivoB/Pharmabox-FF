@@ -258,13 +258,13 @@ class _NavBarPageState extends State<NavBarPage> {
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
-                          Icons.diversity_2,
+                          Icons.forum_outlined,
                           color: Colors.white,
                           size: 24.0,
                         ),
                       )
                     : Icon(
-                        Icons.diversity_2,
+                        Icons.forum_outlined,
                         color: greyColor,
                         size: 24.0,
                       ),

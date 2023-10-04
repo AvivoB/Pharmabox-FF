@@ -114,16 +114,24 @@ class PharmaJobSearchData {
   }
 
   Future<List> getMesRecherches() async {
-    CollectionReference recherches = FirebaseFirestore.instance.collection('recherches');
+    String currenuserID = await getCurrentUserId();
+    bool isTitu = await checkIsTitulaire();
+    List mySearch = [];
+    print('CURR USER step' + isTitu.toString());
+    mySearch.clear();
+    CollectionReference recherches = FirebaseFirestore.instance.collection(isTitu ? 'offres' : 'recherches');
     Query queryRecherche = recherches;
 
-    queryRecherche.where('user_id', isEqualTo: currentUser?.uid);
+    queryRecherche.where('user_id', isEqualTo: currenuserID);
     QuerySnapshot snapshot = await queryRecherche.get();
 
-    List mySearch = [];
-
     for (var search in snapshot.docs) {
-      mySearch.add(search.data() as Map<String, dynamic>);
+      Map<String, dynamic> data = search.data() as Map<String, dynamic>;
+      if (data['user_id'] == currenuserID) {
+        mySearch.add(data);
+        print('USER8ID' + data['user_id'].toString());
+        print(data['user_id']);
+      }
     }
 
     return mySearch.toList();

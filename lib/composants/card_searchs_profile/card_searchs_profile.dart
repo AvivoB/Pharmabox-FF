@@ -22,10 +22,11 @@ import '../../flutter_flow/flutter_flow_model.dart';
 import '../../flutter_flow/form_field_controller.dart';
 
 class CardSearchProfilWidget extends StatefulWidget {
-  CardSearchProfilWidget({Key? key, required this.searchI, this.isEditable = true});
+  CardSearchProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false});
 
   var searchI;
   final bool isEditable;
+  bool isSelected;
   @override
   State<CardSearchProfilWidget> createState() => _CardSearchProfilWidgetState();
 }
@@ -106,8 +107,18 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
+        decoration: widget.isSelected
+            ? BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // Vos couleurs ici
+                ),
+              )
+            : null,
         child: Padding(
-          padding: const EdgeInsets.only(top: 5.0),
+          padding: const EdgeInsets.all(2.0),
           child: Column(
             children: [
               InkWell(
@@ -128,7 +139,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    widget.searchI['nom'],
+                                    widget.searchI['nom'] ?? '',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18.0,

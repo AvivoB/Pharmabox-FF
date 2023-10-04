@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/pharma_job/pharmaJobSearchData.dart';
+import 'package:pharmabox/popups/popup_recherches_saved/popup_recherches_saved_widget.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
@@ -59,11 +60,15 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List offres = [];
   List recherches = [];
 
+  int selectedOffreSearchSaved = 0;
+
   List foundedOffres = [];
   List foundedRecherches = [];
   bool isLoading = true;
   CameraPosition? _currentCameraPosition;
   List selectedPharmaciesJobs = [];
+
+  bool isFromSaved = true;
 
   Future<void> getCurrentPosition() async {
     isLoading = true;
@@ -135,11 +140,12 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
 
   void _getMesRecherches() async {
     var mesRecherches = await PharmaJobSearchData().getMesRecherches();
+    print('MYSEARCH . ' + mesRecherches.toString());
+
     setState(() {
       // mesRecherches.clear();
-      recherches = mesRecherches;
-      print('MYSEARCH . ' + mesRecherches[0].toString());
-      _findOffres(mesRecherches[0]);
+      isTitulaire ? offres = mesRecherches : recherches = mesRecherches;
+      isTitulaire ? _findRecherche(mesRecherches[0]) : _findOffres(mesRecherches[0]);
     });
   }
 
@@ -194,146 +200,152 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
-                  child: /* Stack(
-                  children: [
-                     TextFormField(
-                        controller: _model.searchJobController,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: 'Rechercher...',
-                          hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                          contentPadding: EdgeInsets.all(15.0),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFD0D1DE),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(48.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFD0D1DE),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(28.0),
-                          ),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: 24.0,
-                            color: Color(0xFFD0D1DE),
-                          ),
-                        ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
-                        validator:
-                            _model.searchJobControllerValidator.asValidator(context),
-                      ),
-                    Align(
-                      alignment: AlignmentDirectional(0.94, -0.07),
-                      child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-                        child: FlutterFlowIconButton(
-                          borderColor: Colors.transparent,
-                          borderRadius: 60.0,
-                          borderWidth: 1.0,
-                          buttonSize: 40.0,
-                          fillColor: Color(0xFFEFF6F7),
-                          icon: Icon(
-                            Icons.tune,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 20.0,
-                          ),
-                          onPressed: () async {
-                            await showModalBottomSheet(
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              enableDrag: false,
-                              context: context,
-                              builder: (bottomSheetContext) {
-                                return Padding(
-                                  padding: MediaQuery.of(bottomSheetContext)
-                                      .viewInsets,
-                                  child: isTitulaire ? PopupOffreWidget() : PopupRechercheWidget(),
-                                );
-                              },
-                            ).then((value) => setState(() {}));
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ), */
-                      Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (offres.isNotEmpty)
+                      if (offres.isNotEmpty && isTitulaire == true)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            /*  Text('Ma dernière recherche', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 1.0,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topRight,
-                                  end: Alignment.bottomLeft,
-                                  colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                ),
-                              ),
+                            Text('Mes dernières recherches enregistrées', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                            GestureDetector(
                               child: Container(
-                                margin: EdgeInsets.all(2.0),
-                                padding: EdgeInsets.all(10.0), // adjust as needed for border width
-                                decoration: BoxDecoration(
-                                  color: Colors.white, // or whatever the inner color needs to be
-                                  borderRadius: BorderRadius.circular(5.0), // adjust as needed
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Text(offres[0]['nom'], overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                    // Text(offres[0]['poste'] ?? '' + ' - ' + offres[0]['temps'] + ' - ' + offres[0]['salaire_mensuel'] + '€ / mois',
-                                    //     overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                  ],
+                                width: MediaQuery.of(context).size.width * 1.0,
+                                decoration: isFromSaved
+                                    ? BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                                        ),
+                                      )
+                                    : null,
+                                child: Container(
+                                  margin: EdgeInsets.all(2.0),
+                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                  decoration: BoxDecoration(
+                                    color: Colors.white, // or whatever the inner color needs to be
+                                    borderRadius: BorderRadius.circular(5.0), // adjust as needed
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(Icons.work_outline),
+                                      Text(offres[selectedOffreSearchSaved]['poste'] ?? '', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
+                                      // Text(offres[0]['contrats'] != '' ? offres[0]['contrats'].toList().toString() : '', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
+                                      // Text(offres[0]['salaire_mensuel'] + ' €' ?? '', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
+                                      Icon(Icons.edit_note_outlined)
+                                    ],
+                                  ),
                                 ),
                               ),
+                              onTap: () async {
+                                setState(() {
+                                  isFromSaved = true;
+                                });
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  enableDrag: true,
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (bottomSheetContext) {
+                                    return DraggableScrollableSheet(
+                                        initialChildSize: 0.80,
+                                        builder: (BuildContext context, ScrollController scrollController) {
+                                          return Padding(
+                                            padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                            child: PopupSearchSaved(
+                                              itemSelected: selectedOffreSearchSaved,
+                                              isOffer: true,
+                                              searchSaved: offres,
+                                              onTap: (index) {
+                                                setState(() {
+                                                  _findRecherche(offres[index]);
+                                                  selectedOffreSearchSaved = index;
+                                                });
+                                              },
+                                            ),
+                                          );
+                                        });
+                                  },
+                                ).then((value) => setState(() {}));
+                              },
                             ),
-                           */
                           ],
                         ),
-                      if (recherches.isNotEmpty)
+                      if (recherches.isNotEmpty && isTitulaire == false)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Mes dernières recherche enregistré', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 1.0,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topRight,
-                                  end: Alignment.bottomLeft,
-                                  colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                ),
-                              ),
+                            Text('Mes dernières recherches enregistrées', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                            GestureDetector(
                               child: Container(
-                                margin: EdgeInsets.all(2.0),
-                                padding: EdgeInsets.all(10.0), // adjust as needed for border width
-                                decoration: BoxDecoration(
-                                  color: Colors.white, // or whatever the inner color needs to be
-                                  borderRadius: BorderRadius.circular(5.0), // adjust as needed
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(recherches[0]['nom'], overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                    Text(recherches[0]['salaire_mensuel'] + '€ / mois', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                  ],
+                                width: MediaQuery.of(context).size.width * 1.0,
+                                decoration: isFromSaved
+                                    ? BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                                        ),
+                                      )
+                                    : null,
+                                child: Container(
+                                  margin: EdgeInsets.all(2.0),
+                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                  decoration: BoxDecoration(
+                                    color: Colors.white, // or whatever the inner color needs to be
+                                    borderRadius: BorderRadius.circular(5.0), // adjust as needed
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(Icons.work_outline),
+                                      Text(recherches[selectedOffreSearchSaved]['poste'] /*   ?? '' + ' ' + recherches[0]['contrats'].toString() ?? '' + ' ' + recherches[0]['salaire_mensuel'] + ' €' ?? '', */,
+                                          overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
+                                      Icon(Icons.edit_note_outlined)
+                                    ],
+                                  ),
                                 ),
                               ),
+                              onTap: () async {
+                                setState(() {
+                                  isFromSaved = true;
+                                });
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  enableDrag: true,
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (bottomSheetContext) {
+                                    return DraggableScrollableSheet(
+                                        initialChildSize: 0.80,
+                                        builder: (BuildContext context, ScrollController scrollController) {
+                                          return Padding(
+                                            padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                            child: PopupSearchSaved(
+                                              itemSelected: selectedOffreSearchSaved,
+                                              isOffer: false,
+                                              searchSaved: recherches,
+                                              onTap: (index) {
+                                                setState(() {
+                                                  _findOffres(recherches[index]);
+                                                  selectedOffreSearchSaved = index;
+                                                });
+                                              },
+                                            ),
+                                          );
+                                        });
+                                  },
+                                ).then((value) => setState(() {}));
+                              },
                             ),
                           ],
                         ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                         child: Container(
                           width: double.infinity,
                           height: 50.0,
@@ -361,22 +373,29 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                               size: 20.0,
                             ),
                             onPressed: () async {
+                              setState(() {
+                                isFromSaved = false;
+                              });
                               await showModalBottomSheet(
                                 isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
                                 enableDrag: true,
+                                backgroundColor: Colors.transparent,
                                 context: context,
                                 builder: (bottomSheetContext) {
-                                  return Padding(
-                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                    child: isTitulaire
-                                        ? PopupOffreWidget(
-                                            onFilter: (filters) => {_findRecherche(filters)},
-                                          )
-                                        : PopupRechercheWidget(
-                                            onFilter: (filters) => {_findOffres(filters)},
-                                          ),
-                                  );
+                                  return DraggableScrollableSheet(
+                                      initialChildSize: 0.80,
+                                      builder: (BuildContext context, ScrollController scrollController) {
+                                        return Padding(
+                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                          child: isTitulaire
+                                              ? PopupOffreWidget(
+                                                  onFilter: (filters) => {_findRecherche(filters)},
+                                                )
+                                              : PopupRechercheWidget(
+                                                  onFilter: (filters) => {_findOffres(filters)},
+                                                ),
+                                        );
+                                      });
                                 },
                               );
                             },
@@ -412,7 +431,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                     color: Color(0xFFEFF6F7),
                   ),
                   width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.67,
+                  height: MediaQuery.of(context).size.height * 0.645,
                   child: SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -457,16 +476,20 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                               myLocationEnabled: true,
                               zoomGesturesEnabled: true,
                               zoomControlsEnabled: false,
-                              myLocationButtonEnabled: false,
+                              myLocationButtonEnabled: true,
                               onMapCreated: (GoogleMapController controller) {
                                 _controller.complete(controller);
                                 _manager.setMapId(controller.mapId);
                               },
                               onCameraMove: (position) {
                                 _manager.onCameraMove(position);
-                                setState(() {
-                                  selectedPharmaciesJobs.clear();
-                                });
+                              },
+                              onTap: (argument) {
+                                if (selectedPharmaciesJobs.isNotEmpty) {
+                                  setState(() {
+                                    selectedPharmaciesJobs.clear();
+                                  });
+                                }
                               },
                               onCameraIdle: _manager.updateMap),
                         ),
@@ -474,12 +497,10 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                   if (selectedPharmaciesJobs.isNotEmpty)
                     Positioned(
                       bottom: 60.0,
-                      child: Container(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [for (var i in selectedPharmaciesJobs) CardPharmacieOffreRechercheWidget(data: foundedOffres[i])],
-                          ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [for (var i in selectedPharmaciesJobs) CardPharmacieOffreRechercheWidget(data: foundedOffres[i])],
                         ),
                       ),
                     ),
