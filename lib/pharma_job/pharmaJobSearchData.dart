@@ -48,7 +48,7 @@ class PharmaJobSearchData {
       DocumentSnapshot pharmaDoc = await pharmaref.doc(pharmacieId).get();
       Map<String, dynamic> pharmaData = pharmaDoc.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
 
-      foundedOffres.add({'offre': data.data(), 'pharma_data': pharmaData, 'pharma_id': pharmacieId});
+      foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId});
     }
     return foundedOffres;
   }

@@ -413,16 +413,13 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                 myLocationEnabled: true,
                                 zoomGesturesEnabled: true,
                                 zoomControlsEnabled: false,
-                                myLocationButtonEnabled: false,
+                                myLocationButtonEnabled: true,
                                 onMapCreated: (GoogleMapController controller) {
                                   _controller.complete(controller);
                                   _manager.setMapId(controller.mapId);
                                 },
                                 onCameraMove: (position) {
                                   _manager.onCameraMove(position);
-                                  setState(() {
-                                    selectedItem = null;
-                                  });
                                 },
                                 // onCameraMove: _manager.onCameraMove,
                                 onCameraIdle: _manager.updateMap),
@@ -431,7 +428,31 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                     if (selectedItem != null)
                       Positioned(
                         bottom: 60.0,
-                        child: CardPharmacieWidget(data: pharmacieInPlace[selectedItem!]),
+                        left: 10,
+                        right: 10,
+                        child: Column(
+                          children: [
+                            CardPharmacieWidget(data: pharmacieInPlace[selectedItem!]),
+                            Container(
+                              child: FloatingActionButton.extended(
+                                label: Text('Fermer', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: redColor, fontSize: 10.0, fontWeight: FontWeight.w500)), // <-- Text
+                                backgroundColor: Colors.white,
+                                elevation: 0.0,
+                                icon: Icon(
+                                  // <-- Icon
+                                  Icons.close,
+                                  size: 18.0,
+                                  color: redColor,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    selectedItem = null;
+                                  });
+                                },
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     // Afficher les resulats
                     DraggableScrollableSheet(

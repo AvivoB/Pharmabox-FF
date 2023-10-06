@@ -45,34 +45,33 @@ class PharmaBlablaSearchData {
   }
 
   Future<List<Map<String, dynamic>>> getAllPosts() async {
-      Query<Map<String, dynamic>> pharmablabla = FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true);
+    Query<Map<String, dynamic>> pharmablabla = FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true);
 
-      // Faire la requête pour les posts
-      QuerySnapshot postResult = await pharmablabla.get();
+    // Faire la requête pour les posts
+    QuerySnapshot postResult = await pharmablabla.get();
 
-      List<Map<String, dynamic>> result = [];
+    List<Map<String, dynamic>> result = [];
 
-      // Pour chaque post, faire une requête pour l'utilisateur associé
-      for (var postDoc in postResult.docs) {
-        final userId = postDoc['userId'];
-        final postId = postDoc.id;
-        int commentsCount = await _getCommentsCount(postId);
+    // Pour chaque post, faire une requête pour l'utilisateur associé
+    for (var postDoc in postResult.docs) {
+      final userId = postDoc['userId'];
+      final postId = postDoc.id;
+      int commentsCount = await _getCommentsCount(postId);
 
-        if (userId != null) {
-          final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
-          if (userDoc.exists) {
-            Map<String, dynamic> postData = postDoc.data() as Map<String, dynamic>;
-            postData['count_comment'] = commentsCount.toString();
-            result.add({
-              'post': postData,
-              'postId': postId,
-              'user': userDoc.data(),
-            });
-          }
+      if (userId != null) {
+        final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+        if (userDoc.exists) {
+          Map<String, dynamic> postData = postDoc.data() as Map<String, dynamic>;
+          postData['count_comment'] = commentsCount.toString();
+          result.add({
+            'post': postData,
+            'postId': postId,
+            'user': userDoc.data(),
+          });
         }
       }
+    }
 
-      return result;
+    return result;
   }
-
 }
