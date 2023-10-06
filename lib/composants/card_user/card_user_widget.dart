@@ -1,4 +1,5 @@
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constant.dart';
 import '../../custom_code/widgets/button_network_manager.dart';
@@ -240,8 +241,9 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                     color: Color(0xFF42D2FF),
                                     size: 24.0,
                                   ),
-                                  onPressed: () {
-                                    print('IconButton pressed ...');
+                                  onPressed: () async{
+                                    await launch('tel:' +
+                                          widget.data['telephone']);
                                   },
                                 ),
                               ),
@@ -272,8 +274,9 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                     color: Color(0xFF42D2FF),
                                     size: 24.0,
                                   ),
-                                  onPressed: () {
-                                    print('IconButton pressed ...');
+                                  onPressed: () async{
+                                    await launch('mailto:' +
+                                          widget.data['email']);
                                   },
                                 ),
                               ),

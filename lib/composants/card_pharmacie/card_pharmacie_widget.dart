@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 import 'package:pharmabox/discussion_user/discussion_user_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -148,12 +149,16 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                       ),
                     if (widget.data['groupement'][0]['image'].toString() == 'Autre.jpg')
                       Container(
-                          width: MediaQuery.of(context).size.width * 0.32,
-                          child: Text(widget.data['groupement'][0]['name'].toString(),
-                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF595A71),
-                                  )))
+                          width: MediaQuery.of(context).size.width * 0.30,
+                          child: Row(
+                            children: [
+                              PharmaboxLogo(width: 35),
+                              SizedBox(width: 10),
+                              Flexible(
+                                child: Text(widget.data['groupement'][0]['name'].toString(), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12)),
+                              ),
+                            ],
+                          ))
                   ],
                 ),
               ),

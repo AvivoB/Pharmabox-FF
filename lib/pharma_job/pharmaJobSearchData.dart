@@ -40,15 +40,15 @@ class PharmaJobSearchData {
     QuerySnapshot snapshot = await filteredQuery.get();
     CollectionReference pharmaref = FirebaseFirestore.instance.collection('pharmacies');
     for (var data in snapshot.docs) {
-      print("Document ID: ${data.id}");
-      print("Data: ${data.data()}");
-      print("-----------------------");
       var offreData = data.data() as Map<String, dynamic>?;
       var pharmacieId = offreData != null ? offreData['pharmacie_id'] : '';
       DocumentSnapshot pharmaDoc = await pharmaref.doc(pharmacieId).get();
       Map<String, dynamic> pharmaData = pharmaDoc.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
 
-      foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId});
+      DocumentSnapshot userRef = await FirebaseFirestore.instance.collection('users').doc(pharmaData['user_id']).get();
+      Map<String, dynamic> userData = userRef.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
+      
+      foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
     }
     return foundedOffres;
   }

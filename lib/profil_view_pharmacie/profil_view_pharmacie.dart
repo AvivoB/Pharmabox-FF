@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/composants/card_offers_profile/card_offers_profile.dart';
 import 'package:pharmabox/custom_code/widgets/horaire_select_widget.dart';
 import 'package:pharmabox/custom_code/widgets/index.dart';
+import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
@@ -269,17 +270,23 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                         'assets/groupements/' + pharmacieData['groupement'][0]['image'].toString(),
                                         width: 150.0,
                                         height: 50.0,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                       ),
                                     if (pharmacieData['groupement'][0]['image'].toString() == 'Autre.jpg')
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 15.0),
-                                        child: Text(pharmacieData['groupement'][0]['name'].toString(),
-                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                  fontFamily: 'Poppins',
-                                                  color: blackColor,
-                                                  fontSize: 14.0,
-                                                )),
+                                        padding: const EdgeInsets.only(top: 0.0),
+                                        child: Row(
+                                          children: [
+                                            PharmaboxLogo(width: 50),
+                                            SizedBox(width: 10),
+                                            Text(pharmacieData['groupement'][0]['name'].toString(),
+                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                      fontFamily: 'Poppins',
+                                                      color: blackColor,
+                                                      fontSize: 14.0,
+                                                    )),
+                                          ],
+                                        ),
                                       )
                                   ]),
                                 )
