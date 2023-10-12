@@ -242,7 +242,7 @@ class _PredictionVilleState extends State<PredictionVille> {
                   title: Row(
                     children: [
                       Icon(Icons.location_on_outlined),
-                      Text(_predictions[index]['city'] +', '+ _predictions[index]['country'], style: FlutterFlowTheme.of(context).bodyMedium),
+                      Text(_predictions[index]['city'] + ', ' + _predictions[index]['country'], style: FlutterFlowTheme.of(context).bodyMedium),
                     ],
                   ),
                   onTap: () {

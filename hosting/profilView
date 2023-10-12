@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- Pour Facebook/Open Graph -->
+    <meta property="og:url" content="https://votre-domaine.web.app/votre-page" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mon profil Pharmabox" />
+    <meta property="og:description" content="Mon profil Pharmabox" />
+    <meta property="og:image" content="assets/img/logo-pharma-box.png" />
+
+    <!-- Pour Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@VotreNomUtilisateurTwitter">
+    <meta name="twitter:title" content="Mon profil Pharmabox">
+    <meta name="twitter:description" content="Mon profil Pharmabox">
+    <meta name="twitter:image" content="assets/img/logo-pharma-box.png">
+
+    <!-- Pour LinkedIn -->
+    <meta property="og:url" content="https://votre-domaine.web.app/votre-page" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mon profil Pharmabox" />
+    <meta property="og:description" content="Mon profil Pharmabox" />
+    <meta property="og:image" content="assets/img/logo-pharma-box.png" />
+
+    <!-- Pour WhatsApp -->
+    <meta property="og:url" content="https://votre-domaine.web.app/votre-page" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mon profil Pharmabox" />
+    <meta property="og:description" content="Mon profil Pharmabox" />
+    <meta property="og:image" content="assets/img/logo-pharma-box.png" />
+
+
+    <title>Mon profil pharmabox</title>
+</head>
+<body>
+    
+    <script>
+        function redirectToStore() {
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        
+            // Pour Android
+            if (/android/i.test(userAgent)) {
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.pharmabox.mobileapp';
+            }
+        
+            // Pour iOS
+            else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                window.location.href = 'https://apps.apple.com/app/id[VOTRE_ID_APP]';
+            }
+        
+            // Pour les autres plateformes
+            else {
+                window.location.href = 'https://votrewebsite.com';
+            }
+        }
+        
+        // Appeler la fonction
+        redirectToStore();
+        
+    </script>
+</body>
+</html>

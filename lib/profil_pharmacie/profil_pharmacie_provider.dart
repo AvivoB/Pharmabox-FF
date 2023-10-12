@@ -72,7 +72,7 @@ class ProviderPharmacieUser extends ChangeNotifier {
 
   void setAdresse(latitude, longitude, postcode, rue, ville, region, arrondissement, country) {
     _selectedAdressePharma = [
-      {'latitude': latitude, 'longitude': longitude,'rue': rue, 'postcode': postcode, 'ville': ville, 'region': region, 'arrondissement': arrondissement, 'country': country}
+      {'latitude': latitude, 'longitude': longitude, 'rue': rue, 'postcode': postcode, 'ville': ville, 'region': region, 'arrondissement': arrondissement, 'country': country}
     ];
     notifyListeners();
   }

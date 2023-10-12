@@ -106,18 +106,14 @@ class _MyAppState extends State<MyApp> {
         FlutterFlowTheme.saveThemeMode(mode);
       });
 
- void _handleIncomingLinks() {
+  void _handleIncomingLinks() {
     if (!kIsWeb) {
       // It will handle app links while the app is already started - be it in
       // the foreground or in the background.
       _sub = uriLinkStream.listen((Uri? uri) {
         if (!mounted) return;
-
-
-          print('got uri:' + jsonEncode(uri?.queryParameters));
-
         print('got uri: $uri');
-        // print('got uri:' uri.queryParameters)
+        print('got uri: ' + uri!.path);
       }, onError: (Object err) {
         if (!mounted) return;
         print('got err: $err');
@@ -132,7 +128,6 @@ class _MyAppState extends State<MyApp> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

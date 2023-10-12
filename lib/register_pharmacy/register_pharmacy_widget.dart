@@ -692,7 +692,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ),
                                 ),
                                 custom_widgets.MapAdressePharmacie(
-                                  countryCode: supportedCountry[widget.countryCode.toString()].toString(),
+                                    countryCode: supportedCountry[widget.countryCode.toString()].toString(),
                                     onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region, country) {
                                       _model.pharmacieAdresseController.text = adresse;
                                       providerPharmacieRegister.setAdresse(postcode, adresse, ville, region, arrondissement, country);

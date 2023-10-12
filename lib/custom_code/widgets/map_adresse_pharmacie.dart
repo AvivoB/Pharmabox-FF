@@ -190,16 +190,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
 
     final aDreplacemark = await placemarkFromCoordinates(location.latitude, location.longitude);
 
-    widget.onAdressSelected(
-      location.latitude,
-      location.longitude,
-      aDreplacemark.first.street.toString(),
-      aDreplacemark.first.postalCode.toString(),
-      aDreplacemark.first.locality.toString(),
-      aDreplacemark.first.subLocality.toString() ?? '',
-      aDreplacemark.first.administrativeArea.toString() ?? '',
-      aDreplacemark.first.country.toString() ?? ''
-    );
+    widget.onAdressSelected(location.latitude, location.longitude, aDreplacemark.first.street.toString(), aDreplacemark.first.postalCode.toString(), aDreplacemark.first.locality.toString(), aDreplacemark.first.subLocality.toString() ?? '', aDreplacemark.first.administrativeArea.toString() ?? '', aDreplacemark.first.country.toString() ?? '');
 
     // Set the camera position to the selected location
     _mapController.animateCamera(CameraUpdate.newCameraPosition(

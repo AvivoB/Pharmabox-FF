@@ -1,4 +1,5 @@
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:share/share.dart';
 
 import '../../constant.dart';
 import '/auth/firebase_auth/auth_util.dart';
@@ -49,6 +50,17 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
     });
   }
 
+  void shareProfile(String type) {
+    if (type == 'profil') {
+      final String texte = 'Découvrez mon profil sur Pharmabox : https://pharmaff-dab40.web.app/profilView?userId=' + currentUserUid;
+      Share.share(texte);
+    }
+    if (type == 'pharmacie') {
+      final String texte = 'Découvrez ma Pharmacie sur Pharmabox : https://pharmaff-dab40.web.app/pharmacieProfilView?pharmacieId=' + currentUserUid;
+      Share.share(texte);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -57,7 +69,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.25,
+          height: MediaQuery.of(context).size.height * 0.35,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -134,6 +146,75 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                             child: Text(
                               'Mon profil',
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF161730),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (isTitulaire == true)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                      child: AuthUserStreamWidget(
+                        builder: (context) => InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            shareProfile('pharmacie');
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Icon(
+                                Icons.share_outlined,
+                                color: Colors.black,
+                                size: 24.0,
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                                child: Text(
+                                  'Partager ma pharmacie',
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF161730),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        shareProfile('profil');
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(
+                            Icons.share_outlined,
+                            color: Colors.black,
+                            size: 28.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                            child: Text(
+                              'Partager mon profil',
                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: Color(0xFF161730),

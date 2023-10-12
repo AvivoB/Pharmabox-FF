@@ -478,7 +478,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                           child: MapAdressePharmacie(
                                             isEditable: false,
                                             onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region, country) => {},
-                                            onInitialValue: pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'] +', '+ pharmacieData['situation_geographique']['data']['country'],
+                                            onInitialValue: pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'] + ', ' + pharmacieData['situation_geographique']['data']['country'],
                                           ),
                                         ),
                                       )

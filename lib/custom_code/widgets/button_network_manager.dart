@@ -126,7 +126,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
       return Container(
         alignment: Alignment.center,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(5.0),
           child: GestureDetector(
             onTap: () async {
               await updateNetwork(widget.typeCollection, widget.docId);
@@ -136,10 +136,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
             child: GradientText(
               this.widget.text,
               radius: this.widget.radius,
-              style: TextStyle(
-                fontSize: this.widget.fontSize,
-                fontWeight: FontWeight.w400,
-              ),
+              style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', fontSize: 14.0, fontWeight: FontWeight.w400),
               colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
             ),
           ),

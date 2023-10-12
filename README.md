@@ -1,8 +1,8 @@
 # Pharmabox
 
-A new Flutter project.
+Application Pharmabox 
 
-## Getting Started
+## Demarrer le projet
 
 FlutterFlow projects are built to run on the Flutter _stable_ release.
 

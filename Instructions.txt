@@ -4,5 +4,6 @@ keytool -list -v -keystore "C:\Users\Aviel\.android\debug.keystore" -alias andro
 
 
 Test des deeplink android :
+- cd C:\Users\Aviel\AppData\Local\Android\Sdk\platform-tools>
 - adb shell
 -  am start -W -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "https://pharmaff-dab40.web.app/whateverpath"

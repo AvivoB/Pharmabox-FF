@@ -55,6 +55,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   List searchResults = [];
   int? selectedItem;
   bool isLoading = true;
+  bool searchLoading = false;
   // CameraPosition _currentCameraPosition = CameraPosition(
   //   target: LatLng(0, 0),
   //   zoom: 16.0,
@@ -143,6 +144,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       'situation_geographique_data_region',
       'situation_geographique_data_rue',
       'situation_geographique_data_ville',
+      'situation_geographique_data_country',
       'titulaire_principal',
     ];
 
@@ -306,18 +308,24 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                 if (query.isEmpty) {
                                   userSearch.clear();
                                 } else {
+                                  searchLoading = true;
                                   userSearch = await ExplorerSearchData().searchUsers(query);
+                                  searchLoading = false;
                                 }
                               }
 
                               if (currentTAB == 0) {
                                 if (query.isEmpty) {
+                                  searchLoading = true;
                                   items.clear();
                                   pharmacieInPlace.clear();
                                   await getAllPharmacies();
+                                  searchLoading = false;
                                 } else {
+                                  searchLoading = true;
                                   pharmacieInPlace.clear();
                                   await searchPharmacies(query);
+                                  searchLoading = false;
                                 }
                               }
                             });
@@ -374,22 +382,28 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                                child: userSearch.length == 1
-                                    ? Text(userSearch.length.toString() + ' résultat',
-                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                              fontFamily: 'Poppins',
-                                              color: Color(0xFF595A71),
-                                              fontSize: 14.0,
-                                            ))
-                                    : Text(userSearch.length.toString() + ' résultats',
-                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                              fontFamily: 'Poppins',
-                                              color: Color(0xFF595A71),
-                                              fontSize: 14.0,
-                                            )),
-                              ),
+                              if (searchLoading)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                  child: CircularProgressIndicator(color: Color(0xFF595A71)),
+                                ),
+                              if (searchLoading == false)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                  child: userSearch.length == 1
+                                      ? Text(userSearch.length.toString() + ' résultat',
+                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                fontFamily: 'Poppins',
+                                                color: Color(0xFF595A71),
+                                                fontSize: 14.0,
+                                              ))
+                                      : Text(userSearch.length.toString() + ' résultats',
+                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                fontFamily: 'Poppins',
+                                                color: Color(0xFF595A71),
+                                                fontSize: 14.0,
+                                              )),
+                                ),
                               for (var user in userSearch)
                                 CardUserWidget(
                                   data: user,
@@ -426,7 +440,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                   // onCameraMove: _manager.onCameraMove,
                                   onCameraIdle: _manager.updateMap),
                             ),
-                
+
                       if (selectedItem != null)
                         Positioned(
                           bottom: 60.0,
@@ -474,22 +488,24 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                         width: 60,
                                         colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                                        child: pharmacieInPlace.length == 1
-                                            ? Text(pharmacieInPlace.length.toString() + ' résultat',
-                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                      fontFamily: 'Poppins',
-                                                      color: Color(0xFF595A71),
-                                                      fontSize: 14.0,
-                                                    ))
-                                            : Text(pharmacieInPlace.length.toString() + ' résultats',
-                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                      fontFamily: 'Poppins',
-                                                      color: Color(0xFF595A71),
-                                                      fontSize: 14.0,
-                                                    )),
-                                      ),
+                                      if (searchLoading) Padding(padding: const EdgeInsets.only(top: 8.0, bottom: 8.0), child: CircularProgressIndicator(color: Color(0xFF595A71), value: 5.0)),
+                                      if (searchLoading == false)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                          child: pharmacieInPlace.length == 1
+                                              ? Text(pharmacieInPlace.length.toString() + ' résultat',
+                                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                        fontFamily: 'Poppins',
+                                                        color: Color(0xFF595A71),
+                                                        fontSize: 14.0,
+                                                      ))
+                                              : Text(pharmacieInPlace.length.toString() + ' résultats',
+                                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                        fontFamily: 'Poppins',
+                                                        color: Color(0xFF595A71),
+                                                        fontSize: 14.0,
+                                                      )),
+                                        ),
                                       if (currentTAB == 1)
                                         for (var user in userSearch)
                                           CardUserWidget(

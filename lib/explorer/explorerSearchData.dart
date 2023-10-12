@@ -14,7 +14,7 @@ class ExplorerSearchData {
     final usersSnapshot = await usersRef.where(FieldPath.documentId, isNotEqualTo: await getCurrentUserId()).get();
 
     // Prepare to launch search queries for each field
-    final fields = ['nom', 'prenom', 'city', 'code_postal', 'poste'];
+    final fields = ['nom', 'prenom', 'city', 'code_postal', 'poste', 'country'];
 
     List<Future<QuerySnapshot>> searchDataFutures = [];
 
@@ -67,7 +67,8 @@ class ExplorerSearchData {
       'situation_geographique_data_region',
       'situation_geographique_data_rue',
       'situation_geographique_data_ville',
-      'titulaire_principal',
+      'situation_geographique_data_country'
+          'titulaire_principal',
     ];
 
     List<Future<QuerySnapshot>> searchDataFutures = [];

@@ -131,6 +131,7 @@ dependencies:
   contacts_service: ^0.6.3
   stopwordies: ^1.0.1
   uni_links: ^0.5.1
+  share: ^2.0.4
 
 dev_dependencies:
   analyzer: 5.10.0

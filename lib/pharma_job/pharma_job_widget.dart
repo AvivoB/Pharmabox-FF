@@ -491,7 +491,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 },
                                 onCameraIdle: _manager.updateMap),
                           ),
-              
+
                     if (selectedPharmaciesJobs.isNotEmpty)
                       AnimatedPositioned(
                         duration: Duration(seconds: 1),
@@ -534,7 +534,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                           ],
                         ),
                       ),
-              
+
                     // Afficher les resulats
                     DraggableScrollableSheet(
                       minChildSize: 0.09,
