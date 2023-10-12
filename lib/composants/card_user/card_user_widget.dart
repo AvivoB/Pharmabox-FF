@@ -173,10 +173,24 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     color: Color(0xFF595A71),
                     size: 35.0,
                   ),
+                  if(widget.data['country'] != null)
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                    child: Text(
-                      widget.data['code_postal'] + ', ' + widget.data['city'],
+                    child: 
+                    Text(
+                      widget.data['city'] + ', '  + widget.data['country'],
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Poppins',
+                            color: Color(0xFF595A71),
+                          ),
+                    ),
+                  ),
+                  if(widget.data['country'] == null)
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                    child: 
+                    Text(
+                      widget.data['city'],
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Poppins',
                             color: Color(0xFF595A71),
@@ -241,9 +255,8 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                     color: Color(0xFF42D2FF),
                                     size: 24.0,
                                   ),
-                                  onPressed: () async{
-                                    await launch('tel:' +
-                                          widget.data['telephone']);
+                                  onPressed: () async {
+                                    await launch('tel:' + widget.data['telephone']);
                                   },
                                 ),
                               ),
@@ -274,9 +287,8 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                     color: Color(0xFF42D2FF),
                                     size: 24.0,
                                   ),
-                                  onPressed: () async{
-                                    await launch('mailto:' +
-                                          widget.data['email']);
+                                  onPressed: () async {
+                                    await launch('mailto:' + widget.data['email']);
                                   },
                                 ),
                               ),

@@ -1,4 +1,5 @@
 import 'package:image_picker/image_picker.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:pharmabox/register_step/register_provider.dart';
 
 import '/composants/list_skill_with_slider/list_skill_with_slider_widget.dart';
@@ -83,11 +84,15 @@ class RegisterStepModel extends FlutterFlowModel {
 
   bool afficherTelephone = true;
 
+  String? countryController;
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
-    listSkillWithSliderModel1 = createModel(context, () => ListSkillWithSliderModel());
-    listSkillWithSliderModel2 = createModel(context, () => ListSkillWithSliderModel());
+    listSkillWithSliderModel1 =
+        createModel(context, () => ListSkillWithSliderModel());
+    listSkillWithSliderModel2 =
+        createModel(context, () => ListSkillWithSliderModel());
   }
 
   void dispose() {
@@ -104,13 +109,35 @@ class RegisterStepModel extends FlutterFlowModel {
   }
 
 // Envoyer les données dans firebase
-  createUserToFirebase(context, afficher_tel, afficher_email, nomFamille, prenom, poste, email, telephone, birthDate, postcode, city, presentation, comptencesTestCovid, comptencesVaccination, comptencesTiersPayant, comptencesLabo, comptencesTROD, allowNotifs, allowCGU, imageURL) {
-    final providerUserRegister = Provider.of<ProviderUserRegister>(context, listen: false);
+  createUserToFirebase(
+      context,
+      afficher_tel,
+      afficher_email,
+      nomFamille,
+      prenom,
+      poste,
+      email,
+      telephone,
+      birthDate,
+      city,
+      country,
+      presentation,
+      comptencesTestCovid,
+      comptencesVaccination,
+      comptencesTiersPayant,
+      comptencesLabo,
+      comptencesTROD,
+      allowNotifs,
+      allowCGU,
+      imageURL) {
+    final providerUserRegister =
+        Provider.of<ProviderUserRegister>(context, listen: false);
 
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
 
-    final CollectionReference<Map<String, dynamic>> usersRef = FirebaseFirestore.instance.collection('users');
+    final CollectionReference<Map<String, dynamic>> usersRef =
+        FirebaseFirestore.instance.collection('users');
 
     List competences = [];
 
@@ -130,7 +157,13 @@ class RegisterStepModel extends FlutterFlowModel {
       competences.add('TROD');
     }
 
-    if (nomFamille != '' && prenom != '' && postcode != '' && city != '' && poste != null && allowCGU && allowNotifs) {
+    if (nomFamille != '' &&
+        prenom != '' &&
+        city != '' &&
+        country != '' &&
+        poste != null &&
+        allowCGU &&
+        allowNotifs) {
       usersRef.doc(currentUser?.uid).update({
         'id': currentUser?.uid,
         'nom': nomFamille,
@@ -141,8 +174,9 @@ class RegisterStepModel extends FlutterFlowModel {
         'telephone': telephone,
         'afficher_tel': afficher_tel,
         'date_naissance': birthDate,
-        'code_postal': postcode,
+        // 'code_postal': postcode,
         'city': city,
+        'country': country,
         'presentation': presentation,
         'specialisations': providerUserRegister.selectedSpecialisation,
         'lgo': providerUserRegister.selectedLgo,
@@ -155,12 +189,9 @@ class RegisterStepModel extends FlutterFlowModel {
 
       return true;
     } else {
-      return ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Pour continuer, vous devez compléter votre compte et vous devez accepter les CGU', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryBackground)),
-          backgroundColor: redColor,
-        ),
-      );
+      showCustomSnackBar(context,
+          'Pour continuer, complétez votre compte et accepter nos CGU',
+          isError: true);
     }
   }
 }

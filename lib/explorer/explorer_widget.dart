@@ -261,10 +261,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                 child: HeaderAppWidget(),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 10.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.13,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -363,148 +362,152 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                 ),
               ),
               if (currentTAB == 1)
-                Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFEFF6F7),
-                    ),
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    height: MediaQuery.of(context).size.height * 0.67,
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                              child: userSearch.length == 1
-                                  ? Text(userSearch.length.toString() + ' résultat',
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                            fontFamily: 'Poppins',
-                                            color: Color(0xFF595A71),
-                                            fontSize: 14.0,
-                                          ))
-                                  : Text(userSearch.length.toString() + ' résultats',
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                            fontFamily: 'Poppins',
-                                            color: Color(0xFF595A71),
-                                            fontSize: 14.0,
-                                          )),
-                            ),
-                            for (var user in userSearch)
-                              CardUserWidget(
-                                data: user,
-                              ),
-                          ],
-                        ),
+                Expanded(
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFEFF6F7),
                       ),
-                    )),
-              if (currentTAB == 0)
-                Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.66,
-                  child: Stack(children: [
-                    isLoading
-                        ? ProgressIndicatorPharmabox()
-                        : Container(
-                            child: GoogleMap(
-                                mapType: MapType.normal,
-                                initialCameraPosition: _currentCameraPosition ?? CameraPosition(target: LatLng(0, 0), zoom: 16.0),
-                                markers: markers,
-                                myLocationEnabled: true,
-                                zoomGesturesEnabled: true,
-                                zoomControlsEnabled: false,
-                                myLocationButtonEnabled: true,
-                                onMapCreated: (GoogleMapController controller) {
-                                  _controller.complete(controller);
-                                  _manager.setMapId(controller.mapId);
-                                },
-                                onCameraMove: (position) {
-                                  _manager.onCameraMove(position);
-                                },
-                                // onCameraMove: _manager.onCameraMove,
-                                onCameraIdle: _manager.updateMap),
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      // height: MediaQuery.of(context).size.height * 0.67,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                child: userSearch.length == 1
+                                    ? Text(userSearch.length.toString() + ' résultat',
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                              fontFamily: 'Poppins',
+                                              color: Color(0xFF595A71),
+                                              fontSize: 14.0,
+                                            ))
+                                    : Text(userSearch.length.toString() + ' résultats',
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                              fontFamily: 'Poppins',
+                                              color: Color(0xFF595A71),
+                                              fontSize: 14.0,
+                                            )),
+                              ),
+                              for (var user in userSearch)
+                                CardUserWidget(
+                                  data: user,
+                                ),
+                            ],
                           ),
-
-                    if (selectedItem != null)
-                      Positioned(
-                        bottom: 60.0,
-                        left: 10,
-                        right: 10,
-                        child: Column(
-                          children: [
-                            CardPharmacieWidget(data: pharmacieInPlace[selectedItem!]),
-                            Container(
-                              child: FloatingActionButton.extended(
-                                label: Text('Fermer', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: redColor, fontSize: 10.0, fontWeight: FontWeight.w500)), // <-- Text
-                                backgroundColor: Colors.white,
-                                elevation: 0.0,
-                                icon: Icon(
-                                  // <-- Icon
-                                  Icons.close,
-                                  size: 18.0,
-                                  color: redColor,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    selectedItem = null;
-                                  });
-                                },
-                              ),
-                            )
-                          ],
                         ),
-                      ),
-                    // Afficher les resulats
-                    DraggableScrollableSheet(
-                      minChildSize: 0.09,
-                      initialChildSize: 0.09,
-                      builder: (BuildContext context, ScrollController scrollController) {
-                        return Container(
-                            decoration: BoxDecoration(color: Color(0xFFEFF6F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
-                            child: SingleChildScrollView(
-                              controller: scrollController,
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/Home-Indicator.svg',
-                                      width: 60,
-                                      colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                                      child: pharmacieInPlace.length == 1
-                                          ? Text(pharmacieInPlace.length.toString() + ' résultat',
-                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                    fontFamily: 'Poppins',
-                                                    color: Color(0xFF595A71),
-                                                    fontSize: 14.0,
-                                                  ))
-                                          : Text(pharmacieInPlace.length.toString() + ' résultats',
-                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                    fontFamily: 'Poppins',
-                                                    color: Color(0xFF595A71),
-                                                    fontSize: 14.0,
-                                                  )),
-                                    ),
-                                    if (currentTAB == 1)
-                                      for (var user in userSearch)
-                                        CardUserWidget(
-                                          data: user,
-                                        ),
-                                    if (currentTAB == 0)
-                                      for (var pharmacie in pharmacieInPlace)
-                                        CardPharmacieWidget(
-                                          data: pharmacie,
-                                        ),
-                                  ],
+                      )),
+                ),
+              if (currentTAB == 0)
+                Expanded(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 1.0,
+                    // height: MediaQuery.of(context).size.height * 0.66,
+                    child: Stack(children: [
+                      isLoading
+                          ? ProgressIndicatorPharmabox()
+                          : Container(
+                              child: GoogleMap(
+                                  mapType: MapType.normal,
+                                  initialCameraPosition: _currentCameraPosition ?? CameraPosition(target: LatLng(0, 0), zoom: 16.0),
+                                  markers: markers,
+                                  myLocationEnabled: true,
+                                  zoomGesturesEnabled: true,
+                                  zoomControlsEnabled: false,
+                                  myLocationButtonEnabled: true,
+                                  onMapCreated: (GoogleMapController controller) {
+                                    _controller.complete(controller);
+                                    _manager.setMapId(controller.mapId);
+                                  },
+                                  onCameraMove: (position) {
+                                    _manager.onCameraMove(position);
+                                  },
+                                  // onCameraMove: _manager.onCameraMove,
+                                  onCameraIdle: _manager.updateMap),
+                            ),
+                
+                      if (selectedItem != null)
+                        Positioned(
+                          bottom: 60.0,
+                          left: 10,
+                          right: 10,
+                          child: Column(
+                            children: [
+                              CardPharmacieWidget(data: pharmacieInPlace[selectedItem!]),
+                              Container(
+                                child: FloatingActionButton.extended(
+                                  label: Text('Fermer', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: redColor, fontSize: 10.0, fontWeight: FontWeight.w500)), // <-- Text
+                                  backgroundColor: Colors.white,
+                                  elevation: 0.0,
+                                  icon: Icon(
+                                    // <-- Icon
+                                    Icons.close,
+                                    size: 18.0,
+                                    color: redColor,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedItem = null;
+                                    });
+                                  },
                                 ),
-                              ),
-                            ));
-                      },
-                    )
-                  ]),
+                              )
+                            ],
+                          ),
+                        ),
+                      // Afficher les resulats
+                      DraggableScrollableSheet(
+                        minChildSize: 0.09,
+                        initialChildSize: 0.09,
+                        builder: (BuildContext context, ScrollController scrollController) {
+                          return Container(
+                              decoration: BoxDecoration(color: Color(0xFFEFF6F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+                              child: SingleChildScrollView(
+                                controller: scrollController,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/Home-Indicator.svg',
+                                        width: 60,
+                                        colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                        child: pharmacieInPlace.length == 1
+                                            ? Text(pharmacieInPlace.length.toString() + ' résultat',
+                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                      fontFamily: 'Poppins',
+                                                      color: Color(0xFF595A71),
+                                                      fontSize: 14.0,
+                                                    ))
+                                            : Text(pharmacieInPlace.length.toString() + ' résultats',
+                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                      fontFamily: 'Poppins',
+                                                      color: Color(0xFF595A71),
+                                                      fontSize: 14.0,
+                                                    )),
+                                      ),
+                                      if (currentTAB == 1)
+                                        for (var user in userSearch)
+                                          CardUserWidget(
+                                            data: user,
+                                          ),
+                                      if (currentTAB == 0)
+                                        for (var pharmacie in pharmacieInPlace)
+                                          CardPharmacieWidget(
+                                            data: pharmacie,
+                                          ),
+                                    ],
+                                  ),
+                                ),
+                              ));
+                        },
+                      )
+                    ]),
+                  ),
                 ),
             ],
           ),

@@ -18,7 +18,7 @@ class HorraireSemaineSelect extends StatefulWidget {
 }
 
 class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
-  dynamic _selectedHour = {
+  Map _selectedHour = {
     'Lundi': ['00:00', '00:00', true],
     'Mardi': ['00:00', '00:00', true],
     'Mercredi': ['00:00', '00:00', true],
@@ -38,11 +38,9 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialHours != null) {
-      _selectedHour = widget.initialHours!;
-      _selectedHour = LinkedHashMap.fromIterable(orderedDays, key: (k) => k, value: (v) => _selectedHour[v]);
-      print(_selectedHour);
-    }
+    _selectedHour = widget.initialHours != null ? widget.initialHours : LinkedHashMap.fromIterable(orderedDays, key: (k) => k, value: (v) => _selectedHour[v]);
+
+    print('SELECT EHRUES' + _selectedHour.toString());
   }
 
   @override

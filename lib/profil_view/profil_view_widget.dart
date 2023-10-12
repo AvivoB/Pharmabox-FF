@@ -503,6 +503,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ],
                                 ),
                               ),
+                              if(userData['country'] != null)
                             Padding(
                               padding: EdgeInsets.only(bottom: 5),
                               child: Row(
@@ -513,7 +514,22 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                     size: 24,
                                   ),
                                   SizedBox(width: 5),
-                                  Text(userData != null && userData['code_postal'] != null ? userData['code_postal'] + ', ' + userData['city'] : '', style: FlutterFlowTheme.of(context).bodyMedium)
+                                  Text(userData != null && userData['city'] != null ? userData['city'] + ', ' + userData['country'] ??  '' : '', style: FlutterFlowTheme.of(context).bodyMedium)
+                                ],
+                              ),
+                            ),
+                              if(userData['country'] == null)
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.place,
+                                    color: FlutterFlowTheme.of(context).secondaryText,
+                                    size: 24,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(userData != null && userData['city'] != null ? userData['city'] : '', style: FlutterFlowTheme.of(context).bodyMedium)
                                 ],
                               ),
                             ),

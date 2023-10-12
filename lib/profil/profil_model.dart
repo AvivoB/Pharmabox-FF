@@ -77,6 +77,8 @@ class ProfilModel extends FlutterFlowModel {
 
   bool? afficher_tel;
 
+  String? countryValue;
+
   void addToContratType(String item) {
     if (!contratType.contains(item)) {
       contratType.add(item);

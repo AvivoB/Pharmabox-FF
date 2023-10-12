@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +29,7 @@ import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-
+import 'package:uni_links/uni_links.dart';
 import 'pharmablabla/pharmablabla_widget.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -68,6 +70,12 @@ class _MyAppState extends State<MyApp> {
 
   final authUserSub = authenticatedUserStream.listen((_) {});
 
+  /* DEEP LINKS */
+  StreamSubscription? _sub;
+  Uri? _initialUri;
+  Uri? _latestUri;
+  Object? _err;
+
   @override
   void initState() {
     super.initState();
@@ -79,12 +87,13 @@ class _MyAppState extends State<MyApp> {
       Duration(seconds: 1),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
+    _handleIncomingLinks();
   }
 
   @override
   void dispose() {
     authUserSub.cancel();
-
+    _sub?.cancel();
     super.dispose();
   }
 
@@ -96,6 +105,34 @@ class _MyAppState extends State<MyApp> {
         _themeMode = mode;
         FlutterFlowTheme.saveThemeMode(mode);
       });
+
+ void _handleIncomingLinks() {
+    if (!kIsWeb) {
+      // It will handle app links while the app is already started - be it in
+      // the foreground or in the background.
+      _sub = uriLinkStream.listen((Uri? uri) {
+        if (!mounted) return;
+
+
+          print('got uri:' + jsonEncode(uri?.queryParameters));
+
+        print('got uri: $uri');
+        // print('got uri:' uri.queryParameters)
+      }, onError: (Object err) {
+        if (!mounted) return;
+        print('got err: $err');
+        setState(() {
+          _latestUri = null;
+          if (err is FormatException) {
+            _err = err;
+          } else {
+            _err = null;
+          }
+        });
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

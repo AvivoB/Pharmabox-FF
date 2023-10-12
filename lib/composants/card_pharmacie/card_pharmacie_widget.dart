@@ -178,12 +178,13 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                         color: Color(0xFF595A71),
                         size: 35.0,
                       ),
+                      if(widget.data['situation_geographique']['data']['country'] != null)
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: Text(
-                            widget.data['situation_geographique']['data']['ville'].toString() + ', ' + widget.data['situation_geographique']['data']['postcode'].toString(),
+                            widget.data['situation_geographique']['data']['ville'].toString() + ', ' + widget.data['situation_geographique']['data']['country'].toString(),
                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                   fontFamily: 'Poppins',
                                   color: Color(0xFF595A71),

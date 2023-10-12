@@ -119,7 +119,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
         var docData = doc.data() as Map<String, dynamic>;
 
         docData['doc_id'] = doc.id;
-        docData['localisation_job'] = pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'];
+        docData['localisation_job'] = pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'] + ', ' + pharmacieData['situation_geographique']['data']['country'] ?? '';
         offresPharma.add(docData);
       }
     } else {
@@ -477,8 +477,8 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                         child: Container(
                                           child: MapAdressePharmacie(
                                             isEditable: false,
-                                            onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region) => {},
-                                            onInitialValue: pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'],
+                                            onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region, country) => {},
+                                            onInitialValue: pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'] +', '+ pharmacieData['situation_geographique']['data']['country'],
                                           ),
                                         ),
                                       )

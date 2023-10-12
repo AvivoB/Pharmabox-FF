@@ -9,12 +9,13 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class PredictionNomPhamracie extends StatefulWidget {
-  PredictionNomPhamracie({Key? key, required this.onPlaceSelected, this.onAdressSelected = _emptyFunction, this.initialValue}) : super(key: key);
+  PredictionNomPhamracie({Key? key, required this.onPlaceSelected, this.onAdressSelected = _emptyFunction, this.initialValue, this.countryCode = 'fr'}) : super(key: key);
 
   final Function(String) onPlaceSelected;
   final Function(String) onAdressSelected;
   static void _emptyFunction(String value) {}
   String? initialValue;
+  String countryCode;
   @override
   _PredictionNomPhamracieState createState() => _PredictionNomPhamracieState();
 }
@@ -31,7 +32,7 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
 
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
-      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&components=country:fr&key=$googleMapsApi'));
+      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&components=country:' + widget.countryCode + '&key=$googleMapsApi&language=fr'));
       final json = jsonDecode(response.body);
 
       if (json['status'] == 'OK') {
@@ -125,7 +126,18 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
               itemCount: _predictions.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(_predictions[index]['description'], style: FlutterFlowTheme.of(context).bodyMedium),
+                  title: Row(
+                    children: [
+                      Icon(Icons.local_hospital),
+                      SizedBox(width: 5),
+                      Flexible(
+                        child: Text(
+                          _predictions[index]['description'],
+                          style: FlutterFlowTheme.of(context).bodyMedium.override(fontSize: 12.0, fontFamily: 'Poppins'),
+                        ),
+                      ),
+                    ],
+                  ),
                   onTap: () {
                     _onPredictionSelected(_predictions[index]['terms'][0]['value'], adresse: _predictions[index]['structured_formatting']['secondary_text']);
                   },

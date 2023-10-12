@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 
 import '../custom_code/widgets/horaire_select_widget.dart';
@@ -25,8 +26,9 @@ export 'register_pharmacy_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class RegisterPharmacyWidget extends StatefulWidget {
-  RegisterPharmacyWidget({Key? key, this.titulaire}) : super(key: key);
+  RegisterPharmacyWidget({Key? key, this.titulaire, this.countryCode = 'fr'}) : super(key: key);
   String? titulaire;
+  String? countryCode;
 
   @override
   _RegisterPharmacyWidgetState createState() => _RegisterPharmacyWidgetState();
@@ -222,6 +224,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                       child: custom_widgets.PredictionNomPhamracie(
+                                        countryCode: supportedCountry[widget.countryCode.toString()].toString(),
                                         onPlaceSelected: (nomPharma) {
                                           providerPharmacieRegister.setAdresseRue(nomPharma);
                                         },
@@ -325,7 +328,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   await showModalBottomSheet(
                                                     isScrollControlled: true,
                                                     backgroundColor: Colors.transparent,
-                                                    enableDrag: false,
+                                                    enableDrag: true,
                                                     context: context,
                                                     builder: (bottomSheetContext) {
                                                       return GestureDetector(
@@ -417,7 +420,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                   await showModalBottomSheet(
                                                     isScrollControlled: true,
                                                     backgroundColor: Colors.transparent,
-                                                    enableDrag: false,
+                                                    enableDrag: true,
                                                     context: context,
                                                     builder: (bottomSheetContext) {
                                                       return GestureDetector(
@@ -499,7 +502,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -634,7 +637,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     style: FlutterFlowTheme.of(context).bodyMedium,
                                     keyboardType: TextInputType.phone,
                                     validator: _model.phonePharmacieController1Validator.asValidator(context),
-                                    inputFormatters: [_model.phonePharmacieMask1],
+                                    // inputFormatters: [_model.phonePharmacieMask1]
                                   ),
                                 ),
                               ],
@@ -644,7 +647,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -689,9 +692,10 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   ),
                                 ),
                                 custom_widgets.MapAdressePharmacie(
-                                    onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region) {
+                                  countryCode: supportedCountry[widget.countryCode.toString()].toString(),
+                                    onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region, country) {
                                       _model.pharmacieAdresseController.text = adresse;
-                                      providerPharmacieRegister.setAdresse(postcode, adresse, ville, region, arrondissement);
+                                      providerPharmacieRegister.setAdresse(postcode, adresse, ville, region, arrondissement, country);
                                     },
                                     onInitialValue: providerPharmacieRegister.selectedAdressFromName)
                               ],
@@ -701,7 +705,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -1024,7 +1028,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -1112,7 +1116,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -1450,7 +1454,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -1501,7 +1505,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                             await showModalBottomSheet(
                                               isScrollControlled: true,
                                               backgroundColor: Colors.transparent,
-                                              enableDrag: false,
+                                              enableDrag: true,
                                               context: context,
                                               builder: (bottomSheetContext) {
                                                 return GestureDetector(
@@ -1586,7 +1590,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -1803,7 +1807,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -2116,7 +2120,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -2346,7 +2350,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -2720,7 +2724,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                       child: Container(
                         width: double.infinity,
                         height: 50,

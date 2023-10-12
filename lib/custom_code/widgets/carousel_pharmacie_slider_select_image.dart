@@ -29,13 +29,12 @@ class CarouselPharmacieSliderSelect extends StatefulWidget {
 
 class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderSelect> {
   final List<File> _selectedImages = [];
-  List<String>? _initialImagesSelected;
-  List<String> urls = <String>[];
+  List<String> urls = [];
 
   @override
   void initState() {
     super.initState(); // Don't forget to call super.initState()
-    urls = widget.initialImagesSelected ?? <String>[]; // Assign value to urls here
+    urls = widget.initialImagesSelected != null ? widget.initialImagesSelected! : []; // Assign value to urls here
   }
 
   Future<void> _selectImages() async {

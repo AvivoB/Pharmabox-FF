@@ -13,6 +13,27 @@ const blackColor = Color(0xFF161730);
 
 const googleMapsApi = 'AIzaSyBGiDwJv6PfzO6hPQeymoo7tl4NcdiyloQ';
 
+Map<String, String> supportedCountry = {
+  'France': 'fr',
+  'Belgique': 'be',
+  'Canada': 'ca',
+  'Luxembourg': 'lu',
+  'Monaco': 'mc',
+  'Suisse': 'ch',
+  'Guadeloupe': 'gp',
+  'Martinique': 'mq',
+  'Guyane': 'gf',
+  'La Réunion': 're',
+  'Mayotte': 'yt',
+  'Saint-Pierre-et-Miquelon': 'pm',
+  'Saint-Martin': 'mf',
+  'Saint-Barthélemy': 'bl',
+  'Wallis et Futuna': 'wf',
+  'Polynésie française': 'pf',
+  'Nouvelle-Calédonie': 'nc',
+  'Terres australes et antarctiques françaises': 'tf',
+};
+
 Future<bool> checkIsTitulaire() async {
   final currentUser = FirebaseAuth.instance.currentUser;
 

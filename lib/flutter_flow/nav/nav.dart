@@ -41,6 +41,7 @@ class AppStateNotifier extends ChangeNotifier {
   bool notifyOnAuthChange = true;
 
   bool isComplete = true;
+  bool isVerified = true;
 
   bool get loading => user == null || showSplashImage;
   bool get loggedIn => user?.loggedIn ?? false;
@@ -87,11 +88,14 @@ class AppStateNotifier extends ChangeNotifier {
     if (userDoc.exists) {
       final data = userDoc.data() as Map<String, dynamic>; // Cast data to Map<String, dynamic>
       isComplete = data['isComplete'] ? true : false;
+      isVerified = data['isVerified'] ? true : false;
     } else {
       isComplete = true;
+      isVerified = true;
     }
 
     print('PROFIL COMPLETE : ' + isComplete.toString());
+    print('PROFIL VERIFIED : ' + isVerified.toString());
 
     // Informez les écouteurs que la propriété a changé
     notifyListeners();
@@ -101,11 +105,17 @@ class AppStateNotifier extends ChangeNotifier {
 Widget decideInitialPage(AppStateNotifier appStateNotifier) {
   if (appStateNotifier.loggedIn == false) {
     return RegisterWidget();
-  } else if (appStateNotifier.isComplete == false) {
-    return RegisterStepWidget();
-  } else {
-    return NavBarPage();
   }
+
+  if (appStateNotifier.isComplete == false) {
+    return RegisterStepWidget();
+  }
+
+  if (appStateNotifier.isVerified == false) {
+    return ValidateAccount();
+  }
+
+  return NavBarPage();
 }
 
 GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
@@ -152,7 +162,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'RegisterPharmacy',
           path: '/registerPharmacy',
-          builder: (context, params) => RegisterPharmacyWidget(titulaire: params.getParam('titulaire', ParamType.String)),
+          builder: (context, params) => RegisterPharmacyWidget(titulaire: params.getParam('titulaire', ParamType.String), countryCode: params.getParam('countryCode', ParamType.String)),
         ),
         FFRoute(
           name: 'PharmaJob',

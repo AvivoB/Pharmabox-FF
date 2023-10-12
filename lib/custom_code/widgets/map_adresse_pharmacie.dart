@@ -9,11 +9,12 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../register_pharmacy/register_pharmacie_provider.dart';
 
 class MapAdressePharmacie extends StatefulWidget {
-  const MapAdressePharmacie({Key? key, required this.onAdressSelected, this.onInitialValue, this.isEditable = true}) : super(key: key);
+  MapAdressePharmacie({Key? key, required this.onAdressSelected, this.onInitialValue, this.isEditable = true, this.countryCode = 'fr'}) : super(key: key);
 
-  final Function(double, double, String, String, String, String, String) onAdressSelected;
+  final Function(double, double, String, String, String, String, String, String) onAdressSelected;
   final String? onInitialValue;
   final bool isEditable;
+  String countryCode;
   @override
   _MapAdressePharmacieState createState() => _MapAdressePharmacieState();
 }
@@ -28,16 +29,19 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
   late String _selectedCity;
   List<dynamic> _predictions = [];
 
+  String _countryCode = '';
+
   @override
   void initState() {
     super.initState(); // Don't forget to call super.initState()
     _searchAddress(widget.onInitialValue ?? '');
     _searchController.text = widget.onInitialValue ?? '';
+    // _countryCode = widget.countryCode;
   }
 
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
-      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=geocode&components=country:fr&key=$googleMapsApi'));
+      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=geocode&components=country:' + widget.countryCode + '&key=$googleMapsApi&language=fr'));
       final json = jsonDecode(response.body);
 
       if (json['status'] == 'OK') {
@@ -134,7 +138,15 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
               itemCount: _predictions.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(_predictions[index]['description'], style: FlutterFlowTheme.of(context).bodyMedium),
+                  title: Row(
+                    children: [
+                      Icon(Icons.place_outlined),
+                      SizedBox(width: 5),
+                      Flexible(
+                        child: Text(_predictions[index]['description'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontSize: 12.0, fontFamily: 'Poppins')),
+                      ),
+                    ],
+                  ),
                   onTap: () {
                     _onPredictionSelected(_predictions[index]['description']);
                   },
@@ -186,6 +198,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
       aDreplacemark.first.locality.toString(),
       aDreplacemark.first.subLocality.toString() ?? '',
       aDreplacemark.first.administrativeArea.toString() ?? '',
+      aDreplacemark.first.country.toString() ?? ''
     );
 
     // Set the camera position to the selected location

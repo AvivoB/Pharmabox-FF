@@ -485,7 +485,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         style: FlutterFlowTheme.of(context).bodyMedium,
                                         keyboardType: TextInputType.number,
                                         validator: _model.telephoneControllerValidator.asValidator(context),
-                                        inputFormatters: [_model.telephoneMask],
+                                        // inputFormatters: [_model.telephoneMask],
                                       ),
                                     ),
                                     Padding(
@@ -555,7 +555,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     PredictionVille(onPlaceSelected: (ville) {
                                       _model.postcodeController.text = ville['postal_code'];
                                       _model.cityController.text = ville['city'];
+                                      _model.countryController = ville['country'];
+
+                                      print(ville);
                                     }),
+                                    SizedBox(height: 10),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                       child: TextFormField(
@@ -607,7 +611,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -656,7 +660,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           await showModalBottomSheet(
                                             isScrollControlled: true,
                                             backgroundColor: Colors.transparent,
-                                            enableDrag: false,
+                                            enableDrag: true,
                                             context: context,
                                             builder: (bottomSheetContext) {
                                               return GestureDetector(
@@ -754,7 +758,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -805,7 +809,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               await showModalBottomSheet(
                                                 isScrollControlled: true,
                                                 backgroundColor: Colors.transparent,
-                                                enableDrag: false,
+                                                enableDrag: true,
                                                 context: context,
                                                 builder: (bottomSheetContext) {
                                                   return GestureDetector(
@@ -934,7 +938,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -1151,7 +1155,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -1202,7 +1206,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               await showModalBottomSheet(
                                                 isScrollControlled: true,
                                                 backgroundColor: Colors.transparent,
-                                                enableDrag: false,
+                                                enableDrag: true,
                                                 context: context,
                                                 builder: (bottomSheetContext) {
                                                   return GestureDetector(
@@ -1321,7 +1325,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -1457,7 +1461,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -1578,7 +1582,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 10),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Container(
                           width: double.infinity,
                           height: 50,
@@ -1601,8 +1605,27 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                           child: FFButtonWidget(
                             onPressed: () async {
                               await Future.delayed(Duration(seconds: 2));
-                              var send_data = RegisterStepModel().createUserToFirebase(widget_context_provider, _model.afficherTelephone, _model.afficherEmail, _model.nomFamilleController.text, _model.prenomController.text, _model.posteValue, _model.emailController.text, _model.telephoneController.text, _model.birthDateController.text,
-                                  _model.postcodeController.text, _model.cityController.text, _model.presentationController.text, _model.comptencesTestCovidValue, _model.comptencesVaccinationValue, _model.comptencesTiersPayantValue, _model.comptencesLaboValue, _model.comptencesTRODValue, _model.allowNotifsValue, _model.allowCGUValue, _imageURL!);
+                              var send_data = RegisterStepModel().createUserToFirebase(
+                                  widget_context_provider,
+                                  _model.afficherTelephone,
+                                  _model.afficherEmail,
+                                  _model.nomFamilleController.text,
+                                  _model.prenomController.text,
+                                  _model.posteValue,
+                                  _model.emailController.text,
+                                  _model.telephoneController.text,
+                                  _model.birthDateController.text,
+                                  _model.cityController.text,
+                                  _model.countryController,
+                                  _model.presentationController.text,
+                                  _model.comptencesTestCovidValue,
+                                  _model.comptencesVaccinationValue,
+                                  _model.comptencesTiersPayantValue,
+                                  _model.comptencesLaboValue,
+                                  _model.comptencesTRODValue,
+                                  _model.allowNotifsValue,
+                                  _model.allowCGUValue,
+                                  _imageURL!);
                               if (send_data) {
                                 // setState(() {
                                 //   _isLoading = true;
@@ -1613,6 +1636,10 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       queryParams: {
                                         'titulaire': serializeParam(
                                           _model.nomFamilleController.text + ' ' + _model.prenomController.text,
+                                          ParamType.String,
+                                        ),
+                                        'countryCode': serializeParam(
+                                          _model.countryController,
                                           ParamType.String,
                                         ),
                                       }.withoutNulls);

@@ -35,14 +35,11 @@ class _GradientTextCustomState extends State<GradientTextCustom> {
     return Container(
       alignment: Alignment.center,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(0.0),
         child: GradientText(
           this.widget.text,
           radius: this.widget.radius,
-          style: TextStyle(
-            fontSize: this.widget.fontSize,
-            fontWeight: FontWeight.w400,
-          ),
+          style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', fontSize: 14.0, fontWeight: FontWeight.w400),
           colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
         ),
       ),
@@ -52,7 +49,7 @@ class _GradientTextCustomState extends State<GradientTextCustom> {
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
-            offset: Offset(0.0, 1.0), //(x,y)
+            offset: Offset(1.0, 1.0), //(x,y)
             blurRadius: 2.0,
           ),
         ],

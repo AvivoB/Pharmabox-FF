@@ -1,3 +1,8 @@
 Generer la clé SHA-1
 
 keytool -list -v -keystore "C:\Users\Aviel\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+
+
+Test des deeplink android :
+- adb shell
+-  am start -W -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "https://pharmaff-dab40.web.app/whateverpath"

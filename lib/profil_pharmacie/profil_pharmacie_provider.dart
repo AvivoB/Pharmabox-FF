@@ -70,9 +70,9 @@ class ProviderPharmacieUser extends ChangeNotifier {
     _selectedPharmacieAdresseRue = adresse;
   }
 
-  void setAdresse(postcode, rue, ville, region, arrondissement) {
+  void setAdresse(latitude, longitude, postcode, rue, ville, region, arrondissement, country) {
     _selectedAdressePharma = [
-      {'rue': rue, 'postcode': postcode, 'ville': ville, 'region': region, 'arrondissement': arrondissement}
+      {'latitude': latitude, 'longitude': longitude,'rue': rue, 'postcode': postcode, 'ville': ville, 'region': region, 'arrondissement': arrondissement, 'country': country}
     ];
     notifyListeners();
   }
