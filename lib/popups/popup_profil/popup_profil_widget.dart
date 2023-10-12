@@ -1,3 +1,5 @@
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 import '../../constant.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -152,6 +154,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                       highlightColor: Colors.transparent,
                       onTap: () async {
                         GoRouter.of(context).prepareAuthEvent();
+                        OneSignal.logout();
                         await authManager.signOut();
                         GoRouter.of(context).clearRedirectLocation();
                         context.goNamedAuth('Register', mounted);
