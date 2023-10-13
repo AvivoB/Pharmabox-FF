@@ -44,18 +44,6 @@
         </array>
         </dict>
     </array>
-	<array>
-		<dict>
-		<key>CFBundleTypeRole</key>
-		<string>Editor</string>
-		<key>CFBundleURLName</key>
-		<string>[ANY_URL_NAME]</string>
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>https</string>
-		</array>
-		</dict>
-	</array>
     <key>FlutterDeepLinkingEnabled</key>
     <true/>
 
