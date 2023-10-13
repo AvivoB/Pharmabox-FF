@@ -87,7 +87,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
   void initState() {
     super.initState();
     _model = createModel(context, () => PharmacieProfilViewModel());
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
 
     getpharmacieData();
     getNetworkData();

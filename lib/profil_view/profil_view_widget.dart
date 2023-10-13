@@ -48,6 +48,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
   var userData;
   List recherchesUser = [];
   List offresUser = [];
+  List pharmacieUser = [];
   bool isExpanded_Titu = false;
   bool isExpanded_NonTitu = false;
   bool isExpanded_Pharma = false;
@@ -136,6 +137,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
 
     QuerySnapshot recherches = await FirebaseFirestore.instance.collection('recherches').where('user_id', isEqualTo: widget.userId).get();
     QuerySnapshot offres = await FirebaseFirestore.instance.collection('offres').where('user_id', isEqualTo: widget.userId).get();
+    QuerySnapshot pharmacie = await FirebaseFirestore.instance.collection('pharmacies').where('user_id', isEqualTo: widget.userId).get();
 
     if (docSnapshot.exists) {
       // Accéder aux données du document.
@@ -151,6 +153,11 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
           var docData = doc.data() as Map<String, dynamic>;
           docData['doc_id'] = doc.id;
           offresUser.add(docData);
+        }
+        for (var doc in pharmacie.docs) {
+          var docData = doc.data() as Map<String, dynamic>;
+          docData['doc_id'] = doc.id;
+          pharmacieUser.add(docData);
         }
       });
     } else {
@@ -459,13 +466,62 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                 fontWeight: FontWeight.w600,
                                               ),
                                         ),
-                                        Text(
-                                          userData != null ? userData['poste'] : '',
-                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                fontFamily: 'Poppins',
-                                                color: Colors.white,
-                                              ),
-                                        ),
+                                        if (userData != null && userData['poste'] != 'Pharmacien(ne) titulaire')
+                                          Text(
+                                            userData != null ? userData['poste'] : '',
+                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                  fontFamily: 'Poppins',
+                                                  color: Colors.white,
+                                                ),
+                                          ),
+                                        if (userData != null && userData['poste'] == 'Pharmacien(ne) titulaire')
+                                          GestureDetector(
+                                            onTap: () {
+                                              context.pushNamed('PharmacieProfilView',
+                                                  queryParams: {
+                                                    'pharmacieId': serializeParam(
+                                                      pharmacieUser[0]['doc_id'],
+                                                      ParamType.String,
+                                                    ),
+                                                  }.withoutNulls);
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 10.0, 0.0),
+                                              child: Row(children: [
+                                                pharmacieUser[0]['photo_url'].isNotEmpty
+                                                    ? Container(
+                                                        width: 50.0,
+                                                        height: 50.0,
+                                                        clipBehavior: Clip.antiAlias,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        child: Image.network(
+                                                          pharmacieUser[0]['photo_url'][0],
+                                                          fit: BoxFit.cover,
+                                                        ))
+                                                    : Container(
+                                                        width: 50.0,
+                                                        height: 50.0,
+                                                        clipBehavior: Clip.antiAlias,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        child: Image.asset(
+                                                          'assets/images/Group_19.png',
+                                                          fit: BoxFit.cover,
+                                                        )),
+                                                SizedBox(width: 10),
+                                                Flexible(
+                                                  child: Text(pharmacieUser[0]['situation_geographique']['adresse'].toString(),
+                                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                            fontFamily: 'Poppins',
+                                                            color: Colors.white,
+                                                          )),
+                                                )
+                                              ]),
+                                            ),
+                                          ),
                                         Padding(
                                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                                             child: LikeButtonWidget(
