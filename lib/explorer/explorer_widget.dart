@@ -304,16 +304,16 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                           validator: _model.textControllerValidator.asValidator(context),
                           onChanged: (query) async {
                             setState(() async {
-                              if (currentTAB == 1) {
-                                if (query.isEmpty) {
-                                  userSearch.clear();
-                                } else {
-                                  searchLoading = true;
-                                  userSearch = await ExplorerSearchData().searchUsers(query);
-                                  searchLoading = false;
-                                }
-                              }
-
+                              // if (currentTAB == 1) {
+                              //   if (query.isEmpty) {
+                              //     userSearch.clear();
+                              //   } else {
+                              //     searchLoading = true;
+                              //     /* userSearch =  */ await ExplorerSearchData().searchUsers(query);
+                              //     searchLoading = false;
+                              //   }
+                              // }
+                              searchTerms = query;
                               if (currentTAB == 0) {
                                 if (query.isEmpty) {
                                   searchLoading = true;
@@ -371,47 +371,110 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
               ),
               if (currentTAB == 1)
                 Expanded(
+                  // child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: Color(0xFFEFF6F7),
+                  //     ),
+                  //     width: MediaQuery.of(context).size.width * 1.0,
+                  //     // height: MediaQuery.of(context).size.height * 0.67,
+                  //     child: SingleChildScrollView(
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.all(16.0),
+                  //         child: Column(
+                  //           children: [
+                  //             if (searchLoading)
+                  //               Padding(
+                  //                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  //                 child: CircularProgressIndicator(color: Color(0xFF595A71)),
+                  //               ),
+                  //             if (searchLoading == false)
+                  //               Padding(
+                  //                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  //                 child: userSearch.length == 1
+                  //                     ? Text(userSearch.length.toString() + ' résultat',
+                  //                         style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  //                               fontFamily: 'Poppins',
+                  //                               color: Color(0xFF595A71),
+                  //                               fontSize: 14.0,
+                  //                             ))
+                  //                     : Text(userSearch.length.toString() + ' résultats',
+                  //                         style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  //                               fontFamily: 'Poppins',
+                  //                               color: Color(0xFF595A71),
+                  //                               fontSize: 14.0,
+                  //                             )),
+                  //               ),
+                  //             for (var user in userSearch)
+                  //               CardUserWidget(
+                  //                 data: user,
+                  //               ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     )),
                   child: Container(
                       decoration: BoxDecoration(
                         color: Color(0xFFEFF6F7),
                       ),
-                      width: MediaQuery.of(context).size.width * 1.0,
-                      // height: MediaQuery.of(context).size.height * 0.67,
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              if (searchLoading)
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance.collection('users').snapshots(),
+                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            final users = snapshot.data?.docs;
+
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Container();
+                            }
+
+                            
+
+                            final filteredDocuments = users?.where((document) {
+                              final data = document.data() as Map<String, dynamic>;
+                              final nom = data['nom'] ?? '';
+                              final prenom = data['prenom']?? '';
+                              final city = data['city'] ?? '';
+                              final codepostal = data['code_postal'] ?? '';
+                              final poste = data['poste'] ?? '';
+                              final country = data['country'] ?? '';
+
+                              // Comparez le titre avec le terme de recherche (en minuscules).
+                              return (
+                                nom.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') || 
+                                prenom.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') || 
+                                city.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                codepostal.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                poste.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                country.toLowerCase().contains(searchTerms?.toLowerCase() ?? '')
+                              );
+                            }).toList();
+
+                            return Column(
+                              children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                                  child: CircularProgressIndicator(color: Color(0xFF595A71)),
+                                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0) ,
+                                  child: Text(filteredDocuments!.length > 1 ? filteredDocuments!.length.toString() + ' résulats' : filteredDocuments!.length.toString() + ' résulat', style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                  fontFamily: 'Poppins',
+                                                  color: Color(0xFF595A71),
+                                                  fontSize: 14.0,
+                                                )),
                                 ),
-                              if (searchLoading == false)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                                  child: userSearch.length == 1
-                                      ? Text(userSearch.length.toString() + ' résultat',
-                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                fontFamily: 'Poppins',
-                                                color: Color(0xFF595A71),
-                                                fontSize: 14.0,
-                                              ))
-                                      : Text(userSearch.length.toString() + ' résultats',
-                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                fontFamily: 'Poppins',
-                                                color: Color(0xFF595A71),
-                                                fontSize: 14.0,
-                                              )),
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: filteredDocuments?.length,
+                                    itemBuilder: (context, index) {
+                                       final document = filteredDocuments![index];
+                                      final data = document.data() as Map<String, dynamic>;
+                                      return Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: CardUserWidget(
+                                          data: data,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              for (var user in userSearch)
-                                CardUserWidget(
-                                  data: user,
-                                ),
-                            ],
-                          ),
-                        ),
-                      )),
+                              ],
+                            );
+                          })),
                 ),
               if (currentTAB == 0)
                 Expanded(

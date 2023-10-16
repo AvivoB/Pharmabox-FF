@@ -235,6 +235,10 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                     return Center(child: Text('Une erreur s\'est produite'));
                   }
 
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  }
+
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return Center(
                         child: Text(
@@ -251,11 +255,17 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                     children: mergedList.map((doc) {
                       bool isCurrentUser = doc['fromId'] == currentUser?.uid;
 
+                      print('comment id :' + doc.id);
+
                       return FutureBuilder<DocumentSnapshot>(
                           future: FirebaseFirestore.instance.collection('users').doc(doc['fromId']).get(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return Center(child: CircularProgressIndicator()); // Montrez un loader pendant que les données de l'utilisateur sont récupérées
+                            }
+
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Container();
                             }
 
                             if (snapshot.hasError) {
@@ -319,7 +329,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                                                   Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
                                                   SizedBox(width: 10),
                                                   LikeButtonWidget(
-                                                    documentId: 'hh',
+                                                    documentId: doc.id,
                                                     size: 10,
                                                   ),
                                                 ],
@@ -332,7 +342,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                                                 mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
                                                 children: [
                                                   LikeButtonWidget(
-                                                    documentId: 'hh',
+                                                    documentId: doc.id,
                                                     size: 10,
                                                   ),
                                                   SizedBox(width: 10),

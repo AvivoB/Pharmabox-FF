@@ -93,7 +93,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               shape: BoxShape.circle,
                             ),
                             child: FadeInImage.assetNetwork(
-                              image: widget.data != null ? widget.data['photoUrl'] : '',
+                              image: widget.data != null && widget.data['photoUrl'] != null ? widget.data['photoUrl'] : '',
                               placeholder: 'assets/images/Group_18.png',
                               fit: BoxFit.cover,
                               imageErrorBuilder: (context, error, stackTrace) {
@@ -120,7 +120,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.40,
                                 child: Text(
-                                  widget.data['nom'] + ' ' + widget.data['prenom'],
+                                  widget.data['nom'] ?? '' + ' ' + widget.data['prenom'] ?? '',
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
                                 ),
                               ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -5,7 +7,10 @@ import 'package:http/http.dart' as http;
 import '../constant.dart';
 
 class ExplorerSearchData {
-  Future<List> searchUsers(String query) async {
+  // Créez un StreamController pour émettre les résultats de la recherche en temps réel.
+  final StreamController<List<Map<String, dynamic>>> searchResultsStream = StreamController<List<Map<String, dynamic>>>();
+
+  Future<void> searchUsers(String query) async {
     final lowerCaseQuery = query.toLowerCase();
 
     final usersRef = FirebaseFirestore.instance.collection('users');
@@ -49,10 +54,10 @@ class ExplorerSearchData {
       }
     });
 
-    return uniqueUserData;
+    searchResultsStream.add(uniqueUserData);
   }
 
-  Future<List> searchPharmacies(String query) async {
+  Future<void> searchPharmacies(String query) async {
     final lowerCaseQuery = query.toLowerCase();
 
     final pharmacieRef = FirebaseFirestore.instance.collection('pharmacies');
@@ -105,9 +110,11 @@ class ExplorerSearchData {
       }
     });
 
-    print(uniquePharmacie);
+    searchResultsStream.add(uniquePharmacie);
+  }
 
-    return uniquePharmacie;
+  void dispose() {
+    searchResultsStream.close();
   }
 
   // Future<List> searchPharmacies(String query) async {

@@ -52,6 +52,11 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
   String? searchTerms;
   List searchResults = [];
 
+  int itemsPerPage = 10; // Nombre d'éléments par page
+  DocumentSnapshot? lastDocument;
+
+  String? searchTerm; // Conservez une référence au dernier document chargé
+
   @override
   void initState() {
     super.initState();
@@ -140,7 +145,14 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                     ),
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium,
-                  onChanged: (value) => getDataPost(query: value),
+                  // onChanged: (value) => getDataPost(query: value),
+                  onChanged: (value) async {
+                    // await Future.delayed(Duration(milliseconds: 1000), () {
+                    // });
+                    setState(() {
+                      searchTerm = value.toLowerCase(); // Mettez le terme de recherche en minuscules
+                    });
+                  },
                 ),
               ),
             ),
@@ -194,37 +206,119 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                 ],
               ),
             ),
-            _isLoading
-                ? Expanded(
-                    child: ProgressIndicatorPharmabox(
-                    background: Colors.transparent,
-                  ))
-                : Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          for (var data in searchResults)
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: GestureDetector(
-                                  child: CardPharmablabla(data: data),
-                                  onTap: () {
-                                    context.pushNamed(
-                                      'PharmaBlablaSinglePost',
-                                      queryParams: {
-                                        'postId': serializeParam(
-                                          data['postId'],
-                                          ParamType.String,
-                                        ),
-                                      }.withoutNulls,
-                                    );
-                                  }),
-                            )
-                        ],
-                      ),
-                    ),
-                  ),
+            // _isLoading
+            //     ? Expanded(
+            //         child: ProgressIndicatorPharmabox(
+            //         background: Colors.transparent,
+            //       ))
+            //     : Expanded(
+            //         child: SingleChildScrollView(
+            //           child: Column(
+            //             mainAxisSize: MainAxisSize.max,
+            //             children: [
+            //               for (var data in searchResults)
+            //                 Padding(
+            //                   padding: const EdgeInsets.all(10.0),
+            //                   child: GestureDetector(
+            //                       child: CardPharmablabla(data: data),
+            //                       onTap: () {
+            //                         context.pushNamed(
+            //                           'PharmaBlablaSinglePost',
+            //                           queryParams: {
+            //                             'postId': serializeParam(
+            //                               data['postId'],
+            //                               ParamType.String,
+            //                             ),
+            //                           }.withoutNulls,
+            //                         );
+            //                       }),
+            //                 )
+            //             ],
+            //           ),
+            //         ),0
+            //       ),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true).snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Erreur: ${snapshot.error}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  }
+
+                  final documents = snapshot.data!.docs;
+                  if (documents.isEmpty) {
+                    return Text('Fin des documents');
+                  }
+
+                  final filteredDocuments = documents.where((document) {
+                    final data = document.data() as Map<String, dynamic>;
+                    final title = data['post_content'] as String;
+
+                    // Comparez le titre avec le terme de recherche (en minuscules).
+                    return title.toLowerCase().contains(searchTerm ?? '');
+                  }).toList();
+
+                  return ListView.builder(
+                    itemCount: filteredDocuments.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final document = filteredDocuments[index];
+                      final data = document.data() as Map<String, dynamic>;
+                      final title = data['post_content'] as String;
+                      final userId = data['userId'] as String;
+                      data['post'] = document.data();
+                      data['postId'] = document.id;
+
+                      return FutureBuilder<DocumentSnapshot>(
+                        future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
+                        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> userSnapshot) {
+                          if (userSnapshot.connectionState == ConnectionState.waiting) {
+                            return Container();
+                          }
+
+                          if (userSnapshot.hasError) {
+                            return Text('Erreur: ${userSnapshot.error}');
+                          }
+
+                          final userData = userSnapshot.data!.data() as Map<String, dynamic>;
+                          data['user'] = userData;
+
+                          return FutureBuilder<QuerySnapshot>(
+                              future: FirebaseFirestore.instance.collection('pharmablabla').doc(document.id).collection('comments').get(),
+                              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> subSnapshot) {
+                                if (subSnapshot.connectionState == ConnectionState.waiting) {
+                                  return Container();
+                                }
+
+                                final numSubDocuments = subSnapshot.data!.docs.length;
+                                data['post']['count_comment'] = numSubDocuments;
+                                return Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: GestureDetector(
+                                      child: CardPharmablabla(data: data),
+                                      onTap: () {
+                                        context.pushNamed(
+                                          'PharmaBlablaSinglePost',
+                                          queryParams: {
+                                            'postId': serializeParam(
+                                              data['postId'],
+                                              ParamType.String,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      }),
+                                );
+                              });
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            )
           ],
         ),
       ),

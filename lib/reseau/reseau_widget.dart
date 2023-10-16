@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
 import 'package:pharmabox/popups/popup_import_contact/popup_import_contact_model.dart';
 import 'package:pharmabox/popups/popup_import_contact/popup_import_contact_widget.dart';
 
@@ -40,16 +41,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
     // Use collection group to make query across all collections
     QuerySnapshot queryUsers = await FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: currentUserId).get();
 
-    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance.collection('pharmacies').where('reseau', arrayContains: currentUserId).get();
-
     List listUserNetwork = [];
-
-    for (var doc in queryPharmacies?.docs ?? []) {
-      var data = doc.data();
-      data['documentId'] = doc.id;
-      data['type'] = 'pharmacie';
-      listUserNetwork.add(data);
-    }
 
     // Split users based on their 'poste' field
     for (var doc in queryUsers?.docs ?? []) {
@@ -92,87 +84,99 @@ class _ReseauWidgetState extends State<ReseauWidget> {
               updateCallback: () => setState(() {}),
               child: HeaderAppWidget(),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Mon réseau',
-                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.w600,
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Mon réseau',
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Poppins',
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Color(0x33000000),
+                          offset: Offset(0.0, 2.0),
+                        )
+                      ],
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                        stops: [0.0, 1.0],
+                        begin: AlignmentDirectional(1.0, -1.0),
+                        end: AlignmentDirectional(-1.0, 1.0),
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 30.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      icon: Icon(
+                        Icons.add,
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        size: 20.0,
+                      ),
+                      onPressed: () async {
+                        await showModalBottomSheet(
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          enableDrag: false,
+                          context: context,
+                          builder: (bottomSheetContext) {
+                            return GestureDetector(
+                              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                              child: Padding(
+                                padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                child: PopupImportContact(
+                                  onTap: (lgo) => {},
                                 ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 4.0,
-                                  color: Color(0x33000000),
-                                  offset: Offset(0.0, 2.0),
-                                )
-                              ],
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                stops: [0.0, 1.0],
-                                begin: AlignmentDirectional(1.0, -1.0),
-                                end: AlignmentDirectional(-1.0, 1.0),
                               ),
-                              shape: BoxShape.circle,
-                            ),
-                            child: FlutterFlowIconButton(
-                              borderColor: Colors.transparent,
-                              borderRadius: 30.0,
-                              borderWidth: 1.0,
-                              buttonSize: 40.0,
-                              icon: Icon(
-                                Icons.add,
-                                color: FlutterFlowTheme.of(context).secondaryBackground,
-                                size: 20.0,
-                              ),
-                              onPressed: () async {
-                                await showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  enableDrag: false,
-                                  context: context,
-                                  builder: (bottomSheetContext) {
-                                    return GestureDetector(
-                                      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                      child: Padding(
-                                        padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                        child: PopupImportContact(
-                                          onTap: (lgo) => {},
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ).then((value) => setState(() {}));
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                            );
+                          },
+                        ).then((value) => setState(() {}));
+                      },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          for (var i in userNetwork) i['type'] == 'user' ? CardUserWidget(data: i) : CardPharmacieWidget(data: i),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: currentUserUid).snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Erreur: ${snapshot.error}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  }
+
+                  final documents = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: documents.length,
+                    itemBuilder: (context, index) {
+                      final userData = documents[index].data() as Map<String, dynamic>;
+                      // Utilisez les données de l'utilisateur ici
+
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: CardUserWidget(data: userData),
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ],
