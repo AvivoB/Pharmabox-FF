@@ -138,14 +138,6 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
-                          child: Icon(
-                            FFIcons.kbadgeOr,
-                            color: Color(0xFFFFF492),
-                            size: 24.0,
-                          ),
-                        ),
                       ],
                     ),
                   ),
