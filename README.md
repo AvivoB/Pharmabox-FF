@@ -83,14 +83,14 @@ keytool -genkey -v -keystore release-key.keystore -alias release-key -keyalg RSA
 #### Générer l'application release APK
 Générer la clé de signature
 ```bash
-keytool -genkey -v -keystore C:\Users\<user_name>\upload-keystore.jks ^ -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 ^ -alias key-release
+keytool -genkey -v -keystore C:\Users\<username>\upload-keystore.jks ^ -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 ^ -alias key-release
 ```
 Dans /android/key.properties mettre cela (si le fichier n'existe pas, le créer)
 ```bash
 storePassword=aea12f5305
 keyPassword=aea12f5305
-keyAlias=release-key
-storeFile=C:/Users/<user_name>/upload-keystore.jks
+keyAlias=key-release
+storeFile=C:/Users/<username>/upload-keystore.jks
 ```
 
 ```bash
