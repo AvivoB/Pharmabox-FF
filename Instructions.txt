@@ -7,3 +7,7 @@ Test des deeplink android :
 - cd C:\Users\Aviel\AppData\Local\Android\Sdk\platform-tools>
 - adb shell
 -  am start -W -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "https://pharmaff-dab40.web.app/whateverpath"
+
+
+Génerer une clé keystore :
+keytool -genkey -v -keystore release-key.keystore -alias release-key -keyalg RSA -keysize 2048 -validity 10000

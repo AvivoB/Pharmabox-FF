@@ -283,7 +283,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                             return Text('Erreur: ${userSnapshot.error}');
                           }
 
-                          final userData = userSnapshot.data!.data() as Map<String, dynamic>;
+                          final userData = userSnapshot.data?.data() != null ?  userSnapshot.data?.data() as Map<String, dynamic>: null;
                           data['user'] = userData;
 
                           return FutureBuilder<QuerySnapshot>(
@@ -298,7 +298,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                                 return Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: GestureDetector(
-                                      child: CardPharmablabla(data: data),
+                                      child: userData != null ? CardPharmablabla(data: data) : Container(),
                                       onTap: () {
                                         context.pushNamed(
                                           'PharmaBlablaSinglePost',
