@@ -35,6 +35,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'register_step_model.dart';
 export 'register_step_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RegisterStepWidget extends StatefulWidget {
   const RegisterStepWidget({Key? key}) : super(key: key);
@@ -1539,22 +1540,23 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                           ),
                                           child: TextButton(
                                             onPressed: () async {
-                                              final ByteData bytes = await rootBundle.load('assets/pdfs/CGU-Pharma-box.pdf');
-                                              final List<int> buffer = bytes.buffer.asUint8List();
-                                              final tempDir = await getTemporaryDirectory();
-                                              final tempDocumentPath = '${tempDir.path}/CGU-Pharma-box.pdf';
+                                              // final ByteData bytes = await rootBundle.load('assets/pdfs/CGU-Pharma-box.pdf');
+                                              // final List<int> buffer = bytes.buffer.asUint8List();
+                                              // final tempDir = await getTemporaryDirectory();
+                                              // final tempDocumentPath = '${tempDir.path}/CGU-Pharma-box.pdf';
 
-                                              File tempDocumentFile = await File(tempDocumentPath).writeAsBytes(buffer, flush: true);
+                                              // File tempDocumentFile = await File(tempDocumentPath).writeAsBytes(buffer, flush: true);
 
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => PDFScreen(
-                                                    pdfPath: tempDocumentFile.path,
-                                                    title: 'CGU Pharmabox',
-                                                  ),
-                                                ),
-                                              );
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //     builder: (context) => PDFScreen(
+                                              //       pdfPath: tempDocumentFile.path,
+                                              //       title: 'CGU Pharmabox',
+                                              //     ),
+                                              //   ),
+                                              // );
+                                              await launch('https://pharma-box.fr/mentions-legales-application.html');
                                             },
                                             child: Text(
                                               'J\'accepte les conditions d\'utilisation, cliquez ici pour les consulter',
