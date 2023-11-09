@@ -18,7 +18,7 @@ import 'package:pharmabox/reseau/reseau_import_from_phone.dart';
 import 'package:provider/provider.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
-
+import 'package:upgrader/upgrader.dart';
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
@@ -138,22 +138,24 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProviderProfilUser()),
         ChangeNotifierProvider(create: (_) => ProviderPharmacieUser()),
       ],
-      child: MaterialApp.router(
-        title: 'Pharmabox',
-        localizationsDelegates: [
-          FFLocalizationsDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        locale: _locale,
-        supportedLocales: const [Locale('fr', 'FR')],
-        theme: ThemeData(brightness: Brightness.light),
-        debugShowCheckedModeBanner: false,
-        // darkTheme: ThemeData(brightness: Brightness.dark),
-        themeMode: _themeMode,
-        routeInformationParser: _router.routeInformationParser,
-        routerDelegate: _router.routerDelegate,
+      child: UpgradeAlert(
+        child: MaterialApp.router(
+          title: 'Pharmabox',
+          localizationsDelegates: [
+            FFLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          locale: _locale,
+          supportedLocales: const [Locale('fr', 'FR')],
+          theme: ThemeData(brightness: Brightness.light),
+          debugShowCheckedModeBanner: false,
+          // darkTheme: ThemeData(brightness: Brightness.dark),
+          themeMode: _themeMode,
+          routeInformationParser: _router.routeInformationParser,
+          routerDelegate: _router.routerDelegate,
+        ),
       ),
     );
   }

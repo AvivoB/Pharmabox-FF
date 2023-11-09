@@ -229,7 +229,7 @@ class _PopupPharmaBlablaState extends State<PopupPharmaBlabla> {
                           FlutterFlowDropDown<String>(
                             hintText: 'Tous',
                             controller: _model.posteValueController ??= FormFieldController<String>('Tous'),
-                            options: ['Tous', 'Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien(ne)'],
+                            options: ['Tous', 'Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien'],
                             onChanged: (val) => setState(() => _model.posteValue = val),
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: 50.0,

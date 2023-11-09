@@ -466,7 +466,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                 fontWeight: FontWeight.w600,
                                               ),
                                         ),
-                                        if (userData != null && userData['poste'] != 'Pharmacien(ne) titulaire')
+                                        if (userData != null && userData['poste'] != 'Pharmacien titulaire')
                                           Text(
                                             userData != null ? userData['poste'] : '',
                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -474,7 +474,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                   color: Colors.white,
                                                 ),
                                           ),
-                                        if (userData != null && userData['poste'] == 'Pharmacien(ne) titulaire')
+                                        if (userData != null && userData['poste'] == 'Pharmacien titulaire')
                                           GestureDetector(
                                             onTap: () {
                                               context.pushNamed('PharmacieProfilView',
@@ -668,7 +668,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                               text: 'Réseau',
                             ),
                             Tab(
-                              text: userData != null && userData['poste'] == 'Pharmacien(ne) titulaire' ? 'Offres' : 'Recherches',
+                              text: userData != null && userData['poste'] == 'Pharmacien titulaire' ? 'Offres' : 'Recherches',
                             ),
                           ],
                         ),

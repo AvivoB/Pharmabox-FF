@@ -38,7 +38,7 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
   @override
   void initState() {
     super.initState();
-    _selectedHour = widget.initialHours != null ? widget.initialHours : LinkedHashMap.fromIterable(orderedDays, key: (k) => k, value: (v) => _selectedHour[v]);
+    _selectedHour = widget.initialHours != null ? LinkedHashMap.fromIterable(orderedDays, key: (k) => k, value: (v) => widget.initialHours[v]) : LinkedHashMap.fromIterable(orderedDays, key: (k) => k, value: (v) => _selectedHour[v]);
 
     print('SELECT EHRUES' + _selectedHour.toString());
   }

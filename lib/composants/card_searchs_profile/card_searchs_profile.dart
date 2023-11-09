@@ -476,7 +476,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                           ),
                                                           FlutterFlowDropDown<String>(
                                                             controller: _model.tempspleinpartielValueController ??= FormFieldController<String>(_model.tempspleinpartielValue),
-                                                            options: ['Temps plein', 'Temps partiel', 'Dépannage'],
+                                                            options: ['Temps plein', 'Temps partiel'],
                                                             onChanged: (val) => setState(() => _model.tempspleinpartielValue = val),
                                                             width: MediaQuery.of(context).size.width * 0.8,
                                                             height: 50.0,
@@ -707,7 +707,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          _model.contratType.contains('Intérimaire') ? '€ TTC / H' : '€ / mois',
+                                                          _model.contratType.contains('Intérimaire') ? '€ NET / H' : '€ / mois',
                                                           style: FlutterFlowTheme.of(context).bodyMedium,
                                                         ),
                                                       ],

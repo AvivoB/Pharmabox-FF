@@ -13,6 +13,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../constant.dart';
 import '../custom_code/widgets/gradient_text_custom.dart';
 import '../custom_code/widgets/prediction_ville.dart';
 import '/auth/firebase_auth/auth_util.dart';
@@ -375,7 +376,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                             ),
                                             FlutterFlowDropDown<String>(
                                               controller: _model.posteValueController ??= FormFieldController<String>(null),
-                                              options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien(ne)', 'Pharmacien(ne) titulaire'],
+                                              options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien', 'Pharmacien titulaire'],
                                               onChanged: (val) => setState(() => _model.posteValue = val),
                                               width: MediaQuery.of(context).size.width * 0.78,
                                               height: 50,
@@ -604,6 +605,77 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         validator: _model.presentationControllerValidator.asValidator(context),
                                       ),
                                     ),
+                                    Text('Séléctionnez si vous souhaitez être contacté par téléphone ou E-mail.', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12)),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                              child: Icon(
+                                                Icons.phone,
+                                                color: Color(0xFF595A71),
+                                                size: 28,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Afficher mon numéro de téléphone',
+                                              style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        Switch.adaptive(
+                                          value: _model.afficherTelephone ??= false,
+                                          onChanged: (newValue) async {
+                                            setState(() => _model.afficherTelephone = newValue);
+                                          },
+                                          activeColor: Color(0xFF7CEDAC),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                              child: Icon(
+                                                Icons.email_outlined,
+                                                color: Color(0xFF595A71),
+                                                size: 28,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Afficher mon E-mail',
+                                              style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        Switch.adaptive(
+                                          value: _model.afficherEmail ??= false,
+                                          onChanged: (newValue) async {
+                                            setState(() {
+                                              _model.afficherEmail = newValue;
+                                            });
+                                          },
+                                          activeColor: Color(0xFF7CEDAC),
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                   ],
                                 ),
                               ),
@@ -1614,7 +1686,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 //   _isLoading = true;
                                 // });
 
-                                if (_model.posteValue == 'Pharmacien(ne) titulaire') {
+                                if (_model.posteValue == 'Pharmacien titulaire') {
                                   context.pushNamed('RegisterPharmacy',
                                       queryParams: {
                                         'titulaire': serializeParam(

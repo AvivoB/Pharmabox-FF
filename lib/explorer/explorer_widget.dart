@@ -557,6 +557,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                       child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('users')
+                              .where(FieldPath.documentId, isNotEqualTo: currentUserUid)
                               .snapshots(),
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot> snapshot) {

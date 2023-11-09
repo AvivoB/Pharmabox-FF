@@ -444,7 +444,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                   ),
                                   FlutterFlowDropDown<String>(
                                     controller: _model.tempspleinpartielValueController ??= FormFieldController<String>(null),
-                                    options: ['Temps plein', 'Temps partiel', 'Dépannage'],
+                                    options: ['Temps plein', 'Temps partiel'],
                                     onChanged: (val) => setState(() => _model.tempspleinpartielValue = val),
                                     width: MediaQuery.of(context).size.width * 0.8,
                                     height: 50.0,
@@ -675,7 +675,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                                   ),
                                 ),
                                 Text(
-                                  _model.contratType.contains('Intérimaire') ? '€ TTC / H' : '€ / mois',
+                                  _model.contratType.contains('Intérimaire') ? '€ NET / H' : '€ / mois',
                                   style: FlutterFlowTheme.of(context).bodyMedium,
                                 ),
                               ],

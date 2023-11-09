@@ -192,7 +192,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                 FlutterFlowDropDown<String>(
                                   hintText: 'Poste',
                                   controller: _model.posteValueController ??= FormFieldController<String>(null),
-                                  options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien(ne)'],
+                                  options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien'],
                                   onChanged: (val) => setState(() => _model.posteValue = val),
                                   width: MediaQuery.of(context).size.width * 0.8,
                                   height: 50.0,
@@ -437,7 +437,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                   ),
                                   FlutterFlowDropDown<String>(
                                     controller: _model.tempspleinpartielValueController ??= FormFieldController<String>(null),
-                                    options: ['Temps plein', 'Temps partiel', 'Dépannage'],
+                                    options: ['Temps plein', 'Temps partiel'],
                                     onChanged: (val) => setState(() => _model.tempspleinpartielValue = val),
                                     width: MediaQuery.of(context).size.width * 0.8,
                                     height: 50.0,
@@ -703,7 +703,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                     ),
                                   ),
                                   Text(
-                                    _model.contratType.contains('Intérimaire') ? '€ TTC / H' : '€ / mois',
+                                    _model.contratType.contains('Intérimaire') ? '€ NET / H' : '€ / mois',
                                     style: FlutterFlowTheme.of(context).bodyMedium,
                                   ),
                                 ],

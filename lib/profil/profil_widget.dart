@@ -565,7 +565,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                           ),
                                           FlutterFlowDropDown<String>(
                                             controller: _model.posteValueController ??= FormFieldController<String>(userData.containsKey('poste') != null ? userData['poste'] : ''),
-                                            options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien(ne)', 'Pharmacien(ne) titulaire'],
+                                            options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien', 'Pharmacien titulaire'],
                                             onChanged: (val) => setState(() => _model.posteValue = val),
                                             width: MediaQuery.of(context).size.width * 0.78,
                                             height: 50.0,
@@ -913,7 +913,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                   text: 'Réseau',
                                 ),
                                 Tab(
-                                  text: userData != null && userData['poste'] == 'Pharmacien(ne) titulaire' ? 'Offres' : 'Recherches',
+                                  text: userData != null && userData['poste'] == 'Pharmacien titulaire' ? 'Offres' : 'Recherches',
                                 ),
                               ],
                             ),

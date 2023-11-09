@@ -75,7 +75,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
     // Split users based on their 'poste' field
     for (var doc in queryUsers.docs) {
       var data = doc.data() as Map<String, dynamic>;
-      if (data != null && data['poste'] == 'Pharmacien(ne) titulaire') {
+      if (data != null && data['poste'] == 'Pharmacien titulaire') {
         titulairesNetwork.add(data);
       } else {
         nonTitulairesNetwork.add(data);
@@ -1155,73 +1155,126 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ],
                                         ),
-                                        Row(children: [
-                                          Icon(
-                                            Icons.description_outlined,
-                                            color: greyColor,
-                                            size: 28.0,
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.description_outlined,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text('Ordonnances', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
                                           ),
-                                          SizedBox(width: 10, height: 30),
-                                          Text('Ordonnances', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
-                                          LevelProgressBar(
-                                            level: pharmacieData['tendances'][0]['Ordonances'],
-                                            isUser: false,
-                                          )
-                                        ]),
-                                        Row(children: [
-                                          Icon(
-                                            Icons.face_retouching_natural_outlined,
-                                            color: greyColor,
-                                            size: 28.0,
-                                          ),
-                                          SizedBox(width: 10, height: 30),
-                                          Text('Cosmétiques', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
-                                          LevelProgressBar(
-                                            level: pharmacieData['tendances'][0]['Cosmétiques'],
-                                            isUser: false,
-                                          )
-                                        ]),
-                                        Row(children: [
-                                          Icon(
-                                            Icons.yard_outlined,
-                                            color: greyColor,
-                                            size: 28.0,
-                                          ),
-                                          SizedBox(width: 10, height: 30),
-                                          Text('Phyto / aroma', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
-                                          LevelProgressBar(
-                                            level: pharmacieData['tendances'][0]['Phyto / aroma'],
-                                            isUser: false,
-                                          )
-                                        ]),
-                                        Row(children: [
-                                          Icon(
-                                            Icons.lunch_dining_outlined,
-                                            color: greyColor,
-                                            size: 28.0,
-                                          ),
-                                          SizedBox(width: 10, height: 30),
-                                          Text('Nutrition', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
-                                          LevelProgressBar(
-                                            level: pharmacieData['tendances'][0]['Nutrition'],
-                                            isUser: false,
+                                          Container(
+                                            child: LevelProgressBar(
+                                              level: pharmacieData['tendances'][0]['Ordonances'],
+                                              isUser: false,
+                                            ),
                                           )
                                         ]),
                                         Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Icon(
-                                              Icons.live_help_outlined,
-                                              color: greyColor,
-                                              size: 28.0,
+                                            Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.face_retouching_natural_outlined,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text('Cosmétiques', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
                                             ),
-                                            SizedBox(width: 10, height: 30),
-                                            Text('Conseil', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
-                                            LevelProgressBar(
+                                          ),
+                                          Container(
+                                            child: LevelProgressBar(
+                                              level: pharmacieData['tendances'][0]['Cosmétiques'],
+                                              isUser: false,
+                                            ),
+                                          )
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.yard_outlined,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text('Phyto / aroma', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            child: LevelProgressBar(
+                                              level: pharmacieData['tendances'][0]['Phyto / aroma'],
+                                              isUser: false,
+                                            ),
+                                          )
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.lunch_dining_outlined,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text('Nutrition', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            child: LevelProgressBar(
+                                              level: pharmacieData['tendances'][0]['Nutrition'],
+                                              isUser: false,
+                                            ),
+                                          )
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.live_help_outlined,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text('Conseil', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            child: LevelProgressBar(
                                               level: pharmacieData['tendances'][0]['Conseil'],
                                               isUser: false,
-                                            )
-                                          ],
-                                        ),
+                                            ),
+                                          )
+                                        ])
                                       ],
                                     ),
                                   ),

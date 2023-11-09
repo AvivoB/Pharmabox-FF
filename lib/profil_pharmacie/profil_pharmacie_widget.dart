@@ -128,7 +128,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     // Split users based on their 'poste' field
     for (var doc in queryUsers.docs) {
       var data = doc.data() as Map<String, dynamic>;
-      if (data != null && data['poste'] == 'Pharmacien(ne) titulaire') {
+      if (data != null && data['poste'] == 'Pharmacien titulaire') {
         titulairesNetwork.add(data);
       } else {
         nonTitulairesNetwork.add(data);
