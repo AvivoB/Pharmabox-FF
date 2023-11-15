@@ -7,7 +7,8 @@
         "namespace": "android_app",
         "package_name": "com.pharmabox.mobileapp",
         "sha256_cert_fingerprints": [
-          "8B:69:0E:78:4D:75:20:7A:D8:42:D7:33:88:F0:DC:AE:23:7A:BC:D0:3F:63:5B:66:08:EA:D5:52:D6:E7:A1:9F"
+          "8B:69:0E:78:4D:75:20:7A:D8:42:D7:33:88:F0:DC:AE:23:7A:BC:D0:3F:63:5B:66:08:EA:D5:52:D6:E7:A1:9F",
+          "64:B3:9B:11:46:F6:F1:97:D1:73:73:CD:DA:B3:A8:40:A5:7E:23:0C:C5:DB:C6:29:8B:2C:6D:EE:50:D5:0B:E6"
         ]
       }
     }
