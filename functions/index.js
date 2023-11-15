@@ -147,37 +147,21 @@ exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite
       }
   });
 
-  exports.notifyOnAddNetwork = functions.firestore.document('users/{userId}').onWrite(async (change, context) => {
-    // Récupère les données du document avant le changement
-    const oldData = change.before.data();
-    // Récupère les données du document après le changement
-    const newData = change.after.data();
+  exports.notifyOnAddNetwork = functions.firestore.document('demandes_network/{demande}').onCreate(async (snapshot, context) => {
 
-    if (newData && newData.reseau && (!oldData || newData.reseau.length > oldData.reseau.length)) {
-        // Récupère la dernière entrée ajoutée au tableau `reseau`
-        const lastEntry = newData.reseau[newData.reseau.length - 1];
-
-        // Convertit cette entrée en chaîne de caractères (si ce n'est pas déjà une chaîne)
-        const lastEntryAsString = lastEntry.toString();
-
+        const data = snapshot.data();
         // Accède à Firestore
         const db = admin.firestore();
-        const userId = context.params.userId;
-
         // Crée un nouveau document dans la collection 'notifications'
         const notificationData = {
             addedToNetwork: true,
             liked: false,
-            by_user: lastEntryAsString,
-            for: userId,
+            by_user: data.by_user,
+            for: data.for,
             timestamp: FieldValue.serverTimestamp(),
         };
 
-        return db.collection('notifications').add(notificationData);
-    } else {
-        // Si 'reseau' n'est pas dans le document ou si aucune nouvelle entrée n'a été ajoutée, ne fait rien
-        return null;
-    }
+        db.collection('notifications').add(notificationData);
 });
 
 

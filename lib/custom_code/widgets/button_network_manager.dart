@@ -37,31 +37,47 @@ class ButtonNetworkManager extends StatefulWidget {
 
 class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
   bool isInNetwork = false;
+  String messageButton = 'Ajouter';
 
   // Ajoute au réseau
-  Future<void> updateNetwork(String typeCollection, String docId) async {
-    final documentRef = FirebaseFirestore.instance
-        .collection(typeCollection) // replace with your collection name
-        .doc(docId);
+  Future<void> addToNetwork() async {
+    String currentUserId = await getCurrentUserId();
 
-    String currentuserid = await getCurrentUserId();
-
-    await documentRef.update({
-      'reseau': FieldValue.arrayUnion([currentuserid]),
+    final demandesRef = FirebaseFirestore.instance.collection('demandes_network');
+    final demandesData = {
+      'by_user': currentUserId,
+      'status': 'pending',
+      'for': widget.docId,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+    await demandesRef.add(demandesData);
+    print('Envoyé demande');
+    setState(() {
+      messageButton = 'Envoyée';
     });
   }
 
 // Supprime du réseau
   Future<void> deleteNetwork(String typeCollection, String docId) async {
+    String currentuserid = await getCurrentUserId();
+
     final documentRef = FirebaseFirestore.instance
         .collection(typeCollection) // replace with your collection name
         .doc(docId);
-    String currentuserid = await getCurrentUserId();
+
+    final currentUserRef = FirebaseFirestore.instance
+        .collection('users') // replace with your collection name
+        .doc(currentuserid);
+
     await documentRef.update({
       'reseau': FieldValue.arrayRemove([currentuserid]),
     });
+    await currentUserRef.update({
+      'reseau': FieldValue.arrayRemove([docId]),
+    });
     setState(() {
       isInNetwork = false;
+      messageButton = 'Ajouter';
     });
   }
 
@@ -69,21 +85,38 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
   Future<void> verifyInNetwork(String typeCollection, String docId) async {
     String currentUserId = await getCurrentUserId();
 
-    DocumentReference documentRef = FirebaseFirestore.instance
-        .collection(typeCollection) // replace with your collection name
-        .doc(docId);
+    QuerySnapshot demandesSnapshot = await FirebaseFirestore.instance.collection('demandes_network').where('for', isEqualTo: docId).where('by_user', isEqualTo: currentUserId).get();
 
-    DocumentSnapshot documentSnapshot = await documentRef.get();
+    if (demandesSnapshot.docs.isNotEmpty) {
+      // If there is a request in the 'demandes_network' collection, set isInNetwork to 'demande envoyée'
+      setState(() {
+        isInNetwork = false;
+        messageButton = 'Envoyée';
+      });
+    } else {
+      DocumentReference documentRef = FirebaseFirestore.instance
+          .collection(typeCollection) // replace with your collection name
+          .doc(docId);
 
-    if (documentSnapshot.exists) {
-      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      DocumentSnapshot documentSnapshot = await documentRef.get();
 
-      // Check if 'reseau' array contains the current user's ID
-      if (data != null ? data['reseau'].contains(currentUserId) : '') {
-        // If the current user's ID is found in the 'reseau' array, remove it
-        setState(() {
-          isInNetwork = true;
-        });
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+
+        // Check if 'reseau' array contains the current user's ID
+        if (data != null ? data['reseau'].contains(currentUserId) : '') {
+          // If the current user's ID is found in the 'reseau' array, remove it
+          setState(() {
+            isInNetwork = true;
+            messageButton = '';
+          });
+        } else {
+          // If the document snapshot does not exist, set isInNetwork to 'ajouter'
+          setState(() {
+            isInNetwork = false;
+            messageButton = 'Ajouter';
+          });
+        }
       }
     }
   }
@@ -129,12 +162,12 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
           padding: const EdgeInsets.all(5.0),
           child: GestureDetector(
             onTap: () async {
-              await updateNetwork(widget.typeCollection, widget.docId);
-              await verifyInNetwork(widget.typeCollection, widget.docId);
-              setState(() {});
+              if(messageButton != 'Envoyée') {
+                await addToNetwork();
+              }
             },
             child: GradientText(
-              this.widget.text,
+              messageButton,
               radius: this.widget.radius,
               style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', fontSize: 14.0, fontWeight: FontWeight.w400),
               colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],

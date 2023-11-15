@@ -43,6 +43,7 @@ import 'package:provider/provider.dart';
 import 'profil_model.dart';
 export 'profil_model.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class ProfilWidget extends StatefulWidget {
   const ProfilWidget({
@@ -246,9 +247,23 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
     Future<void> _pickImage({required ImageSource source}) async {
       final pickedFile = await ImagePicker().getImage(source: source);
 
-      if (pickedFile != null) {
+      if(pickedFile != null) {
+          final croppedImage = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 50,
+          compressFormat: ImageCompressFormat.jpg,
+          uiSettings: [
+            AndroidUiSettings(toolbarTitle: 'Redimensionner l\'image', toolbarColor: blueColor, toolbarWidgetColor: Colors.white, initAspectRatio: CropAspectRatioPreset.original, lockAspectRatio: false),
+            IOSUiSettings(
+              title: 'Redimensionner l\'image',
+            ),
+          ],
+        );
+
+      if (croppedImage != null) {
         setState(() {
-          _image = File(pickedFile.path);
+          _image = File(croppedImage.path);
           _isLoading = true;
         });
 
@@ -263,6 +278,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
           userData['photoUrl'] = url;
           _isLoading = false;
         });
+      }
       }
     }
 
@@ -454,6 +470,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                     child: TextFormField(
+                                      textCapitalization: TextCapitalization.sentences,
                                       controller: _model.nomFamilleController,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -499,6 +516,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                     child: TextFormField(
+                                      textCapitalization: TextCapitalization.sentences,
                                       controller: _model.prenomController,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -756,6 +774,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                                     child: TextFormField(
+                                      textCapitalization: TextCapitalization.sentences,
                                       controller: _model.presentationController,
                                       obscureText: false,
                                       decoration: InputDecoration(

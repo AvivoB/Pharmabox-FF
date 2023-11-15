@@ -101,6 +101,7 @@ class _PopupLgoPharmacieWidgetState extends State<PopupLgoPharmacieWidget> {
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
+                            textCapitalization: TextCapitalization.sentences,
                             controller: _model.lgoFilterController,
                             autofocus: false,
                             readOnly: false,

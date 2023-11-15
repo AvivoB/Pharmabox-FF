@@ -256,6 +256,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      textCapitalization: TextCapitalization.sentences,
                       controller: _message,
                       minLines: 1,
                       maxLines: null,

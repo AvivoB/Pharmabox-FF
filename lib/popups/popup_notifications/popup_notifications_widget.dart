@@ -168,7 +168,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                                               children: [
                                                 if (userData != null)
                                                   Text(
-                                                    data!['addedToNetwork'] && userData != null ? userData!['prenom'] + ' ' + userData['nom'] + ' vous a ajouté à son réseau' : userData!['prenom'] + ' ' + userData['nom'] + ' a aimé votre profil',
+                                                    data!['addedToNetwork'] && userData != null ? userData!['prenom'] + ' ' + userData['nom'] + ' souhaite rejoindre votre réseau' : userData!['prenom'] + ' ' + userData['nom'] + ' a aimé votre profil',
                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                           fontFamily: 'Poppins',
                                                           color: Color(0xFF595A71),

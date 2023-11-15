@@ -184,6 +184,7 @@ class _PredictionVilleState extends State<PredictionVille> {
         Padding(
           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
           child: TextFormField(
+            textCapitalization: TextCapitalization.sentences,
             obscureText: false,
             // readOnly: true,
             controller: _cityController,

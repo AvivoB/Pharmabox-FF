@@ -237,6 +237,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                     child: TextFormField(
+                                      textCapitalization: TextCapitalization.sentences,
                                       controller: _model.nomdelapharmacieController2,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -366,6 +367,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                               Container(
                                                 width: MediaQuery.of(context).size.width * 0.60,
                                                 child: TextFormField(
+                                                  textCapitalization: TextCapitalization.sentences,
                                                   controller: _model.groupementAutre,
                                                   onChanged: (value) {
                                                     print('Groupement selected' + value.toString());
@@ -454,6 +456,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                     child: TextFormField(
+                                      textCapitalization: TextCapitalization.sentences,
                                       controller: _model.presentationController,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -753,6 +756,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
+                                    textCapitalization: TextCapitalization.sentences,
                                     controller: _model.rerController,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -798,6 +802,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
+                                    textCapitalization: TextCapitalization.sentences,
                                     controller: _model.metroController,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -843,6 +848,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
+                                    textCapitalization: TextCapitalization.sentences,
                                     controller: _model.busController,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -888,6 +894,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
+                                    textCapitalization: TextCapitalization.sentences,
                                     controller: _model.tramwayController1,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -933,6 +940,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                   child: TextFormField(
+                                    textCapitalization: TextCapitalization.sentences,
                                     controller: _model.tramwayController2,
                                     obscureText: false,
                                     decoration: InputDecoration(

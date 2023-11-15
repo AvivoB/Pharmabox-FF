@@ -95,6 +95,7 @@ class _PopupEnregistrerOffreWidgetState extends State<PopupEnregistrerOffreWidge
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
+                            textCapitalization: TextCapitalization.sentences,
                             controller: _model.lgoFilterController,
                             readOnly: true,
                             obscureText: false,

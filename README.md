@@ -59,7 +59,7 @@ firebase deploy --only hosting
 
 #### Tester les deeplinks
 ```bash
-cd C:\Users\Aviel\AppData\Local\Android\Sdk\platform-tools>
+cd C:\Users\Aviel\AppData\Local\Android\Sdk\platform-tools
 ```
 ```bash
 adb shell

@@ -117,7 +117,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                                width: MediaQuery.of(context).size.width * 0.35,
                                 child: Text(
                                   widget.data['user']['nom'] + ' ' + widget.data['user']['prenom'],
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),

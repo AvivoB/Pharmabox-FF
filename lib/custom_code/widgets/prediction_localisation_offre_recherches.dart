@@ -69,6 +69,7 @@ class _PredictionOffreRechercheLocalisationState extends State<PredictionOffreRe
     return Column(
       children: [
         TextFormField(
+          textCapitalization: TextCapitalization.sentences,
           controller: _searchController,
           obscureText: false,
           onChanged: _onSearchChanged,

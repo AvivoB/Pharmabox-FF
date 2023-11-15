@@ -361,6 +361,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
+                        textCapitalization: TextCapitalization.sentences,
                           controller: _model.textController,
                           obscureText: false,
                           decoration: InputDecoration(

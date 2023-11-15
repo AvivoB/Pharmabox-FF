@@ -7,6 +7,7 @@ import 'package:pharmabox/custom_code/widgets/button_network_manager.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/discussion_user/discussion_user_widget.dart';
 import 'package:pharmabox/popups/popup_signalement/popup_signalement_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_user/card_user_widget.dart';
@@ -346,6 +347,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
+                                              if(userData['telephone'] != '' && userData['afficher_tel'])
                                               Padding(
                                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                                                 child: Container(
@@ -371,13 +373,14 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                         color: Color(0xFF42D2FF),
                                                         size: 24.0,
                                                       ),
-                                                      onPressed: () {
-                                                        print('IconButton pressed ...');
+                                                      onPressed: () async {
+                                                        await launch('tel:' + userData['telephone']);
                                                       },
                                                     ),
                                                   ),
                                                 ),
                                               ),
+                                              if(userData['email'] != '' && userData['afficher_email'])
                                               Padding(
                                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                                                 child: Container(
@@ -403,8 +406,8 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                         color: Color(0xFF42D2FF),
                                                         size: 24.0,
                                                       ),
-                                                      onPressed: () {
-                                                        print('IconButton pressed ...');
+                                                      onPressed: ()  async {
+                                                        await launch('mailto:' + userData['email']);
                                                       },
                                                     ),
                                                   ),
@@ -589,7 +592,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ],
                                 ),
                               ),
-                            if (userData != null && userData['email'] != '')
+                            if (userData['email'] != '' && userData['afficher_email'])
                               Padding(
                                 padding: EdgeInsets.only(bottom: 5),
                                 child: Row(

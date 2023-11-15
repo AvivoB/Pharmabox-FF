@@ -100,6 +100,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
                           controller: _model.groupementFilterController,
                           obscureText: false,
                           decoration: InputDecoration(

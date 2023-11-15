@@ -814,9 +814,11 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                       ],
                                                     ),
                                                   ),
+                                                
                                                 Padding(
                                                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                                                   child: TextFormField(
+                                                    textCapitalization: TextCapitalization.sentences,
                                                     controller: _model.nomOffreController,
                                                     obscureText: false,
                                                     decoration: InputDecoration(

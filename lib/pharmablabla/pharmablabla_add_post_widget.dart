@@ -98,7 +98,16 @@ class _PharmaBlablaAddPostState extends State<PharmaBlablaAddPost> {
       _model.posteValue != null ? searchTerms.add(_model.posteValue.toString().toLowerCase()) : '';
 
       try {
-        await pharmablablaCollection.add({'post_content': _model.postContent.text, 'userId': currentuserId, 'search_terms': searchTerms, 'network': _model.reseauType, 'date_created': DateTime.now()});
+        await pharmablablaCollection.add({
+          'post_content': _model.postContent.text, 
+          'userId': currentuserId, 
+          'search_terms': searchTerms, 
+          'network': _model.reseauType,
+          'LGO': _model.selectedLGO[0]['name'],
+          'poste': _model.posteValue,
+          // 'groupement': _model.selectedGroupement[0]['name'],
+          'date_created': DateTime.now()
+        });
         return true;
       } catch (e) {
         print('Erreur lors de l\'ajout du document: $e');
@@ -383,6 +392,7 @@ class _PharmaBlablaAddPostState extends State<PharmaBlablaAddPost> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                         child: TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
                           minLines: 10,
                           controller: _model.postContent,
                           obscureText: false,

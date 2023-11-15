@@ -74,6 +74,7 @@ class _MapAdressePharmacieState extends State<MapAdressePharmacie> {
       children: [
         if (widget.isEditable)
           TextFormField(
+            textCapitalization: TextCapitalization.sentences,
             controller: _searchController,
             obscureText: false,
             onChanged: _onSearchChanged,

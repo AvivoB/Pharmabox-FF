@@ -70,6 +70,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http" android:host="pharmaff-dab40.web.app" />
                 <data android:scheme="https" />
+                <data android:scheme="http" android:host="pharma-box.fr" />
+                <data android:scheme="https" android:host="pharma-box.fr" />
             </intent-filter>
 
 

@@ -132,6 +132,7 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                         child: TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
                           controller: _model.lgoFilterController,
                           onChanged: _onSearchChanged,
                           obscureText: false,

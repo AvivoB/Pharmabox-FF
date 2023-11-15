@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pharmabox/composants/card_pharmablabla/card_pharmablabla.dart';
@@ -57,6 +58,8 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
 
   String? searchTerm; // Conservez une référence au dernier document chargé
 
+  Map<String, dynamic> currentUser = {};
+
   @override
   void initState() {
     super.initState();
@@ -66,28 +69,32 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
         this.isTitulaire = isTitulaire;
       });
     });
-    getDataPost();
+    getCurrentUserData().then((user_data) {
+      setState(() {
+        this.currentUser = user_data;
+      });
+    });
   }
 
-  Future<void> getDataPost({query = ''}) async {
-    if (query != '') {
-      searchResults.clear();
-      List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().filterPosts(query);
-      setState(() {
-        searchResults = posts;
-      });
-    } else {
-      searchResults.clear();
-      setState(() {
-        _isLoading = true;
-      });
-      List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().getAllPosts();
-      setState(() {
-        searchResults = posts;
-        _isLoading = false;
-      });
-    }
-  }
+  // Future<void> getDataPost({query = ''}) async {
+  //   if (query != '') {
+  //     searchResults.clear();
+  //     List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().filterPosts(query);
+  //     setState(() {
+  //       searchResults = posts;
+  //     });
+  //   } else {
+  //     searchResults.clear();
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().getAllPosts();
+  //     setState(() {
+  //       searchResults = posts;
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -103,224 +110,274 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
       resizeToAvoidBottomInset: false,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
-        child: Column(
-          children: [
-            wrapWithModel(
-              model: _model.headerAppModel,
-              updateCallback: () => setState(() {}),
-              child: HeaderAppWidget(),
+        child: Column(children: [
+          wrapWithModel(
+            model: _model.headerAppModel,
+            updateCallback: () => setState(() {}),
+            child: HeaderAppWidget(),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 1.0,
+            decoration: BoxDecoration(
+              color: FlutterFlowTheme.of(context).secondaryBackground,
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 1.0,
-              decoration: BoxDecoration(
-                color: FlutterFlowTheme.of(context).secondaryBackground,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  controller: _model.searchPost,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    hintText: 'Rechercher...',
-                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                    contentPadding: EdgeInsets.all(15.0),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFD0D1DE),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(48.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFD0D1DE),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(28.0),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      size: 24.0,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextFormField(
+                textCapitalization: TextCapitalization.sentences,
+                controller: _model.searchPost,
+                obscureText: false,
+                decoration: InputDecoration(
+                  hintText: 'Rechercher...',
+                  hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                  contentPadding: EdgeInsets.all(15.0),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
                       color: Color(0xFFD0D1DE),
+                      width: 1,
                     ),
+                    borderRadius: BorderRadius.circular(48.0),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyMedium,
-                  // onChanged: (value) => getDataPost(query: value),
-                  onChanged: (value) async {
-                    // await Future.delayed(Duration(milliseconds: 1000), () {
-                    // });
-                    setState(() {
-                      searchTerm = value.toLowerCase(); // Mettez le terme de recherche en minuscules
-                    });
-                  },
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFFD0D1DE),
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(28.0),
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    size: 24.0,
+                    color: Color(0xFFD0D1DE),
+                  ),
                 ),
+                style: FlutterFlowTheme.of(context).bodyMedium,
+                // onChanged: (value) => getDataPost(query: value),
+                onChanged: (value) async {
+                  // await Future.delayed(Duration(milliseconds: 1000), () {
+                  // });
+                  setState(() {
+                    searchTerm = value.toLowerCase(); // Mettez le terme de recherche en minuscules
+                  });
+                },
               ),
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 15.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'PharmaBlabla',
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Poppins',
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 4.0,
-                          color: Color(0x33000000),
-                          offset: Offset(0.0, 2.0),
-                        )
-                      ],
-                      gradient: LinearGradient(
-                        colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                        stops: [0.0, 1.0],
-                        begin: AlignmentDirectional(1.0, -1.0),
-                        end: AlignmentDirectional(-1.0, 1.0),
+          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 15.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'PharmaBlabla',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Poppins',
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w600,
                       ),
-                      shape: BoxShape.circle,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 4.0,
+                        color: Color(0x33000000),
+                        offset: Offset(0.0, 2.0),
+                      )
+                    ],
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                      stops: [0.0, 1.0],
+                      begin: AlignmentDirectional(1.0, -1.0),
+                      end: AlignmentDirectional(-1.0, 1.0),
                     ),
-                    child: FlutterFlowIconButton(
-                      borderColor: Colors.transparent,
-                      borderRadius: 30.0,
-                      borderWidth: 1.0,
-                      buttonSize: 40.0,
-                      icon: Icon(
-                        Icons.send_outlined,
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        size: 24.0,
-                      ),
-                      onPressed: () async {
-                        context.pushNamed('PharmaBlablaAddPost');
-                      },
-                    ),
+                    shape: BoxShape.circle,
                   ),
-                ],
-              ),
+                  child: FlutterFlowIconButton(
+                    borderColor: Colors.transparent,
+                    borderRadius: 30.0,
+                    borderWidth: 1.0,
+                    buttonSize: 40.0,
+                    icon: Icon(
+                      Icons.send_outlined,
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      size: 24.0,
+                    ),
+                    onPressed: () async {
+                      context.pushNamed('PharmaBlablaAddPost');
+                    },
+                  ),
+                ),
+              ],
             ),
-            // _isLoading
-            //     ? Expanded(
-            //         child: ProgressIndicatorPharmabox(
-            //         background: Colors.transparent,
-            //       ))
-            //     : Expanded(
-            //         child: SingleChildScrollView(
-            //           child: Column(
-            //             mainAxisSize: MainAxisSize.max,
-            //             children: [
-            //               for (var data in searchResults)
-            //                 Padding(
-            //                   padding: const EdgeInsets.all(10.0),
-            //                   child: GestureDetector(
-            //                       child: CardPharmablabla(data: data),
-            //                       onTap: () {
-            //                         context.pushNamed(
-            //                           'PharmaBlablaSinglePost',
-            //                           queryParams: {
-            //                             'postId': serializeParam(
-            //                               data['postId'],
-            //                               ParamType.String,
-            //                             ),
-            //                           }.withoutNulls,
-            //                         );
-            //                       }),
-            //                 )
-            //             ],
-            //           ),
-            //         ),0
-            //       ),
-            Expanded(
+          ),
+          // _isLoading
+          //     ? Expanded(
+          //         child: ProgressIndicatorPharmabox(
+          //         background: Colors.transparent,
+          //       ))
+          //     : Expanded(
+          //         child: SingleChildScrollView(
+          //           child: Column(
+          //             mainAxisSize: MainAxisSize.max,
+          //             children: [
+          //               for (var data in searchResults)
+          //                 Padding(
+          //                   padding: const EdgeInsets.all(10.0),
+          //                   child: GestureDetector(
+          //                       child: CardPharmablabla(data: data),
+          //                       onTap: () {
+          //                         context.pushNamed(
+          //                           'PharmaBlablaSinglePost',
+          //                           queryParams: {
+          //                             'postId': serializeParam(
+          //                               data['postId'],
+          //                               ParamType.String,
+          //                             ),
+          //                           }.withoutNulls,
+          //                         );
+          //                       }),
+          //                 )
+          //             ],
+          //           ),
+          //         ),0
+          //       ),
+          Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true).snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Erreur: ${snapshot.error}');
-                  }
+            stream: FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true).snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Erreur: ${snapshot.error}');
+              }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container();
-                  }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              }
 
-                  final documents = snapshot.data!.docs;
-                  if (documents.isEmpty) {
-                    return Text('Fin des documents');
-                  }
+              final documents = snapshot.data!.docs;
+              if (documents.isEmpty) {
+                return Text('Fin des documents');
+              }
 
-                  final filteredDocuments = documents.where((document) {
-                    final data = document.data() as Map<String, dynamic>;
-                    final title = data['post_content'] as String;
+              var filteredDocuments = documents.where((document) {
+                final data = document.data() as Map<String, dynamic>;
+                final title = data['post_content'] as String;
 
-                    // Comparez le titre avec le terme de recherche (en minuscules).
-                    return title.toLowerCase().contains(searchTerm ?? '');
-                  }).toList();
+                // Comparez le titre avec le terme de recherche (en minuscules).
+                return title.toLowerCase().contains(searchTerm ?? '');
+              }).toList();
 
-                  return ListView.builder(
-                    itemCount: filteredDocuments.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final document = filteredDocuments[index];
-                      final data = document.data() as Map<String, dynamic>;
-                      final title = data['post_content'] as String;
-                      final userId = data['userId'] as String;
-                      data['post'] = document.data();
-                      data['postId'] = document.id;
+              // Filtrer les documents en fonction de mon réseau
+              filteredDocuments = filteredDocuments.where((document) {
+                final data = document.data() as Map<String, dynamic>;
 
-                      return FutureBuilder<DocumentSnapshot>(
-                        future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
-                        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> userSnapshot) {
-                          if (userSnapshot.connectionState == ConnectionState.waiting) {
-                            return Container();
-                          }
+                if (data['network'] == 'Tout Pharmabox') {
+                  return true;
+                }
 
-                          if (userSnapshot.hasError) {
-                            return Text('Erreur: ${userSnapshot.error}');
-                          }
+                if (currentUser['reseau'] != null && data['network'] == 'Mon réseau' && currentUser['reseau'].contains(data['userId'])) {
+                  return true;
+                }
 
-                          final userData = userSnapshot.data?.data() != null ?  userSnapshot.data?.data() as Map<String, dynamic>: null;
-                          data['user'] = userData;
+                return false;
+              }).toList();
 
-                          return FutureBuilder<QuerySnapshot>(
-                              future: FirebaseFirestore.instance.collection('pharmablabla').doc(document.id).collection('comments').get(),
-                              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> subSnapshot) {
-                                if (subSnapshot.connectionState == ConnectionState.waiting) {
-                                  return Container();
-                                }
+              // Filtre sur les LGO
+              filteredDocuments = filteredDocuments.where((document) {
+                final data = document.data() as Map<String, dynamic>;
+                final names = currentUser['lgo'].map((item) => item['name']).toList();
 
-                                final numSubDocuments = subSnapshot.data!.docs.length;
-                                data['post']['count_comment'] = numSubDocuments;
-                                return Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: GestureDetector(
-                                      child: userData != null ? CardPharmablabla(data: data) : Container(),
-                                      onTap: () {
-                                        context.pushNamed(
-                                          'PharmaBlablaSinglePost',
-                                          queryParams: {
-                                            'postId': serializeParam(
-                                              data['postId'],
-                                              ParamType.String,
-                                            ),
-                                          }.withoutNulls,
-                                        );
-                                      }),
-                                );
-                              });
-                        },
-                      );
+                if (currentUser['id'] == data['userId']) {
+                  return true;
+                }
+                if (data['LGO'] == 'Par LGO' || !data.containsKey('LGO')) {
+                  return true;
+                }
+                if (currentUser['lgo'] != null && names.contains(data['LGO'])) {
+                  return true;
+                }
+
+                return false;
+              }).toList();
+
+              // Filtre sur les postes visées
+              filteredDocuments = filteredDocuments.where((document) {
+                final data = document.data() as Map<String, dynamic>;
+
+                if (data['poste'] == null || !data.containsKey('poste')) {
+                  return true;
+                }
+                if (currentUser['id'] == data['userId']) {
+                  return true;
+                }
+
+                if (currentUser['poste'] != null && currentUser['poste'] == data['poste']) {
+                  return true;
+                }
+
+                return false;
+              }).toList();
+
+              return ListView.builder(
+                itemCount: filteredDocuments.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final document = filteredDocuments[index];
+                  final data = document.data() as Map<String, dynamic>;
+                  final title = data['post_content'] as String;
+                  final userId = data['userId'] as String;
+                  data['post'] = document.data();
+                  data['postId'] = document.id;
+
+                  return FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
+                    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> userSnapshot) {
+                      if (userSnapshot.connectionState == ConnectionState.waiting) {
+                        return Container();
+                      }
+
+                      if (userSnapshot.hasError) {
+                        return Text('Erreur: ${userSnapshot.error}');
+                      }
+
+                      final userData = userSnapshot.data?.data() != null ? userSnapshot.data?.data() as Map<String, dynamic> : null;
+                      data['user'] = userData;
+
+                      return FutureBuilder<QuerySnapshot>(
+                          future: FirebaseFirestore.instance.collection('pharmablabla').doc(document.id).collection('comments').get(),
+                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> subSnapshot) {
+                            if (subSnapshot.connectionState == ConnectionState.waiting) {
+                              return Container();
+                            }
+
+                            final numSubDocuments = subSnapshot.data!.docs.length;
+                            data['post']['count_comment'] = numSubDocuments;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                              child: GestureDetector(
+                                  child: userData != null ? CardPharmablabla(data: data) : Container(),
+                                  onTap: () {
+                                    context.pushNamed(
+                                      'PharmaBlablaSinglePost',
+                                      queryParams: {
+                                        'postId': serializeParam(
+                                          data['postId'],
+                                          ParamType.String,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  }),
+                            );
+                          });
                     },
                   );
                 },
-              ),
-            )
-          ],
-        ),
+              );
+            },
+          ))
+        ]),
       ),
     );
   }

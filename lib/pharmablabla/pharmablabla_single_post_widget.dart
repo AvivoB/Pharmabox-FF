@@ -375,6 +375,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      textCapitalization: TextCapitalization.sentences,
                       controller: _commentMessage,
                       minLines: 1,
                       maxLines: null,

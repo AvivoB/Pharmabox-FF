@@ -30,6 +30,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
   bool isExpanded_NonTitu = false;
   bool isExpanded_Pharma = false;
   final _unfocusNode = FocusNode();
+  int demandesPending = 0;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List titulairesNetwork = [];
@@ -55,6 +56,41 @@ class _ReseauWidgetState extends State<ReseauWidget> {
     setState(() {
       userNetwork = listUserNetwork;
     });
+  }
+
+  Future<void> _acceptInvite(userToAdd, invitId) async {
+    String currentUserId = await getCurrentUserId();
+
+    final documentRef = FirebaseFirestore.instance
+        .collection('users') // replace with your collection name
+        .doc(userToAdd);
+
+    final currentUserRef = FirebaseFirestore.instance
+        .collection('users') // replace with your collection name
+        .doc(currentUserId);
+
+    String currentuserid = await getCurrentUserId();
+
+    await documentRef.update({
+      'reseau': FieldValue.arrayUnion([currentuserid]),
+    });
+    await currentUserRef.update({
+      'reseau': FieldValue.arrayUnion([userToAdd]),
+    });
+
+    final invitRef = FirebaseFirestore.instance
+        .collection('demandes_network') // replace with your collection name
+        .doc(invitId);
+
+    invitRef.delete();
+  }
+
+  Future<void> _declineInvite(invitId) async {
+    final documentRef = FirebaseFirestore.instance
+        .collection('demandes_network') // replace with your collection name
+        .doc(invitId);
+
+    documentRef.delete();
   }
 
   @override
@@ -85,7 +121,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
               child: HeaderAppWidget(),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 15.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,32 +187,315 @@ class _ReseauWidgetState extends State<ReseauWidget> {
               ),
             ),
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: currentUserUid).snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Erreur: ${snapshot.error}');
-                  }
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    
+                    Container(
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance.collection('demandes_network').where('for', isEqualTo: currentUserUid).snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text('Erreur: ${snapshot.error}');
+                          }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container();
-                  }
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Container();
+                          }
 
-                  final documents = snapshot.data!.docs;
+                          final documents = snapshot.data!.docs;
 
-                  return ListView.builder(
-                    itemCount: documents.length,
-                    itemBuilder: (context, index) {
-                      final userData = documents[index].data() as Map<String, dynamic>;
-                      // Utilisez les données de l'utilisateur ici
+                          
+                          return Column(
+                            children: [
+                              if (documents.length > 0)
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Demandes d\'ajout ('+documents.length.toString()+')',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                child: ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: documents.length,
+                                  itemBuilder: (context, index) {
+                                    final demande = documents[index].data() as Map<String, dynamic>;
+                                    final invitId = documents[index].id;
+                                    // Utilisez les données de l'utilisateur ici
+                                    return FutureBuilder<DocumentSnapshot>(
+                                        future: FirebaseFirestore.instance.collection('users').doc(demande['by_user']).get(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasError) {
+                                            return Text('Erreur: ${snapshot.error}');
+                                          }
 
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: CardUserWidget(data: userData),
-                      );
-                    },
-                  );
-                },
+                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                            return Container();
+                                          }
+
+                                          final userData = snapshot.data!;
+                                          return Padding(
+                                              padding: const EdgeInsets.all(10.0),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                                child: Container(
+                                                  width: MediaQuery.of(context).size.width * 1.0,
+                                                  // height: MediaQuery.of(context).size.height * 0.65,
+                                                  decoration: BoxDecoration(
+                                                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                                                    borderRadius: BorderRadius.circular(15.0),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Color.fromRGBO(31, 92, 103, 0.17),
+                                                        offset: Offset(10.0, 10.0),
+                                                        blurRadius: 12.0,
+                                                        spreadRadius: -6.0,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    children: [
+                                                      Padding(
+                                                        padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.max,
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Container(
+                                                              child: Row(
+                                                                mainAxisSize: MainAxisSize.max,
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                                                                    child: Container(
+                                                                      width: 50.0,
+                                                                      height: 50.0,
+                                                                      clipBehavior: Clip.antiAlias,
+                                                                      decoration: BoxDecoration(
+                                                                        shape: BoxShape.circle,
+                                                                      ),
+                                                                      child: FadeInImage.assetNetwork(
+                                                                        image: userData != null && userData['photoUrl'] != null ? userData['photoUrl'] : '',
+                                                                        placeholder: 'assets/images/Group_18.png',
+                                                                        fit: BoxFit.cover,
+                                                                        imageErrorBuilder: (context, error, stackTrace) {
+                                                                          return Image.asset('assets/images/Group_18.png');
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () => {
+                                                                      context.pushNamed('ProfilView',
+                                                                          queryParams: {
+                                                                            'userId': serializeParam(
+                                                                              userData['id'],
+                                                                              ParamType.String,
+                                                                            ),
+                                                                          }.withoutNulls)
+                                                                    },
+                                                                    child: Column(
+                                                                      mainAxisSize: MainAxisSize.max,
+                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      children: [
+                                                                        Container(
+                                                                          width: MediaQuery.of(context).size.width * 0.40,
+                                                                          child: Text(
+                                                                            userData['nom'] + ' ' + userData['prenom'],
+                                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
+                                                                          ),
+                                                                        ),
+                                                                        Container(
+                                                                          width: MediaQuery.of(context).size.width * 0.44,
+                                                                          child: Text(
+                                                                            userData['poste'] ?? '',
+                                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                  fontFamily: 'Poppins',
+                                                                                  color: Color(0xFF8D8D97),
+                                                                                  fontSize: 13.0,
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.max,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.location_on_outlined,
+                                                              color: Color(0xFF595A71),
+                                                              size: 35.0,
+                                                            ),
+                                                            if (userData['country'] != null)
+                                                              Padding(
+                                                                padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                                                                child: Text(
+                                                                  userData['city'] + ', ' + userData['country'],
+                                                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                        fontFamily: 'Poppins',
+                                                                        color: Color(0xFF595A71),
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            if (userData['country'] == null)
+                                                              Padding(
+                                                                padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                                                                child: Text(
+                                                                  userData['city'],
+                                                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                        fontFamily: 'Poppins',
+                                                                        color: Color(0xFF595A71),
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: MediaQuery.of(context).size.width * 1.0,
+                                                        decoration: BoxDecoration(
+                                                          color: Color(0xFFEFF6F7),
+                                                          borderRadius: BorderRadius.only(
+                                                            bottomLeft: Radius.circular(15.0),
+                                                            bottomRight: Radius.circular(15.0),
+                                                            topLeft: Radius.circular(0.0),
+                                                            topRight: Radius.circular(0.0),
+                                                          ),
+                                                        ),
+                                                        child: Padding(
+                                                          padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              Container(
+                                                                child: TextButton(
+                                                                    onPressed: () async {
+                                                                      await _acceptInvite(demande['by_user'], invitId);
+                                                                    },
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Icon(Icons.check, color: blueColor),
+                                                                        Text('ACCEPTER', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blueColor, fontWeight: FontWeight.w600)),
+                                                                      ],
+                                                                    )),
+                                                              ),
+                                                              Container(
+                                                                child: TextButton(
+                                                                    onPressed: () async {
+                                                                      await _declineInvite(invitId);
+                                                                    },
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Icon(Icons.close, color: redColor),
+                                                                        Text('REFUSER', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: redColor, fontWeight: FontWeight.w600)),
+                                                                      ],
+                                                                    )),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ));
+                                        });
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    
+                    Container(
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: currentUserUid).snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Text('Erreur: ${snapshot.error}');
+                          }
+
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Container();
+                          }
+
+                          final documents = snapshot.data!.docs;
+
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Dans mon réseau ('+documents.length.toString()+')',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                child: ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: documents.length,
+                                  itemBuilder: (context, index) {
+                                    final userData = documents[index].data() as Map<String, dynamic>;
+                                    // Utilisez les données de l'utilisateur ici
+
+                                    return Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: CardUserWidget(data: userData),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

@@ -101,6 +101,7 @@ class _PopupLanguesWidgetState extends State<PopupLanguesWidget> {
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                           child: TextFormField(
+                            textCapitalization: TextCapitalization.sentences,
                             controller: _model.langueFilterController,
                             autofocus: false,
                             readOnly: false,

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/custom_code/widgets/pdfViewer.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
@@ -83,10 +84,24 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
   Widget build(BuildContext context) {
     Future<void> _pickImage({required ImageSource source}) async {
       final pickedFile = await ImagePicker().getImage(source: source);
-
-      if (pickedFile != null) {
+      
+      if(pickedFile != null) {
+              final croppedImage = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          compressQuality: 50,
+          compressFormat: ImageCompressFormat.jpg,
+          uiSettings: [
+            AndroidUiSettings(toolbarTitle: 'Redimensionner l\'image', toolbarColor: blueColor, toolbarWidgetColor: Colors.white, initAspectRatio: CropAspectRatioPreset.original, lockAspectRatio: false),
+            IOSUiSettings(
+              title: 'Redimensionner l\'image',
+            ),
+          ],
+        );
+      
+      if (croppedImage != null) {
         setState(() {
-          _image = File(pickedFile.path);
+          _image = File(croppedImage.path);
           _isLoading = true;
         });
 
@@ -100,6 +115,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
           _isLoading = false;
           _imageURL = url;
         });
+      }
       }
     }
 
@@ -265,6 +281,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                       child: TextFormField(
+                                        textCapitalization: TextCapitalization.sentences,
                                         controller: _model.nomFamilleController,
                                         obscureText: false,
                                         decoration: InputDecoration(
@@ -310,6 +327,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                       child: TextFormField(
+                                        textCapitalization: TextCapitalization.sentences,
                                         controller: _model.prenomController,
                                         obscureText: false,
                                         decoration: InputDecoration(
@@ -565,6 +583,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                       child: TextFormField(
+                                        textCapitalization: TextCapitalization.sentences,
                                         controller: _model.presentationController,
                                         obscureText: false,
                                         decoration: InputDecoration(

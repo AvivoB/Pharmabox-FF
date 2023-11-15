@@ -942,6 +942,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                         Padding(
                                           padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                           child: TextFormField(
+                                            textCapitalization: TextCapitalization.sentences,
                                             controller: _model.descriptionOffreController,
                                             obscureText: false,
                                             decoration: InputDecoration(
@@ -985,6 +986,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                         Padding(
                                           padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                           child: TextFormField(
+                                            textCapitalization: TextCapitalization.sentences,
                                             controller: _model.nomOffreController,
                                             obscureText: false,
                                             decoration: InputDecoration(
@@ -1049,6 +1051,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                             child: FFButtonWidget(
                                               onPressed: () async {
                                                 await Future.delayed(Duration(seconds: 2));
+                                                print(widget.searchI);
                                                 saveOffre(widget.searchI['doc_id']);
                                                 showCustomSnackBar(context, 'Offre mise à jour');
                                               },

@@ -127,6 +127,7 @@ class PharmaJobSearchData {
 
     for (var search in snapshot.docs) {
       Map<String, dynamic> data = search.data() as Map<String, dynamic>;
+      data['doc_id'] = search.id;
       if (data['user_id'] == currenuserID) {
         mySearch.add(data);
         print('USER8ID' + data['user_id'].toString());

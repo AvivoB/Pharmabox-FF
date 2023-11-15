@@ -172,6 +172,7 @@ class _PopupSignalementState extends State<PopupSignalement> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                   child: TextFormField(
+                    textCapitalization: TextCapitalization.sentences,
                     minLines: 12,
                     controller: _model.comment,
                     obscureText: false,

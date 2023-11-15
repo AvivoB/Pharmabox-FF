@@ -51,6 +51,7 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.searchSaved);
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
