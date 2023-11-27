@@ -270,7 +270,9 @@ class _PharmaBlablaAddPostState extends State<PharmaBlablaAddPost> {
                               enableDrag: false,
                               context: context,
                               builder: (bottomSheetContext) {
-                                return DraggableScrollableSheet(builder: (BuildContext context, ScrollController scrollController) {
+                                return DraggableScrollableSheet(
+                                  initialChildSize: 0.75,
+                                  builder: (BuildContext context, ScrollController scrollController) {
                                   return GestureDetector(
                                     onTap: () => '',
                                     child: Padding(

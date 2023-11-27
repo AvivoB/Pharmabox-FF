@@ -53,7 +53,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 1.0,
-          height: MediaQuery.of(context).size.height * 0.70,
+          height: MediaQuery.of(context).size.height * 0.75,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
@@ -165,7 +165,7 @@ class _PopupGroupementWidgetState extends State<PopupGroupementWidget> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.height * 0.50,
+                  height: MediaQuery.of(context).size.height * 0.54,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),

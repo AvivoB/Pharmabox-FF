@@ -569,29 +569,28 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                               return Container();
                             }
 
+                            // Simule ici la recherche en Full Text en filtrants les requetes Firestores
                             final filteredDocuments = users?.where((document) {
-                              final data =
-                                  document.data() as Map<String, dynamic>;
+                              final data = document.data() as Map<String, dynamic>;
                               final nom = data['nom'] ?? '';
                               final prenom = data['prenom'] ?? '';
+                              final usernameEnOrdre = data['nom'] != null && data['prenom'] != null ? data['nom'] +' '+ data['prenom'] : '';
+                              final usernameEnDesordre = data['nom'] != null && data['prenom'] != null ? data['prenom'] +' '+ data['nom'] : '';
                               final city = data['city'] ?? '';
                               final codepostal = data['code_postal'] ?? '';
                               final poste = data['poste'] ?? '';
                               final country = data['country'] ?? '';
 
                               // Comparez le titre avec le terme de recherche (en minuscules).
-                              return (nom.toLowerCase().contains(
-                                      searchTerms?.toLowerCase() ?? '') ||
-                                  prenom.toLowerCase().contains(
-                                      searchTerms?.toLowerCase() ?? '') ||
-                                  city.toLowerCase().contains(
-                                      searchTerms?.toLowerCase() ?? '') ||
-                                  codepostal.toLowerCase().contains(
-                                      searchTerms?.toLowerCase() ?? '') ||
-                                  poste.toLowerCase().contains(
-                                      searchTerms?.toLowerCase() ?? '') ||
-                                  country.toLowerCase().contains(
-                                      searchTerms?.toLowerCase() ?? ''));
+                              return (
+                                nom.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                prenom.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                city.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                codepostal.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                poste.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                usernameEnOrdre.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                usernameEnDesordre.toLowerCase().contains(searchTerms?.toLowerCase() ?? '') ||
+                                country.toLowerCase().contains(searchTerms?.toLowerCase() ?? ''));
                             }).toList();
 
                             return Column(
@@ -625,9 +624,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                                           as Map<String, dynamic>;
                                       return Padding(
                                         padding: const EdgeInsets.all(16.0),
-                                        child: CardUserWidget(
+                                        child: data['nom'] != null && data['prenom'] != null ? CardUserWidget(
                                           data: data,
-                                        ),
+                                        ) : Container(),
                                       );
                                     },
                                   ),

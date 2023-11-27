@@ -585,7 +585,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                                     enableDrag: false,
                                                     context: context,
                                                     builder: (bottomSheetContext) {
-                                                      return DraggableScrollableSheet(builder: (BuildContext context, ScrollController scrollController) {
+                                                      return DraggableScrollableSheet(
+                                                        initialChildSize: 0.75,
+                                                        builder: (BuildContext context, ScrollController scrollController) {
                                                         return GestureDetector(
                                                           onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
                                                           child: Padding(

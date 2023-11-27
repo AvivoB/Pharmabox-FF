@@ -263,7 +263,6 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                               ),
                             ),
                           ),
-                          if (widget.data['contact_pharma']['email'] != '')
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                               child: Container(

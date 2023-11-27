@@ -384,7 +384,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                             ),
                                                           ),
                                                           Container(
-                                                            width: MediaQuery.of(context).size.width * 0.7,
+                                                            width: MediaQuery.of(context).size.width * 0.6,
                                                             decoration: BoxDecoration(
                                                               color: FlutterFlowTheme.of(context).secondaryBackground,
                                                             ),

@@ -34,7 +34,7 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
     if (query.isNotEmpty) {
       final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&components=country:' + widget.countryCode + '&key=$googleMapsApi&language=fr'));
       final json = jsonDecode(response.body);
-
+       widget.onPlaceSelected(query);
       if (json['status'] == 'OK') {
         setState(() {
           _predictions = json['predictions'];
@@ -67,6 +67,7 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
   void initState() {
     super.initState();
     _searchController.text = widget.initialValue ?? '';
+    widget.onPlaceSelected(widget.initialValue ?? '');
   }
 
   @override

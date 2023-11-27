@@ -6,6 +6,7 @@ import 'package:pharmabox/composants/card_searchs_profile/card_searchs_profile.d
 import 'package:pharmabox/custom_code/widgets/button_network_manager.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/discussion_user/discussion_user_widget.dart';
+import 'package:pharmabox/flutter_flow/chat/index.dart';
 import 'package:pharmabox/popups/popup_signalement/popup_signalement_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,19 +68,11 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
     // Use collection group to make query across all collections
     QuerySnapshot queryUsers = await FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: widget.userId).get();
 
-    QuerySnapshot queryPharmacies = await FirebaseFirestore.instance.collection('pharmacies').where('reseau', arrayContains: widget.userId).get();
-
-    for (var doc in queryPharmacies?.docs ?? []) {
-      var data = doc.data();
-      data['documentId'] = doc.id;
-      data['type'] = 'pharmacie';
-      networkUser.add(data);
-    }
-
     // Split users based on their 'poste' field
     for (var doc in queryUsers?.docs ?? []) {
       var data = doc.data();
       data['type'] = 'user';
+      data['documentId'] = doc.id;
       networkUser.add(data);
     }
   }
@@ -347,72 +340,72 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
-                                              if(userData['telephone'] != '' && userData['afficher_tel'])
-                                              Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                      colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
-                                                      stops: [0.0, 1.0],
-                                                      begin: AlignmentDirectional(1.0, 0.0),
-                                                      end: AlignmentDirectional(-1.0, 0),
-                                                    ),
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: Padding(
-                                                    padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
-                                                    child: FlutterFlowIconButton(
-                                                      borderColor: Color(0x0042D2FF),
-                                                      borderRadius: 30.0,
-                                                      borderWidth: 0.0,
-                                                      buttonSize: 40.0,
-                                                      fillColor: Colors.white,
-                                                      icon: Icon(
-                                                        Icons.phone,
-                                                        color: Color(0xFF42D2FF),
-                                                        size: 24.0,
+                                              if (userData['telephone'] != '' && userData['afficher_tel'])
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                        colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                                        stops: [0.0, 1.0],
+                                                        begin: AlignmentDirectional(1.0, 0.0),
+                                                        end: AlignmentDirectional(-1.0, 0),
                                                       ),
-                                                      onPressed: () async {
-                                                        await launch('tel:' + userData['telephone']);
-                                                      },
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                                      child: FlutterFlowIconButton(
+                                                        borderColor: Color(0x0042D2FF),
+                                                        borderRadius: 30.0,
+                                                        borderWidth: 0.0,
+                                                        buttonSize: 40.0,
+                                                        fillColor: Colors.white,
+                                                        icon: Icon(
+                                                          Icons.phone,
+                                                          color: Color(0xFF42D2FF),
+                                                          size: 24.0,
+                                                        ),
+                                                        onPressed: () async {
+                                                          await launch('tel:' + userData['telephone']);
+                                                        },
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              if(userData['email'] != '' && userData['afficher_email'])
-                                              Padding(
-                                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                      colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
-                                                      stops: [0.0, 1.0],
-                                                      begin: AlignmentDirectional(1.0, 0.0),
-                                                      end: AlignmentDirectional(-1.0, 0),
-                                                    ),
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: Padding(
-                                                    padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
-                                                    child: FlutterFlowIconButton(
-                                                      borderColor: Color(0x0042D2FF),
-                                                      borderRadius: 30.0,
-                                                      borderWidth: 0.0,
-                                                      buttonSize: 40.0,
-                                                      fillColor: Colors.white,
-                                                      icon: Icon(
-                                                        Icons.mail_outline_rounded,
-                                                        color: Color(0xFF42D2FF),
-                                                        size: 24.0,
+                                              if (userData['email'] != '' && userData['afficher_email'])
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                        colors: [Color(0xFF42D2FF), Color(0xFF7CEDAC)],
+                                                        stops: [0.0, 1.0],
+                                                        begin: AlignmentDirectional(1.0, 0.0),
+                                                        end: AlignmentDirectional(-1.0, 0),
                                                       ),
-                                                      onPressed: ()  async {
-                                                        await launch('mailto:' + userData['email']);
-                                                      },
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                                                      child: FlutterFlowIconButton(
+                                                        borderColor: Color(0x0042D2FF),
+                                                        borderRadius: 30.0,
+                                                        borderWidth: 0.0,
+                                                        buttonSize: 40.0,
+                                                        fillColor: Colors.white,
+                                                        icon: Icon(
+                                                          Icons.mail_outline_rounded,
+                                                          color: Color(0xFF42D2FF),
+                                                          size: 24.0,
+                                                        ),
+                                                        onPressed: () async {
+                                                          await launch('mailto:' + userData['email']);
+                                                        },
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
                                               Container(
                                                 decoration: BoxDecoration(
                                                   gradient: LinearGradient(
@@ -1232,7 +1225,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                     ),
                                                   ),
                                                   Container(
-                                                    width: MediaQuery.of(context).size.width * 0.6,
+                                                    width: MediaQuery.of(context).size.width * 0.8,
                                                     decoration: BoxDecoration(
                                                       color: FlutterFlowTheme.of(context).secondaryBackground,
                                                     ),
@@ -1262,7 +1255,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                               padding: const EdgeInsets.only(top: 15.0),
                               child: Column(
                                 children: [
-                                  for (var i in networkUser) i['type'] == 'user' ? CardUserWidget(data: i) : CardPharmacieWidget(data: i),
+                                  for (var i in networkUser) i['documentId'] != currentUserUid ? CardUserWidget(data: i) : Container(),
                                 ],
                               ),
                             ),

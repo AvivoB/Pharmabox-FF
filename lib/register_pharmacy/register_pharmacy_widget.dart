@@ -332,17 +332,21 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                     enableDrag: true,
                                                     context: context,
                                                     builder: (bottomSheetContext) {
-                                                      return GestureDetector(
-                                                        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                        child: Padding(
-                                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                          child: PopupGroupementWidget(onTap: (value) {
-                                                            print(value);
-                                                            var groupement = context.read<ProviderPharmacieRegister>();
-                                                            groupement.selectGroupement(value);
-                                                          }),
-                                                        ),
-                                                      );
+                                                      return DraggableScrollableSheet(
+                                                          initialChildSize: 0.75,
+                                                          builder: (BuildContext context, ScrollController scrollController) {
+                                                            return GestureDetector(
+                                                              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                                              child: Padding(
+                                                                padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                                child: PopupGroupementWidget(onTap: (value) {
+                                                                  print(value);
+                                                                  var groupement = context.read<ProviderPharmacieRegister>();
+                                                                  groupement.selectGroupement(value);
+                                                                }),
+                                                              ),
+                                                            );
+                                                          });
                                                     },
                                                   ).then((value) => setState(() {}));
                                                 },
@@ -425,15 +429,20 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                                     enableDrag: true,
                                                     context: context,
                                                     builder: (bottomSheetContext) {
-                                                      return GestureDetector(
-                                                        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                        child: Padding(
-                                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                          child: PopupGroupementWidget(onTap: (value) {
-                                                            var groupement = context.read<ProviderPharmacieRegister>();
-                                                            groupement.selectGroupement(value);
-                                                          }),
-                                                        ),
+                                                      return DraggableScrollableSheet(
+                                                        initialChildSize: 0.75,
+                                                        builder: (BuildContext context, ScrollController scrollController) {
+                                                          return GestureDetector(
+                                                            onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                                            child: Padding(
+                                                              padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                              child: PopupGroupementWidget(onTap: (value) {
+                                                                var groupement = context.read<ProviderPharmacieRegister>();
+                                                                groupement.selectGroupement(value);
+                                                              }),
+                                                            ),
+                                                          );
+                                                        }
                                                       );
                                                     },
                                                   ).then((value) => setState(() {}));

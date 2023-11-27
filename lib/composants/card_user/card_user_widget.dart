@@ -220,6 +220,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          if(widget.data['afficher_tel'])
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                             child: Container(
@@ -252,6 +253,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               ),
                             ),
                           ),
+                          if(widget.data['afficher_email'])
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                             child: Container(

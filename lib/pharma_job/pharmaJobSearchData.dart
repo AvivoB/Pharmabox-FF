@@ -8,11 +8,17 @@ import '../constant.dart';
 class PharmaJobSearchData {
   // Recherche des offres en fonctions des filtres de recherche
   Future<List> filterRechercheToFindOffre(filters) async {
+    Map<String, dynamic> userData = await getCurrentUserData();
+
     CollectionReference offres = FirebaseFirestore.instance.collection('offres');
     Query filteredQuery = offres;
     print("----------FILTERS NORMAL-------------");
     print(filters);
     print("----------END---FILTERS-------------");
+
+    filteredQuery = filteredQuery.where('poste', isEqualTo: userData['poste']);
+
+    print("----------" + userData['poste'] + "-------------");
 
     // Recherche par contrat OK
     if (!filters['contrats'].contains('Intérimaire') && filters['contrats'] != null && filters['contrats'].isNotEmpty) {

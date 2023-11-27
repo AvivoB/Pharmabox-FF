@@ -10,7 +10,8 @@ Application Flutter Pharmabox
  - Branche : dev-aviel
  - Projet Firebase : pharmaff-dab40
  - Notifications push : OneSignal
- 
+ - Adresse mail du compte google : pharmaboxdb@gmail.com
+ - Adresse mail du compte Apple : avielber26@gmail.com
 
 ## Installation du projet en local
 
@@ -102,20 +103,34 @@ flutter build appbundle
 ```
 
 ## Builder l'application pour IOS
-#### Effacer les dépendances qui posent soucis
+Effacer les dépendances puis les réinstaller avec ces commandes
 ```bash
 flutter clean
 ```
 ```bash
 flutter pub get
 ```
+Ensuite se rendre dans le dossier 'ios' et taper ces commandes
 ```bash
 pod install
 ```
+Sur les MAC M1
+```bash
+arch -x86_64 pod install
+```
+Ensuite :
 ```bash
 pod update
 ```
 #### Builder l'application IOS
 ```bash
-flutter build
+flutter build ipa
 ```
+
+
+## Utilisation de CodeMagic
+Afin de fluidifier le déploiement de l'application, sur Google Play et App Store, 
+un processus CI/CD est exécuté avec CodeMagic, il est relié au dépot Github qui 
+stocke le projet.
+
+CodeMagic est configuré avec les identifiants et clés d'api Google Play pour la publication auto des MAJ de l'application

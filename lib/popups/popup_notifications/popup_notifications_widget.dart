@@ -22,6 +22,8 @@ class PopupNotificationsWidget extends StatefulWidget {
 class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
   late PopupNotificationsModel _model;
 
+  List allNotifs = [];
+
   @override
   void setState(VoidCallback callback) {
     super.setState(callback);
@@ -39,6 +41,12 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
     _model.maybeDispose();
 
     super.dispose();
+  }
+
+  void deleteNotifications(all) {
+    for (var i = 0; i < all.length; i++) {
+      FirebaseFirestore.instance.collection('notifications').doc(allNotifs[i].id).delete();
+    }
   }
 
   @override
@@ -85,6 +93,7 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                           size: 24.0,
                         ),
                         onPressed: () async {
+                          deleteNotifications(allNotifs);
                           Navigator.pop(context);
                         },
                       ),
@@ -103,6 +112,8 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
 
                         // Filtering out documents where 'for' does not equal the current user's ID.
                         List<DocumentSnapshot<Map<String, dynamic>>> documents = snapshot.data != null ? snapshot.data!.docs.where((doc) => doc.data()['for'] == currentUserId).toList() : [];
+
+                          allNotifs = documents;
 
                         if (documents.isEmpty) {
                           return Center(
@@ -145,11 +156,10 @@ class _PopupNotificationsWidgetState extends State<PopupNotificationsWidget> {
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                             ),
-                                            child: FadeInImage.assetNetwork(
-                                              image: userData != null && userData!['photoUrl'] != null ? userData!['photoUrl'] : '',
-                                              placeholder: 'assets/images/Group_18.png',
+                                            child: Image.network(
+                                              userData != null && userData!['photoUrl'] != null ? userData!['photoUrl'] : '',
                                               fit: BoxFit.cover,
-                                              imageErrorBuilder: (context, error, stackTrace) {
+                                              errorBuilder: (context, error, stackTrace) {
                                                 return Image.asset('assets/images/Group_18.png');
                                               },
                                             ),

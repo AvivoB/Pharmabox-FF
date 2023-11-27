@@ -38,6 +38,7 @@ class ButtonNetworkManager extends StatefulWidget {
 class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
   bool isInNetwork = false;
   String messageButton = 'Ajouter';
+  bool isCurrentUser = false;
 
   // Ajoute au réseau
   Future<void> addToNetwork() async {
@@ -85,6 +86,8 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
   Future<void> verifyInNetwork(String typeCollection, String docId) async {
     String currentUserId = await getCurrentUserId();
 
+    isCurrentUser = docId == currentUserId ? true : false;
+
     QuerySnapshot demandesSnapshot = await FirebaseFirestore.instance.collection('demandes_network').where('for', isEqualTo: docId).where('by_user', isEqualTo: currentUserId).get();
 
     if (demandesSnapshot.docs.isNotEmpty) {
@@ -129,7 +132,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
 
   @override
   Widget build(BuildContext context) {
-    if (isInNetwork) {
+    if (isInNetwork && !isCurrentUser) {
       return Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -155,14 +158,15 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
           },
         ),
       );
-    } else {
+    }
+    if (!isInNetwork && !isCurrentUser) {
       return Container(
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: GestureDetector(
             onTap: () async {
-              if(messageButton != 'Envoyée') {
+              if (messageButton != 'Envoyée') {
                 await addToNetwork();
               }
             },
@@ -187,5 +191,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
         ),
       );
     }
+
+    return Container();
   }
 }

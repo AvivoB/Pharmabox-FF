@@ -164,6 +164,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     selectedPharmaciesJobs.clear();
     items.clear();
     var data = await PharmaJobSearchData().filterRechercheToFindOffre(filters);
+    _getMesRecherches();
     setState(() {
       foundedOffres = data;
       int countArray = 0;
@@ -394,7 +395,9 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                                   onFilter: (filters) => {_findRecherche(filters)},
                                                 )
                                               : PopupRechercheWidget(
-                                                  onFilter: (filters) => {_findOffres(filters)},
+                                                  onFilter: (filters) {
+                                                    _findOffres(filters);
+                                                  },
                                                 ),
                                         );
                                       });
