@@ -116,8 +116,10 @@ class PharmaJobSearchData {
         DocumentSnapshot userDoc = await usersRef.doc(userId).get();
         Map<String, dynamic> userData = userDoc.exists ? userDoc.data() as Map<String, dynamic> : {};
 
+        if(userData['nom'] != null && userData['prenom'] != null) {
         uniqueSearch.add(userData); // Les Sets n'ajouteront pas de doublons
         uniqueUserIds.add(userId); // Ajouter l'userId au Set
+        }
       }
     }
     return uniqueSearch.toList();

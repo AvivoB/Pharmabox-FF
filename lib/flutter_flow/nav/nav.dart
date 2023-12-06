@@ -189,12 +189,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'Reseau',
           path: '/reseau',
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Reseau')
-              : NavBarPage(
-                  initialPage: 'Reseau',
-                  page: ReseauWidget(),
-                ),
+          builder: (context, params) => params.isEmpty ? NavBarPage(initialPage: 'Reseau') : ReseauWidget(),
         ),
         FFRoute(name: 'ReseauImportFromPhone', path: '/reseauImportFromPhone', builder: (context, params) => NavBarPage(initialPage: 'Reseau', page: ReseauImportFromPhone(type: params.getParam('type', ParamType.String)))),
         FFRoute(

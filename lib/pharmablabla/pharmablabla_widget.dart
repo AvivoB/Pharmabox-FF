@@ -341,36 +341,44 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                         return Text('Erreur: ${userSnapshot.error}');
                       }
 
-                      final userData = userSnapshot.data?.data() != null ? userSnapshot.data?.data() as Map<String, dynamic> : null;
-                      data['user'] = userData;
+                      if (userSnapshot.hasData) {
+                        final userData = userSnapshot.data?.data() != null ? userSnapshot.data?.data() as Map<String, dynamic> : null;
+                        data['user'] = userData;
 
-                      return FutureBuilder<QuerySnapshot>(
-                          future: FirebaseFirestore.instance.collection('pharmablabla').doc(document.id).collection('comments').get(),
-                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> subSnapshot) {
-                            if (subSnapshot.connectionState == ConnectionState.waiting) {
-                              return Container();
-                            }
+                        return FutureBuilder<QuerySnapshot>(
+                            future: FirebaseFirestore.instance.collection('pharmablabla').doc(document.id).collection('comments').get(),
+                            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> subSnapshot) {
+                              if (subSnapshot.connectionState == ConnectionState.waiting) {
+                                return Container();
+                              }
 
-                            final numSubDocuments = subSnapshot.data!.docs.length;
-                            data['post']['count_comment'] = numSubDocuments;
+                              if (subSnapshot.hasData) {
+                                final numSubDocuments = subSnapshot.data!.docs.length;
+                                data['post']['count_comment'] = numSubDocuments;
 
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                              child: GestureDetector(
-                                  child: userData != null ? CardPharmablabla(data: data) : Container(),
-                                  onTap: () {
-                                    context.pushNamed(
-                                      'PharmaBlablaSinglePost',
-                                      queryParams: {
-                                        'postId': serializeParam(
-                                          data['postId'],
-                                          ParamType.String,
-                                        ),
-                                      }.withoutNulls,
-                                    );
-                                  }),
-                            );
-                          });
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                                  child: GestureDetector(
+                                      child: userData != null ? CardPharmablabla(data: data) : Container(),
+                                      onTap: () {
+                                        context.pushNamed(
+                                          'PharmaBlablaSinglePost',
+                                          queryParams: {
+                                            'postId': serializeParam(
+                                              data['postId'],
+                                              ParamType.String,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      }),
+                                );
+                              } else {
+                                return Container();
+                              }
+                            });
+                      } else {
+                        return Container();
+                      }
                     },
                   );
                 },

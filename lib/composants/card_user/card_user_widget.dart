@@ -92,11 +92,10 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: FadeInImage.assetNetwork(
-                              image: widget.data != null && widget.data['photoUrl'] != null ? widget.data['photoUrl'] : '',
-                              placeholder: 'assets/images/Group_18.png',
+                            child: Image.network(
+                              widget.data != null && widget.data!['photoUrl'] != null ? widget.data!['photoUrl'] : '',
                               fit: BoxFit.cover,
-                              imageErrorBuilder: (context, error, stackTrace) {
+                              errorBuilder: (context, error, stackTrace) {
                                 return Image.asset('assets/images/Group_18.png');
                               },
                             ),
@@ -118,10 +117,19 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.40,
-                                child: Text(
-                                  widget.data['nom'] + ' ' + widget.data['prenom'],
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.data['nom'],
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      widget.data['prenom'],
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Container(

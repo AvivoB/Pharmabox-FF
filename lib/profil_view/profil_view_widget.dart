@@ -1255,7 +1255,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                               padding: const EdgeInsets.only(top: 15.0),
                               child: Column(
                                 children: [
-                                  for (var i in networkUser) i['documentId'] != currentUserUid ? CardUserWidget(data: i) : Container(),
+                                  for (var i in networkUser) i['documentId'] != currentUserUid && i['nom'] != null && i['prenom'] != null ? CardUserWidget(data: i) : Container(),
                                 ],
                               ),
                             ),

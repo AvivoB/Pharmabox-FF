@@ -468,6 +468,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                           )),
                             ),
                             for (var user in foundedRecherches)
+                            
                               CardUserWidget(
                                 data: user,
                               ),

@@ -1822,7 +1822,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                   padding: const EdgeInsets.only(top: 15.0),
                                   child: Column(
                                     children: [
-                                      for (var i in networkUser) i['type'] == 'user' ? CardUserWidget(data: i) : CardPharmacieWidget(data: i),
+                                      for (var i in networkUser) i['type'] == 'user' && i['nom'] != null && i['prenom'] != null ? CardUserWidget(data: i) : CardPharmacieWidget(data: i),
                                     ],
                                   ),
                                 ),

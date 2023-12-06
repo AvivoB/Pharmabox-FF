@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
+import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
+import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/popups/popup_import_contact/popup_import_contact_model.dart';
 import 'package:pharmabox/popups/popup_import_contact/popup_import_contact_widget.dart';
 
@@ -191,7 +193,6 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    
                     Container(
                       child: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance.collection('demandes_network').where('for', isEqualTo: currentUserUid).snapshots(),
@@ -206,28 +207,27 @@ class _ReseauWidgetState extends State<ReseauWidget> {
 
                           final documents = snapshot.data!.docs;
 
-                          
                           return Column(
                             children: [
                               if (documents.length > 0)
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Demandes d\'ajout ('+documents.length.toString()+')',
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    ),
-                                  ],
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 0.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Demandes d\'ajout (' + documents.length.toString() + ')',
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
                               Container(
                                 child: ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
@@ -438,7 +438,6 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                         },
                       ),
                     ),
-                    
                     Container(
                       child: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: currentUserUid).snapshots(),
@@ -448,49 +447,52 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                           }
 
                           if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Container();
+                            Container();
                           }
 
-                          final documents = snapshot.data!.docs;
-
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Dans mon réseau ('+documents.length.toString()+')',
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    ),
-                                  ],
+                          if (snapshot.hasData) {
+                            final documents = snapshot.data!.docs;
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 0.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Dans mon réseau (' + documents.length.toString() + ')',
+                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                child: ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: documents.length,
-                                  itemBuilder: (context, index) {
-                                    final userData = documents[index].data() as Map<String, dynamic>;
-                                    // Utilisez les données de l'utilisateur ici
-
-                                    return Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: CardUserWidget(data: userData),
-                                    );
-                                  },
+                                Container(
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: documents.length,
+                                    itemBuilder: (context, index) {
+                                      final userData = documents[index].data() as Map<String, dynamic>;
+                                      // Utilisez les données de l'utilisateur ici
+                                      if (userData['nom'] != null && userData['prenom'] != null)
+                                        return Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: CardUserWidget(data: userData),
+                                        );
+                                    },
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
+                              ],
+                            );
+                          } else {
+                            return Container();
+                          }
                         },
                       ),
                     ),
