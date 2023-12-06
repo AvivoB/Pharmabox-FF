@@ -8,6 +8,7 @@ import 'package:pharmabox/backend/backend.dart';
 import 'package:pharmabox/composants/card_searchs_profile/card_searchs_profile_model.dart';
 import 'package:pharmabox/custom_code/widgets/planningTable/custom_table.dart';
 import 'package:pharmabox/custom_code/widgets/prediction_localisation_offre_recherches.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_drop_down.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_theme.dart';
@@ -157,27 +158,30 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                width: 20,
-                                                height: 20,
-                                                decoration: ShapeDecoration(
-                                                  color: _model.isActive != null && _model.isActive! ? Color(0xFF6AD697) : Color(0xFFD67D6A),
-                                                  shape: OvalBorder(),
-                                                  shadows: [
-                                                    BoxShadow(
-                                                      color: _model.isActive != null && _model.isActive! ? Color(0x596AD697) : Color(0x59D67D6A),
-                                                      blurRadius: 4,
-                                                      offset: Offset(0, 0),
-                                                      spreadRadius: 4,
-                                                    )
-                                                  ],
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 20,
+                                                  height: 20,
+                                                  decoration: ShapeDecoration(
+                                                    color: _model.isActive != null && _model.isActive! ? Color(0xFF6AD697) : Color(0xFFD67D6A),
+                                                    shape: OvalBorder(),
+                                                    shadows: [
+                                                      BoxShadow(
+                                                        color: _model.isActive != null && _model.isActive! ? Color(0x596AD697) : Color(0x59D67D6A),
+                                                        blurRadius: 4,
+                                                        offset: Offset(0, 0),
+                                                        spreadRadius: 4,
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(width: 10),
-                                              Text(_model.isActive != null && _model.isActive! ? 'actif' : 'inactif', style: FlutterFlowTheme.of(context).bodySmall),
-                                            ],
+                                                SizedBox(width: 10),
+                                                Text(_model.isActive != null && _model.isActive! ? 'actif' : 'inactif', style: FlutterFlowTheme.of(context).bodySmall),
+                                              ],
+                                            ),
                                           ),
                                           if (isExpendedSearchOffer)
                                             Switch.adaptive(
@@ -189,6 +193,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                             ),
                                         ],
                                       ),
+                                      Text('Recherche valable 1 mois à partir du ' + DateFormat('dd/MM/yyyy').format(widget.searchI['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodySmall),
                                       if (isExpendedSearchOffer)
                                         Padding(
                                           padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 15.0),
@@ -478,7 +483,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                             controller: _model.tempspleinpartielValueController ??= FormFieldController<String>(_model.tempspleinpartielValue),
                                                             options: ['Temps plein', 'Temps partiel'],
                                                             onChanged: (val) => setState(() => _model.tempspleinpartielValue = val),
-                                                            width: MediaQuery.of(context).size.width * 0.8,
+                                                            width: MediaQuery.of(context).size.width * 0.75,
                                                             height: 50.0,
                                                             textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                   fontFamily: 'Poppins',
@@ -883,9 +888,9 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                     child: FFButtonWidget(
                                                       onPressed: () async {
                                                         // Navigator.pop(context);
-                                                        setState(() {
+                                                          await Future.delayed(Duration(seconds: 2));
                                                           saveRecherche(widget.searchI['doc_id']);
-                                                        });
+                                                          showCustomSnackBar(context, 'Recherche mise à jour');
                                                       },
                                                       text: 'Enregistrer',
                                                       options: FFButtonOptions(

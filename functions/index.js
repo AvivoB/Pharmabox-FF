@@ -293,21 +293,102 @@ exports.sendNotificationOnMessage = functions.firestore
 });
 
 
-// exports.extractKeywords = functions.firestore
-//     .document('pharmablabla/{documentId}')
-//     .onCreate(async (snap, context) => {
-//         const originalContent = snap.data().post_content;
-        
-//         // Ceci est un exemple très basique et devrait être remplacé par votre logique d'extraction de mots-clés.
-//         const wordsWithoutStopWords = originalContent.toLowerCase().split(' ').filter(word => word.length > 3);
-        
-//         const keywords = wordsWithoutStopWords.map(word => word);
-        
-//         // Mettre à jour le document avec les mots clés extraits.
-//         return snap.ref.update({ search_terms: keywords });
-//     });
+
+exports.sendMailDesactivePharmacie = functions.firestore
+  .document('pharmacies/{pharmacieId}')
+  .onUpdate(async (change, context) => {
+    const newValue = change.after.data();
+    const previousValue = change.before.data();
+
+    if (newValue.isValid === false && previousValue.isValid === true) {
+
+      const userId = newValue.user_id;
+
+      // Récupérer les informations de l'utilisateur depuis la collection 'users'
+      const userDoc = await admin.firestore().collection('users').doc(userId).get();
+      const userData = userDoc.data(); 
+
+      const MailDesactivationPath = path.join(__dirname, '/email_template/desactivation_pharmacie.html');
+      const MailDesactivationContent = fs.readFileSync(MailDesactivationPath, 'utf8');
+
+      const mailOptions = {
+        from: env.fromEmail,
+        to: userData['email'],
+        subject: 'Votre pharmacie a été désactivée',
+        html: MailDesactivationContent
+    };        
+      // Envoie le mail
+      return env.transporter.sendMail(mailOptions); // utilisez votre configuration d'environnement
+    }
+
+    return null;
+});
+
+exports.sendMailDesactiveCompte = functions.firestore
+  .document('users/{ueserId}')
+  .onUpdate(async (change, context) => {
+    const newValue = change.after.data();
+    const previousValue = change.before.data();
+
+    if (newValue.isValid === false && previousValue.isValid === true) {
+      // Le champ 'isValid' a changé de true à false
+      const userEmail = newValue.email; // Assurez-vous que votre document contient le champ 'email'
+
+      const MailComptePath = path.join(__dirname, '/email_template/desactivation_compte.html');
+      const MailDesactivationCompteContent = fs.readFileSync(MailComptePath, 'utf8');
+
+      const mailOptions = {
+        from: env.fromEmail,
+        to: userEmail,
+        subject: 'Votre compte a été désactivée',
+        html: MailDesactivationCompteContent
+    };        
+      // Envoie le mail
+      return env.transporter.sendMail(mailOptions); // utilisez votre configuration d'environnement
+    }
+
+    return null;
+});
 
 
+// exports.desactiveOffresRechercheSuperieur_A_1_Mois = functions.pubsub
+//   .schedule('every 24 hours')
+//   .timeZone('UTC')
+//   .onRun(async (context) => {
+//     try {
+//       const currentDate = new Date();
+//       const lastMonth = new Date();
+//       lastMonth.setMonth(currentDate.getMonth() - 1);
+
+//       // Mettez à jour les documents de la collection 'offres'
+//       const offresSnapshot = await firestore.collection('offres')
+//         .where('date_created', '<=', admin.firestore().Timestamp.fromDate(lastMonth))
+//         .get();
+
+//       const offresBatch = firestore.batch();
+//       offresSnapshot.forEach((doc) => {
+//         offresBatch.update(doc.ref, { isValid: false });
+//       });
+//       await offresBatch.commit();
+
+//       // Mettez à jour les documents de la collection 'recherches'
+//       const recherchesSnapshot = await firestore.collection('recherches')
+//         .where('date_created', '<=', admin.firestore().Timestamp.fromDate(lastMonth))
+//         .get();
+
+//       const recherchesBatch = firestore.batch();
+//       recherchesSnapshot.forEach((doc) => {
+//         recherchesBatch.update(doc.ref, { isValid: false });
+//       });
+//       await recherchesBatch.commit();
+
+//       console.log('Mise à jour des documents avec succès.');
+//       return null;
+//     } catch (error) {
+//       console.error('Erreur lors de la mise à jour des documents :', error);
+//       return null;
+//     }
+// });
 
 
 

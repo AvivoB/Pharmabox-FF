@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/desactivated_account/desactivated_account.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_add_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_single_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_widget.dart';
@@ -42,6 +43,7 @@ class AppStateNotifier extends ChangeNotifier {
 
   bool isComplete = true;
   bool isVerified = true;
+  bool isValid = true;
 
   bool get loading => user == null || showSplashImage;
   bool get loggedIn => user?.loggedIn ?? false;
@@ -57,10 +59,10 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(BaseAuthUser newUser) {
+  Future<void> update(BaseAuthUser newUser) async {
     initialUser ??= newUser;
     user = newUser;
-    checkIfUserIsComplete();
+    await checkIfUserIsComplete();
 
     // Refresh the app on auth change unless explicitly marked otherwise.
     if (notifyOnAuthChange) {
@@ -77,25 +79,20 @@ class AppStateNotifier extends ChangeNotifier {
   }
 
   Future<void> checkIfUserIsComplete() async {
-    String currentuserId = await getCurrentUserId();
-    // Référence à la collection 'users' et au document spécifique pour cet utilisateur
-    DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc(currentuserId);
-
-    // Obtenez le document pour cet utilisateur
-    DocumentSnapshot userDoc = await userRef.get();
-
-    // Vérifiez si le champ 'isComplete' est true
-    if (userDoc.exists) {
-      final data = userDoc.data() as Map<String, dynamic>; // Cast data to Map<String, dynamic>
-      isComplete = data['isComplete'] ? true : false;
-      isVerified = data['isVerified'] ? true : false;
-    } else {
-      isComplete = true;
-      isVerified = true;
-    }
+    Map<String, dynamic> userData = await getCurrentUserData();
+    
+    isComplete = userData['isComplete'];
+    isVerified = userData['isVerified'];
+    isValid = userData['isValid'];
+    // } else {
+    //   isComplete = true;
+    //   isVerified = true;
+    //   isValid = true;
+    // }
 
     print('PROFIL COMPLETE : ' + isComplete.toString());
     print('PROFIL VERIFIED : ' + isVerified.toString());
+    print('PROFIL VALID : ' + userData['isValid'].toString());
 
     // Informez les écouteurs que la propriété a changé
     notifyListeners();
@@ -113,6 +110,11 @@ Widget decideInitialPage(AppStateNotifier appStateNotifier) {
 
   if (appStateNotifier.isVerified == false) {
     return ValidateAccount();
+  }
+
+  if (appStateNotifier.isValid == false) {
+    print('desactived account');
+    return DesactivatedAccount();
   }
 
   return NavBarPage();

@@ -164,27 +164,30 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration: ShapeDecoration(
-                                          color: _model.isActive != null && _model.isActive! ? Color(0xFF6AD697) : Color(0xFFD67D6A),
-                                          shape: OvalBorder(),
-                                          shadows: [
-                                            BoxShadow(
-                                              color: _model.isActive != null && _model.isActive! ? Color(0x596AD697) : Color(0x59D67D6A),
-                                              blurRadius: 4,
-                                              offset: Offset(0, 0),
-                                              spreadRadius: 4,
-                                            )
-                                          ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          decoration: ShapeDecoration(
+                                            color: _model.isActive != null && _model.isActive! ? Color(0xFF6AD697) : Color(0xFFD67D6A),
+                                            shape: OvalBorder(),
+                                            shadows: [
+                                              BoxShadow(
+                                                color: _model.isActive != null && _model.isActive! ? Color(0x596AD697) : Color(0x59D67D6A),
+                                                blurRadius: 4,
+                                                offset: Offset(0, 0),
+                                                spreadRadius: 4,
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(_model.isActive != null && _model.isActive! ? 'actif' : 'inactif', style: FlutterFlowTheme.of(context).bodySmall),
-                                    ],
+                                        SizedBox(width: 10),
+                                        Text(_model.isActive != null && _model.isActive! ? 'actif' : 'inactif', style: FlutterFlowTheme.of(context).bodySmall),
+                                      ],
+                                    ),
                                   ),
                                   if (isExpendedSearchOffer)
                                     Switch.adaptive(
@@ -478,7 +481,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                                     controller: _model.tempspleinpartielValueController ??= FormFieldController<String>(widget.searchI['temps']),
                                                     options: ['Temps plein', 'Temps partiel'],
                                                     onChanged: (val) => setState(() => _model.tempspleinpartielValue = val),
-                                                    width: MediaQuery.of(context).size.width * 0.8,
+                                                    width: MediaQuery.of(context).size.width * 0.75,
                                                     height: 50.0,
                                                     textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                                           fontFamily: 'Poppins',

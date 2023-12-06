@@ -18,6 +18,8 @@ class PharmaJobSearchData {
 
     filteredQuery = filteredQuery.where('poste', isEqualTo: userData['poste']);
 
+    filteredQuery = filteredQuery.where('isActive', isEqualTo: true);
+
     print("----------" + userData['poste'] + "-------------");
 
     // Recherche par contrat OK
@@ -66,6 +68,8 @@ class PharmaJobSearchData {
     print("----------FILTERS TITULAIRES-------------");
     print(filters);
     print("----------END---FILTERS-------------");
+
+    filteredQuery = filteredQuery.where('isActive', isEqualTo: true);
 
     // Recherche par contrat OK
     if (!filters['contrats'].contains('Intérimaire') && filters['contrats'] != null && filters['contrats'].isNotEmpty) {
@@ -123,12 +127,14 @@ class PharmaJobSearchData {
     String currenuserID = await getCurrentUserId();
     bool isTitu = await checkIsTitulaire();
     List mySearch = [];
-    print('CURR USER step' + isTitu.toString());
+
     mySearch.clear();
     CollectionReference recherches = FirebaseFirestore.instance.collection(isTitu ? 'offres' : 'recherches');
     Query queryRecherche = recherches;
 
-    queryRecherche.where('user_id', isEqualTo: currenuserID);
+    queryRecherche = queryRecherche.where('user_id', isEqualTo: currenuserID);
+    queryRecherche = queryRecherche.where('isActive', isEqualTo: true);
+    
     QuerySnapshot snapshot = await queryRecherche.get();
 
     for (var search in snapshot.docs) {
@@ -136,8 +142,8 @@ class PharmaJobSearchData {
       data['doc_id'] = search.id;
       if (data['user_id'] == currenuserID) {
         mySearch.add(data);
-        print('USER8ID' + data['user_id'].toString());
-        print(data['user_id']);
+
+        print('SAVED SEARCHS ' + mySearch.toString());
       }
     }
 

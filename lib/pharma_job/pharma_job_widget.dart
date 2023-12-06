@@ -143,12 +143,13 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   void _getMesRecherches() async {
     var mesRecherches = await PharmaJobSearchData().getMesRecherches();
     print('MYSEARCH . ' + mesRecherches.toString());
-
+    // if(foundedOffres.isNotEmpty || foundedRecherches.isNotEmpty) {
     setState(() {
       // mesRecherches.clear();
       isTitulaire ? offres = mesRecherches : recherches = mesRecherches;
       isTitulaire ? _findRecherche(mesRecherches[0]) : _findOffres(mesRecherches[0]);
     });
+    // }
   }
 
   void _findRecherche(filters) async {
@@ -164,7 +165,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     selectedPharmaciesJobs.clear();
     items.clear();
     var data = await PharmaJobSearchData().filterRechercheToFindOffre(filters);
-    _getMesRecherches();
     setState(() {
       foundedOffres = data;
       int countArray = 0;
@@ -392,10 +392,18 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                           padding: MediaQuery.of(bottomSheetContext).viewInsets,
                                           child: isTitulaire
                                               ? PopupOffreWidget(
-                                                  onFilter: (filters) => {_findRecherche(filters)},
+                                                  onFilter: (filters, isSaved) {
+                                                    if (isSaved) {
+                                                      _getMesRecherches();
+                                                    }
+                                                    _findRecherche(filters);
+                                                  },
                                                 )
                                               : PopupRechercheWidget(
-                                                  onFilter: (filters) {
+                                                  onFilter: (filters, isSaved) {
+                                                    if (isSaved) {
+                                                      _getMesRecherches();
+                                                    }
                                                     _findOffres(filters);
                                                   },
                                                 ),

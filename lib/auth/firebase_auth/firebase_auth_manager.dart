@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import '../auth_manager.dart';
 import '../base_auth_user_provider.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
@@ -189,9 +190,15 @@ class FirebaseAuthManager extends AuthManager with EmailSignInManager, Anonymous
       return userCredential == null ? null : PharmaboxFirebaseUser.fromUserCredential(userCredential);
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.message!}')),
-      );
+
+      var message = e.message;
+      if(message!.contains('disabled')) {
+        showCustomSnackBar(context, 'Votre compte a été désactivé', isError: true);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: heyy ${e.message!}')),
+        );
+      }
       return null;
     }
   }

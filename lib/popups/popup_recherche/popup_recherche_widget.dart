@@ -23,7 +23,7 @@ import '/custom_code/widgets/index.dart' as custom_widgets;
 
 class PopupRechercheWidget extends StatefulWidget {
   const PopupRechercheWidget({Key? key, this.onFilter}) : super(key: key);
-  final Function(dynamic)? onFilter;
+  final Function(dynamic, bool)? onFilter;
 
   @override
   _PopupRechercheWidgetState createState() => _PopupRechercheWidgetState();
@@ -100,9 +100,11 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
       'date_created': Timestamp.now(),
       'isActive': true,
     };
-    widget.onFilter!(createRecherche);
+    
 
     if (_model.saveSearch == true) {
+      widget.onFilter!(createRecherche, true);
+
       firestore.collection('recherches').add(createRecherche).then((docRef) {
         showCustomSnackBar(context, 'Votre recherche a été enregistrée');
         print('Données enregistrées avec succès ! ID du document : ${docRef.id}');
@@ -110,6 +112,8 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
         print('Erreur lors de l\'enregistrement des données : $error');
         showCustomSnackBar(context, 'Erreur d\'enregistrement', isError: true);
       });
+    } else {
+      widget.onFilter!(createRecherche, false);
     }
   }
 

@@ -292,6 +292,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                 )
                               ],
                             ),
+                            if(pharmacieData['presentation'] != '')
                             SizedBox(
                               height: 25,
                             ),
@@ -392,6 +393,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                           Column(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
+                                              if(pharmacieData['contact_pharma']['email'] != '')
                                               Padding(
                                                 padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                                 child: Row(children: [
@@ -401,9 +403,13 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                                     size: 28.0,
                                                   ),
                                                   SizedBox(width: 10),
-                                                  Text(pharmacieData['contact_pharma']['email'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
+                                                  
+                                                  Container(
+                                                    child: Text(pharmacieData['contact_pharma']['email'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                                  )
                                                 ]),
                                               ),
+                                              if(pharmacieData['contact_pharma']['telephone'] != '')
                                               Padding(
                                                 padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                                 child: Row(children: [

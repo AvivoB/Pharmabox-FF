@@ -131,8 +131,10 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
           groupement: groupementDataPlace,
           id: countArray++);
       setState(() {
-        items.add(place);
-        pharmacieInPlace.add(dataWithId);
+        if(dataWithId['isValid']) {
+          items.add(place);
+          pharmacieInPlace.add(dataWithId);
+        }
       });
       _manager.setItems(items);
       _manager.updateMap();
@@ -559,6 +561,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
                           stream: FirebaseFirestore.instance
                               .collection('users')
                               .where(FieldPath.documentId, isNotEqualTo: currentUserUid)
+                              .where('isVerified', isEqualTo: true)
+                              .where('isComplete', isEqualTo: true)
+                              .where('isValid', isEqualTo: true)
                               .snapshots(),
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot> snapshot) {

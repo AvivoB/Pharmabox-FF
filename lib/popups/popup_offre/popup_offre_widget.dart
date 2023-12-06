@@ -23,7 +23,7 @@ export 'popup_offre_model.dart';
 
 class PopupOffreWidget extends StatefulWidget {
   const PopupOffreWidget({Key? key, this.onFilter}) : super(key: key);
-  final Function(dynamic)? onFilter;
+  final Function(dynamic, bool)? onFilter;
 
   @override
   _PopupOffreWidgetState createState() => _PopupOffreWidgetState();
@@ -106,9 +106,9 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
     if (_model.posteValue != null && _model.enregistrerOffre == true) {
       firestore.collection('offres').add(createOffre);
       showCustomSnackBar(context, 'Votre offre a été enregistrée');
-      widget.onFilter!(createOffre);
+      widget.onFilter!(createOffre, true);
     } else if (_model.enregistrerOffre == false) {
-      widget.onFilter!(createOffre);
+      widget.onFilter!(createOffre, false);
     } else {
       showCustomSnackBar(context, 'Merci de renseigner le poste recherché', isError: true);
     }
