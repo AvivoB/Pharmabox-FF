@@ -1179,6 +1179,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                           Container(
+                                            width: MediaQuery.of(context).size.width * 0.5,
                                             child: LevelProgressBar(
                                               level: pharmacieData['tendances'][0]['Ordonances'],
                                               isUser: false,
@@ -1203,6 +1204,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                           Container(
+                                            width: MediaQuery.of(context).size.width * 0.5,
                                             child: LevelProgressBar(
                                               level: pharmacieData['tendances'][0]['Cosmétiques'],
                                               isUser: false,
@@ -1227,6 +1229,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                           Container(
+                                            width: MediaQuery.of(context).size.width * 0.5,
                                             child: LevelProgressBar(
                                               level: pharmacieData['tendances'][0]['Phyto / aroma'],
                                               isUser: false,
@@ -1251,6 +1254,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                           Container(
+                                            width: MediaQuery.of(context).size.width * 0.5,
                                             child: LevelProgressBar(
                                               level: pharmacieData['tendances'][0]['Nutrition'],
                                               isUser: false,
@@ -1275,12 +1279,180 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                           Container(
+                                            width: MediaQuery.of(context).size.width * 0.5,
                                             child: LevelProgressBar(
                                               level: pharmacieData['tendances'][0]['Conseil'],
                                               isUser: false,
                                             ),
                                           )
                                         ])
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 12,
+                                        color: Color(0x2B1F5C67),
+                                        offset: Offset(10, 10),
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(15),
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Equipe',
+                                              style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                                    fontFamily: 'Poppins',
+                                                    color: FlutterFlowTheme.of(context).primaryText,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.groups,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text(pharmacieData['equipe']['nb_pharmaciens'].toString() + ' Pharmaciens', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.groups,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text(pharmacieData['equipe']['nb_preparateurs'].toString() + ' Préparateurs', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.groups,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text(pharmacieData['equipe']['nb_rayonnistes'].toString() + ' Rayonnistes', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.groups,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text(pharmacieData['equipe']['nb_conseillers'].toString() + ' Conseillers', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.groups,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text(pharmacieData['equipe']['nb_etudiants'].toString() + ' Etudiants', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.groups,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text(pharmacieData['equipe']['nb_etudiants_6eme_annee'].toString() + ' Etudiants 6e année', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Container(
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.groups,
+                                                  color: greyColor,
+                                                  size: 28.0,
+                                                ),
+                                                SizedBox(width: 10, height: 30),
+                                                Text(pharmacieData['equipe']['nb_apprentis'].toString() + ' Apprentis', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
                                       ],
                                     ),
                                   ),

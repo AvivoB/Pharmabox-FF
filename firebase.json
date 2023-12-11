@@ -3,6 +3,9 @@
     "source": "functions"
   },
   "emulators": {
+    "auth": {
+      "port": 4300
+    },
     "functions": {
       "port": 4200
     },

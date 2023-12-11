@@ -345,7 +345,6 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     providerPharmacieUser.setHoraire(userData != null ? userData['horaires'] : null);
     providerPharmacieUser.setPharmacieLocation(userData != null ? userData['situation_geographique']['lat_lng'][0] : '', userData != null ? userData['situation_geographique']['lat_lng'][1] : '');
 
-    getNetworkData();
     if (_isLoading) {
       return Center(child: ProgressIndicatorPharmabox());
     } else {
@@ -586,18 +585,18 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                                     context: context,
                                                     builder: (bottomSheetContext) {
                                                       return DraggableScrollableSheet(
-                                                        initialChildSize: 0.75,
-                                                        builder: (BuildContext context, ScrollController scrollController) {
-                                                        return GestureDetector(
-                                                          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-                                                          child: Padding(
-                                                            padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                            child: PopupGroupementWidget(onTap: (value) {
-                                                              providerPharmacieUser.selectGroupement(value);
-                                                            }),
-                                                          ),
-                                                        );
-                                                      });
+                                                          initialChildSize: 0.75,
+                                                          builder: (BuildContext context, ScrollController scrollController) {
+                                                            return GestureDetector(
+                                                              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+                                                              child: Padding(
+                                                                padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                                child: PopupGroupementWidget(onTap: (value) {
+                                                                  providerPharmacieUser.selectGroupement(value);
+                                                                }),
+                                                              ),
+                                                            );
+                                                          });
                                                     },
                                                   ).then((value) => setState(() {}));
                                                 },

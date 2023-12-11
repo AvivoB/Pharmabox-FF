@@ -194,9 +194,16 @@ class FirebaseAuthManager extends AuthManager with EmailSignInManager, Anonymous
       var message = e.message;
       if(message!.contains('disabled')) {
         showCustomSnackBar(context, 'Votre compte a été désactivé', isError: true);
-      } else {
+      } 
+      if(message!.contains('There is no user record corresponding to this identifier')) {
+        showCustomSnackBar(context, 'Identifiants inccorects', isError: true);
+      } 
+      if(message!.contains('The email address is already in use by another account')) {
+        showCustomSnackBar(context, 'Identifiants inccorects', isError: true);
+      } 
+      else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: heyy ${e.message!}')),
+          SnackBar(content: Text('Error: ${e.message!}')),
         );
       }
       return null;

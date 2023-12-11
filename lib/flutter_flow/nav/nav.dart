@@ -8,6 +8,7 @@ import 'package:pharmabox/desactivated_account/desactivated_account.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_add_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_single_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_widget.dart';
+import 'package:pharmabox/profil/profil_suppression.dart';
 import 'package:pharmabox/profil_view_pharmacie/profil_view_pharmacie.dart';
 import 'package:pharmabox/register_validation_account/register_validation_account.dart';
 import 'package:pharmabox/reseau/reseau_import_from_phone.dart';
@@ -120,6 +121,14 @@ Widget decideInitialPage(AppStateNotifier appStateNotifier) {
   return NavBarPage();
 }
 
+Widget redirectIfAlreadyInscrit(AppStateNotifier appStateNotifier) {
+  if (appStateNotifier.isComplete == true && appStateNotifier.isVerified == true) {
+    return NavBarPage();
+  }
+
+  return RegisterStepWidget();
+}
+
 GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
@@ -149,7 +158,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'RegisterStep',
           path: '/registerStep',
-          builder: (context, params) => RegisterStepWidget(),
+          builder: (context, params) => redirectIfAlreadyInscrit(appStateNotifier),
         ),
         FFRoute(
           name: 'ValidateAccount',
@@ -234,7 +243,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'Disucssions',
           path: '/disucssions',
           builder: (context, params) => DisucssionsWidget(),
-        )
+        ),
+        FFRoute(
+          name: 'DeleteAccount',
+          path: '/deleteAccount',
+          builder: (context, params) => params.isEmpty ? NavBarPage(initialPage: 'DeleteAccount') : ProfilDeleteAccount(),
+        ),
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       urlPathStrategy: UrlPathStrategy.path,
     );

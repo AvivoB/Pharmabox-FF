@@ -166,10 +166,11 @@ class _FFButtonWidgetState extends State<FFButtonWidget> {
       return Container(
         height: widget.options.height,
         width: widget.options.width,
+        
         child: ElevatedButton.icon(
           icon: Padding(
             padding: widget.options.iconPadding ?? EdgeInsets.zero,
-            child: widget.icon ??
+            child: loading ? Container() : widget.icon ??
                 FaIcon(
                   widget.iconData,
                   size: widget.options.iconSize,

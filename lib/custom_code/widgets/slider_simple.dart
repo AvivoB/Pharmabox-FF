@@ -23,6 +23,7 @@ class _SliderSimpleState extends State<SliderSimple> {
   void initState() {
     super.initState();
     _currentStep = widget.slider ?? 0;
+    widget.onChanged?.call(widget.slider ?? 0);
   }
 
   int _currentStep = 0;

@@ -351,46 +351,152 @@ exports.sendMailDesactiveCompte = functions.firestore
 });
 
 
-// exports.desactiveOffresRechercheSuperieur_A_1_Mois = functions.pubsub
-//   .schedule('every 24 hours')
-//   .timeZone('UTC')
-//   .onRun(async (context) => {
-//     try {
-//       const currentDate = new Date();
-//       const lastMonth = new Date();
-//       lastMonth.setMonth(currentDate.getMonth() - 1);
+exports.deleteAccount = functions.https.onRequest( async (req, res) => {
+  
+  if (!req.body.userId) {
+    res.status(400).send('User ID is required');
+    return;
+  }
+  // Récupérez l'id de l'utilisateur
+  const userId = req.body.userId;
 
-//       // Mettez à jour les documents de la collection 'offres'
-//       const offresSnapshot = await firestore.collection('offres')
-//         .where('date_created', '<=', admin.firestore().Timestamp.fromDate(lastMonth))
-//         .get();
+  console.log('suppression du compte: ' + userId);
 
-//       const offresBatch = firestore.batch();
-//       offresSnapshot.forEach((doc) => {
-//         offresBatch.update(doc.ref, { isValid: false });
-//       });
-//       await offresBatch.commit();
+  const demandeNetworkRef = admin.firestore().collection('demandes_network');
+  const demandeNetwork1 = await demandeNetworkRef.where('by_user', '==', userId).get();
+  const demandeNetwork2 = await demandeNetworkRef.where('for', '==', userId).get();
 
-//       // Mettez à jour les documents de la collection 'recherches'
-//       const recherchesSnapshot = await firestore.collection('recherches')
-//         .where('date_created', '<=', admin.firestore().Timestamp.fromDate(lastMonth))
-//         .get();
+  const likesRef = admin.firestore().collection('likes');
+  const likes1 = await likesRef.where('document_id', '==', userId).get();
+  const likes2 = await likesRef.where('liked_by', '==', userId).get();
 
-//       const recherchesBatch = firestore.batch();
-//       recherchesSnapshot.forEach((doc) => {
-//         recherchesBatch.update(doc.ref, { isValid: false });
-//       });
-//       await recherchesBatch.commit();
+  const notificationsRef = admin.firestore().collection('notifications');
+  const notifications1 = await notificationsRef.where('by_user', '==', userId).get();
+  const notifications2 = await notificationsRef.where('for', '==', userId).get();
 
-//       console.log('Mise à jour des documents avec succès.');
-//       return null;
-//     } catch (error) {
-//       console.error('Erreur lors de la mise à jour des documents :', error);
-//       return null;
-//     }
-// });
+  const offresRef = admin.firestore().collection('offres');
+  const offres = await offresRef.where('user_id', '==', userId).get();
+
+  const recherchesRef = admin.firestore().collection('recherches');
+  const recherches = await recherchesRef.where('user_id', '==', userId).get();
+
+  const pharmablablaRef = admin.firestore().collection('pharmablabla');
+  const pharmablabla = await pharmablablaRef.where('userId', '==', userId).get();
+
+  const pharmaciesRef = admin.firestore().collection('pharmacies');
+  const pharmacies = await pharmaciesRef.where('user_id', '==', userId).get();
 
 
+  const signalementsRef = admin.firestore().collection('notifications');
+  const signalements1 = await signalementsRef.where('docId', '==', userId).get();
+  const signalements2 = await signalementsRef.where('fromId', '==', userId).get();
+
+  const usersRef = admin.firestore().collection('users');
+
+  const network = await usersRef.where('reseau', 'array-contains', userId).get();
+
+  
+
+  const users = await usersRef.where('uid', '==', userId).get();
+
+  const messagesRef = await admin.firestore().collection("messages");
+  const messages = await messagesRef.get();
+
+
+
+
+ 
+  const deletePromises = [];
+    // demandes_network
+    demandeNetwork1.forEach((doc) => {
+      console.log('suppression des demandes réseau')
+      deletePromises.push(doc.ref.delete());
+    });
+    demandeNetwork2.forEach((doc) => {
+      console.log('suppression des demandes réseau')
+      deletePromises.push(doc.ref.delete());
+    });
+
+    // Likes
+    likes1.forEach((doc) => {
+      console.log('suppression des likes')
+      deletePromises.push(doc.ref.delete());
+    });
+    likes2.forEach((doc) => {
+      console.log('suppression des likes')
+      deletePromises.push(doc.ref.delete());
+    });
+
+    // notifications
+    notifications1.forEach((doc) => {
+      console.log('suppression des notifications')
+      deletePromises.push(doc.ref.delete());
+    });
+    notifications2.forEach((doc) => {
+      console.log('suppression des notifications')
+      deletePromises.push(doc.ref.delete());
+    });
+
+    // Offres
+    offres.forEach((doc) => {
+      console.log('suppression des offres')
+      deletePromises.push(doc.ref.delete());
+    });
+    // recherches
+    recherches.forEach((doc) => {
+      console.log('suppression des recherches')
+      deletePromises.push(doc.ref.delete());
+    });
+    // Pharmablabla
+    pharmablabla.forEach((doc) => {
+      console.log('suppression des post pharmablabla')
+      deletePromises.push(doc.ref.delete());
+    });
+    // Pharmacies
+    pharmacies.forEach((doc) => {
+      console.log('suppression de la paharmacie ')
+      deletePromises.push(doc.ref.delete());
+    });
+
+    // Signalements
+    signalements1.forEach((doc) => {
+      console.log('suppression des signalements')
+      deletePromises.push(doc.ref.delete());
+    });
+    signalements2.forEach((doc) => {
+      console.log('suppression des signalements')
+      deletePromises.push(doc.ref.delete());
+    });
+
+    // Mise a jour du réseau des autres
+    network.forEach(async (doc) => {
+      const reseauArray = doc.data().reseau || [];
+      console.log('suppression du réseau')
+      // Supprimer 'userId' du tableau
+      reseauArrayFiltered = reseauArray.filter(id => id !== userId);
+      deletePromises.push(doc.ref.update({ reseau: reseauArrayFiltered }));
+    });
+
+      
+    messages.forEach((document) => {
+      console.log('suppression des messages')
+      // Supprimez le document si son nom contient l'ID de l'utilisateur
+      if (document.id.includes(userId)) {
+        deletePromises.push(document.ref.delete());
+      }
+    });
+
+    // Users
+    users.forEach((doc) => {
+      console.log('suppression de l\'utilisateur')
+      deletePromises.push(doc.ref.delete());
+    });
+
+    
+    await Promise.all(deletePromises);
+
+    await admin.auth().deleteUser(userId);
+});
 
 
 

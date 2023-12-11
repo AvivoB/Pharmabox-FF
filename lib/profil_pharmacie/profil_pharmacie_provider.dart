@@ -82,6 +82,11 @@ class ProviderPharmacieUser extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setAllTendances(tendances) {
+    _tendences = tendences;
+    notifyListeners();
+  }
+
   void setMissions(missions) {
     _selectedMissions = missions;
     // notifyListeners();
@@ -129,4 +134,5 @@ class ProviderPharmacieUser extends ChangeNotifier {
     _selectedHoraires = listeHoraire;
     // notifyListeners();
   }
+
 }

@@ -54,7 +54,7 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Pharmabox souhaites acceder a vos contacts</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Pour effectuer une recherche à proximité, cette application nécessite l'accès à votre position actuelle.</string>
+	<string>L'application Pharmabox a besoin de votre localisation pour vous fournir des données en fonction de votre localisation. Par exemple pour rechercher une Pharmacie à proximité et ainsi vous proposer les meilleurs résulats possibles.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Pour pouvoir télécharger des données, cette application nécessite l'autorisation d'accéder à la photothèque.</string>
 	<key>PermissionGroupNotification</key>

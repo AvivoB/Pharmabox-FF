@@ -12,6 +12,7 @@ import 'package:pharmabox/custom_code/widgets/prediction_ville.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
+import 'package:pharmabox/profil/profil_suppression.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_user/card_user_widget.dart';
@@ -1811,6 +1812,22 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                       ),
                                     ),
                                   ),
+                                  TextButton(
+                                    onPressed: (){
+                                      Navigator.push(context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProfilDeleteAccount(),
+                                        ),
+                                      );
+                                    }, 
+                                    child: Text(
+                                      'Supprimer mon compte', 
+                                      style: FlutterFlowTheme.of(context).titleSmall.override(
+                                      fontFamily: 'Poppins',
+                                      color: blueColor,
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),))
                                 ],
                               ),
                             ),

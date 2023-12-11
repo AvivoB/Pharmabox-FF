@@ -1583,11 +1583,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          width: MediaQuery.of(context).size.width * 0.65,
+                                          width: MediaQuery.of(context).size.width * 0.70,
                                           constraints: BoxConstraints(
                                             maxWidth: MediaQuery.of(context).size.width * 0.8,
                                           ),
@@ -1618,11 +1618,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          width: MediaQuery.of(context).size.width * 0.65,
+                                          width: MediaQuery.of(context).size.width * 0.70,
                                           constraints: BoxConstraints(
                                             maxWidth: MediaQuery.of(context).size.width * 0.8,
                                           ),
