@@ -1647,7 +1647,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                               //     ),
                                               //   ),
                                               // );
-                                              await launch('https://pharma-box.fr/mentions-legales-application.html');
+                                              await launch('https://www.pharma-box.fr/mentions-legales-application.html');
                                             },
                                             child: Text(
                                               'J\'accepte les conditions d\'utilisation, cliquez ici pour les consulter',

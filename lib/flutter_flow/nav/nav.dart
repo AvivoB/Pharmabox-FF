@@ -158,7 +158,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'RegisterStep',
           path: '/registerStep',
-          builder: (context, params) => redirectIfAlreadyInscrit(appStateNotifier),
+          builder: (context, params) => RegisterStepWidget(),
         ),
         FFRoute(
           name: 'ValidateAccount',
