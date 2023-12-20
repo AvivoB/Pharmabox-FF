@@ -71,11 +71,14 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
   Future<void> getCurrentPosition() async {
     isLoading = true;
     bool isLocationPermissionGranted = await requestLocationPermission();
+    var permission = await Geolocator.checkPermission();
 
-    if (isLocationPermissionGranted) {
+    print(permission);
+    if (isLocationPermissionGranted || permission == LocationPermission.whileInUse) {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+      print(position);
 
       setState(() {
         _currentCameraPosition = CameraPosition(

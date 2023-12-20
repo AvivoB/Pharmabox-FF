@@ -122,6 +122,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
         docData['localisation_job'] = pharmacieData['situation_geographique']['data']['rue'] + ', ' + pharmacieData['situation_geographique']['data']['ville'] + ', ' + pharmacieData['situation_geographique']['data']['postcode'] + ', ' + pharmacieData['situation_geographique']['data']['country'] ?? '';
         offresPharma.add(docData);
       }
+      getuserData(pharmacieData['user_id']);
     } else {
       // Gérer le cas où les données de l'utilisateur n'existent pas.
       return;
@@ -148,7 +149,6 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    getuserData(pharmacieData != null ? pharmacieData['user_id'] : '');
 
     if (_isLoading) {
       return ProgressIndicatorPharmabox();
@@ -194,7 +194,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                           child: Column(children: [
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
                                   child: Column(
@@ -244,14 +244,6 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                                       color: blackColor,
                                                       fontSize: 14.0,
                                                     ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
-                                              child: Icon(
-                                                FFIcons.kbadgeOr,
-                                                color: Color(0xFFFFF492),
-                                                size: 24.0,
                                               ),
                                             ),
                                           ],

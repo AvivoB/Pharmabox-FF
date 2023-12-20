@@ -67,13 +67,17 @@ Future<String> getPharmacyByUserId() async {
 }
 
 Future<Map<String, dynamic>> getCurrentUserData() async {
-  final user = FirebaseAuth.instance.currentUser;
-  final userDoc = FirebaseFirestore.instance.collection('users').doc(user?.uid);
-  DocumentSnapshot userSnapshot = await userDoc.get();
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(user?.uid);
+    DocumentSnapshot userSnapshot = await userDoc.get();
 
-  // Vérifiez si le document utilisateur existe et contient des données
-  if (userSnapshot.exists && userSnapshot.data() != null) {
-    return userSnapshot.data() as Map<String, dynamic>;
+    // Vérifiez si le document utilisateur existe et contient des données
+    if (userSnapshot.exists && userSnapshot.data() != null) {
+      return userSnapshot.data() as Map<String, dynamic>;
+    }
+  } catch (e) {
+    
   }
 
   return {};
