@@ -268,7 +268,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                     if (pharmacieData['groupement'][0]['image'].toString() != 'Autre.jpg')
                                       Image.asset(
                                         'assets/groupements/' + pharmacieData['groupement'][0]['image'].toString(),
-                                        width: 150.0,
+                                        width: 120.0,
                                         height: 50.0,
                                         fit: BoxFit.contain,
                                       ),
@@ -403,8 +403,8 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                                     size: 28.0,
                                                   ),
                                                   SizedBox(width: 10),
-                                                  
                                                   Container(
+                                                    width: MediaQuery.of(context).size.width * 0.75,
                                                     child: Text(pharmacieData['contact_pharma']['email'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)),
                                                   )
                                                 ]),
@@ -890,7 +890,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                               Text('Borne de télé-médecine', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                             ]),
                                           ),
-                                        if (pharmacieData['missions'] != '' && pharmacieData['missions'].contains('externalisé'))
+                                        if (pharmacieData['missions'] != '' && pharmacieData['missions'].contains('Préparation externalisé'))
                                           Padding(
                                             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
@@ -1327,6 +1327,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ],
                                         ),
+                                        if(int.parse(pharmacieData['equipe']['nb_pharmaciens']) > 0)
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1345,6 +1346,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                         ]),
+                                        if(int.parse(pharmacieData['equipe']['nb_preparateurs']) > 0)
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1363,6 +1365,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                         ]),
+                                        if(int.parse(pharmacieData['equipe']['nb_rayonnistes']) > 0)
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1381,6 +1384,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                         ]),
+                                        if(int.parse(pharmacieData['equipe']['nb_conseillers']) > 0)
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1399,6 +1403,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                         ]),
+                                        if(int.parse(pharmacieData['equipe']['nb_etudiants']) > 0)
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1417,6 +1422,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                         ]),
+                                        if(int.parse(pharmacieData['equipe']['nb_etudiants_6eme_annee']) > 0)
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1435,6 +1441,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             ),
                                           ),
                                         ]),
+                                        if(int.parse(pharmacieData['equipe']['nb_apprentis']) > 0)
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

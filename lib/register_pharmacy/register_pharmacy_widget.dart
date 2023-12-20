@@ -96,7 +96,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
       missions.add('Borne de télé-médecine');
     }
     if (_model.missionPreparationValue) {
-      missions.add('externalisé');
+      missions.add('Préparation externalisé');
     } else {
       missions.add('par l\'équipe');
     }

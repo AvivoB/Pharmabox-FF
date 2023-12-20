@@ -258,7 +258,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
 
               final documents = snapshot.data!.docs;
               if (documents.isEmpty) {
-                return Text('Fin des documents');
+                return Text('');
               }
 
               var filteredDocuments = documents.where((document) {

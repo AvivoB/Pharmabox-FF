@@ -245,7 +245,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
       missions.add('Borne de télé-médecine');
     }
     if (_model.missionPreparationValue) {
-      missions.add('externalisé');
+      missions.add('Préparation externalisé');
     } else {
       missions.add('par l\'équipe');
     }
@@ -2197,15 +2197,15 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                                     colorFilter: ColorFilter.mode(Color(0xFF595A71), BlendMode.srcIn),
                                                   )),
                                               Text(
-                                                'Étiquettes électroniques',
+                                                'Étiquettes éléctroniques',
                                                 style: FlutterFlowTheme.of(context).bodyMedium,
                                               ),
                                             ],
                                           ),
                                           Switch.adaptive(
-                                            value: providerPharmacieUser.selectedConfort.contains('Étiquettes électroniques') ? true : false,
+                                            value: providerPharmacieUser.selectedConfort.contains('Etiquettes éléctroniques') ? true : false,
                                             onChanged: (newValue) async {
-                                              setState(() => providerPharmacieUser.updateConfort(newValue, 'Étiquettes électroniques'));
+                                              setState(() => providerPharmacieUser.updateConfort(newValue, 'Etiquettes éléctroniques'));
                                             },
                                             activeColor: Color(0xFF7CEDAC),
                                           ),
