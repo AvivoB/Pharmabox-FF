@@ -60,9 +60,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => RegisterStepModel());
+    var namefull = currentUserDisplayName.split(' ');
+    print('heyy' +currentUserDisplayName);
 
-    _model.nomFamilleController ??= TextEditingController();
-    _model.prenomController ??= TextEditingController();
+    _model.nomFamilleController ??= TextEditingController(text: namefull.last);
+    _model.prenomController ??= TextEditingController(text: namefull.first);
     _model.emailController ??= TextEditingController(text: currentUserEmail);
     _model.telephoneController ??= TextEditingController();
     _model.birthDateController ??= TextEditingController();
@@ -84,9 +86,9 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
   Widget build(BuildContext context) {
     Future<void> _pickImage({required ImageSource source}) async {
       final pickedFile = await ImagePicker().getImage(source: source);
-      
-      if(pickedFile != null) {
-              final croppedImage = await ImageCropper().cropImage(
+
+      if (pickedFile != null) {
+        final croppedImage = await ImageCropper().cropImage(
           sourcePath: pickedFile.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           compressQuality: 50,
@@ -98,24 +100,24 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
             ),
           ],
         );
-      
-      if (croppedImage != null) {
-        setState(() {
-          _image = File(croppedImage.path);
-          _isLoading = true;
-        });
 
-        final Reference storageRef = FirebaseStorage.instance.ref().child('profile_pictures/${DateTime.now()}.png');
-        final UploadTask uploadTask = storageRef.putFile(_image!);
-        final TaskSnapshot downloadUrl = (await uploadTask);
+        if (croppedImage != null) {
+          setState(() {
+            _image = File(croppedImage.path);
+            _isLoading = true;
+          });
 
-        String url = (await downloadUrl.ref.getDownloadURL());
+          final Reference storageRef = FirebaseStorage.instance.ref().child('profile_pictures/${DateTime.now()}.png');
+          final UploadTask uploadTask = storageRef.putFile(_image!);
+          final TaskSnapshot downloadUrl = (await uploadTask);
 
-        setState(() {
-          _isLoading = false;
-          _imageURL = url;
-        });
-      }
+          String url = (await downloadUrl.ref.getDownloadURL());
+
+          setState(() {
+            _isLoading = false;
+            _imageURL = url;
+          });
+        }
       }
     }
 
@@ -625,76 +627,76 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                     ),
                                     Text('Séléctionnez si vous souhaitez être contacté par téléphone ou E-mail.', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12)),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.phone,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.phone,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              'Afficher mon numéro de téléphone',
-                                              style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12),
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.afficherTelephone ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.afficherTelephone = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                                              child: Icon(
-                                                Icons.email_outlined,
-                                                color: Color(0xFF595A71),
-                                                size: 28,
+                                              Text(
+                                                'Afficher mon numéro de téléphone',
+                                                style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12),
                                               ),
-                                            ),
-                                            Text(
-                                              'Afficher mon E-mail',
-                                              style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12),
-                                            ),
-                                          ],
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.afficherEmail ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() {
-                                              _model.afficherEmail = newValue;
-                                            });
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model.afficherTelephone ??= false,
+                                            onChanged: (newValue) async {
+                                              setState(() => _model.afficherTelephone = newValue);
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  )
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+                                                child: Icon(
+                                                  Icons.email_outlined,
+                                                  color: Color(0xFF595A71),
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Afficher mon E-mail',
+                                                style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12),
+                                              ),
+                                            ],
+                                          ),
+                                          Switch.adaptive(
+                                            value: _model.afficherEmail ??= false,
+                                            onChanged: (newValue) async {
+                                              setState(() {
+                                                _model.afficherEmail = newValue;
+                                              });
+                                            },
+                                            activeColor: Color(0xFF7CEDAC),
+                                          ),
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),

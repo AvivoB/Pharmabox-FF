@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
@@ -34,29 +35,32 @@ Future<UserCredential> appleSignIn() async {
   // // include a nonce in the credential request. When signing in in with
   // // Firebase, the nonce in the id token returned by Apple, is expected to
   // // match the sha256 hash of `rawNonce`.
-  // final rawNonce = generateNonce();
-  // final nonce = sha256ofString(rawNonce);
+if(Platform.isIOS) {
+    final rawNonce = generateNonce();
+  final nonce = sha256ofString(rawNonce);
 
-  // // Request credential for the currently signed in Apple account.
-  // final appleCredential = await SignInWithApple.getAppleIDCredential(
-  //   webAuthenticationOptions: WebAuthenticationOptions(clientId: 'com.pharmabox.mobileappsignin', redirectUri: Uri.parse('https://pharmaff-dab40.firebaseapp.com/__/auth/handler')),
-  //   scopes: [
-  //     AppleIDAuthorizationScopes.email,
-  //     AppleIDAuthorizationScopes.fullName,
-  //   ],
-  //   nonce: nonce,
-  // );
+  // Request credential for the currently signed in Apple account.
+  final appleCredential = await SignInWithApple.getAppleIDCredential(
+    scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ],
+    nonce: nonce,
+  );
 
-  // // Create an `OAuthCredential` from the credential returned by Apple.
-  // final oauthCredential = OAuthProvider("apple.com").credential(
-  //   idToken: appleCredential.identityToken,
-  //   rawNonce: rawNonce,
-  // );
+  // Create an `OAuthCredential` from the credential returned by Apple.
+  final oauthCredential = OAuthProvider("apple.com").credential(
+    idToken: appleCredential.identityToken,
+    rawNonce: rawNonce,
+  );
 
-  final appleProvider = AppleAuthProvider();
+  return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+} else {
+  final appleProvider = AppleAuthProvider().addScope('email').addScope('name');
   return await FirebaseAuth.instance.signInWithProvider(appleProvider);
+}
 
   // Sign in the user with Firebase. If the nonce we generated earlier does
   // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-  // return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
 }
