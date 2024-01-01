@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:pharmabox/constant.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
@@ -262,6 +264,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   ),
                                 ),
                               ),
+                              if(Platform.isAndroid)
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                 child: Container(
@@ -320,65 +323,65 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 50.0,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 4.0,
-                                        color: Color(0x301F5C67),
-                                        offset: Offset(0.0, 4.0),
-                                      )
-                                    ],
-                                    // gradient: LinearGradient(
-                                    //   colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                    //   stops: [0.0, 1.0],
-                                    //   begin: AlignmentDirectional(1.0, -1.0),
-                                    //   end: AlignmentDirectional(-1.0, 1.0),
-                                    // ),
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: FFButtonWidget(
-                                    onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
-                                      final user = await authManager.signInWithApple(context);
-                                      if (user == null) {
-                                        return;
-                                      }
+                              // Padding(
+                              //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                              //   child: Container(
+                              //     width: double.infinity,
+                              //     height: 50.0,
+                              //     decoration: BoxDecoration(
+                              //       boxShadow: [
+                              //         BoxShadow(
+                              //           blurRadius: 4.0,
+                              //           color: Color(0x301F5C67),
+                              //           offset: Offset(0.0, 4.0),
+                              //         )
+                              //       ],
+                              //       // gradient: LinearGradient(
+                              //       //   colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                              //       //   stops: [0.0, 1.0],
+                              //       //   begin: AlignmentDirectional(1.0, -1.0),
+                              //       //   end: AlignmentDirectional(-1.0, 1.0),
+                              //       // ),
+                              //       color: Colors.white,
+                              //       borderRadius: BorderRadius.circular(15.0),
+                              //     ),
+                              //     child: FFButtonWidget(
+                              //       onPressed: () async {
+                              //         GoRouter.of(context).prepareAuthEvent();
+                              //         final user = await authManager.signInWithApple(context);
+                              //         if (user == null) {
+                              //           return;
+                              //         }
 
-                                      context.goNamedAuth('Explorer', mounted);
-                                    },
-                                    text: 'Connexion avec Apple',
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.apple,
-                                      color: blackColor,
-                                    ),
-                                    options: FFButtonOptions(
-                                      width: double.infinity,
-                                      height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                      color: Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                                            fontFamily: 'Poppins',
-                                            color: blackColor,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                      elevation: 0.0,
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              //         context.goNamedAuth('Explorer', mounted);
+                              //       },
+                              //       text: 'Connexion avec Apple',
+                              //       icon: FaIcon(
+                              //         FontAwesomeIcons.apple,
+                              //         color: blackColor,
+                              //       ),
+                              //       options: FFButtonOptions(
+                              //         width: double.infinity,
+                              //         height: 40.0,
+                              //         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              //         iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              //         color: Color(0x00FFFFFF),
+                              //         textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                              //               fontFamily: 'Poppins',
+                              //               color: blackColor,
+                              //               fontSize: 18.0,
+                              //               fontWeight: FontWeight.w600,
+                              //             ),
+                              //         elevation: 0.0,
+                              //         borderSide: BorderSide(
+                              //           color: Colors.transparent,
+                              //           width: 1.0,
+                              //         ),
+                              //         borderRadius: BorderRadius.circular(8.0),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
