@@ -50,7 +50,7 @@
         
             // Pour iOS
             else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                window.location.href = 'https://apps.apple.com/app/idHQ9ZW2HDZC.com.pharmabox.mobileapp';
+                window.location.href = 'https://apps.apple.com/fr/app/pharma-box/id6469619913';
             }
         
             // Pour les autres plateformes
