@@ -73,10 +73,27 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
       );
       if (pickedImage != null) pickedImages = [pickedImage];
     } else if (option == 'gallery') {
-      pickedImages = await ImagePicker().pickMultiImage(
-        imageQuality: 50,
-        maxWidth: 800,
-      );
+      //pickedImages = await ImagePicker().pickMultiImage(
+       // imageQuality: 50,
+       // maxWidth: 800,
+      //);
+      try {
+        pickedImages = await ImagePicker().pickMultiImage(
+          imageQuality: 50,
+          maxWidth: 800,
+        );
+        
+        if (pickedImages != null) {
+          // Process pickedImages
+        } else {
+          // User canceled the pick operation
+          print('Image picking canceled by the user');
+        }
+      } catch (e) {
+        // Handle other exceptions
+        print('Unexpected error picking images: $e');
+      }
+
     }
 
     if (pickedImages != null) {

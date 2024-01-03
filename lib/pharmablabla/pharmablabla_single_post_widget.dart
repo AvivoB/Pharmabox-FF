@@ -314,7 +314,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                                                     ),
                                                   ),
                                                 ),
-                                                Text(userData != null ? userData['nom'] ?? '' + ' ' + userData['prenom'] : 'Utilisateur', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w600)),
+                                                Text(userData != null ? userData['nom'] + ' ' + userData['prenom'] : 'Utilisateur', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w600)),
                                               ],
                                             ),
                                           if (isCurrentUser) Text('Vous', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w600)),
@@ -326,7 +326,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                                               child: Row(
                                                 mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
                                                 children: [
-                                                  Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
+                                                  Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp']?.toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
                                                   SizedBox(width: 10),
                                                   LikeButtonWidget(
                                                     documentId: doc.id,

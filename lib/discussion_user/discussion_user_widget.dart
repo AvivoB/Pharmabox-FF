@@ -229,13 +229,22 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                         padding: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
                         child: Align(
                           alignment: (isCurrentUser ? Alignment.topRight : Alignment.topLeft),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: (isCurrentUser ? greenColor : Colors.grey.shade200),
-                            ),
-                            padding: EdgeInsets.all(12),
-                            child: Text(doc['message'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isCurrentUser ? Colors.white : blackColor, fontSize: 14, fontWeight: FontWeight.w400)),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: (isCurrentUser ? greenColor : Colors.grey.shade200),
+                                ),
+                                padding: EdgeInsets.all(12),
+                                child: Column(
+                                  children: [
+                                    Text(doc['message'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isCurrentUser ? Colors.white : blackColor, fontSize: 14, fontWeight: FontWeight.w400)),
+                                  ],
+                                ),
+                              ),
+                              //Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp']?.toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
+                            ],
                           ),
                         ),
                       );
