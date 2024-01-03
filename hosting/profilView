@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta name="apple-itunes-app" content="app-id=HQ9ZW2HDZC.com.pharmabox.mobileapp">
+
 
     <!-- Pour Facebook/Open Graph -->
     <meta property="og:url" content="https://votre-domaine.web.app/votre-page" />
@@ -49,12 +51,12 @@
         
             // Pour iOS
             else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                window.location.href = 'https://apps.apple.com/app/id[VOTRE_ID_APP]';
+                window.location.href = 'https://apps.apple.com/app/idHQ9ZW2HDZC.com.pharmabox.mobileapp';
             }
         
             // Pour les autres plateformes
             else {
-                window.location.href = 'https://votrewebsite.com';
+                window.location.href = 'https://pharma-box.fr';
             }
         }
         
