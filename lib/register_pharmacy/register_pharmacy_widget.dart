@@ -157,7 +157,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
       'equipe': {
         'nb_pharmaciens': (_model.phonePharmacieController2.text != '') ? _model.phonePharmacieController2.text : '0',
         'nb_preparateurs': (_model.nbPreparateurController.text != '') ? _model.nbPreparateurController.text : '0',
-        'nb_rayonnistes': (_model.nbRayonnistesController.text != '') ? _model.nbPreparateurController.text : '0',
+        'nb_rayonnistes': (_model.nbRayonnistesController.text != '') ? _model.nbRayonnistesController.text : '0',
         'nb_conseillers': (_model.nbConseillersController.text != '') ? _model.nbConseillersController.text : '0',
         'nb_apprentis': (_model.nbApprentiController.text != '') ? _model.nbApprentiController.text : '0',
         'nb_etudiants': (_model.nbEtudiantsController.text != '') ? _model.nbEtudiantsController.text : '0',
