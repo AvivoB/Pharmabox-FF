@@ -237,9 +237,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       );
                                       if (user == null) {
                                         return;
-                                      }
-
-                                      context.goNamedAuth('Explorer', mounted);
+                                      } else {
+                                        context.goNamedAuth('Explorer', mounted);
+                                      } 
+                                      
                                     },
                                     text: 'Se connecter',
                                     options: FFButtonOptions(

@@ -287,7 +287,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
               // Filtre sur les LGO
               filteredDocuments = filteredDocuments.where((document) {
                 final data = document.data() as Map<String, dynamic>;
-                final names = currentUser['lgo'].map((item) => item['name']).toList();
+                //final names = currentUser['lgo'] != null ? currentUser['lgo'].map((item) => item['name']).toList() : [] ;
 
                 if (currentUser['id'] == data['userId']) {
                   return true;
@@ -295,7 +295,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                 if (data['LGO'] == 'Par LGO' || !data.containsKey('LGO')) {
                   return true;
                 }
-                if (currentUser['lgo'] != null && names.contains(data['LGO'])) {
+                if (currentUser['lgo'] != null && currentUser['lgo'].map((item) => item['name']).toList().contains(data['LGO'])) {
                   return true;
                 }
 
