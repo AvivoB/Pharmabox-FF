@@ -77,7 +77,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset('assets/icons/logo-pharma-box.png', width: 30),
+                                    ClipRRect(child: Image.asset('assets/icons/logo-pharma-box.png', width: 30), borderRadius: BorderRadius.circular(10.0)),
                                     SizedBox(height: 10, width: 10),
                                     Text('Pharma-Box', style: FlutterFlowTheme.of(context).displaySmall),
                                   ],
