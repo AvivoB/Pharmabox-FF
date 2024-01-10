@@ -133,7 +133,7 @@ class RegisterStepModel extends FlutterFlowModel {
       competences.add('TROD');
     }
 
-    if (nomFamille != '' && prenom != '' && city != '' && country != '' && poste != null && allowCGU && allowNotifs) {
+    if (nomFamille != '' && prenom != '' && city != '' && country != '' && poste != null && allowCGU) {
       usersRef.doc(currentUser?.uid).update({
         'id': currentUser?.uid,
         'nom': nomFamille,

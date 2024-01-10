@@ -196,63 +196,149 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
         ),
         body: Column(
           children: [
+            
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('messages').doc(conversationId).collection('message').orderBy('timestamp', descending: true).snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Une erreur s\'est produite'));
-                  }
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('messages')
+                      .doc(conversationId)
+                      .collection('message')
+                      .orderBy('timestamp', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Une erreur s\'est produite'));
+                    }
 
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return Center(
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(
                         child: Text(
-                      'Démarrez une conversation avec ce membre',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
-                    ));
-                  }
-
-                  final mergedList = snapshot.data!.docs;
-
-                  return ListView(
-                    reverse: true,
-                    padding: EdgeInsets.all(12.0),
-                    children: mergedList.map((doc) {
-                      bool isCurrentUser = doc['fromId'] == currentUser;
-
-                      if (doc['receiverId'] == currentUser) {
-                        FirebaseFirestore.instance.collection('messages').doc(conversationId).collection('message').doc(doc.id).update({'isViewed': true}).then((value) {}).catchError((error) {
-                              print('Error updating document: $error');
-                            });
-                      }
-                      return Container(
-                        padding: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
-                        child: Align(
-                          alignment: (isCurrentUser ? Alignment.topRight : Alignment.topLeft),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: (isCurrentUser ? greenColor : Colors.grey.shade200),
-                                ),
-                                padding: EdgeInsets.all(12),
-                                child: Column(
-                                  children: [
-                                    Text(doc['message'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isCurrentUser ? Colors.white : blackColor, fontSize: 14, fontWeight: FontWeight.w400)),
-                                  ],
-                                ),
-                              ),
-                              //Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp']?.toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
-                            ],
+                          'Démarrez une conversation avec ce membre',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: blackColor,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       );
-                    }).toList(),
-                  );
-                },
+                    }
+
+                    final mergedList = snapshot.data!.docs;
+
+                    // Grouper les messages par jour
+                    Map<String, List<DocumentSnapshot>> groupedMessages = {};
+                    mergedList.forEach((doc) {
+                      String date = doc['timestamp'] != null ? DateFormat('dd/MM/yyyy', 'fr_FR').format(doc['timestamp']?.toDate()) : '';
+
+                      if (!groupedMessages.containsKey(date)) {
+                        groupedMessages[date] = [];
+                      }
+
+                      groupedMessages[date]?.add(doc);
+                    });
+
+                    // Créer une liste d'éléments à afficher
+                    List<Widget> messageWidgets = [];
+
+                    groupedMessages.forEach((date, messages) {
+                      
+
+                      
+
+                      // Ajouter les messages pour cette date
+                      messageWidgets.addAll(messages.map<Widget>((doc) {
+                        bool isCurrentUser = doc['fromId'] == currentUser;
+
+                        if (doc['receiverId'] == currentUser) {
+                          FirebaseFirestore.instance.collection('messages').doc(conversationId).collection('message').doc(doc.id).update({'isViewed': true}).then((value) {}).catchError((error) {
+                            print('Error updating document: $error');
+                          });
+                        }
+
+                        return Container(
+                          padding: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
+                          child: Align(
+                            alignment: (isCurrentUser ? Alignment.topRight : Alignment.topLeft),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: (isCurrentUser ? greenColor : Colors.grey.shade200),
+                                  ),
+                                  padding: EdgeInsets.all(12),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        doc['message'],
+                                        style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          color: isCurrentUser ? Colors.white : blackColor,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          
+                                          Text(
+                                            doc['timestamp'] != null ? DateFormat('HH:mm', 'fr_FR').format(doc['timestamp']?.toDate()) : '',
+                                            style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              color: greyColor,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          if(isCurrentUser) SizedBox(width: 10),
+                                          if(isCurrentUser) Icon(Icons.done_all, size: 18, color: doc['isViewed'] ? blueColor : greyColor,),
+                                          
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList());
+
+                      // Ajouter la date en tant que séparateur
+                      messageWidgets.add(
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: Center(
+                            child: Text(
+                              date,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    });
+
+                    
+
+                    
+
+                    return ListView(
+                      reverse: true,
+                      padding: EdgeInsets.all(12.0),
+                      children: messageWidgets,
+                    );
+                  },
+                ),
               ),
-            ),
+
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               decoration: BoxDecoration(

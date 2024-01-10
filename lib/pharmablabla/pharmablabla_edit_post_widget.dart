@@ -41,14 +41,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stopwordies/stopwordies.dart';
 
-class PharmaBlablaAddPost extends StatefulWidget {
-  const PharmaBlablaAddPost({Key? key}) : super(key: key);
+class PharmaBlablaEditPost extends StatefulWidget {
+  const PharmaBlablaEditPost({Key? key, this.postId, this.data}) : super(key: key);
+  final String? postId;
+  final String? data;
 
   @override
-  _PharmaBlablaAddPostState createState() => _PharmaBlablaAddPostState();
+  _PharmaBlablaEditPostState createState() => _PharmaBlablaEditPostState();
 }
 
-class _PharmaBlablaAddPostState extends State<PharmaBlablaAddPost> {
+class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
   late PharmaBlablaModel _model;
   bool isTitulaire = false;
 
@@ -68,6 +70,7 @@ class _PharmaBlablaAddPostState extends State<PharmaBlablaAddPost> {
 
   @override
   void initState() {
+    print('HEYY'+widget.data.toString());
     super.initState();
     _model = createModel(context, () => PharmaBlablaModel());
     _model.postContent ??= TextEditingController();
@@ -77,6 +80,8 @@ class _PharmaBlablaAddPostState extends State<PharmaBlablaAddPost> {
       });
     });
   }
+
+
 
   Future<bool> savePostPharmablabla() async {
     CollectionReference pharmablablaCollection = FirebaseFirestore.instance.collection('pharmablabla');

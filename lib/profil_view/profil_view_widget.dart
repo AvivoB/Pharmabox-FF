@@ -470,7 +470,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                   color: Colors.white,
                                                 ),
                                           ),
-                                        if (userData != null && userData['poste'] == 'Pharmacien titulaire')
+                                        if (userData != null && userData['poste'] == 'Pharmacien titulaire' && pharmacieUser.isNotEmpty)
                                           GestureDetector(
                                             onTap: () {
                                               context.pushNamed('PharmacieProfilView',
@@ -481,10 +481,12 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                     ),
                                                   }.withoutNulls);
                                             },
-                                            child: Padding(
+                                            child: 
+                                            pharmacieUser.isNotEmpty ?
+                                            Padding(
                                               padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 10.0, 0.0),
                                               child: Row(children: [
-                                                pharmacieUser[0]['photo_url'].isNotEmpty
+                                               pharmacieUser.isNotEmpty && pharmacieUser[0]['photo_url'].isNotEmpty
                                                     ? Container(
                                                         width: 50.0,
                                                         height: 50.0,
@@ -516,7 +518,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                           )),
                                                 )
                                               ]),
-                                            ),
+                                            ) : Container(),
                                           ),
                                         Padding(
                                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),

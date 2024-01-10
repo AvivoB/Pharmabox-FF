@@ -874,7 +874,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
-                                                Icons.local_pharmacy_outlined,
+                                                Icons.videocam_outlined,
                                                 color: greyColor,
                                                 size: 28.0,
                                               ),
@@ -887,7 +887,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 15.0),
                                             child: Row(children: [
                                               Icon(
-                                                Icons.videocam_outlined,
+                                                Icons.local_pharmacy_outlined,
                                                 color: greyColor,
                                                 size: 28.0,
                                               ),

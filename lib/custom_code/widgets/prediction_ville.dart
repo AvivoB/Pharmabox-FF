@@ -34,69 +34,60 @@ class _PredictionVilleState extends State<PredictionVille> {
   String? countrieValue;
 
   void _onSearchChanged(String query) async {
-    if (query.isNotEmpty) {
-      try {
-        final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/geocode/json?address=$query&key=$googleMapsApi&language=fr'));
-        final json = jsonDecode(response.body);
+  if (query.isNotEmpty) {
 
-        if (json['status'] == 'OK') {
-          setState(() {
-            _predictions = json['results']
-                .map((result) {
-                  String city = '';
-                  String postalCode = '';
-                  String country = '';
+    widget.onPlaceSelected({'city': query, 'country': 'France'});
+    try {
+      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&key=$googleMapsApi&language=fr'));
+      final json = jsonDecode(response.body);
 
-                  for (var component in result['address_components']) {
-                    if (component['types'].contains('locality')) {
-                      city = component['long_name'];
-                    }
-                    if (component['types'].contains('postal_code')) {
-                      postalCode = component['long_name'];
-                    }
-                    if (component['types'].contains('country')) {
-                      country = component['long_name'];
-                    }
-                  }
+      if (json['status'] == 'OK') {
+        setState(() {
+          _predictions = json['predictions']
+              .map((prediction) {
+                List<String> predictionData = prediction['description'].split(', ');
 
-                  print(city);
-                  print(postalCode);
-                  print(country);
-
-                  return {'city': city, 'postal_code': postalCode, 'country': country};
-                })
-                .where((item) => item != null)
-                .toList();
-          });
-        } else {
-          setState(() {
-            _predictions = [];
-          });
-        }
-      } catch (e) {
-        print("Erreur lors de la requête: $e");
+                return {'city': predictionData[0], 'country': predictionData[1]};
+              })
+              .where((item) => item != null)
+              .toList();
+        });
+      } else {
         setState(() {
           _predictions = [];
         });
       }
-    } else {
+    } catch (e) {
+      print("Erreur lors de la requête: $e");
       setState(() {
         _predictions = [];
       });
     }
-  }
-
-  void _onPredictionSelected(prediction) {
+  } else {
     setState(() {
       _predictions = [];
     });
-    if (widget.onPlaceSelected != null) {
+  }
+}
+
+
+  void _onPredictionSelected(prediction) {
+
+    print(prediction);
+
+    if (prediction != null) {
       widget.onPlaceSelected(prediction);
-      _cityController.text = prediction['city'];
+      _cityController.text = prediction['city'].toString();
       if (_searchController.text != '') {
-        _searchController.text = prediction['postal_code'];
+        _searchController.text = prediction['country'];
       }
+    } else {
+      widget.onPlaceSelected({'city': _cityController.text, 'country': 'France'});
     }
+
+    setState(() {
+      _predictions = [];
+    });
   }
 
   @override
@@ -237,15 +228,12 @@ class _PredictionVilleState extends State<PredictionVille> {
             ),
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: 1,
+              itemCount: _predictions.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Row(
-                    children: [
-                      Icon(Icons.location_on_outlined),
-                      Text(_predictions[index]['city'] + ', ' + _predictions[index]['country'], style: FlutterFlowTheme.of(context).bodyMedium),
-                    ],
-                  ),
+                  horizontalTitleGap: 0,
+                  leading: Icon(Icons.location_on_outlined),
+                  title: Text(_predictions[index]['city'] + ', ' + _predictions[index]['country'], style: FlutterFlowTheme.of(context).bodyMedium, overflow: TextOverflow.ellipsis),
                   onTap: () {
                     _onPredictionSelected(_predictions[index]);
                   },

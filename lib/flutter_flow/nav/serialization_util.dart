@@ -83,6 +83,8 @@ String? serializeParam(
       case ParamType.Document:
         final reference = (param as dynamic).reference as DocumentReference;
         return _serializeDocumentReference(reference);
+      case ParamType.Map:
+          return serializeMap(param);
 
       default:
         return null;
@@ -155,6 +157,31 @@ DocumentReference _deserializeDocumentReference(
   return FirebaseFirestore.instance.doc(path);
 }
 
+String serializeMap(Map<dynamic, dynamic> data) {
+
+    Map returnData = {};
+  // Parcourir la Map pour rechercher les champs de type Timestamp
+  data.forEach((dynamic key, dynamic value) {
+
+
+    
+    if (value is Timestamp || key is Timestamp) {
+      // Convertir le Timestamp en objet DateTime
+      DateTime dateTimeValue = value.toDate();
+      // Convertir le DateTime en format ISO 8601
+      returnData[key] = dateTimeValue.toUtc().toIso8601String();
+    }
+
+    if(value == null || key == null) {
+      returnData[key] = '';
+    }
+
+  });
+
+  // Convertir la Map en JSON
+  return jsonEncode(returnData);
+}
+
 enum ParamType {
   int,
   double,
@@ -169,6 +196,7 @@ enum ParamType {
   JSON,
   Document,
   DocumentReference,
+  Map
 }
 
 dynamic deserializeParam<T>(

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pharmabox/composants/card_offers_profile/card_offers_profile.dart';
 import 'package:pharmabox/composants/card_searchs_profile/card_searchs_profile.dart';
 import 'package:pharmabox/constant.dart';
@@ -246,6 +247,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     Future<void> _pickImage({required ImageSource source}) async {
+      
       final pickedFile = await ImagePicker().getImage(source: source);
 
       if(pickedFile != null) {
@@ -273,12 +275,18 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
         final TaskSnapshot downloadUrl = (await uploadTask);
 
         String url = (await downloadUrl.ref.getDownloadURL());
+        
 
         setState(() {
           _model.imageURL = url;
           userData['photoUrl'] = url;
           _isLoading = false;
         });
+
+         final CollectionReference<Map<String, dynamic>> usersRef = FirebaseFirestore.instance.collection('users');
+
+         usersRef.doc(currentUser?.uid).update({'photoUrl': url});
+
       }
       }
     }
@@ -768,9 +776,8 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                       initialPostCode: _model.postcodeController.text,
                                       initialCity: _model.cityController.text,
                                       onPlaceSelected: (ville) {
-                                        _model.postcodeController.text = ville['postal_code'];
-                                        _model.cityController.text = ville['city'];
-                                        _model.countryValue = ville['country'];
+                                        _model.cityController.text = ville['city'].toString();
+                                        _model.countryValue = ville['country'].toString();
                                       }),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),

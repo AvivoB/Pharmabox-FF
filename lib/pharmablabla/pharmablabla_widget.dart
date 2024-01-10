@@ -206,44 +206,13 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                       size: 24.0,
                     ),
                     onPressed: () async {
-                      context.pushNamed('PharmaBlablaAddPost');
+                      context.pushNamed('PharmaBlablaEditPost');
                     },
                   ),
                 ),
               ],
             ),
           ),
-          // _isLoading
-          //     ? Expanded(
-          //         child: ProgressIndicatorPharmabox(
-          //         background: Colors.transparent,
-          //       ))
-          //     : Expanded(
-          //         child: SingleChildScrollView(
-          //           child: Column(
-          //             mainAxisSize: MainAxisSize.max,
-          //             children: [
-          //               for (var data in searchResults)
-          //                 Padding(
-          //                   padding: const EdgeInsets.all(10.0),
-          //                   child: GestureDetector(
-          //                       child: CardPharmablabla(data: data),
-          //                       onTap: () {
-          //                         context.pushNamed(
-          //                           'PharmaBlablaSinglePost',
-          //                           queryParams: {
-          //                             'postId': serializeParam(
-          //                               data['postId'],
-          //                               ParamType.String,
-          //                             ),
-          //                           }.withoutNulls,
-          //                         );
-          //                       }),
-          //                 )
-          //             ],
-          //           ),
-          //         ),0
-          //       ),
           Expanded(
               child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true).snapshots(),
@@ -360,6 +329,69 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                                   padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
                                   child: GestureDetector(
                                       child: userData != null ? CardPharmablabla(data: data) : Container(),
+                                      onLongPress: () {
+                                        if(currentUserUid == userId)
+                                        showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.60,
+          // Contenu du BottomSheet
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Apporter des modifications',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Poppins',
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                ListTile(
+                  title: Text('Modifier votre post'),
+                  onTap: () {
+                    // Action à effectuer lors du clic sur "Modifier"
+                    Navigator.pop(context);
+                    context.pushNamed(
+                                          'PharmaBlablaEditPost',
+                                          queryParams: {
+                                            'postId': serializeParam(
+                                              data['postId'],
+                                              ParamType.String,
+                                            ),
+                                            'data': serializeParam(
+                                              serializeMap(data),
+                                              ParamType.JSON,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                  },
+                ),
+                Divider(), // Ajoute une séparation entre les options
+                ListTile(
+                  title: Text(
+                    'Supprimer le post du Pharmablabla',
+                    style: TextStyle(color: redColor), // Couleur rouge
+                  ),
+                  onTap: () {
+                    // Action à effectuer lors du clic sur "Supprimer"
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+                                      },
                                       onTap: () {
                                         context.pushNamed(
                                           'PharmaBlablaSinglePost',

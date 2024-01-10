@@ -7,6 +7,7 @@ import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pharmabox/custom_code/widgets/pdfViewer.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/register_step/register_provider.dart';
@@ -575,9 +576,8 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                       ),
                                     ),
                                     PredictionVille(onPlaceSelected: (ville) {
-                                      _model.postcodeController.text = ville['postal_code'];
-                                      _model.cityController.text = ville['city'];
-                                      _model.countryController = ville['country'];
+                                      _model.cityController.text = ville['city'].toString();
+                                      _model.countryController = ville['country'].toString();
 
                                       print(ville);
                                     }),
@@ -1581,94 +1581,40 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: MediaQuery.of(context).size.width * 0.70,
-                                          constraints: BoxConstraints(
-                                            maxWidth: MediaQuery.of(context).size.width * 0.8,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                                          ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: MediaQuery.of(context).size.width * 0.70,
+                                        constraints: BoxConstraints(
+                                          maxWidth: MediaQuery.of(context).size.width * 0.8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context).secondaryBackground,
+                                        ),
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            await launch('https://www.pharma-box.fr/mentions-legales-application.html');
+                                          },
                                           child: Text(
-                                            'Je donne à PharmaBox le droit de m\'envoyer des notifications.',
-                                            textAlign: TextAlign.start,
-                                            maxLines: 2,
+                                            'J\'accepte les conditions générales d\'utilisation  cliquez ici pour les consulter',
                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                   fontFamily: 'Poppins',
                                                   fontSize: 12,
                                                 ),
                                           ),
                                         ),
-                                        Switch.adaptive(
-                                          value: _model.allowNotifsValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.allowNotifsValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: MediaQuery.of(context).size.width * 0.70,
-                                          constraints: BoxConstraints(
-                                            maxWidth: MediaQuery.of(context).size.width * 0.8,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                                          ),
-                                          child: TextButton(
-                                            onPressed: () async {
-                                              // final ByteData bytes = await rootBundle.load('assets/pdfs/CGU-Pharma-box.pdf');
-                                              // final List<int> buffer = bytes.buffer.asUint8List();
-                                              // final tempDir = await getTemporaryDirectory();
-                                              // final tempDocumentPath = '${tempDir.path}/CGU-Pharma-box.pdf';
-
-                                              // File tempDocumentFile = await File(tempDocumentPath).writeAsBytes(buffer, flush: true);
-
-                                              // Navigator.push(
-                                              //   context,
-                                              //   MaterialPageRoute(
-                                              //     builder: (context) => PDFScreen(
-                                              //       pdfPath: tempDocumentFile.path,
-                                              //       title: 'CGU Pharmabox',
-                                              //     ),
-                                              //   ),
-                                              // );
-                                              await launch('https://www.pharma-box.fr/mentions-legales-application.html');
-                                            },
-                                            child: Text(
-                                              'J\'accepte les conditions d\'utilisation, cliquez ici pour les consulter',
-                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 12,
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                        Switch.adaptive(
-                                          value: _model.allowCGUValue ??= false,
-                                          onChanged: (newValue) async {
-                                            setState(() => _model.allowCGUValue = newValue);
-                                          },
-                                          activeColor: Color(0xFF7CEDAC),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                      Switch.adaptive(
+                                        value: _model.allowCGUValue ??= false,
+                                        onChanged: (newValue) async {
+                                          setState(() => _model.allowCGUValue = newValue);
+                                        },
+                                        activeColor: Color(0xFF7CEDAC),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),

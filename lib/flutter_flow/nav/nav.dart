@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/desactivated_account/desactivated_account.dart';
-import 'package:pharmabox/pharmablabla/pharmablabla_add_post_widget.dart';
+import 'package:pharmabox/pharmablabla/pharmablabla_edit_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_single_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_widget.dart';
 import 'package:pharmabox/profil/profil_suppression.dart';
@@ -82,14 +82,9 @@ class AppStateNotifier extends ChangeNotifier {
   Future<void> checkIfUserIsComplete() async {
     Map<String, dynamic> userData = await getCurrentUserData();
     
-    isComplete = userData['isComplete'];
-    isVerified = userData['isVerified'];
-    isValid = userData['isValid'];
-    // } else {
-    //   isComplete = true;
-    //   isVerified = true;
-    //   isValid = true;
-    // }
+    isComplete = userData.isNotEmpty ? userData['isComplete'] : false;
+    isVerified = userData.isNotEmpty ?  userData['isVerified'] : false;
+    isValid = userData.isNotEmpty ? userData['isValid'] : false;
 
     print('PROFIL COMPLETE : ' + isComplete.toString());
     print('PROFIL VERIFIED : ' + isVerified.toString());
@@ -185,7 +180,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   page: PharmaJobWidget(),
                 ),
         ),
-        FFRoute(name: 'PharmaBlablaAddPost', path: '/pharmaBlablaAddPost', builder: (context, params) => NavBarPage(initialPage: 'PharmaBlabla', page: PharmaBlablaAddPost())),
+        FFRoute(name: 'PharmaBlablaEditPost', path: '/PharmaBlablaEditPost', builder: (context, params) => NavBarPage(initialPage: 'PharmaBlabla', page: PharmaBlablaEditPost(
+          postId: params.getParam('postId', ParamType.String),
+          data: params.getParam('postId', ParamType.Map),
+
+        ))),
         FFRoute(name: 'PharmaBlabla', path: '/pharmaBlabla', builder: (context, params) => NavBarPage(initialPage: 'PharmaBlabla', page: PharmaBlabla())),
         FFRoute(
             name: 'PharmaBlablaSinglePost',

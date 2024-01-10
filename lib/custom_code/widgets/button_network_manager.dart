@@ -107,7 +107,7 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
         Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
         // Check if 'reseau' array contains the current user's ID
-        if (data != null ? data['reseau'].contains(currentUserId) : '') {
+        if (data['reseau'] != null? data['reseau'].contains(currentUserId) : false) {
           // If the current user's ID is found in the 'reseau' array, remove it
           setState(() {
             isInNetwork = true;
