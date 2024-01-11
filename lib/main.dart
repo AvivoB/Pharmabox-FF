@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
 import 'package:pharmabox/notifications/firebase_notifications_service.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
 import 'package:pharmabox/profil_pharmacie/profil_pharmacie_provider.dart';
@@ -34,18 +35,41 @@ import 'pharmablabla/pharmablabla_widget.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  await FirebaseMessaging.instance.getToken();
+  final token = await FirebaseMessaging.instance.getToken();
+  print('FCM Token : ${token}');
+  await setupFlutterNotifications();
+  PushNotification.displayLocalNotification(message.notification?.title ?? 'Titre', message.notification?.body ?? 'Nouveau message');
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  print('Handling a background message ${message.messageId}');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initFirebase();
   await FlutterFlowTheme.initialize();
-  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-  OneSignal.initialize("ce23a4c1-57e3-4379-913d-388977c0e0da");
-  // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-  OneSignal.Notifications.requestPermission(true);
-  OneSignal.login(await getCurrentUserId());
-  // OneSignal.User.pushSubscription.addObserver((state) {
-  //     print(state.current.jsonRepresentation());
-  //   });
+  PushNotification.init();
+  FirebaseMessaging.onMessage.listen((event) {
+  // do something
+  });
+
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    firebaseMessaging.onTokenRefresh.listen((event) {
+    if (currentUser != null) {
+      print('token $event');
+      FirebaseFirestore.instance.collection('users').doc(currentUserUid).update({
+      'fcmToken': event,
+    });
+    }
+  });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print('clicked notif : $event');
+  });
 
   runApp(MyApp());
 }
@@ -193,17 +217,6 @@ class _NavBarPageState extends State<NavBarPage> {
       'Profil': ProfilWidget(),
       'Pharmacie': ProfilPharmacie(),
     };
-
-    OneSignal.Notifications.addClickListener((event) {
-      String fromId = event.notification.additionalData!['fromId'].toString() ?? '';
-      print('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: ${fromId}');
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DiscussionUserWidget(toUser: fromId),
-        ),
-      );
-    });
 
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(

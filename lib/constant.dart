@@ -42,7 +42,6 @@ Future<bool> checkIsTitulaire() async {
 
   // Récupérer le document de l'utilisateur courant à partir de Firestore
   final currentUserDoc = await userCollection.doc(currentUser!.uid).get();
-  print(currentUserDoc.get('poste'));
   if (currentUserDoc.get('poste') == 'Pharmacien titulaire') {
     return true;
   } else {

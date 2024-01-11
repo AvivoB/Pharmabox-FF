@@ -76,26 +76,6 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
     });
   }
 
-  // Future<void> getDataPost({query = ''}) async {
-  //   if (query != '') {
-  //     searchResults.clear();
-  //     List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().filterPosts(query);
-  //     setState(() {
-  //       searchResults = posts;
-  //     });
-  //   } else {
-  //     searchResults.clear();
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-  //     List<Map<String, dynamic>> posts = await PharmaBlablaSearchData().getAllPosts();
-  //     setState(() {
-  //       searchResults = posts;
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
-
   @override
   void dispose() {
     _model.dispose();
@@ -242,6 +222,10 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
               filteredDocuments = filteredDocuments.where((document) {
                 final data = document.data() as Map<String, dynamic>;
 
+                if (currentUser['id'] == data['userId']) {
+                  return true;
+                }
+
                 if (data['network'] == 'Tout Pharmabox') {
                   return true;
                 }
@@ -275,10 +259,11 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
               filteredDocuments = filteredDocuments.where((document) {
                 final data = document.data() as Map<String, dynamic>;
 
-                if (data['poste'] == null || !data.containsKey('poste')) {
+                if (currentUser['id'] == data['userId']) {
                   return true;
                 }
-                if (currentUser['id'] == data['userId']) {
+
+                if (data['poste'] == null || !data.containsKey('poste')) {
                   return true;
                 }
 
@@ -330,67 +315,65 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                                   child: GestureDetector(
                                       child: userData != null ? CardPharmablabla(data: data) : Container(),
                                       onLongPress: () {
-                                        if(currentUserUid == userId)
-                                        showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.60,
-          // Contenu du BottomSheet
-          child: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Apporter des modifications',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Poppins',
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-                ListTile(
-                  title: Text('Modifier votre post'),
-                  onTap: () {
-                    // Action à effectuer lors du clic sur "Modifier"
-                    Navigator.pop(context);
-                    context.pushNamed(
-                                          'PharmaBlablaEditPost',
-                                          queryParams: {
-                                            'postId': serializeParam(
-                                              data['postId'],
-                                              ParamType.String,
+                                        if (currentUserUid == userId)
+                                          showModalBottomSheet(
+                                            context: context,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
                                             ),
-                                            'data': serializeParam(
-                                              serializeMap(data),
-                                              ParamType.JSON,
-                                            ),
-                                          }.withoutNulls,
-                                        );
-                  },
-                ),
-                Divider(), // Ajoute une séparation entre les options
-                ListTile(
-                  title: Text(
-                    'Supprimer le post du Pharmablabla',
-                    style: TextStyle(color: redColor), // Couleur rouge
-                  ),
-                  onTap: () {
-                    // Action à effectuer lors du clic sur "Supprimer"
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+                                            builder: (BuildContext context) {
+                                              return Container(
+                                                height: MediaQuery.of(context).size.height * 0.60,
+                                                // Contenu du BottomSheet
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(25.0),
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'Apporter des modifications',
+                                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                              fontFamily: 'Poppins',
+                                                              fontSize: 18.0,
+                                                              fontWeight: FontWeight.w600,
+                                                            ),
+                                                      ),
+                                                      ListTile(
+                                                        title: Text('Modifier votre post'),
+                                                        onTap: () {
+                                                          // Action à effectuer lors du clic sur "Modifier"
+                                                          Map postEdit = {'content': data['post_content'].toString(), 'postId': data['postId'].toString(), 'LGO': data['LGO'].toString(), 'network': data['network'].toString(), 'poste': data['poste'].toString()};
+                                                          Navigator.pop(context);
+                                                          context.pushNamed(
+                                                            'PharmaBlablaEditPost',
+                                                            queryParams: {
+                                                              'data': serializeParam(
+                                                                jsonEncode(postEdit),
+                                                                ParamType.String,
+                                                              ),
+                                                            }.withoutNulls,
+                                                          );
+                                                        },
+                                                      ),
+                                                      Divider(), // Ajoute une séparation entre les options
+                                                      ListTile(
+                                                        title: Text(
+                                                          'Supprimer le post du Pharmablabla',
+                                                          style: TextStyle(color: redColor), // Couleur rouge
+                                                        ),
+                                                        onTap: () async {
+                                                          // Action à effectuer lors du clic sur "Supprimer"
+                                                          Navigator.pop(context);
+                                                          await FirebaseFirestore.instance.collection('pharmablabla').doc(data['postId'].toString()).delete();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
                                       },
                                       onTap: () {
                                         context.pushNamed(

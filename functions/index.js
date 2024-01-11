@@ -162,6 +162,34 @@ exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite
         };
 
         db.collection('notifications').add(notificationData);
+
+          const receiverId = data.for;
+          const senderId = data.by_user;
+    
+          // Retrieve FCM token for the receiverId
+          const userDoc = await admin.firestore().collection('users').doc(receiverId).get();
+          const senderNotif = await admin.firestore().collection('users').doc(senderId).get();
+          const receiverFCMToken = userDoc.data().fcmToken;
+    
+          if (receiverFCMToken) {
+    
+            const message = {
+              "notification" : {
+                body: `${senderNotif.data().nom} ${senderNotif.data().prenom} souhaite rejoindre votre réseau`,
+                title: 'Demande d\'ajout'
+            },
+              token: receiverFCMToken,
+            };
+    
+            try {
+              const response = await admin.messaging().send(message);
+              console.log('Notification sent:', response);
+            } catch (error) {
+              console.error('Error sending notification:', error);
+            }
+          } else {
+            console.log('Receiver does not have a valid FCM token.');
+          }
 });
 
 
@@ -257,35 +285,37 @@ exports.sendNotificationOnMessage = functions.firestore
         // retarde la fonction de 1.5s pour verifier si l'utilisateur est sur la discussion
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        if(data.isViewed == false) {
-            const receiverId = data.receiverId;
-            const messageContent = data.message;
+        if (!data.isViewed) {
+          const receiverId = data.receiverId;
+          const messageContent = data.message;
     
+          // Retrieve FCM token for the receiverId
+          const userDoc = await admin.firestore().collection('users').doc(receiverId).get();
+          const receiverFCMToken = userDoc.data().fcmToken;
+    
+          if (receiverFCMToken) {
             // Metadata
             const metadata = {
-              'receiverId': data.receiverId,
-              'fromId': data.fromId
-          };
+              receiverId: data.receiverId,
+              fromId: data.fromId,
+            };
     
-            const notificationContent = {
-              app_id: ONESIGNAL_APP_ID,
-              headings: { "en": "Nouveau message" },
-              contents: { "en": messageContent },
-              include_external_user_ids: [receiverId],
-              'data': metadata
-          };
+            const message = {
+              "notification" : {
+                body: messageContent,
+                title: 'Nouveau message'
+            },
+              token: receiverFCMToken,
+            };
     
-          try {
-              const response = await axios.post('https://onesignal.com/api/v1/notifications', notificationContent, {
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': `Basic ${ONESIGNAL_API_KEY}`
-                  }
-              });
-    
-              console.log('Notification sent', response.data);
-          } catch (e) {
-              console.error('Error sending notification', e);
+            try {
+              const response = await admin.messaging().send(message);
+              console.log('Notification sent:', response);
+            } catch (error) {
+              console.error('Error sending notification:', error);
+            }
+          } else {
+            console.log('Receiver does not have a valid FCM token.');
           }
         }
 

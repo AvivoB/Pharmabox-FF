@@ -274,12 +274,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                                     children: [
                                       Text(
                                         doc['message'],
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          color: isCurrentUser ? Colors.white : blackColor,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                        ),
+                                        style : FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isCurrentUser ? Colors.white : blackColor, fontSize: 14, fontWeight: FontWeight.w400),
                                       ),
                                       SizedBox(height: 10),
                                       Row(
@@ -296,7 +291,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                                             ),
                                           ),
                                           if(isCurrentUser) SizedBox(width: 10),
-                                          if(isCurrentUser) Icon(Icons.done_all, size: 18, color: doc['isViewed'] ? blueColor : greyColor,),
+                                          if(isCurrentUser) Icon(Icons.done_all, size: 18, color: doc['isViewed'] ? blueColor : greyColor),
                                           
                                         ],
                                       ),

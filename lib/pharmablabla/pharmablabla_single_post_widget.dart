@@ -255,8 +255,6 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                     children: mergedList.map((doc) {
                       bool isCurrentUser = doc['fromId'] == currentUser?.uid;
 
-                      print('comment id :' + doc.id);
-
                       return FutureBuilder<DocumentSnapshot>(
                           future: FirebaseFirestore.instance.collection('users').doc(doc['fromId']).get(),
                           builder: (context, snapshot) {

@@ -42,8 +42,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:stopwordies/stopwordies.dart';
 
 class PharmaBlablaEditPost extends StatefulWidget {
-  const PharmaBlablaEditPost({Key? key, this.postId, this.data}) : super(key: key);
-  final String? postId;
+  const PharmaBlablaEditPost({Key? key, this.data}) : super(key: key);
   final String? data;
 
   @override
@@ -53,6 +52,7 @@ class PharmaBlablaEditPost extends StatefulWidget {
 class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
   late PharmaBlablaModel _model;
   bool isTitulaire = false;
+  Map<String, dynamic> updateData = {};
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -70,10 +70,15 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
 
   @override
   void initState() {
-    print('HEYY'+widget.data.toString());
+    if (widget.data != null) {
+      updateData = jsonDecode(widget.data.toString());
+    }
+
     super.initState();
     _model = createModel(context, () => PharmaBlablaModel());
-    _model.postContent ??= TextEditingController();
+    _model.postContent ??= TextEditingController(text: updateData['content']);
+    _model.selectedLGO[0] = updateData.isNotEmpty && updateData['LGO'] != 'Par LGO' ? {"image": "${updateData['LGO']}.jpg", "name": updateData['LGO']} : {"image": "Autre.jpg", "name": "Par LGO"};
+    _model.reseauType = updateData.isNotEmpty && updateData['network'] != 'Tout Pharmabox' ? 'Mon réseau' : 'Tout Pharmabox';
     checkIsTitulaire().then((isTitulaire) {
       setState(() {
         this.isTitulaire = isTitulaire;
@@ -81,9 +86,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
     });
   }
 
-
-
-  Future<bool> savePostPharmablabla() async {
+  Future<bool> savePostPharmablabla(type) async {
     CollectionReference pharmablablaCollection = FirebaseFirestore.instance.collection('pharmablabla');
     String currentuserId = await getCurrentUserId();
 
@@ -102,25 +105,47 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
       _model.selectedLGO[0]['name'].toString() != 'Par LGO' ? searchTerms.add(_model.selectedLGO[0]['name'].toString().toLowerCase()) : '';
       _model.posteValue != null ? searchTerms.add(_model.posteValue.toString().toLowerCase()) : '';
 
-      try {
-        await pharmablablaCollection.add({
-          'post_content': _model.postContent.text, 
-          'userId': currentuserId, 
-          'search_terms': searchTerms, 
-          'network': _model.reseauType,
-          'LGO': _model.selectedLGO[0]['name'],
-          'poste': _model.posteValue,
-          // 'groupement': _model.selectedGroupement[0]['name'],
-          'date_created': DateTime.now()
-        });
-        return true;
-      } catch (e) {
-        print('Erreur lors de l\'ajout du document: $e');
-        return false;
+      if (type == 'create') {
+        try {
+          await pharmablablaCollection.add({
+            'post_content': _model.postContent.text,
+            'userId': currentuserId,
+            'search_terms': searchTerms,
+            'network': _model.reseauType,
+            'LGO': _model.selectedLGO[0]['name'],
+            'poste': _model.posteValue,
+            // 'groupement': _model.selectedGroupement[0]['name'],
+            'date_created': DateTime.now()
+          });
+          return true;
+        } catch (e) {
+          print('Erreur lors de l\'ajout du document: $e');
+          return false;
+        }
+      }
+
+      if (type == 'update') {
+        try {
+          await pharmablablaCollection.doc(updateData['postId']).update({
+            'post_content': _model.postContent.text,
+            'userId': currentuserId,
+            'search_terms': searchTerms,
+            'network': _model.reseauType,
+            'LGO': _model.selectedLGO[0]['name'],
+            'poste': _model.posteValue,
+            // 'groupement': _model.selectedGroupement[0]['name'],
+          });
+          return true;
+        } catch (e) {
+          print('Erreur lors de l\'ajout du document: $e');
+          return false;
+        }
       }
     } else {
       return false;
     }
+
+    return false;
   }
 
   @override
@@ -154,7 +179,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Ajouter un post',
+                    updateData.isNotEmpty ? 'Modifier votre post' : 'Ajouter un post',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Poppins',
                           fontSize: 22.0,
@@ -198,8 +223,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                           ),
                         ),
                         FlutterFlowDropDown<String>(
-                          hintText: 'Tous',
-                          controller: _model.posteValueController ??= FormFieldController<String>('Tous'),
+                          controller: _model.posteValueController ??= FormFieldController<String>(updateData.isNotEmpty && updateData['poste'] != 'null' ? updateData['poste'] : 'Tous'),
                           options: ['Tous', 'Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Pharmacien titulaire', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien'],
                           onChanged: (val) => setState(() => _model.posteValue = val),
                           width: MediaQuery.of(context).size.width * 0.8,
@@ -225,7 +249,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                Padding(
+                  Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 0.0, 0.0),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.44,
@@ -276,22 +300,22 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                               context: context,
                               builder: (bottomSheetContext) {
                                 return DraggableScrollableSheet(
-                                  initialChildSize: 0.75,
-                                  builder: (BuildContext context, ScrollController scrollController) {
-                                  return GestureDetector(
-                                    onTap: () => '',
-                                    child: Padding(
-                                      padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                      child: PopupLgoWidget(
-                                        onTap: (lgo) {
-                                          setState(() {
-                                            _model.selectedLGO[0] = lgo;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                });
+                                    initialChildSize: 0.75,
+                                    builder: (BuildContext context, ScrollController scrollController) {
+                                      return GestureDetector(
+                                        onTap: () => '',
+                                        child: Padding(
+                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                          child: PopupLgoWidget(
+                                            onTap: (lgo) {
+                                              setState(() {
+                                                _model.selectedLGO[0] = lgo;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    });
                               },
                             ).then((value) => setState(() {}));
                           },
@@ -299,7 +323,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                             children: [
                               _model.selectedLGO[0]['name'] == 'Par LGO' ? PharmaboxLogo(width: 25) : Image.asset('assets/lgo/' + _model.selectedLGO[0]['image']),
                               SizedBox(width: 5),
-                              Text(_model.selectedLGO[0]['name'].toString(), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11)),
+                              Text(updateData.isNotEmpty ? updateData['LGO'] : _model.selectedLGO[0]['name'].toString(), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11)),
                             ],
                           )),
                     ),
@@ -386,7 +410,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Lancez un sujet ...',
+                            updateData.isNotEmpty ? 'Réécrivez votre post ...' : 'Lancez un sujet ...',
                             style: FlutterFlowTheme.of(context).headlineMedium.override(
                                   fontFamily: 'Poppins',
                                   color: FlutterFlowTheme.of(context).primaryText,
@@ -466,14 +490,14 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                           child: FFButtonWidget(
                             onPressed: () async {
                               await Future.delayed(Duration(seconds: 2));
-                              if (await savePostPharmablabla()) {
+                              if (await savePostPharmablabla(updateData.isNotEmpty ? 'update' : 'create')) {
                                 showCustomSnackBar(context, 'Votre publication est en ligne !');
                                 context.pushNamed('PharmaBlabla');
                               } else {
                                 showCustomSnackBar(context, 'Erreur de publication', isError: true);
                               }
                             },
-                            text: 'Publier',
+                            text: updateData.isNotEmpty ? 'Enregistrer' : 'Publier',
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 40.0,

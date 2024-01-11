@@ -181,9 +181,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 ),
         ),
         FFRoute(name: 'PharmaBlablaEditPost', path: '/PharmaBlablaEditPost', builder: (context, params) => NavBarPage(initialPage: 'PharmaBlabla', page: PharmaBlablaEditPost(
-          postId: params.getParam('postId', ParamType.String),
-          data: params.getParam('postId', ParamType.Map),
-
+          data: params.getParam('data', ParamType.String),
         ))),
         FFRoute(name: 'PharmaBlabla', path: '/pharmaBlabla', builder: (context, params) => NavBarPage(initialPage: 'PharmaBlabla', page: PharmaBlabla())),
         FFRoute(
