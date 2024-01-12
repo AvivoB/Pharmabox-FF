@@ -75,8 +75,9 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   Future<void> getCurrentPosition() async {
     isLoading = true;
     bool isLocationPermissionGranted = await requestLocationPermission();
+    var permission = await Geolocator.checkPermission();
 
-    if (isLocationPermissionGranted) {
+    if (isLocationPermissionGranted || permission == LocationPermission.whileInUse) {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -258,16 +259,26 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                         builder: (BuildContext context, ScrollController scrollController) {
                                           return Padding(
                                             padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                            child: PopupSearchSaved(
-                                              itemSelected: selectedOffreSearchSaved,
-                                              isOffer: true,
-                                              searchSaved: offres,
-                                              onTap: (index) {
-                                                setState(() {
-                                                  _findRecherche(offres[index]);
-                                                  selectedOffreSearchSaved = index;
-                                                });
-                                              },
+                                            child: ListView(
+                                              children: [
+                                                PopupSearchSaved(
+                                                  itemSelected: selectedOffreSearchSaved,
+                                                  isOffer: true,
+                                                  searchSaved: offres,
+                                                  onTap: (index) {
+                                                    setState(() {
+                                                      _findRecherche(offres[index]);
+                                                      selectedOffreSearchSaved = index;
+                                                    });
+                                                  },
+                                                  onSave: (data) {
+                                                    _findRecherche(data);
+                                                    setState(() {
+                                                      offres[selectedOffreSearchSaved] = data;
+                                                  });
+                                                  },
+                                                ),
+                                              ],
                                             ),
                                           );
                                         });
@@ -338,6 +349,13 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                                   selectedOffreSearchSaved = index;
                                                 });
                                               },
+                                              onSave: (data) {
+                                                print(data);
+                                                _findOffres(data);
+                                                setState(() {
+                                                  recherches[selectedOffreSearchSaved] = data;
+                                                });
+                                              },
                                             ),
                                           );
                                         });
@@ -385,30 +403,43 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 backgroundColor: Colors.transparent,
                                 context: context,
                                 builder: (bottomSheetContext) {
-                                  return DraggableScrollableSheet(
-                                      initialChildSize: 0.80,
-                                      builder: (BuildContext context, ScrollController scrollController) {
-                                        return Padding(
-                                          padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                          child: isTitulaire
-                                              ? PopupOffreWidget(
-                                                  onFilter: (filters, isSaved) {
-                                                    if (isSaved) {
-                                                      _getMesRecherches();
-                                                    }
-                                                    _findRecherche(filters);
-                                                  },
-                                                )
-                                              : PopupRechercheWidget(
-                                                  onFilter: (filters, isSaved) {
-                                                    if (isSaved) {
-                                                      _getMesRecherches();
-                                                    }
-                                                    _findOffres(filters);
-                                                  },
-                                                ),
-                                        );
-                                      });
+                                  return Container(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: DraggableScrollableSheet(
+                                          initialChildSize: 0.80,
+                                          builder: (BuildContext context, ScrollController scrollController) {
+                                            return Padding(
+                                              padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                              child: isTitulaire
+                                                  ? ListView(
+                                                      children: [
+                                                        PopupOffreWidget(
+                                                          onFilter: (filters, isSaved) {
+                                                            if (isSaved) {
+                                                              _getMesRecherches();
+                                                            }
+                                                            _findRecherche(filters);
+                                                          },
+                                                        )
+                                                      ],
+                                                    )
+                                                  : ListView(
+                                                      children: [
+                                                        PopupRechercheWidget(
+                                                          onFilter: (filters, isSaved) {
+                                                            if (isSaved) {
+                                                              _getMesRecherches();
+                                                            }
+                                                            _findOffres(filters);
+                                                          },
+                                                        )
+                                                      ],
+                                                    ),
+                                            );
+                                          }),
+                                    ),
+                                  );
                                 },
                               );
                             },
@@ -468,7 +499,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                           )),
                             ),
                             for (var user in foundedRecherches)
-                            
                               CardUserWidget(
                                 data: user,
                               ),

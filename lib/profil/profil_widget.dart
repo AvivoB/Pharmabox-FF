@@ -1861,6 +1861,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                             for (var searchI in offresUser)
                               CardOfferProfilWidget(
                                 searchI: searchI,
+                                onSave: (data) {},
                               )
                         ],
                       ),

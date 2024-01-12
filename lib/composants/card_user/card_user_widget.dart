@@ -121,13 +121,14 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.data['nom'],
+                                      widget.data['nom'].toString().toCapitalized(),
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: 3),
                                     Text(
-                                      widget.data['prenom'],
-                                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
+                                      widget.data['prenom'].toString().toCapitalized(),
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600,),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),

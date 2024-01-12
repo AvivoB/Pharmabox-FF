@@ -22,7 +22,7 @@ import 'popup_offre_model.dart';
 export 'popup_offre_model.dart';
 
 class PopupOffreWidget extends StatefulWidget {
-  const PopupOffreWidget({Key? key, this.onFilter}) : super(key: key);
+  const PopupOffreWidget({Key? key, this.onFilter }) : super(key: key);
   final Function(dynamic, bool)? onFilter;
 
   @override

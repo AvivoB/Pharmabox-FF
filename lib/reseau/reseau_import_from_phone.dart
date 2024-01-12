@@ -271,6 +271,14 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
                           ],
                         ),
                       ),
+                      if(_usersFounded.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text('Aucun contact de votre répertoire ne fait partie du réseau Pharmabox',
+                          style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 18, ),
+                        ),
+                      ),
+                      if(_usersFounded.isNotEmpty)
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                         child: Container(
@@ -346,6 +354,7 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
                                       ),
                                     ],
                                   ),
+                                  
                                   for (var contact in _usersFounded)
                                     GestureDetector(
                                       onTap: () {

@@ -24,11 +24,12 @@ import '../../flutter_flow/flutter_flow_model.dart';
 import '../../flutter_flow/form_field_controller.dart';
 
 class CardOfferProfilWidget extends StatefulWidget {
-  CardOfferProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false});
+  CardOfferProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false, required this.onSave});
 
   var searchI;
   final bool isEditable;
   bool isSelected;
+  final Function(dynamic) onSave;
   @override
   State<CardOfferProfilWidget> createState() => _CardOfferProfilWidgetState();
 }
@@ -104,6 +105,8 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
       'pharmacie_id': pharmacieId,
       'isActive': _model.isActive
     };
+
+    widget.onSave(updateData);
 
     firestore.collection('offres').doc(searchId).update(updateData).then((_) {
       print('Données mises à jour avec succès !');
@@ -200,6 +203,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                 ],
                               ),
                               SizedBox(width: 10, height: 10),
+                              if(widget.searchI['date_created'] != null)
                               Text('Offre valable 1 mois à partir du ' + DateFormat('dd/MM/yyyy').format(widget.searchI['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodySmall),
                               if (isExpendedSearchOffer)
                                 Padding(

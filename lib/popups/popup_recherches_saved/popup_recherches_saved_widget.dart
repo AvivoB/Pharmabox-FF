@@ -13,8 +13,9 @@ import 'popup_recherches_saved_model.dart';
 export 'popup_recherches_saved_model.dart';
 
 class PopupSearchSaved extends StatefulWidget {
-  PopupSearchSaved({Key? key, required this.onTap, required this.searchSaved, required this.isOffer, this.itemSelected = 0}) : super(key: key);
+  PopupSearchSaved({Key? key, required this.onTap, required this.searchSaved, required this.isOffer, this.itemSelected = 0, required this.onSave}) : super(key: key);
   final Function onTap;
+  final Function onSave;
   final List searchSaved;
   final bool? isOffer;
   int itemSelected;
@@ -142,7 +143,13 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
                                   padding: const EdgeInsets.only(top: 8.0, bottom: 4.0, left: 10.0),
                                   child: Text('Recherche séléctionnée', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                                 ),
-                              CardOfferProfilWidget(searchI: widget.searchSaved[index], isSelected: widget.itemSelected == index ? true : false),
+                              CardOfferProfilWidget(
+                                searchI: widget.searchSaved[index],
+                                isSelected: widget.itemSelected == index ? true : false,
+                                onSave: (data) {
+                                  widget.onSave(data);
+                                },
+                              ),
                             ],
                           )),
                         )

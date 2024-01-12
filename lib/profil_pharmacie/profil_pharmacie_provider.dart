@@ -107,6 +107,7 @@ class ProviderPharmacieUser extends ChangeNotifier {
   }
 
   void updateMissions(boolean, mission) {
+    print('mission $mission');
     if (boolean) {
       _selectedMissions.add(mission);
     } else {
@@ -134,5 +135,4 @@ class ProviderPharmacieUser extends ChangeNotifier {
     _selectedHoraires = listeHoraire;
     // notifyListeners();
   }
-
 }

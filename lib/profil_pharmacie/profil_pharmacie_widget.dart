@@ -340,11 +340,12 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     if (userData != null && userData['lgo'] != null) {
       providerPharmacieUser.setLGO(userData['lgo']);
     }
-    providerPharmacieUser.setMissions(userData != null ? userData['missions'] : []);
-    providerPharmacieUser.setConfort(userData != null ? userData['confort'] : []);
+    providerPharmacieUser.setMissions(userData != null ? userData['missions'] : providerPharmacieUser.selectedMissions);
+    providerPharmacieUser.setConfort(userData != null ? userData['confort'] : providerPharmacieUser.selectedConfort);
     providerPharmacieUser.setHoraire(userData != null ? userData['horaires'] : null);
     providerPharmacieUser.setPharmacieLocation(userData != null ? userData['situation_geographique']['lat_lng'][0] : '', userData != null ? userData['situation_geographique']['lat_lng'][1] : '');
 
+    // print(providerPharmacieUser.selectedMissions.contains('Test COVID'));
     if (_isLoading) {
       return Center(child: ProgressIndicatorPharmabox());
     } else {
@@ -1922,8 +1923,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                           ),
                                           Switch.adaptive(
                                             value: providerPharmacieUser.selectedMissions.contains('Test COVID') ? true : false,
-                                            onChanged: (newValue) async {
+                                            onChanged: (newValue) {
                                               setState(() => providerPharmacieUser.updateMissions(newValue, 'Test COVID'));
+                                              
                                             },
                                             activeColor: Color(0xFF7CEDAC),
                                           ),
@@ -3041,6 +3043,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                       for (var searchI in offresPharma)
                         CardOfferProfilWidget(
                           searchI: searchI,
+                          onSave: (data) {},
                         )
                   ],
                 ),

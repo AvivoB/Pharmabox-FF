@@ -1274,6 +1274,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                           CardOfferProfilWidget(
                             searchI: searchI,
                             isEditable: false,
+                            onSave: (data) {},
                           )
                     ],
                   ),
