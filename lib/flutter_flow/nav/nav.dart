@@ -12,6 +12,7 @@ import 'package:pharmabox/profil/profil_suppression.dart';
 import 'package:pharmabox/profil_view_pharmacie/profil_view_pharmacie.dart';
 import 'package:pharmabox/register_validation_account/register_validation_account.dart';
 import 'package:pharmabox/reseau/reseau_import_from_phone.dart';
+import 'package:upgrader/upgrader.dart';
 import '../../profil_pharmacie/profil_pharmacie_widget.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
@@ -133,7 +134,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => decideInitialPage(appStateNotifier),
+          builder: (context, _) => UpgradeAlert(child: decideInitialPage(appStateNotifier)),
         ),
         FFRoute(
           name: 'Register',

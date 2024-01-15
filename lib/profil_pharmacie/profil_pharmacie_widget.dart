@@ -195,6 +195,8 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     _model.typologie = userData != null ? userData['typologie'] : '';
     _model.preferenceContactValue = userData != null ? userData['contact_pharma']['preference_contact'] : '';
     _model.patientParJourValue = userData != null ? userData['nb_patient_jour'] : '';
+    _model.isValid = userData != null ? userData['isValid'] : true;
+    _model.isComplete = userData != null ? userData['isActive'] : true;
     setState(() {
       _isLoading = false;
     });
@@ -315,6 +317,8 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
             'nb_apprentis': (_model.nbApprentiController.text != '') ? _model.nbApprentiController.text : '0',
             'nb_etudiants': (_model.nbEtudiantsController.text != '') ? _model.nbEtudiantsController.text : '0',
             'nb_etudiants_6eme_annee': (_model.nbEtudiants6emeController.text != '') ? _model.nbEtudiants6emeController.text : '0',
+            'isValid': _model.isValid,
+            'isComplete': _model.isComplete
           }
         }, SetOptions(merge: true))
         .then((value) => showCustomSnackBar(context, 'Vos informations ont été enregistrés'))

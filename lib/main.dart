@@ -162,24 +162,22 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProviderProfilUser()),
         ChangeNotifierProvider(create: (_) => ProviderPharmacieUser()),
       ],
-      child: UpgradeAlert(
-        child: MaterialApp.router(
-          title: 'Pharmabox',
-          localizationsDelegates: [
-            FFLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          locale: _locale,
-          supportedLocales: const [Locale('fr', 'FR')],
-          theme: ThemeData(brightness: Brightness.light),
-          debugShowCheckedModeBanner: false,
-          // darkTheme: ThemeData(brightness: Brightness.dark),
-          themeMode: _themeMode,
-          routeInformationParser: _router.routeInformationParser,
-          routerDelegate: _router.routerDelegate,
-        ),
+      child: MaterialApp.router(
+        title: 'Pharmabox',
+        localizationsDelegates: [
+          FFLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        locale: _locale,
+        supportedLocales: const [Locale('fr', 'FR')],
+        theme: ThemeData(brightness: Brightness.light),
+        debugShowCheckedModeBanner: false,
+        // darkTheme: ThemeData(brightness: Brightness.dark),
+        themeMode: _themeMode,
+        routeInformationParser: _router.routeInformationParser,
+        routerDelegate: _router.routerDelegate,
       ),
     );
   }
@@ -229,8 +227,8 @@ class _NavBarPageState extends State<NavBarPage> {
           _currentPageName = tabs.keys.toList()[i];
         }),
         backgroundColor: Colors.white,
-        selectedItemColor: Color(0xFF7CEDAC),
-        unselectedItemColor: greyColor,
+        // selectedItemColor: Color(0xFF7CEDAC),
+        unselectedItemColor: Colors.transparent,
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
         margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),

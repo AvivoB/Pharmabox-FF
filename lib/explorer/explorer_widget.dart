@@ -134,7 +134,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget>
           groupement: groupementDataPlace,
           id: countArray++);
       setState(() {
-        if(dataWithId['isValid']) {
+        if(dataWithId['isValid'] && data['isComplete']) {
           items.add(place);
           pharmacieInPlace.add(dataWithId);
         }

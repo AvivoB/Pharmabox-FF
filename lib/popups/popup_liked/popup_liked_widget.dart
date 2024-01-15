@@ -168,7 +168,7 @@ class _PopupLikedWidgetState extends State<PopupLikedWidget> {
                                               children: [
                                                 if (userData != null)
                                                   Text(
-                                                    userData != null ? userData!['prenom'] + ' ' + userData['nom'] : 'Utilisateur',
+                                                     (userData != null ? userData['prenom'] ?? '' : '') + ' ' + (userData != null ? userData['nom'] ?? '' : ''),
                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                           fontFamily: 'Poppins',
                                                           color: Color(0xFF595A71),
