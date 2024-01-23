@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -47,6 +49,10 @@ class PharmaJobSearchData {
 
     filters['localisation'] != null ? cityJob = extractCityFromLocation(filters['localisation']) : '';
 
+    Map<String, dynamic> cityCoordinates = await getCityCoordinates(cityJob);
+    var cityLatitude = cityCoordinates['latitude'];
+    var cityLongitude = cityCoordinates['longitude'];
+
     List foundedOffres = [];
 
     QuerySnapshot snapshot = await filteredQuery.get();
@@ -60,11 +66,20 @@ class PharmaJobSearchData {
       DocumentSnapshot userRef = await FirebaseFirestore.instance.collection('users').doc(pharmaData['user_id']).get();
       Map<String, dynamic> userData = userRef.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
 
-      if (cityJob != '' && cityJob == pharmaData['situation_geographique']['data']['ville']) {
+      if (cityJob != '' && cityJob == pharmaData['situation_geographique']['data']['ville'] && filters['rayon'] == '') {
         foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
-      } 
-      if(cityJob == '') {
+      }
+      if (cityJob == '') {
         foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+      }
+
+      if (cityJob != '' && filters['rayon'] != '') {
+        // Calculate the distance using Haversine formula
+        double distance = calculateHaversineDistance(cityLatitude, cityLongitude, pharmaData['situation_geographique']['data']['latitude'], pharmaData['situation_geographique']['data']['longitude']);
+        print('DISTANCE : ' + distance.toString());
+        if (distance <= double.parse(filters['rayon'])) {
+          foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+        }
       }
     }
     return foundedOffres;
@@ -170,4 +185,35 @@ String extractCityFromLocation(String locationString) {
   String city = parts.isNotEmpty ? parts[0].trim() : '';
 
   return city;
+}
+
+Future<Map<String, dynamic>> getCityCoordinates(String cityName) async {
+  // Replace 'YOUR_API_KEY' with your actual Google Maps API key
+  String apiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=$cityName&key=$googleMapsApi';
+
+  final response = await http.get(Uri.parse(apiUrl));
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> data = json.decode(response.body);
+    if (data['status'] == 'OK' && data['results'].isNotEmpty) {
+      final location = data['results'][0]['geometry']['location'];
+      double latitude = location['lat'];
+      double longitude = location['lng'];
+      return {'latitude': latitude, 'longitude': longitude};
+    }
+  }
+
+  return {'latitude': 0.0, 'longitude': 0.0};
+}
+
+double calculateHaversineDistance(double lat1, double lon1, double lat2, double lon2) {
+  const R = 6371.0; // Earth radius in kilometers
+
+  double dLat = (lat2.toDouble() - lat1.toDouble()) * (pi / 180.0);
+  double dLon = (lon2.toDouble() - lon1.toDouble()) * (pi / 180.0);
+
+  double a = sin(dLat / 2) * sin(dLat / 2) + cos(lat1.toDouble() * (pi / 180.0)) * cos(lat2.toDouble() * (pi / 180.0)) * sin(dLon / 2) * sin(dLon / 2);
+  double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+  return R * c; // Distance in kilometers
 }
