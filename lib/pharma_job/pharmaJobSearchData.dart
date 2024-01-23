@@ -43,6 +43,10 @@ class PharmaJobSearchData {
       filteredQuery = filteredQuery.where('temps', isEqualTo: filters['temps']);
     }
 
+    String cityJob = '';
+
+    filters['localisation'] != null ? cityJob = extractCityFromLocation(filters['localisation']) : '';
+
     List foundedOffres = [];
 
     QuerySnapshot snapshot = await filteredQuery.get();
@@ -56,7 +60,12 @@ class PharmaJobSearchData {
       DocumentSnapshot userRef = await FirebaseFirestore.instance.collection('users').doc(pharmaData['user_id']).get();
       Map<String, dynamic> userData = userRef.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
 
-      foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+      if (cityJob != '' && cityJob == pharmaData['situation_geographique']['data']['ville']) {
+        foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+      } 
+      if(cityJob == '') {
+        foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+      }
     }
     return foundedOffres;
   }
@@ -116,9 +125,9 @@ class PharmaJobSearchData {
         DocumentSnapshot userDoc = await usersRef.doc(userId).get();
         Map<String, dynamic> userData = userDoc.exists ? userDoc.data() as Map<String, dynamic> : {};
 
-        if(userData['nom'] != null && userData['prenom'] != null) {
-        uniqueSearch.add(userData); // Les Sets n'ajouteront pas de doublons
-        uniqueUserIds.add(userId); // Ajouter l'userId au Set
+        if (userData['nom'] != null && userData['prenom'] != null) {
+          uniqueSearch.add(userData); // Les Sets n'ajouteront pas de doublons
+          uniqueUserIds.add(userId); // Ajouter l'userId au Set
         }
       }
     }
@@ -136,7 +145,7 @@ class PharmaJobSearchData {
 
     queryRecherche = queryRecherche.where('user_id', isEqualTo: currenuserID);
     queryRecherche = queryRecherche.where('isActive', isEqualTo: true);
-    
+
     QuerySnapshot snapshot = await queryRecherche.get();
 
     for (var search in snapshot.docs) {
@@ -151,4 +160,14 @@ class PharmaJobSearchData {
 
     return mySearch.toList();
   }
+}
+
+String extractCityFromLocation(String locationString) {
+  // Diviser la chaîne en fonction de la virgule et obtenir le premier élément
+  List<String> parts = locationString.split(',');
+
+  // Récupérer la première partie (la ville)
+  String city = parts.isNotEmpty ? parts[0].trim() : '';
+
+  return city;
 }

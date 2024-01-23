@@ -19,6 +19,8 @@ class CardSearchProfilModel extends FlutterFlowModel {
 
   bool? isActive;
 
+  String? posteValue;
+
   void addToContratType(String item) {
     if (!contratType.contains(item)) {
       contratType.add(item);

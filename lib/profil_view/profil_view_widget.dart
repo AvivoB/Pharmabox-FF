@@ -1268,6 +1268,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                           CardSearchProfilWidget(
                             searchI: searchI,
                             isEditable: false,
+                            onSave: (p0) => {},
                           ),
                       if (_selectedIndex == 2 && offresUser.isNotEmpty)
                         for (var searchI in offresUser)

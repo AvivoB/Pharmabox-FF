@@ -23,11 +23,12 @@ import '../../flutter_flow/flutter_flow_model.dart';
 import '../../flutter_flow/form_field_controller.dart';
 
 class CardSearchProfilWidget extends StatefulWidget {
-  CardSearchProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false});
+  CardSearchProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false, required this.onSave});
 
   var searchI;
   final bool isEditable;
   bool isSelected;
+  final Function(dynamic) onSave;
   @override
   State<CardSearchProfilWidget> createState() => _CardSearchProfilWidgetState();
 }
@@ -41,6 +42,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
     super.initState();
     _model = createModel(context, () => CardSearchProfilModel());
 
+    _model.posteValue = widget.searchI['poste'];
     _model.localisationController ??= TextEditingController(text: widget.searchI['localisation']);
     _model.dureMoisController ??= TextEditingController(text: widget.searchI['duree']);
     _model.debutContratController ??= TextEditingController(text: widget.searchI['debut_contrat']);
@@ -76,6 +78,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
 
     // Données à enregistrer
     final updateData = {
+      'poste': _model.posteValue,
       'nom': _model.nomOffreController.text,
       'localisation': _model.localisationController.text,
       'rayon': _model.rayonController.text,
@@ -93,6 +96,8 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
       'date_created': Timestamp.now(),
       'isActive': _model.isActive
     };
+
+    widget.onSave(updateData);
 
     firestore.collection('recherches').doc(searchId).update(updateData).then((_) {
       print('Données mises à jour avec succès !');

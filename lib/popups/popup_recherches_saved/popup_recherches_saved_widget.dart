@@ -52,7 +52,6 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.searchSaved);
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -120,7 +119,13 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
                                   padding: const EdgeInsets.only(top: 8.0, bottom: 4.0, left: 10.0),
                                   child: Text('Recherche séléctionnée', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                                 ),
-                              CardSearchProfilWidget(searchI: widget.searchSaved[index], isSelected: widget.itemSelected == index ? true : false),
+                              CardSearchProfilWidget(
+                                searchI: widget.searchSaved[index], 
+                                isSelected: widget.itemSelected == index ? true : false,
+                                onSave: (data) {
+                                  widget.onSave(data);
+                                },
+                              ),
                             ],
                           )),
                         ),

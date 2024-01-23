@@ -275,7 +275,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                                     _findRecherche(data);
                                                     setState(() {
                                                       offres[selectedOffreSearchSaved] = data;
-                                                  });
+                                                    });
                                                   },
                                                 ),
                                               ],
@@ -317,7 +317,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Icon(Icons.work_outline),
-                                      Text(recherches[selectedOffreSearchSaved]['poste'] /*   ?? '' + ' ' + recherches[0]['contrats'].toString() ?? '' + ' ' + recherches[0]['salaire_mensuel'] + ' €' ?? '', */,
+                                      Text(recherches[selectedOffreSearchSaved]['poste'] ?? '' /*   ?? '' + ' ' + recherches[0]['contrats'].toString() ?? '' + ' ' + recherches[0]['salaire_mensuel'] + ' €' ?? '', */,
                                           overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
                                       Icon(Icons.edit_note_outlined)
                                     ],
@@ -350,7 +350,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                                 });
                                               },
                                               onSave: (data) {
-                                                print(data);
                                                 _findOffres(data);
                                                 setState(() {
                                                   recherches[selectedOffreSearchSaved] = data;
