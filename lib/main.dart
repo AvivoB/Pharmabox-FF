@@ -29,7 +29,6 @@ import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.da
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:uni_links/uni_links.dart';
 import 'pharmablabla/pharmablabla_widget.dart';
 
@@ -70,6 +69,15 @@ void main() async {
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     print('clicked notif : $event');
   });
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  print('Got a message whilst in the foreground!');
+  print('Message data: ${message.data}');
+
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
+});
 
   runApp(MyApp());
 }

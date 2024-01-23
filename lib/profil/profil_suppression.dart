@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/flutter_flow/chat/index.dart';
@@ -159,7 +158,6 @@ class ProfilDeleteAccount extends StatelessWidget {
             TextButton(
                 onPressed: () async {
                   GoRouter.of(context).prepareAuthEvent();
-                  OneSignal.logout();
                   await deleteAccount();
                   await authManager.signOut();
                   GoRouter.of(context).clearRedirectLocation();

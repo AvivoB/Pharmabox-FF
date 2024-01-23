@@ -1,4 +1,5 @@
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+
+import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
 import 'package:share/share.dart';
 
 import '../../constant.dart';
@@ -235,7 +236,6 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                       highlightColor: Colors.transparent,
                       onTap: () async {
                         GoRouter.of(context).prepareAuthEvent();
-                        OneSignal.logout();
                         await authManager.signOut();
                         GoRouter.of(context).clearRedirectLocation();
                         context.goNamedAuth('Register', mounted);
@@ -263,6 +263,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                       ),
                     ),
                   ),
+                  //GestureDetector(child: Text('TEST NOTIF'), onTap: () => PushNotification.displayLocalNotification('Titre', 'Nouveau message'),)
                 ],
               ),
             ),

@@ -50,19 +50,20 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Pour prendre une photo ou une vidéo, cette application nécessite une autorisation d'accès à l'appareil photo.</string>
+	<string>Pour prendre une photo ou une vidéo, cette application nécessite une autorisation d&apos;accès à l&apos;appareil photo.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Pharmabox souhaites acceder a vos contacts</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>L'application Pharmabox a besoin de votre localisation pour vous fournir des données en fonction de votre localisation. Par exemple pour rechercher une Pharmacie à proximité et ainsi vous proposer les meilleurs résulats possibles.</string>
+	<string>L&apos;application Pharmabox a besoin de votre localisation pour vous fournir des données en fonction de votre localisation. Par exemple pour rechercher une Pharmacie à proximité et ainsi vous proposer les meilleurs résulats possibles.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Pour pouvoir télécharger des données, cette application nécessite l'autorisation d'accéder à la photothèque.</string>
+	<string>Pour pouvoir télécharger des données, cette application nécessite l&apos;autorisation d&apos;accéder à la photothèque.</string>
 	<key>PermissionGroupNotification</key>
 	<string>Pharmabox souhaites pouvoir vous envoyer des notifications</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
