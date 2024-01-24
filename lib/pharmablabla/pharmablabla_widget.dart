@@ -37,7 +37,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PharmaBlabla extends StatefulWidget {
-  const PharmaBlabla({Key? key}) : super(key: key);
+  const PharmaBlabla({Key? key, this.currentPage}) : super(key: key);
+  final String? currentPage;
 
   @override
   _PharmaBlablaState createState() => _PharmaBlablaState();
@@ -283,6 +284,17 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                   final userId = data['userId'] as String;
                   data['post'] = document.data();
                   data['postId'] = document.id;
+
+                  print('PAGE '+widget.currentPage.toString());
+                  if (widget.currentPage.toString() == 'PharmaBlabla' && !data['users_viewed'].contains(currentUser['id'])) {
+                    FirebaseFirestore.instance.collection('pharmablabla').doc(document.id).update({
+                      'users_viewed': FieldValue.arrayUnion([currentUserUid]),
+                    }).then((value) {
+                      // Update successful
+                    }).catchError((error) {
+                      print('Error updating document: $error');
+                    });
+                  }
 
                   return FutureBuilder<DocumentSnapshot>(
                     future: FirebaseFirestore.instance.collection('users').doc(userId).get(),

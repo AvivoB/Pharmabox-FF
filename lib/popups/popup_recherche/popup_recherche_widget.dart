@@ -178,6 +178,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
                           child: TextFormField(
                             controller: _model.rayonController,
                             obscureText: false,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               labelText: 'Rayon en km',
                               hintStyle: FlutterFlowTheme.of(context).bodySmall,

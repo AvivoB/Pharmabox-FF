@@ -522,7 +522,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                 myLocationEnabled: true,
                                 zoomGesturesEnabled: true,
                                 zoomControlsEnabled: false,
-                                myLocationButtonEnabled: true,
+                                myLocationButtonEnabled: false,
                                 onMapCreated: (GoogleMapController controller) {
                                   _controller.complete(controller);
                                   _manager.setMapId(controller.mapId);
@@ -578,8 +578,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
 
                     // Afficher les resulats
                     DraggableScrollableSheet(
-                      minChildSize: 0.09,
-                      initialChildSize: 0.09,
+                      minChildSize: 0.11,
+                      initialChildSize: 0.11,
                       builder: (BuildContext context, ScrollController scrollController) {
                         return Container(
                             decoration: BoxDecoration(color: Color(0xFFEFF6F7), borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),

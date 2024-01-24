@@ -216,6 +216,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                                                   child: TextFormField(
                                                     controller: _model.rayonController,
+                                                    keyboardType: TextInputType.number,
                                                     obscureText: false,
                                                     decoration: InputDecoration(
                                                       labelText: 'Rayon en km',

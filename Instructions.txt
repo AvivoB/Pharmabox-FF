@@ -11,3 +11,6 @@ Test des deeplink android :
 
 Génerer une clé keystore :
 keytool -genkey -v -keystore release-key.keystore -alias release-key -keyalg RSA -keysize 2048 -validity 10000
+
+Attibuer ladresse a paris
+adb emu geo fix 2.333333 48.866667

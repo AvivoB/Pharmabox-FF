@@ -108,6 +108,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
       if (type == 'create') {
         try {
           await pharmablablaCollection.add({
+            'users_viewed': [],
             'post_content': _model.postContent.text,
             'userId': currentuserId,
             'search_terms': searchTerms,

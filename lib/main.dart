@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -53,16 +54,16 @@ void main() async {
   await FlutterFlowTheme.initialize();
   PushNotification.init();
   FirebaseMessaging.onMessage.listen((event) {
-  // do something
+    // do something
   });
 
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    firebaseMessaging.onTokenRefresh.listen((event) {
+  firebaseMessaging.onTokenRefresh.listen((event) {
     if (currentUser != null) {
       print('token $event');
       FirebaseFirestore.instance.collection('users').doc(currentUserUid).update({
-      'fcmToken': event,
-    });
+        'fcmToken': event,
+      });
     }
   });
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -71,13 +72,13 @@ void main() async {
   });
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  print('Got a message whilst in the foreground!');
-  print('Message data: ${message.data}');
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
 
-  if (message.notification != null) {
-    print('Message also contained a notification: ${message.notification}');
-  }
-});
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
 
   runApp(MyApp());
 }
@@ -218,13 +219,15 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'Explorer': ExplorerWidget(),
       'PharmaJob': PharmaJobWidget(),
-      'PharmaBlabla': PharmaBlabla(),
+      'PharmaBlabla': PharmaBlabla(currentPage: _currentPageName),
       'Reseau': ReseauWidget(),
       'Profil': ProfilWidget(),
       'Pharmacie': ProfilPharmacie(),
     };
 
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
+    
+
     return Scaffold(
       body: _currentPage ?? tabs[_currentPageName],
       extendBody: true,
@@ -239,7 +242,7 @@ class _NavBarPageState extends State<NavBarPage> {
         unselectedItemColor: Colors.transparent,
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
-        margin: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+        margin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
         padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
         width: double.infinity,
         elevation: 0.0,
@@ -299,58 +302,160 @@ class _NavBarPageState extends State<NavBarPage> {
             ),
           ),
           FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            customWidget: Stack(
               children: [
-                currentIndex == 2
-                    ? ShaderMask(
-                        shaderCallback: (bounds) => LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
-                          stops: [0.0, 1.0],
-                        ).createShader(bounds),
-                        child: Icon(
+                 Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  currentIndex == 2
+                      ? ShaderMask(
+                          shaderCallback: (bounds) => LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                            stops: [0.0, 1.0],
+                          ).createShader(bounds),
+                          child: Icon(
+                            Icons.forum_outlined,
+                            color: Colors.white,
+                            size: 24.0,
+                          ),
+                        )
+                      : Icon(
                           Icons.forum_outlined,
-                          color: Colors.white,
+                          color: greyColor,
                           size: 24.0,
                         ),
-                      )
-                    : Icon(
-                        Icons.forum_outlined,
-                        color: greyColor,
-                        size: 24.0,
-                      ),
-                Text('Blabla', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400)),
-              ],
-            ),
+                  Text(
+                    'Blabla',
+                    overflow: TextOverflow.ellipsis,
+                    style: FlutterFlowTheme.of(context).headlineMedium.override(
+                          fontFamily: 'Poppins',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          fontSize: 10,
+                          fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400,
+                        ),
+                  )
+                ],
+              ),
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance.collection('pharmablabla').snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      // Display the error message
+                      print('${snapshot.error}');
+                    }
+
+                    // Filter documents where 'users_viewed' does not contain currentUserId
+                    var filteredDocs = snapshot.data?.docs.where((doc) => !(doc['users_viewed']?.contains(currentUserUid) ?? false));
+
+                    final int unreadNotificationsCount = filteredDocs?.length ?? 0;
+                    if (unreadNotificationsCount > 0) {
+                      return Positioned(
+                        top: -3.0, // Adjust as needed
+                        right: 0.0, // Adjust as needed
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).alternate,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(3.0, 3.0, 3.0, 3.0),
+                            child: Text(
+                              unreadNotificationsCount.toString(),
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: FlutterFlowTheme.of(context).primaryBackground,
+                                    fontSize: 10.0,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
+             
+            ]),
           ),
           FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            customWidget: Stack(
               children: [
-                currentIndex == 3
-                    ? ShaderMask(
-                        shaderCallback: (bounds) => LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
-                          stops: [0.0, 1.0],
-                        ).createShader(bounds),
-                        child: Icon(
+                 Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  currentIndex == 3
+                      ? ShaderMask(
+                          shaderCallback: (bounds) => LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                            stops: [0.0, 1.0],
+                          ).createShader(bounds),
+                          child: Icon(
+                            Icons.people_alt_outlined,
+                            color: Colors.white,
+                            size: 24.0,
+                          ),
+                        )
+                      : Icon(
                           Icons.people_alt_outlined,
-                          color: Colors.white,
+                          color: greyColor,
                           size: 24.0,
                         ),
-                      )
-                    : Icon(
-                        Icons.people_alt_outlined,
-                        color: greyColor,
-                        size: 24.0,
-                      ),
-                Text('Réseau', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400)),
-              ],
-            ),
+                  Text(
+                    'Réseau',
+                    overflow: TextOverflow.ellipsis,
+                    style: FlutterFlowTheme.of(context).headlineMedium.override(
+                          fontFamily: 'Poppins',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          fontSize: 10,
+                          fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400,
+                        ),
+                  )
+                ],
+              ),
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance.collection('demandes_network').where('for', isEqualTo: currentUserUid).snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      // Display the error message
+                      print('${snapshot.error}');
+                    }
+
+                    // Filter documents where 'users_viewed' does not contain currentUserId
+                    // var filteredDocs = snapshot.data?.docs.where((doc) => !(doc['for']?.contains(currentUserUid) ?? false));
+
+                    final int unreadNotificationsCount = snapshot.data?.docs.length ?? 0;
+                    if (unreadNotificationsCount > 0) {
+                      return Positioned(
+                        top: -3.0, // Adjust as needed
+                        right: 0.0, // Adjust as needed
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).alternate,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(3.0, 3.0, 3.0, 3.0),
+                            child: Text(
+                              unreadNotificationsCount.toString(),
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Poppins',
+                                    color: FlutterFlowTheme.of(context).primaryBackground,
+                                    fontSize: 10.0,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
+             
+            ]),
           ),
           FloatingNavbarItem(
             customWidget: Column(
