@@ -99,19 +99,11 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
   Future<List<DocumentSnapshot>> fetchUsersByPhone(List<String> phoneNumbers) async {
     final firestore = FirebaseFirestore.instance;
 
-    if (phoneNumbers.isEmpty) {
-      return []; // Return empty list if no phone numbers are provided
-    }
-
-    // Segment the list into chunks of 10 due to Firestore limitations
-    final chunks = [];
-    for (var i = 0; i < phoneNumbers.length; i += 10) {
-      chunks.add(phoneNumbers.sublist(i, i + 10 > phoneNumbers.length ? phoneNumbers.length : i + 10));
-    }
+    print('hello');
 
     final List<DocumentSnapshot> users = [];
-    for (var chunk in chunks) {
-      final querySnapshot = await firestore.collection('users').where('telephone', whereIn: chunk).get();
+    for (var chunk in phoneNumbers) {
+      final querySnapshot = await firestore.collection('users').where('telephone', isEqualTo: chunk.replaceAll(' ', '')).get();
 
       users.addAll(querySnapshot.docs);
     }
@@ -146,7 +138,6 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
     setState(() {
       _isLoading = true;
     });
-
     var users;
 
     if (widget.type == 'phone') {
@@ -157,6 +148,7 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
     if (widget.type == 'email') {
       final emails = await fetchContactsEmails();
       users = await fetchUsersByEmails(emails);
+      print(users);
     }
 
     for (var user in users) {
@@ -195,21 +187,19 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
     setState(() {
       _isLoading = true;
     });
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    final CollectionReference usersRef = _firestore.collection('users');
     final currentUserId = await getCurrentUserId();
+    final demandesRef = FirebaseFirestore.instance.collection('demandes_network');
     // 1. Loop through the _userSelected list
     for (String userId in _userSelected) {
       // 2. Fetch the corresponding document and update
-      await usersRef.doc(userId).update({
-        'reseau': FieldValue.arrayUnion([currentUserId])
-      });
+      final demandesData = {
+        'by_user': currentUserId,
+        'status': 'pending',
+        'for': userId,
+        'timestamp': FieldValue.serverTimestamp(),
+      };
+      await demandesRef.add(demandesData);
     }
-
-    // 3. Update the current user's document with the entire _userSelected list
-    await usersRef.doc(currentUserId).update({
-      'reseau': FieldValue.arrayUnion(_userSelected) // Add the entire list to the reseau field
-    });
     setState(() {
       _isLoading = false;
     });
@@ -219,7 +209,6 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
 
   @override
   void initState() {
-    print('TYPE PARAM / ' + widget.type);
     super.initState();
     _model = createModel(context, () => ReseauModel());
     fetchAndDisplayUsers().then((value) => print('CONTACT FOUND / ' + value.toString()));
@@ -271,170 +260,174 @@ class _ReseauImportFromPhoneState extends State<ReseauImportFromPhone> {
                           ],
                         ),
                       ),
-                      if(_usersFounded.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text('Aucun contact de votre répertoire ne fait partie du réseau Pharmabox',
-                          style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 18, ),
-                        ),
-                      ),
-                      if(_usersFounded.isNotEmpty)
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).secondaryBackground,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 12,
-                                color: Color(0x2B1F5C67),
-                                offset: Offset(10, 10),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(15),
+                      if (_usersFounded.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            'Aucun contact de votre répertoire ne fait partie du réseau Pharmabox',
+                            style: FlutterFlowTheme.of(context).headlineMedium.override(
+                                  fontFamily: 'Poppins',
+                                  color: FlutterFlowTheme.of(context).primaryText,
+                                  fontSize: 18,
+                                ),
                           ),
+                        ),
+                      if (_usersFounded.isNotEmpty)
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                           child: Container(
-                            width: 100,
+                            width: double.infinity,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context).secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x2B1F5C67),
+                                  offset: Offset(10, 10),
+                                )
+                              ],
                               borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
                             ),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          _selectAllUsers();
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.check, // This is just an example icon, you can choose any other icon
-                                              color: blueColor,
-                                            ),
-                                            SizedBox(width: 8),
-                                            Text('Tout séléctionner', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: blueColor, fontSize: 16, fontWeight: FontWeight.w500)),
-                                          ],
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          _addToNetwork();
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5.0),
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey,
-                                                offset: Offset(0.0, 1.0), //(x,y)
-                                                blurRadius: 2.0,
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context).secondaryBackground,
+                                borderRadius: BorderRadius.circular(15),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            _selectAllUsers();
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.check, // This is just an example icon, you can choose any other icon
+                                                color: blueColor,
                                               ),
+                                              SizedBox(width: 8),
+                                              Text('Tout séléctionner', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: blueColor, fontSize: 16, fontWeight: FontWeight.w500)),
                                             ],
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(6.0),
-                                            child: GradientText(
-                                              'Ajouter',
-                                              radius: 5.0,
-                                              style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
-                                              colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
-                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  
-                                  for (var contact in _usersFounded)
-                                    GestureDetector(
-                                      onTap: () {
-                                        selectUserToAdd(contact['userId'].toString());
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                        child: Container(
-                                          decoration: ShapeDecoration(
-                                            color: _userSelected.contains(contact['userId']) ? Color(0xFFEFF6F7) : Colors.white,
-                                            shape: _userSelected.contains(contact['userId'])
-                                                ? RoundedRectangleBorder(
-                                                    side: BorderSide(width: 1, color: Color(0xFF42D2FF)),
-                                                    borderRadius: BorderRadius.circular(5),
-                                                  )
-                                                : RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                                            shadows: [
-                                              BoxShadow(
-                                                color: Color(0x261F5C67),
-                                                blurRadius: 4,
-                                                offset: Offset(0, 2),
-                                                spreadRadius: 0,
-                                              )
-                                            ],
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(5, 10, 5, 10),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                                                  child: Container(
-                                                    width: 50.0,
-                                                    height: 50.0,
-                                                    clipBehavior: Clip.antiAlias,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                    child: FadeInImage.assetNetwork(
-                                                      image: contact['photoUrl'],
-                                                      placeholder: 'assets/images/Group_18.png',
-                                                      fit: BoxFit.cover,
-                                                      imageErrorBuilder: (context, error, stackTrace) {
-                                                        return Image.asset('assets/images/Group_18.png');
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  children: [
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          widget.type == 'phone' ? contact['telephone'] : contact['email'],
-                                                          style: FlutterFlowTheme.of(context).bodyMedium,
-                                                        ),
-                                                        Text(
-                                                          contact['nom'] + ' ' + contact['prenom'],
-                                                          style: FlutterFlowTheme.of(context).bodyMedium,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                        GestureDetector(
+                                          onTap: () {
+                                            _addToNetwork();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(5.0),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey,
+                                                  offset: Offset(0.0, 1.0), //(x,y)
+                                                  blurRadius: 2.0,
                                                 ),
                                               ],
                                             ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(6.0),
+                                              child: GradientText(
+                                                'Ajouter',
+                                                radius: 5.0,
+                                                style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
+                                                colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    for (var contact in _usersFounded)
+                                      GestureDetector(
+                                        onTap: () {
+                                          selectUserToAdd(contact['userId'].toString());
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                          child: Container(
+                                            decoration: ShapeDecoration(
+                                              color: _userSelected.contains(contact['userId']) ? Color(0xFFEFF6F7) : Colors.white,
+                                              shape: _userSelected.contains(contact['userId'])
+                                                  ? RoundedRectangleBorder(
+                                                      side: BorderSide(width: 1, color: Color(0xFF42D2FF)),
+                                                      borderRadius: BorderRadius.circular(5),
+                                                    )
+                                                  : RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                              shadows: [
+                                                BoxShadow(
+                                                  color: Color(0x261F5C67),
+                                                  blurRadius: 4,
+                                                  offset: Offset(0, 2),
+                                                  spreadRadius: 0,
+                                                )
+                                              ],
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(5, 10, 5, 10),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                                                    child: Container(
+                                                      width: 50.0,
+                                                      height: 50.0,
+                                                      clipBehavior: Clip.antiAlias,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: FadeInImage.assetNetwork(
+                                                        image: contact['photoUrl'],
+                                                        placeholder: 'assets/images/Group_18.png',
+                                                        fit: BoxFit.cover,
+                                                        imageErrorBuilder: (context, error, stackTrace) {
+                                                          return Image.asset('assets/images/Group_18.png');
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            widget.type == 'phone' ? contact['telephone'] : contact['email'],
+                                                            style: FlutterFlowTheme.of(context).bodyMedium,
+                                                          ),
+                                                          Text(
+                                                            contact['nom'] + ' ' + contact['prenom'],
+                                                            style: FlutterFlowTheme.of(context).bodyMedium,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
