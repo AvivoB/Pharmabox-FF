@@ -41,19 +41,21 @@ class PushNotification {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission for push notifications');
+
+      // Generate FCM token
+      final token = await _firebaseMessaging.getToken();
+      print('FCM Token : ${token}');
+      await FirebaseFirestore.instance.collection('users').doc(currentUserUid).update({
+        'fcmToken': token,
+      });
+
+      // Initialize FlutterLocalNotificationsPlugin
+      final InitializationSettings initializationSettings = InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher'), iOS: DarwinInitializationSettings());
+      await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
     } else {
       print('User declined or has not granted permission for push notifications');
     }
 
-    // Generate FCM token
-    final token = await _firebaseMessaging.getToken();
-    print('FCM Token : ${token}');
-    await FirebaseFirestore.instance.collection('users').doc(currentUserUid).update({
-      'fcmToken': token,
-    });
-
-    // Initialize FlutterLocalNotificationsPlugin
-    final InitializationSettings initializationSettings = InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher'), iOS: DarwinInitializationSettings());
-    await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    
   }
 }
