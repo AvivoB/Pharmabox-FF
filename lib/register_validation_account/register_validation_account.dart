@@ -88,7 +88,7 @@ class _ValidateAccountState extends State<ValidateAccount> {
                   ],
                 ),
                 SizedBox(height: 50, width: 100),
-                Text('Afin de valider votre compte, merci d\'entrer le code reçu par email', style: FlutterFlowTheme.of(context).bodySmall, textAlign: TextAlign.center),
+                Text('Afin de valider votre compte, merci d\'entrer le code reçu par email ou SMS, si vous ne le reçevez pas regardez vos spams', style: FlutterFlowTheme.of(context).bodySmall, textAlign: TextAlign.center),
                 SizedBox(height: 50, width: 100),
                 if (_resendMessage.isNotEmpty) Text(_resendMessage['message'].toString(), style: FlutterFlowTheme.of(context).bodySmall, textAlign: TextAlign.center),
                 if (_resendMessage.isNotEmpty) SizedBox(height: 50, width: 100),

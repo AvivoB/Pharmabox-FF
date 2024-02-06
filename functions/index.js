@@ -217,9 +217,7 @@ const htmlPath = path.join(__dirname, '/email_template/code_validation.html');
 const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
 // Envoi du code de verification du compte
-exports.updateUserOnCreate = functions.firestore
-  .document('users/{userId}')
-  .onCreate((snap, context) => {
+exports.updateUserOnCreate = functions.firestore.document('users/{userId}').onCreate((snap, context) => {
 
     // Mise à jour du document utilisateur avec le code de validation
     return admin.firestore().collection('users').doc(snap.id).update({
@@ -256,6 +254,24 @@ exports.sendCodeVerification = functions.https.onRequest((req, res) => {
       }
       const user = doc.data();
 
+
+      // Votre code existant pour envoyer la requête SMS
+      axios.post('https://api.smsapi.com/sms.do', new URLSearchParams({ 
+        'to': user.telephone.replace(/^0/, "+33"),
+        'from': 'Pharmabox',
+        'message': 'Votre code de validation pour votre compte est ' + newVerificationCode,
+        'format': 'json'
+      }), {
+        headers: {
+            'Authorization': `Bearer TvLYFzww2QkDkYNZHdnGMeZErJVIj869sQqFYm8g`
+        }
+      }).then(() => {
+        // Faites quelque chose ici après avoir envoyé le SMS, si nécessaire
+      }).catch((error) => {
+        console.error(error);
+        // Gérez les erreurs ici
+      });
+
       // Construire le courriel
       const mailOptions = {
           from: env.fromEmail, // utilisez votre configuration d'environnement
@@ -266,6 +282,7 @@ exports.sendCodeVerification = functions.https.onRequest((req, res) => {
 
       // Envoie le mail
       return env.transporter.sendMail(mailOptions); // utilisez votre configuration d'environnement
+
   }).then(() => {
       res.status(200).send('Verification code resent successfully');
   }).catch((error) => {
@@ -275,8 +292,8 @@ exports.sendCodeVerification = functions.https.onRequest((req, res) => {
 });
 
 
-const ONESIGNAL_APP_ID = 'ce23a4c1-57e3-4379-913d-388977c0e0da'; 
-const ONESIGNAL_API_KEY = 'YjE0NjlmNjYtMjE1NS00MThmLWJlZTItYTFhYTJiNmYwZGU4';
+// const ONESIGNAL_APP_ID = 'ce23a4c1-57e3-4379-913d-388977c0e0da'; 
+// const ONESIGNAL_API_KEY = 'YjE0NjlmNjYtMjE1NS00MThmLWJlZTItYTFhYTJiNmYwZGU4';
 
 exports.sendNotificationOnMessage = functions.firestore
     .document('messages/{messageId}/message/{docId}')

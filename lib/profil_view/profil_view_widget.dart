@@ -515,6 +515,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                             fontFamily: 'Poppins',
                                                             color: Colors.white,
+                                                            fontSize: 12.0
                                                           )),
                                                 )
                                               ]),

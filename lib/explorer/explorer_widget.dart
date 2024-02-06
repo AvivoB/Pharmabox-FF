@@ -121,19 +121,24 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
         'documentId': doc.id,
       };
 
+      print('MESDATA ' + doc.id.toString());
+
       String name = dataWithId['situation_geographique']['adresse'];
       List<dynamic> location = dataWithId['situation_geographique']['lat_lng'];
       String groupementDataPlace = dataWithId['groupement'][0]['name'];
-      Place place = Place(name: name, latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace, id: doc.id);
+      String pharmacieId = dataWithId['documentId'];
+      Place place = Place(name: name, latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace, id: pharmacieId);
       setState(() {
-        if (dataWithId['isValid'] && data['isComplete']) {
+        if (dataWithId['isValid']) {
           items.add(place);
           pharmacieInPlace.add(dataWithId);
         }
       });
-      _manager.setItems(items);
-      _manager.updateMap();
+
     }
+    print('ITEMS LENGHT '+items.length.toString());
+    _manager.setItems(items);
+    _manager.updateMap();
   }
 
   Future<void> searchPharmacies(String query) async {
@@ -548,7 +553,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                                  child: Text(filteredDocuments!.length > 1 ? filteredDocuments!.length.toString() + ' résulats' : filteredDocuments!.length.toString() + ' résulat',
+                                  child: Text(filteredDocuments!.length > 1 ? filteredDocuments!.length.toString() + ' résultats' : filteredDocuments!.length.toString() + ' résultat',
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF595A71),

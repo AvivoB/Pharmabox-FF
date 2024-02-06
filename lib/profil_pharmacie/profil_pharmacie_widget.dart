@@ -311,7 +311,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
           'tendances': providerPharmacieUser.tendences,
           'equipe': {
             'nb_pharmaciens': (_model.nbPharmaciensController.text != '') ? _model.nbPharmaciensController.text : '0',
-            'nb_preparateurs': (_model.nbPreparateursController.text != '') ? _model.nbPreparateursController.text : '0',
+            'nb_preparateurs': (_model.nbPreparateurController.text != '') ? _model.nbPreparateurController.text : '0',
             'nb_rayonnistes': (_model.nbRayonnistesController.text != '') ? _model.nbRayonnistesController.text : '0',
             'nb_conseillers': (_model.nbConseillersController.text != '') ? _model.nbConseillersController.text : '0',
             'nb_apprentis': (_model.nbApprentiController.text != '') ? _model.nbApprentiController.text : '0',

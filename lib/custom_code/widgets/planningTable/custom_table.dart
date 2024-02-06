@@ -28,7 +28,10 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
     super.initState();
 
     // ignore: unrelated_type_equality_checks
-    selectedOptions = widget.onInitialValue.isNotEmpty ? transformInitialValue(widget.onInitialValue) : List.generate(daysOfWeek.length, (_) => List.generate(periods.length, (_) => 'Obligatoire'));
+    // selectedOptions = widget.onInitialValue.isNotEmpty ? transformInitialValue(widget.onInitialValue) : List.generate(daysOfWeek.length, (_) => List.generate(periods.length, (_) => 'Obligatoire'));
+
+    selectedOptions = widget.onInitialValue.isNotEmpty ? transformInitialValue(widget.onInitialValue) : List.generate(daysOfWeek.length, (_) => {'semaine': List.generate(periods.length, (_) => 'Obligatoire')});
+
     print('GRILLE VALUE : ' + selectedOptions.toString());
   }
 
@@ -36,7 +39,9 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
     if (!widget.isEditable) return;
     print(widget.isEditable);
 
-    String currentOption = selectedOptions[row][col];
+    print(selectedOptions[row]['semaine'][col]);
+
+    String currentOption = selectedOptions[row]['semaine'][col];
     String newOption = '';
 
     if (currentOption == 'Obligatoire') {
@@ -48,7 +53,7 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
     }
 
     setState(() {
-      selectedOptions[row][col] = newOption;
+      selectedOptions[row]['semaine'][col] = newOption;
     });
 
     if (widget.onSelectionChanged != null) {
@@ -80,6 +85,7 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
 
   @override
   Widget build(BuildContext context) {
+    print(selectedOptions);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
@@ -99,11 +105,11 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
               for (var period in periods)
                 TableCell(
                   child: Container(
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: Text(
                       period,
                       textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 9.0, fontWeight: FontWeight.w600),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 11.0, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -124,20 +130,21 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
                             ),
                       ),
                     )),
-                for (var j = 0; j < periods.length; j++)
+                for (var j = 0; j < selectedOptions[i]['semaine'].length; j++)
                   TableCell(
                     child: GestureDetector(
                       onTap: () => _toggleOption(i, j),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: _getBackgroundColor(selectedOptions[i][j]),
+                          color: _getBackgroundColor(selectedOptions[i]['semaine'][j].toString()),
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                         padding: EdgeInsets.all(6.0),
                         margin: EdgeInsets.all(4.0),
                         child: Icon(
-                          _getIcon(selectedOptions[i][j]),
+                          _getIcon(selectedOptions[i]['semaine'][j].toString()),
                           color: Colors.white,
+                          size: 22.0,
                         ),
                       ),
                     ),

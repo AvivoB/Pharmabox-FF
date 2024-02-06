@@ -517,7 +517,11 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         controller: _model.birthDateController,
                                         readOnly: true,
                                         onTap: () async {
-                                          final _datePickedDate = await showDatePicker(context: context, initialDate: getCurrentTimestamp, firstDate: DateTime(1900), lastDate: getCurrentTimestamp, keyboardType: TextInputType.url);
+                                            DateTime currentDate = DateTime.now();
+
+                                          // Calculez la date minimale (16 ans en arrière à partir de la date actuelle)
+                                          DateTime minDate = DateTime(currentDate.year - 16, currentDate.month, currentDate.day);
+                                          final _datePickedDate = await showDatePicker(context: context, initialDate: minDate,  firstDate: DateTime(1900), lastDate: minDate, keyboardType: TextInputType.url,);
 
                                           if (_datePickedDate != null) {
                                             setState(() {
