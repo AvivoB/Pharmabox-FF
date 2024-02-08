@@ -195,8 +195,8 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     _model.typologie = userData != null ? userData['typologie'] : '';
     _model.preferenceContactValue = userData != null ? userData['contact_pharma']['preference_contact'] : '';
     _model.patientParJourValue = userData != null ? userData['nb_patient_jour'] : '';
-    _model.isValid = userData != null ? userData['isValid'] : true;
-    _model.isComplete = userData != null ? userData['isComplete'] : true;
+    _model.isValid = userData?['isValid'] ?? true;
+    _model.isValid = userData?['isComplete'] ?? true;
     setState(() {
       _isLoading = false;
     });
