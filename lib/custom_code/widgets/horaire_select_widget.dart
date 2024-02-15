@@ -61,13 +61,17 @@ class _HorraireSemaineSelectState extends State<HorraireSemaineSelect> {
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Text(day, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w500)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Text(day, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w500)),
+                    ),
                   ),
                 ),
                 height: 50,
                 width: 80,
                 decoration: BoxDecoration(
                   color: Color(0xFFEFF6F7),
+                  borderRadius: BorderRadius.circular(4),
                 ),
               ),
               Container(

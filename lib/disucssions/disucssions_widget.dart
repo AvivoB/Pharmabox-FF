@@ -33,68 +33,14 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
   final User? currentUser = FirebaseAuth.instance.currentUser;
 
+  Map listUserTime = {};
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => DisucssionsModel());
-    getRecentConversations();
-    // Configurer la réception des notifications push
-  }
-
-  Future<List> getRecentConversations() async {
-    String currentId = await getCurrentUserId();
-
-    // Récupérer les discussions avec le currentId en tant que receiverId
-    final QuerySnapshot snapshot1 = await FirebaseFirestore.instance.collection('messages').where('receiverId', isEqualTo: currentId).orderBy('timestamp', descending: true).get();
-
-    // Récupérer les discussions avec le currentId en tant que fromId
-    final QuerySnapshot snapshot2 = await FirebaseFirestore.instance.collection('messages').where('fromId', isEqualTo: currentId).orderBy('timestamp', descending: true).get();
-
-    final List conversations = [];
-    // Map pour stocker les derniers messages de chaque conversation
-    final Map<String, dynamic> lastMessages = {};
-
-    // Parcourir les documents du snapshot1 pour trouver le dernier message de chaque conversation
-    for (final DocumentSnapshot doc in snapshot1.docs) {
-      final String conversationId = doc['receiverId'];
-      final String message = doc['message'];
-
-      // Vérifier si le dernier message de la conversation a déjà été enregistré
-      if (lastMessages.containsKey(conversationId)) {
-        // Si la conversation n'a pas encore de dernier message, l'ajouter
-        lastMessages[conversationId] = {
-          'message': message,
-          'timestamp': doc['timestamp'],
-        };
-      }
-    }
-
-    // Parcourir les documents du snapshot2 pour trouver le dernier message de chaque conversation
-    for (final DocumentSnapshot doc in snapshot2.docs) {
-      final String conversationId = doc.id;
-      final String message = doc['message'];
-
-      // Vérifier si le dernier message de la conversation a déjà été enregistré
-      if (lastMessages.containsKey(conversationId)) {
-        // Si la conversation n'a pas encore de dernier message, l'ajouter
-        lastMessages[conversationId] = {
-          'message': message,
-          'timestamp': doc['timestamp'],
-        };
-      }
-    }
-
-    // Convertir les derniers messages en une liste de maps
-    final List recentConversations = lastMessages.values.toList();
-
-    // Trier les conversations par ordre décroissant de timestamp
-    recentConversations.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
-
-    print(recentConversations);
-
-    return recentConversations;
   }
 
   @override
@@ -141,7 +87,7 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
           ),
         ),
         body: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('messages').snapshots(),
+            stream: FirebaseFirestore.instance.collection('messages').orderBy('timestamp', descending: true).snapshots(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
                 return Text('Something went wrong');
@@ -184,6 +130,7 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
                                 stream: FirebaseFirestore.instance.collection('messages').doc(conversationId).collection('message').where('isViewed', isEqualTo: false).snapshots(),
                                 builder: (context, snapshot) {
                                   int unreadMessagesCount = snapshot.data?.docs.length ?? 0;
+                                 
                                   return GestureDetector(
                                     onTap: () {
                                       Navigator.push(

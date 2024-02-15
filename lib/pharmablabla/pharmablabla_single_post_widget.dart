@@ -20,6 +20,7 @@ import 'package:pharmabox/pharmablabla/pharmablabla_search.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
+import '../custom_code/widgets/VideoPlayer.dart';
 import '../custom_code/widgets/box_in_draggable_scroll.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../popups/popup_offre/popup_offre_widget.dart';
@@ -222,6 +223,31 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                     child: Text(
                       postAndUserData['post']['post_content'] ?? '',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 15.0),
+                    ),
+                  ),
+                  if(postAndUserData['post']['media'] != null)
+                Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
+                    child: Container(
+                      height: 200,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: BouncingScrollPhysics(),
+                        child: Row(
+                          children: [
+                            for (final media in postAndUserData['post']['media'].toList())
+                              media.toString().contains('.mp4')
+                                  ? Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: VideoPlayerWidget(videoUrl: media),
+                                  )
+                                  : Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Image.network(media),
+                                  ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],

@@ -1659,7 +1659,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
 
                                 if (_model.posteValue == 'Pharmacien titulaire') {
                                   context.pushNamed('RegisterPharmacy',
-                                      params: {
+                                      queryParams: {
                                         'titulaire': serializeParam(
                                           _model.nomFamilleController.text + ' ' + _model.prenomController.text,
                                           ParamType.String,

@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/composants/card_user/card_user_widget.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
@@ -21,7 +24,8 @@ import 'package:pharmabox/pharmablabla/pharmablabla_model.dart';
 import 'package:pharmabox/popups/popup_groupement/popup_groupement_widget.dart';
 import 'package:pharmabox/popups/popup_lgo/popup_lgo_widget.dart';
 import 'package:pharmabox/popups/popup_pharmablabla/popup_pharmablabla_widget.dart';
-
+import 'package:video_player/video_player.dart';
+import 'package:path/path.dart' as p;
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
 import '../custom_code/widgets/box_in_draggable_scroll.dart';
@@ -53,6 +57,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
   late PharmaBlablaModel _model;
   bool isTitulaire = false;
   Map<String, dynamic> updateData = {};
+  List<VideoPlayerController> videosControllers = [];
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -86,6 +91,69 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
     });
   }
 
+  List<XFile>? _pickedImages;
+  List<VideoPlayerController> documentsMedia = [];
+  List<XFile> documentsImage = [];
+  bool _loading = false;
+  List<String> urlsFiles = [];
+
+  Future<void> _selectVideoAndImage() async {
+    _pickedImages?.clear();
+    videosControllers.clear();
+    documentsMedia.clear();
+    _pickedImages = await ImagePicker().pickMultipleMedia();
+
+    setState(() {
+      _loading = true;
+    });
+    try {
+      for (int index = 0; index < _pickedImages!.length; index++) {
+        if (_pickedImages![index].path.toLowerCase().endsWith('.mp4')) {
+          documentsMedia.add(VideoPlayerController.file(File(_pickedImages![index].path.toString()))..initialize().then((_) => setState(() {})));
+        } else {
+          documentsImage.add(_pickedImages![index]);
+        }
+        setState(() {
+          _loading = false;
+        });
+      }
+      
+    } catch (e) {
+      print('Error selecting images: $e');
+    }
+  }
+
+  deleteMedia(int index, String type) {
+    if (type == 'video') {
+      documentsMedia.removeAt(index);
+    }
+    if (type == 'image') {
+      documentsImage.removeAt(index);
+    }
+    setState(() {});
+  }
+
+  // Méthode pour téléverser les images sélectionnées vers Firebase Storage
+  Future<List<String>> uploadImages() async {
+    List<String> urls = [];
+    if (_pickedImages != null) {
+
+      for (var image in _pickedImages!) {
+        final Reference storageRef = FirebaseStorage.instance.ref().child('pharmablabla/${DateTime.now()}${p.basename(image.path)}');
+        final UploadTask uploadTask = storageRef.putFile(File(image.path));
+        final TaskSnapshot downloadUrl = (await uploadTask);
+
+        String url = (await downloadUrl.ref.getDownloadURL());
+
+        urls.add(url);
+      }
+
+      return urls;
+    }
+
+    return urls;
+  }
+
   Future<bool> savePostPharmablabla(type) async {
     CollectionReference pharmablablaCollection = FirebaseFirestore.instance.collection('pharmablabla');
     String currentuserId = await getCurrentUserId();
@@ -107,6 +175,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
 
       if (type == 'create') {
         try {
+          List<String> url = await uploadImages();
           await pharmablablaCollection.add({
             'users_viewed': [],
             'post_content': _model.postContent.text,
@@ -115,8 +184,9 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
             'network': _model.reseauType,
             'LGO': _model.selectedLGO[0]['name'],
             'poste': _model.posteValue,
-            // 'groupement': _model.selectedGroupement[0]['name'],
+            'media': url,
             'date_created': DateTime.now()
+            // 'groupement': _model.selectedGroupement[0]['name'],
           });
           return true;
         } catch (e) {
@@ -414,7 +484,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
                                     updateData.isNotEmpty ? 'Réécrivez votre post ...' : 'Lancez un sujet ...',
@@ -425,13 +495,92 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
+                                  if (updateData.isEmpty)
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        await _selectVideoAndImage();
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Couleur de fond blanche
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.add_circle_outlined, color: greyColor), // Icône de média
+                                          SizedBox(width: 8), // Espace entre l'icône et le texte
+                                          Text('Photos & Vidéos', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 11, fontWeight: FontWeight.w400)), // Texte du bouton
+                                        ],
+                                      ),
+                                    ),
                                 ],
                               ),
+                              if (_pickedImages != null)
+                                Container(
+                                  height: (documentsMedia.length > 0 || documentsImage.length > 0) ? 100 : 0, // Ajustez la hauteur en fonction du nombre d'éléments affichés
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: BouncingScrollPhysics(),
+                                    child: Row(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+                                      for (final video in documentsMedia)
+                                        Stack(
+                                          children: [
+                                            Container(
+                                                // ajustez la hauteur selon vos besoins
+                                                child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: AspectRatio(
+                                                aspectRatio: video.value.aspectRatio,
+                                                child: VideoPlayer(video),
+                                              ),
+                                            )),
+                                            Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.all(Radius.circular(50.0))),
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  Icons.remove,
+                                                  color: Colors.white,
+                                                  size: 15,
+                                                ),
+                                                onPressed: () => deleteMedia(documentsMedia.indexOf(video), 'video'),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      for (final image in documentsImage)
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              // ajustez la hauteur selon vos besoins
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Image.file(File(image.path)),
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(color: redColor, borderRadius: BorderRadius.all(Radius.circular(50.0))),
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  Icons.remove,
+                                                  color: Colors.white,
+                                                  size: 15,
+                                                ),
+                                                onPressed: () => deleteMedia(documentsImage.indexOf(image), 'image'),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                    ]),
+                                  ),
+                                ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: TextFormField(
                                   textCapitalization: TextCapitalization.sentences,
-                                  minLines: 10,
+                                  minLines: 6,
                                   controller: _model.postContent,
                                   obscureText: false,
                                   decoration: InputDecoration(
@@ -496,7 +645,6 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                                   ),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      await Future.delayed(Duration(seconds: 2));
                                       if (await savePostPharmablabla(updateData.isNotEmpty ? 'update' : 'create')) {
                                         showCustomSnackBar(context, 'Votre publication est en ligne !');
                                         context.pushNamed('PharmaBlabla');

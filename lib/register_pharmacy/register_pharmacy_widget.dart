@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/custom_code/widgets/map_adresse_pharmacie.dart';
 import 'package:pharmabox/register_pharmacy/register_pharmacie_provider.dart';
 
 import '../custom_code/widgets/horaire_select_widget.dart';
@@ -703,7 +704,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                     ],
                                   ),
                                 ),
-                                custom_widgets.MapAdressePharmacie(
+                                MapAdressePharmacie(
                                     countryCode: supportedCountry[widget.countryCode.toString()].toString(),
                                     onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region, country) {
                                       _model.pharmacieAdresseController.text = adresse;

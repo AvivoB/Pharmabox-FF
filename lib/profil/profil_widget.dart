@@ -248,7 +248,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     Future<void> _pickImage({required ImageSource source}) async {
       
-      final pickedFile = await ImagePicker().getImage(source: source);
+      final pickedFile = await ImagePicker().pickImage(source: source);
 
       if(pickedFile != null) {
           final croppedImage = await ImageCropper().cropImage(

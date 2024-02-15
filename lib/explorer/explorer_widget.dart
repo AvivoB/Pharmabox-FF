@@ -416,9 +416,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                       // Les coordonnées GPS sont disponibles dans la liste des locations
                                       double latitude = locations[0].latitude;
                                       double longitude = locations[0].longitude;
-
-                                      print('TLV LATT' + latitude.toString());
-                                      print('TLV LATT' + longitude.toString());
                                       GoogleMapController controller = await _controller.future;
                                       controller.animateCamera(CameraUpdate.newCameraPosition(
                                           // on below line we have given positions of Location 5

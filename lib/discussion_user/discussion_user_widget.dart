@@ -58,7 +58,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
 
     try {
       if (_message.text.isNotEmpty) {
-        conversationDoc.set({'last_message': _message.text, 'last_message_from': currentUser});
+        conversationDoc.set({'last_message': _message.text, 'last_message_from': currentUser, 'timestamp': FieldValue.serverTimestamp()});
         // Add a new document to the 'message' subcollection.
         await conversationDoc.collection('message').add({
           'fromId': currentUser,

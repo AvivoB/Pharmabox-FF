@@ -101,7 +101,7 @@ class _CarouselPharmacieSliderSelectState extends State<CarouselPharmacieSliderS
         final croppedImage = await ImageCropper().cropImage(
           sourcePath: imageFile.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-          compressQuality: 50,
+          compressQuality: 90,
           compressFormat: ImageCompressFormat.jpg,
           uiSettings: [
             AndroidUiSettings(toolbarTitle: 'Redimensionner l\'image', toolbarColor: blueColor, toolbarWidgetColor: Colors.white, initAspectRatio: CropAspectRatioPreset.original, lockAspectRatio: false),

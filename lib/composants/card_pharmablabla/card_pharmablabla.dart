@@ -2,6 +2,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/composants/card_pharmablabla/card_pharmablabla_model.dart';
 
 import '../../constant.dart';
+import '../../custom_code/widgets/VideoPlayer.dart';
 import '../../custom_code/widgets/button_network_manager.dart';
 import '../../custom_code/widgets/like_button.dart';
 import '../../discussion_user/discussion_user_widget.dart';
@@ -36,8 +37,6 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CardPharmablablaModel());
-
-    print(widget.data);
   }
 
   @override
@@ -153,6 +152,31 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                 ),
               ),
             ),
+            if(widget.data['post']['media'] != null)
+            Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
+                child: Container(
+                  height: 200,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    child: Row(
+                      children: [
+                        for (final media in widget.data['post']['media'].toList())
+                          media.toString().contains('.mp4')
+                              ? Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: VideoPlayerWidget(videoUrl: media),
+                              )
+                              : Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Image.network(media),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             Container(
               width: MediaQuery.of(context).size.width * 1.0,
               decoration: BoxDecoration(
