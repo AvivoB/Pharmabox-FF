@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
 import 'package:pharmabox/composants/card_offers_profile/card_offers_profile.dart';
 import 'package:pharmabox/composants/card_searchs_profile/card_searchs_profile.dart';
 import 'package:pharmabox/custom_code/widgets/button_network_manager.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/discussion_user/discussion_user_widget.dart';
-import 'package:pharmabox/flutter_flow/chat/index.dart';
 import 'package:pharmabox/popups/popup_signalement/popup_signalement_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -474,12 +474,9 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                           GestureDetector(
                                             onTap: () {
                                               context.pushNamed('PharmacieProfilView',
-                                                  queryParams: {
-                                                    'pharmacieId': serializeParam(
-                                                      pharmacieUser[0]['doc_id'],
-                                                      ParamType.String,
-                                                    ),
-                                                  }.withoutNulls);
+                                                  queryParameters: {
+                                                    'pharmacieId': pharmacieUser[0]['doc_id']
+                                                  });
                                             },
                                             child: 
                                             pharmacieUser.isNotEmpty ?

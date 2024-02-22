@@ -306,12 +306,9 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                                                     GestureDetector(
                                                                       onTap: () => {
                                                                         context.pushNamed('ProfilView',
-                                                                            queryParams: {
-                                                                              'userId': serializeParam(
-                                                                                userData['id'],
-                                                                                ParamType.String,
-                                                                              ),
-                                                                            }.withoutNulls)
+                                                                            queryParameters: {
+                                                                              'userId': userData['id']
+                                                                            })
                                                                       },
                                                                       child: Column(
                                                                         mainAxisSize: MainAxisSize.max,

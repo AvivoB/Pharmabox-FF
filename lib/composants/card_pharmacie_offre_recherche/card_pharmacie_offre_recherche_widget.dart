@@ -100,12 +100,9 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                           GestureDetector(
                             onTap: () {
                               context.pushNamed('PharmacieProfilView',
-                                  queryParams: {
-                                    'pharmacieId': serializeParam(
-                                      widget.data['pharma_id'],
-                                      ParamType.String,
-                                    ),
-                                  }.withoutNulls);
+                                  queryParameters: {
+                                    'pharmacieId': widget.data['pharma_id'],
+                                  });
                             },
                             child: Text(
                               widget.data['pharma_data']['situation_geographique'] != null ? widget.data['pharma_data']['situation_geographique']['adresse'] : '',

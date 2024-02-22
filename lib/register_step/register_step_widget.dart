@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/custom_code/widgets/pdfViewer.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/register_step/register_provider.dart';
@@ -62,7 +63,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
     super.initState();
     _model = createModel(context, () => RegisterStepModel());
     var namefull = currentUserDisplayName.split(' ');
-    print('heyy' +currentUserDisplayName);
+    print('heyy' + currentUserDisplayName);
 
     _model.nomFamilleController ??= TextEditingController(text: namefull.last);
     _model.prenomController ??= TextEditingController(text: namefull.first);
@@ -517,11 +518,17 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         controller: _model.birthDateController,
                                         readOnly: true,
                                         onTap: () async {
-                                            DateTime currentDate = DateTime.now();
+                                          DateTime currentDate = DateTime.now();
 
                                           // Calculez la date minimale (16 ans en arrière à partir de la date actuelle)
                                           DateTime minDate = DateTime(currentDate.year - 16, currentDate.month, currentDate.day);
-                                          final _datePickedDate = await showDatePicker(context: context, initialDate: minDate,  firstDate: DateTime(1900), lastDate: minDate, keyboardType: TextInputType.url,);
+                                          final _datePickedDate = await showDatePicker(
+                                            context: context,
+                                            initialDate: minDate,
+                                            firstDate: DateTime(1900),
+                                            lastDate: minDate,
+                                            keyboardType: TextInputType.url,
+                                          );
 
                                           if (_datePickedDate != null) {
                                             setState(() {
@@ -1658,18 +1665,16 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                 // });
 
                                 if (_model.posteValue == 'Pharmacien titulaire') {
-                                  context.pushNamed('RegisterPharmacy',
-                                      queryParams: {
-                                        'titulaire': serializeParam(
-                                          _model.nomFamilleController.text + ' ' + _model.prenomController.text,
-                                          ParamType.String,
-                                        ),
-                                        'countryCode': serializeParam(
-                                          _model.countryController,
-                                          ParamType.String,
-                                        ),
-                                      }.withoutNulls);
+                                   var providerAuth = Provider.of<AuthProvider>(context, listen: false);
+                                   providerAuth.setComplete();
+                                   providerAuth.setDuringRegister();
+                                  context.pushNamed('RegisterPharmacy', queryParameters: {
+                                    'titulaire': _model.nomFamilleController.text + ' ' + _model.prenomController.text,
+                                    'countryCode': _model.countryController,
+                                  });
                                 } else {
+                                  var providerAuth = Provider.of<AuthProvider>(context, listen: false);
+                                  providerAuth.setComplete();
                                   context.pushNamed('ValidateAccount');
                                 }
                               }

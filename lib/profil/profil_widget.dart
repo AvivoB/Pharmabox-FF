@@ -925,6 +925,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                 ),
                               ),
                               indicatorWeight: 1,
+                              dividerHeight: 0,
                               indicatorPadding: EdgeInsets.only(top: 40),
                               unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',

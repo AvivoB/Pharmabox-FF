@@ -92,11 +92,8 @@ class _PopupImportContactState extends State<PopupImportContact> {
                     title: Text('Depuis vos numéros de téléphone', style: FlutterFlowTheme.of(context).bodyMedium),
                     onTap: () {
                       context.pushNamed('ReseauImportFromPhone',
-                          queryParams: {
-                            'type': serializeParam(
-                              'phone',
-                              ParamType.String,
-                            ),
+                          queryParameters: {
+                            'type': 'phone'
                           }.withoutNulls);
                     },
                   ),
@@ -104,7 +101,7 @@ class _PopupImportContactState extends State<PopupImportContact> {
                     leading: Icon(Icons.mail_outline),
                     title: Text('A partir de vos E-mails enregistrés', style: FlutterFlowTheme.of(context).bodyMedium),
                     onTap: () {
-                      context.pushNamed('ReseauImportFromPhone', queryParams: {'type': 'email'}.withoutNulls);
+                      context.pushNamed('ReseauImportFromPhone', queryParameters: {'type': 'email'}.withoutNulls);
                     },
                   ),
                 ],

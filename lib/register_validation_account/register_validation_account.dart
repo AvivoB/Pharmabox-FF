@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_theme.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class ValidateAccount extends StatefulWidget {
   @override
@@ -36,7 +38,8 @@ class _ValidateAccountState extends State<ValidateAccount> {
       if ((userDoc.data()! as Map<String, dynamic>)['verificationCode'].toString() == enteredCode) {
         // Mettez à jour les champs isVerified et isValid à true pour cet utilisateur
         await FirebaseFirestore.instance.collection('users').doc(currentUserId).update({'isVerified': true, 'isValid': true});
-
+        var providerAuth = Provider.of<AuthProvider>(context, listen: false);
+        providerAuth.setValidCode();
         return true; // le code est correct
       }
     }

@@ -299,7 +299,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   ),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
+                                      // GoRouter.of(context).prepareAuthEvent();
                                       if (_model.motdepasseController.text != _model.confirmpasswordController.text) {
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
@@ -320,7 +320,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         return;
                                       }
 
-                                      context.goNamedAuth('RegisterStep', mounted);
+                                      context.pushNamed('RegisterStep');
                                     },
                                     text: 'S\'enregistrer',
                                     options: FFButtonOptions(
@@ -369,13 +369,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   ),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
+                                      // GoRouter.of(context).prepareAuthEvent();
                                       final user = await authManager.signInWithGoogle(context);
                                       if (user == null) {
                                         return;
                                       }
 
-                                      context.goNamedAuth('RegisterStep', mounted);
+                                      context.pushNamed('RegisterStep');
                                     },
                                     text: 'S\'inscire avec Google',
                                     icon: FaIcon(

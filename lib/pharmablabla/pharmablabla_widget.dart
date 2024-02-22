@@ -359,12 +359,13 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                                                           Navigator.pop(context);
                                                           context.pushNamed(
                                                             'PharmaBlablaEditPost',
-                                                            queryParams: {
-                                                              'data': serializeParam(
-                                                                jsonEncode(postEdit),
-                                                                ParamType.String,
-                                                              ),
-                                                            }.withoutNulls,
+                                                            queryParameters: {
+                                                              'content': data['post_content'].toString(),
+                                                              'postId': data['postId'].toString(),
+                                                              'LGO': data['LGO'].toString(), 
+                                                              'network': data['network'].toString(), 
+                                                              'poste': data['poste'].toString()
+                                                            },
                                                           );
                                                         },
                                                       ),
@@ -390,12 +391,9 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                                       onTap: () {
                                         context.pushNamed(
                                           'PharmaBlablaSinglePost',
-                                          queryParams: {
-                                            'postId': serializeParam(
-                                              data['postId'],
-                                              ParamType.String,
-                                            ),
-                                          }.withoutNulls,
+                                          queryParameters: {
+                                            'postId': data['postId']
+                                          },
                                         );
                                       }),
                                 );

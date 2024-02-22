@@ -235,10 +235,10 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        GoRouter.of(context).prepareAuthEvent();
+                        // GoRouter.of(context).prepareAuthEvent();
                         await authManager.signOut();
                         GoRouter.of(context).clearRedirectLocation();
-                        context.goNamedAuth('Register', mounted);
+                        context.pushNamed('Register');
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,

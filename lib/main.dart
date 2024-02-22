@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
 import 'package:pharmabox/notifications/firebase_notifications_service.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
@@ -27,6 +28,7 @@ import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'flutter_flow/nav/AppStateNotifier.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
@@ -93,13 +95,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale;
-  ThemeMode _themeMode = FlutterFlowTheme.themeMode;
+  ThemeMode _themeMode = ThemeMode.light;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   late Stream<BaseAuthUser> userStream;
 
-  late AppStateNotifier _appStateNotifier;
-  late GoRouter _router;
+  // late AppStateNotifier _appStateNotifier;
 
   final authUserSub = authenticatedUserStream.listen((_) {});
 
@@ -112,14 +113,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _appStateNotifier = AppStateNotifier();
-    _router = createRouter(_appStateNotifier);
+    AppStateNotifier _appStateNotifier = AppStateNotifier();
+    // _router = createRouter(_appStateNotifier);
     userStream = pharmaboxFirebaseUserStream()..listen((user) => _appStateNotifier.update(user));
     jwtTokenStream.listen((_) {});
-    Future.delayed(
-      Duration(seconds: 1),
-      () => _appStateNotifier.stopShowingSplashImage(),
-    );
+    // Future.delayed(
+    //   Duration(seconds: 1),
+    //   () => _appStateNotifier.stopShowingSplashImage(),
+    // );
     _handleIncomingLinks();
   }
 
@@ -166,6 +167,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProviderUserRegister()),
         ChangeNotifierProvider(create: (_) => ProviderPharmacieRegister()),
         ChangeNotifierProvider(create: (_) => ProviderProfilUser()),
@@ -181,12 +183,16 @@ class _MyAppState extends State<MyApp> {
         ],
         locale: _locale,
         supportedLocales: const [Locale('fr', 'FR')],
-        theme: ThemeData(brightness: Brightness.light),
+        theme: ThemeData(
+          useMaterial3: false,
+          brightness: Brightness.light,
+        ),
         debugShowCheckedModeBanner: false,
         // darkTheme: ThemeData(brightness: Brightness.dark),
         themeMode: _themeMode,
-        routeInformationParser: _router.routeInformationParser,
-        routerDelegate: _router.routerDelegate,
+        // routeInformationParser: _router.routeInformationParser,
+        // routerDelegate: _router.routerDelegate,
+        routerConfig: routerApp
       ),
     );
   }
@@ -231,7 +237,7 @@ class _NavBarPageState extends State<NavBarPage> {
     return Scaffold(
       body: _currentPage ?? tabs[_currentPageName],
       extendBody: true,
-      bottomNavigationBar: FloatingNavbar(
+      bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (i) => setState(() {
           _currentPage = null;
@@ -240,15 +246,20 @@ class _NavBarPageState extends State<NavBarPage> {
         backgroundColor: Colors.white,
         // selectedItemColor: Color(0xFF7CEDAC),
         unselectedItemColor: Colors.transparent,
-        borderRadius: 8.0,
-        itemBorderRadius: 8.0,
-        margin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-        width: double.infinity,
-        elevation: 0.0,
+        // borderRadius: 8.0,
+        // itemBorderRadius: 8.0,
+        // margin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+        // padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
+        // width: double.infinity,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        elevation: 8.0,
+        selectedFontSize: 0,
         items: [
-          FloatingNavbarItem(
-            customWidget: Column(
+          BottomNavigationBarItem(
+            label: '',
+            icon: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 currentIndex == 0
@@ -274,8 +285,9 @@ class _NavBarPageState extends State<NavBarPage> {
               ],
             ),
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
+          BottomNavigationBarItem(
+            label: '',
+            icon: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 currentIndex == 1
@@ -301,11 +313,14 @@ class _NavBarPageState extends State<NavBarPage> {
               ],
             ),
           ),
-          FloatingNavbarItem(
-            customWidget: Stack(
+          BottomNavigationBarItem(
+            label: '',
+            icon: Stack(
+              alignment: Alignment.center,
               children: [
                  Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   currentIndex == 2
                       ? ShaderMask(
@@ -339,7 +354,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 ],
               ),
               StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection('pharmablabla').snapshots(),
+                  stream: FirebaseFirestore.instance.collection('pharmablabla').where('network', isEqualTo: 'Tout Pharmabox').snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       // Display the error message
@@ -379,8 +394,10 @@ class _NavBarPageState extends State<NavBarPage> {
              
             ]),
           ),
-          FloatingNavbarItem(
-            customWidget: Stack(
+          BottomNavigationBarItem(
+            label: '',
+            icon: Stack(
+              alignment: Alignment.center,
               children: [
                  Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -457,8 +474,9 @@ class _NavBarPageState extends State<NavBarPage> {
              
             ]),
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
+          BottomNavigationBarItem(
+            label: '',
+            icon: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 currentIndex == 4 || currentIndex == -1

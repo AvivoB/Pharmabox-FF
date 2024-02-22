@@ -545,6 +545,36 @@ exports.deleteAccount = functions.https.onRequest( async (req, res) => {
     await admin.auth().deleteUser(userId);
 });
 
+// Desactive les offres et recherches qui ont plus d'un mois
+exports.disableInactiveDocuments = functions.pubsub.schedule('every 24 hours').timeZone('UTC').onRun((context) => {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setUTCMonth(oneMonthAgo.getUTCMonth() - 1);
+
+  const offresCollection = admin.firestore().collection('offres');
+  const recherchesCollection = admin.firestore().collection('recherches');
+
+  const updatePromises = [];
+
+  // Mise à jour de la collection 'offres'
+  const offresQuery = offresCollection.where('date_created', '<=', admin.firestore.Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
+  updatePromises.push(updateDocuments(offresQuery));
+
+  // Mise à jour de la collection 'recherches'
+  const recherchesQuery = recherchesCollection.where('date_created', '<=', admin.firestore.Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
+  updatePromises.push(updateDocuments(recherchesQuery));
+
+  return Promise.all(updatePromises);
+});
+
+function updateDocuments(query) {
+  return query.get().then(snapshot => {
+      const updatePromises = [];
+      snapshot.forEach(doc => {
+          updatePromises.push(doc.ref.update({ isActive: false }));
+      });
+      return Promise.all(updatePromises);
+  });
+}
 
 
 

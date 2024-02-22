@@ -228,7 +228,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   ),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
+                                      // GoRouter.of(context).prepareAuthEvent();
 
                                       final user = await authManager.signInWithEmail(
                                         context,
@@ -238,7 +238,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       if (user == null) {
                                         return;
                                       } else {
-                                        context.goNamedAuth('Explorer', mounted);
+                                        context.pushNamed('Explorer');
                                       } 
                                       
                                     },
@@ -289,13 +289,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   ),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
+                                      // GoRouter.of(context).prepareAuthEvent();
                                       final user = await authManager.signInWithGoogle(context);
                                       if (user == null) {
                                         return;
                                       }
 
-                                      context.goNamedAuth('Explorer', mounted);
+                                      context.pushNamed('Explorer');
                                     },
                                     text: 'Connexion via Google',
                                     icon: FaIcon(

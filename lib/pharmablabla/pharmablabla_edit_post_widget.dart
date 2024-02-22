@@ -46,8 +46,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:stopwordies/stopwordies.dart';
 
 class PharmaBlablaEditPost extends StatefulWidget {
-  const PharmaBlablaEditPost({Key? key, this.data}) : super(key: key);
-  final String? data;
+  const PharmaBlablaEditPost({Key? key, this.lgo, this.postId, this.content, this.network, this.poste}) : super(key: key);
+  final String? lgo;
+  final String? postId;
+  final String? content;
+  final String? network;
+  final String? poste;
 
   @override
   _PharmaBlablaEditPostState createState() => _PharmaBlablaEditPostState();
@@ -75,8 +79,8 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
 
   @override
   void initState() {
-    if (widget.data != null) {
-      updateData = jsonDecode(widget.data.toString());
+    if (widget.postId != null) {
+      updateData = {'content': widget.content.toString(), 'postId': widget.postId.toString(), 'LGO':widget.lgo.toString(), 'network': widget.network.toString(), 'poste': widget.poste.toString()};
     }
 
     super.initState();
@@ -117,7 +121,6 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
           _loading = false;
         });
       }
-      
     } catch (e) {
       print('Error selecting images: $e');
     }
@@ -137,7 +140,6 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
   Future<List<String>> uploadImages() async {
     List<String> urls = [];
     if (_pickedImages != null) {
-
       for (var image in _pickedImages!) {
         final Reference storageRef = FirebaseStorage.instance.ref().child('pharmablabla/${DateTime.now()}${p.basename(image.path)}');
         final UploadTask uploadTask = storageRef.putFile(File(image.path));
@@ -495,23 +497,23 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
-                                  if (updateData.isEmpty)
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        await _selectVideoAndImage();
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Couleur de fond blanche
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.add_circle_outlined, color: greyColor), // Icône de média
-                                          SizedBox(width: 8), // Espace entre l'icône et le texte
-                                          Text('Photos & Vidéos', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 11, fontWeight: FontWeight.w400)), // Texte du bouton
-                                        ],
-                                      ),
-                                    ),
+                                  // if (updateData.isEmpty)
+                                  //   ElevatedButton(
+                                  //     onPressed: () async {
+                                  //       await _selectVideoAndImage();
+                                  //     },
+                                  //     style: ButtonStyle(
+                                  //       backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Couleur de fond blanche
+                                  //     ),
+                                  //     child: Row(
+                                  //       mainAxisSize: MainAxisSize.min,
+                                  //       children: [
+                                  //         Icon(Icons.add_circle_outlined, color: greyColor), // Icône de média
+                                  //         SizedBox(width: 8), // Espace entre l'icône et le texte
+                                  //         Text('Photos & Vidéos', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 11, fontWeight: FontWeight.w400)), // Texte du bouton
+                                  //       ],
+                                  //     ),
+                                  //   ),
                                 ],
                               ),
                               if (_pickedImages != null)

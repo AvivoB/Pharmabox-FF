@@ -103,12 +103,9 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                         GestureDetector(
                           onTap: () => {
                             context.pushNamed('ProfilView',
-                                queryParams: {
-                                  'userId': serializeParam(
-                                    widget.data['user']['id'],
-                                    ParamType.String,
-                                  ),
-                                }.withoutNulls)
+                                queryParameters: {
+                                  'userId': widget.data['user']['id'],
+                                })
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -152,31 +149,31 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                 ),
               ),
             ),
-            if(widget.data['post']['media'] != null)
-            Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
-                child: Container(
-                  height: 200,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
-                    child: Row(
-                      children: [
-                        for (final media in widget.data['post']['media'].toList())
-                          media.toString().contains('.mp4')
-                              ? Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: VideoPlayerWidget(videoUrl: media),
-                              )
-                              : Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Image.network(media),
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+            // if(widget.data['post']['media'] != null && widget.data['post']['media'].toList().isNotEmpty)
+            // Padding(
+            //     padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
+            //     child: Container(
+            //       height: 350,
+            //       child: SingleChildScrollView(
+            //         scrollDirection: Axis.horizontal,
+            //         physics: BouncingScrollPhysics(),
+            //         child: Row(
+            //           children: [
+            //             for (final media in widget.data['post']['media'].toList())
+            //               media.toString().contains('.mp4')
+            //                   ? Padding(
+            //                     padding: const EdgeInsets.all(4.0),
+            //                     child: VideoPlayerWidget(videoUrl: media),
+            //                   )
+            //                   : Padding(
+            //                     padding: const EdgeInsets.all(4.0),
+            //                     child: Image.network(media),
+            //                   ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
             Container(
               width: MediaQuery.of(context).size.width * 1.0,
               decoration: BoxDecoration(

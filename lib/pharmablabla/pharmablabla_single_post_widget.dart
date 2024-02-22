@@ -225,31 +225,31 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                       style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 15.0),
                     ),
                   ),
-                  if(postAndUserData['post']['media'] != null)
-                Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
-                    child: Container(
-                      height: 200,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        physics: BouncingScrollPhysics(),
-                        child: Row(
-                          children: [
-                            for (final media in postAndUserData['post']['media'].toList())
-                              media.toString().contains('.mp4')
-                                  ? Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: VideoPlayerWidget(videoUrl: media),
-                                  )
-                                  : Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Image.network(media),
-                                  ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                //   if(postAndUserData['post']['media'] != null)
+                // Padding(
+                //     padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
+                //     child: Container(
+                //       height: 200,
+                //       child: SingleChildScrollView(
+                //         scrollDirection: Axis.horizontal,
+                //         physics: BouncingScrollPhysics(),
+                //         child: Row(
+                //           children: [
+                //             for (final media in postAndUserData['post']['media'].toList())
+                //               media.toString().contains('.mp4')
+                //                   ? Padding(
+                //                     padding: const EdgeInsets.all(4.0),
+                //                     child: VideoPlayerWidget(videoUrl: media),
+                //                   )
+                //                   : Padding(
+                //                     padding: const EdgeInsets.all(4.0),
+                //                     child: Image.network(media),
+                //                   ),
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ),
                 ],
               ),
             ),

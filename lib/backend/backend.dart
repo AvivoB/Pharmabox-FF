@@ -20,15 +20,15 @@ export 'schema/chats_record.dart';
 export 'schema/chat_messages_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
-Future<int> queryUsersRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      UsersRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
+// Future<int> queryUsersRecordCount({
+//   Query Function(Query)? queryBuilder,
+//   int limit = -1,
+// }) =>
+//     queryCollectionCount(
+//       UsersRecord.collection,
+//       queryBuilder: queryBuilder,
+//       limit: limit,
+//     );
 
 Stream<List<UsersRecord>> queryUsersRecord({
   Query Function(Query)? queryBuilder,
@@ -72,15 +72,15 @@ Future<FFFirestorePage<UsersRecord>> queryUsersRecordPage({
     );
 
 /// Functions to query ChatsRecords (as a Stream and as a Future).
-Future<int> queryChatsRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      ChatsRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
+// Future<int> queryChatsRecordCount({
+//   Query Function(Query)? queryBuilder,
+//   int limit = -1,
+// }) =>
+//     queryCollectionCount(
+//       ChatsRecord.collection,
+//       queryBuilder: queryBuilder,
+//       limit: limit,
+//     );
 
 Stream<List<ChatsRecord>> queryChatsRecord({
   Query Function(Query)? queryBuilder,
@@ -123,16 +123,16 @@ Future<FFFirestorePage<ChatsRecord>> queryChatsRecordPage({
       isStream: isStream,
     );
 
-/// Functions to query ChatMessagesRecords (as a Stream and as a Future).
-Future<int> queryChatMessagesRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      ChatMessagesRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
+// /// Functions to query ChatMessagesRecords (as a Stream and as a Future).
+// Future<int> queryChatMessagesRecordCount({
+//   Query Function(Query)? queryBuilder,
+//   int limit = -1,
+// }) =>
+//     queryCollectionCount(
+//       ChatMessagesRecord.collection,
+//       queryBuilder: queryBuilder,
+//       limit: limit,
+//     );
 
 Stream<List<ChatMessagesRecord>> queryChatMessagesRecord({
   Query Function(Query)? queryBuilder,
@@ -175,21 +175,21 @@ Future<FFFirestorePage<ChatMessagesRecord>> queryChatMessagesRecordPage({
       isStream: isStream,
     );
 
-Future<int> queryCollectionCount(
-  Query collection, {
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) {
-  final builder = queryBuilder ?? (q) => q;
-  var query = builder(collection);
-  if (limit > 0) {
-    query = query.limit(limit);
-  }
+// Future<int> queryCollectionCount(
+//   Query collection, {
+//   Query Function(Query)? queryBuilder,
+//   int limit = -1,
+// }) {
+//   final builder = queryBuilder ?? (q) => q;
+//   var query = builder(collection);
+//   if (limit > 0) {
+//     query = query.limit(limit);
+//   }
 
-  return query.count().get().catchError((err) {
-    print('Error querying $collection: $err');
-  }).then((value) => value.count);
-}
+//   return query.count().get().catchError((err) {
+//     print('Error querying $collection: $err');
+//   }).then((value) => value.count);
+// }
 
 Stream<List<T>> queryCollection<T>(Query collection, Serializer<T> serializer, {Query Function(Query)? queryBuilder, int limit = -1, bool singleRecord = false}) {
   final builder = queryBuilder ?? (q) => q;

@@ -104,12 +104,9 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                         GestureDetector(
                           onTap: () => {
                             context.pushNamed('ProfilView',
-                                queryParams: {
-                                  'userId': serializeParam(
-                                    widget.data['id'],
-                                    ParamType.String,
-                                  ),
-                                }.withoutNulls)
+                                queryParameters: {
+                                  'userId': widget.data['id'],
+                                })
                           },
                           child: Column(
                             mainAxisSize: MainAxisSize.max,

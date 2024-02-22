@@ -38,7 +38,7 @@ class PharmaJobSearchData {
     }
 
     if (filters['horaire_dispo_interim'] != null && filters['horaire_dispo_interim'].isNotEmpty && filters['contrats'].contains('Intérimaire')) {
-      filteredQuery = filteredQuery.where('proposition_dispo_interim', arrayContainsAny: filters['horaire_dispo_interim']);
+      filteredQuery = filteredQuery.where('proposition_dispo_interim', arrayContainsAny: filters['horaire_dispo_interim']).where('contrats', arrayContainsAny: filters['contrats']);
     }
 
     if (filters['temps'] != '') {
@@ -113,7 +113,8 @@ class PharmaJobSearchData {
     }
 
     if (filters['proposition_dispo_interim'] != null && filters['proposition_dispo_interim'].isNotEmpty && filters['contrats'].contains('Intérimaire')) {
-      filteredQuery = filteredQuery.where('horaire_dispo_interim', arrayContainsAny: filters['horaire_dispo_interim']);
+      print('search interim');
+      filteredQuery = filteredQuery.where('contrats', arrayContainsAny: filters['contrats']).where('horaire_dispo_interim', arrayContains: filters['horaire_dispo_interim']);
     }
 
     if (filters['temps'] != '') {

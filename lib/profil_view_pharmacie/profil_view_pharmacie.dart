@@ -207,12 +207,9 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                       GestureDetector(
                                         onTap: () => {
                                           context.pushNamed('ProfilView',
-                                              queryParams: {
-                                                'userId': serializeParam(
-                                                  userData['id'],
-                                                  ParamType.String,
-                                                ),
-                                              }.withoutNulls)
+                                              queryParameters: {
+                                                'userId': userData['id']
+                                              })
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,

@@ -698,6 +698,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                           ),
                         ),
                         indicatorWeight: 1,
+                        dividerHeight: 0,
                         indicatorPadding: EdgeInsets.only(top: 40),
                         unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Poppins',

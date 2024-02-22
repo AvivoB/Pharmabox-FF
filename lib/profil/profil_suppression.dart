@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
 import 'package:pharmabox/constant.dart';
-import 'package:pharmabox/flutter_flow/chat/index.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_theme.dart';
 import '../../constant.dart';
 import '/auth/firebase_auth/auth_util.dart';
@@ -157,11 +156,11 @@ class ProfilDeleteAccount extends StatelessWidget {
             ),
             TextButton(
                 onPressed: () async {
-                  GoRouter.of(context).prepareAuthEvent();
+                  // GoRouter.of(context).prepareAuthEvent();
                   await deleteAccount();
                   await authManager.signOut();
                   GoRouter.of(context).clearRedirectLocation();
-                  context.goNamedAuth('Register', true);
+                  context.pushNamed('Register');
                 },
                 child: Text(
                   'Supprimer mon compte définitivement',

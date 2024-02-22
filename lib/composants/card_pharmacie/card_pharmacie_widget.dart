@@ -111,12 +111,9 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
             GestureDetector(
               onTap: () => {
                 context.pushNamed('PharmacieProfilView',
-                    queryParams: {
-                      'pharmacieId': serializeParam(
-                        widget.data['documentId'],
-                        ParamType.String,
-                      ),
-                    }.withoutNulls)
+                    queryParameters: {
+                      'pharmacieId': widget.data['documentId'],
+                    })
               },
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),

@@ -443,6 +443,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                           ),
                         ),
                         indicatorWeight: 1,
+                        dividerHeight: 0,
                         indicatorPadding: EdgeInsets.only(top: 40),
                         controller: _tabController,
                         onTap: (value) async {
