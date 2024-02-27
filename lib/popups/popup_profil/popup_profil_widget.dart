@@ -1,4 +1,5 @@
 
+import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
 import 'package:share/share.dart';
 
@@ -236,7 +237,8 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                       highlightColor: Colors.transparent,
                       onTap: () async {
                         // GoRouter.of(context).prepareAuthEvent();
-                        await authManager.signOut();
+                        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                        await authProvider.signOut();
                         GoRouter.of(context).clearRedirectLocation();
                         context.pushNamed('Register');
                       },

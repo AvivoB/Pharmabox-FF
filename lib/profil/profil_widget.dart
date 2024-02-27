@@ -46,6 +46,7 @@ import 'profil_model.dart';
 export 'profil_model.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:pharmabox/auth/AuthProvider.dart' as AUTHPROVIDER;
 
 class ProfilWidget extends StatefulWidget {
   const ProfilWidget({
@@ -105,6 +106,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
 
   updateUserToFirebase(context) {
     final providerProfilUser = Provider.of<ProviderProfilUser>(context, listen: false);
+    final authProvider = Provider.of<AUTHPROVIDER.AuthProvider>(context, listen: false);
 
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
@@ -131,7 +133,10 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
         'photoUrl': _model.imageURL,
         'afficher_tel': _model.afficher_tel,
         'afficher_email': _model.afficher_email,
+        'isComplete': true,
+        'isVerified': true,
       });
+      authProvider.setComplete();
       showCustomSnackBar(context, 'Votre profil à été mis à jour');
     } else {
       showCustomSnackBar(context, 'Merci de compléter votre profil', isError: true);
@@ -230,11 +235,11 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
       _model.afficher_tel = userData['afficher_tel'] ?? true;
 
       final providerProfilUser = Provider.of<ProviderProfilUser>(context, listen: false);
-      providerProfilUser.setSpecialisation(userData != null ? userData['specialisations'] : []);
-      providerProfilUser.setLGO(userData != null ? userData['lgo'] : []);
-      providerProfilUser.setCompetence(userData != null ? userData['competences'] : []);
-      providerProfilUser.setLangues(userData != null ? userData['langues'] : []);
-      providerProfilUser.setExperiences(userData != null ? userData['experiences'] : []);
+      providerProfilUser.setSpecialisation(userData?['specialisations'] ?? []);
+      providerProfilUser.setLGO(userData?['lgo'] ?? []);
+      providerProfilUser.setCompetence(userData?['competences']?? []);
+      providerProfilUser.setLangues(userData?['langues'] ?? []);
+      providerProfilUser.setExperiences(userData?['experiences'] ?? []);
       setState(() {
         _isLoading = false;
       });
@@ -457,7 +462,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                       Padding(
                                           padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                                           child: LikeButtonWidget(
-                                            documentId: userData != null ? userData['id'] : '',
+                                            documentId: userData?['id'] ?? '',
                                             isActive: false,
                                           )),
                                     ],

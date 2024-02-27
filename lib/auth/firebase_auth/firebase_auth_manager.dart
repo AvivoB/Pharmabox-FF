@@ -68,29 +68,29 @@ class FirebaseAuthManager extends AuthManager with EmailSignInManager, Anonymous
     );
   }
 
-  @override
-  Future<BaseAuthUser?> signInWithEmail(
-    BuildContext context,
-    String email,
-    String password,
-  ) =>
-      _signInOrCreateAccount(
-        context,
-        () => emailSignInFunc(email, password),
-        'EMAIL',
-      );
+  // @override
+  // Future<BaseAuthUser?> signInWithEmail(
+  //   BuildContext context,
+  //   String email,
+  //   String password,
+  // ) =>
+  //     _signInOrCreateAccount(
+  //       context,
+  //       () => emailSignInFunc(email, password),
+  //       'EMAIL',
+  //     );
 
-  @override
-  Future<BaseAuthUser?> createAccountWithEmail(
-    BuildContext context,
-    String email,
-    String password,
-  ) =>
-      _signInOrCreateAccount(
-        context,
-        () => emailCreateAccountFunc(email, password),
-        'EMAIL',
-      );
+  // @override
+  // Future<BaseAuthUser?> createAccountWithEmail(
+  //   BuildContext context,
+  //   String email,
+  //   String password,
+  // ) =>
+  //     _signInOrCreateAccount(
+  //       context,
+  //       () => emailCreateAccountFunc(email, password),
+  //       'EMAIL',
+  //     );
 
   @override
   Future<BaseAuthUser?> signInAnonymously(
@@ -208,5 +208,17 @@ class FirebaseAuthManager extends AuthManager with EmailSignInManager, Anonymous
       }
       return null;
     }
+  }
+  
+  @override
+  Future<BaseAuthUser?> createAccountWithEmail(BuildContext context, String email, String password) {
+    // TODO: implement createAccountWithEmail
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<BaseAuthUser?> signInWithEmail(BuildContext context, String email, String password, String nom, String prenom) {
+    // TODO: implement signInWithEmail
+    throw UnimplementedError();
   }
 }

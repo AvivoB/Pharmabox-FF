@@ -428,7 +428,7 @@ class _NavBarPageState extends State<NavBarPage> {
                           fontFamily: 'Poppins',
                           color: FlutterFlowTheme.of(context).primaryText,
                           fontSize: 10,
-                          fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400,
+                          fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400,
                         ),
                   )
                 ],

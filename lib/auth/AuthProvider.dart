@@ -12,6 +12,7 @@ class AuthProvider extends ChangeNotifier {
   bool _isComplete = false;
   bool _isVerified = false;
   bool _duringRegister = true;
+  bool _isLoadingAuth = true;
 
   User? get user => _user;
   Map<String, dynamic>? get userData => _userData;
@@ -20,6 +21,7 @@ class AuthProvider extends ChangeNotifier {
   bool get isComplete => _isComplete;
   bool get isVerified => _isVerified;
   bool get duringRegister => _duringRegister;
+  bool get isLoadingAuth => _isLoadingAuth;
 
   AuthProvider() {
     _auth.authStateChanges().listen((User? newUser) async {
@@ -32,6 +34,7 @@ class AuthProvider extends ChangeNotifier {
         _isVerified = _userData?['isVerified'] ?? false;
         _duringRegister = false;
       }
+      _isLoadingAuth = false;
       notifyListeners();
     });
   }

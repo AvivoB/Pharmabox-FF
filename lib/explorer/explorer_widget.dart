@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -87,10 +88,13 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
         isLoading = false;
       });
     } else {
-      // Handle the case when the user denies the location permission
-      // Add your own logic or show a message to the user
-      isLoading = false;
-      setState(() {});
+      setState(() {
+        _currentCameraPosition = CameraPosition(
+          target: LatLng(48.866667, 2.333333),
+          zoom: 16.0,
+        );
+        isLoading = false;
+      });
     }
   }
 
@@ -235,6 +239,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        authProvider.isComplete == false ?
+        showAlertCompleteProfile(context) : print('OKKK proifle complet');
+    });
   }
 
   void _playAnimation() {
@@ -243,7 +253,11 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   }
 
   ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder);
+    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder, 
+      levels: [1, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 20.0], // Optional : Configure this if you want to change zoom levels at which the clustering precision change
+      extraPercent: 0.2, // Optional : This number represents the percentage (0.2 for 20%) of latitude and longitude (in each direction) to be considered on top of the visible map bounds to render clusters. This way, clusters don't "pop out" when you cross the map.
+      stopClusteringZoom: 15.0 // Optional : The zoom level to stop clustering, so it's only rendering single item "clusters"
+    );
   }
 
   void _updateMarkers(Set<Marker> markers) {

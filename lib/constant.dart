@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pharmabox/flutter_flow/flutter_flow_theme.dart';
 import 'package:provider/provider.dart';
+import 'package:pharmabox/auth/AuthProvider.dart' as customAuthProvider;
 
 const redColor = Color(0xFFF89999);
 const greenColor = Color(0xFF7CEDAC);
@@ -75,9 +79,7 @@ Future<Map<String, dynamic>> getCurrentUserData() async {
     if (userSnapshot.exists && userSnapshot.data() != null) {
       return userSnapshot.data() as Map<String, dynamic>;
     }
-  } catch (e) {
-    
-  }
+  } catch (e) {}
 
   return {};
 }
@@ -92,6 +94,56 @@ Future<String> getCurrentUserId() async {
 }
 
 extension StringCasingExtension on String {
-  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
+  String toCapitalized() => length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
   String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+}
+
+void showAlertCompleteProfile(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Votre profil est incomplet',
+          style: FlutterFlowTheme.of(context).bodyLarge,
+        ),
+        content: Text('Pour augmenter votre visibilité sur Pharmabox, veuillez compléter votre profil.', style: FlutterFlowTheme.of(context).bodyMedium),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.pushNamed('Profil');
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 4,
+                      color: Color(0x301F5C67),
+                      offset: Offset(0, 4),
+                    )
+                  ],
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                    stops: [0, 1],
+                    begin: AlignmentDirectional(1, -1),
+                    end: AlignmentDirectional(-1, 1),
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Compléter mon profil', style: FlutterFlowTheme.of(context).bodyMedium.copyWith(color: Colors.white)),
+                )),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Fermer l'alerte
+            },
+            child: Text('Plus tard', style: FlutterFlowTheme.of(context).bodyMedium.copyWith(color: redColor)),
+          ),
+        ],
+      );
+    },
+  );
 }

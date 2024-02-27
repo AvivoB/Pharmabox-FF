@@ -155,7 +155,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     text: 'Ajouter',
                     // height: 25.0,
                     typeCollection: 'users',
-                    docId: widget.data['id'],
+                    docId: widget.data?['id'] ?? '',
                   )),
                 ],
               ),
@@ -215,7 +215,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                   children: [
                     Container(
                       child: LikeButtonWidget(
-                        documentId: widget.data['id'],
+                        documentId: widget.data?['id'] ?? '',
                       ),
                     ),
                     Container(

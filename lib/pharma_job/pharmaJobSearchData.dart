@@ -113,8 +113,9 @@ class PharmaJobSearchData {
     }
 
     if (filters['proposition_dispo_interim'] != null && filters['proposition_dispo_interim'].isNotEmpty && filters['contrats'].contains('Intérimaire')) {
-      print('search interim');
-      filteredQuery = filteredQuery.where('contrats', arrayContainsAny: filters['contrats']).where('horaire_dispo_interim', arrayContains: filters['horaire_dispo_interim']);
+      // Cherche les offres qui ont les horaires de disponibilité de l'intérim et des dates de dispo contenu dans la proposition_dispo_interim
+       
+      filteredQuery = filteredQuery.where('contrats', arrayContainsAny: filters['contrats']).where('horaire_dispo_interim', arrayContains: filters['proposition_dispo_interim']);
     }
 
     if (filters['temps'] != '') {

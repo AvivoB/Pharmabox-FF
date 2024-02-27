@@ -13,7 +13,14 @@ class RegisterModel extends FlutterFlowModel {
   final formKey = GlobalKey<FormState>();
   // State field(s) for Email widget.
   TextEditingController? emailController;
+  TextEditingController? nomController;
+  TextEditingController? prenomController;
   String? Function(BuildContext, String?)? emailControllerValidator;
+
+  var posteValueController;
+
+  String? posteValue = 'Pharmacien';
+
   String? _emailControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Adresse mail invalide';
@@ -37,32 +44,19 @@ class RegisterModel extends FlutterFlowModel {
     return null;
   }
 
-  // State field(s) for Confirmpassword widget.
-  TextEditingController? confirmpasswordController;
-  late bool confirmpasswordVisibility;
-  String? Function(BuildContext, String?)? confirmpasswordControllerValidator;
-  String? _confirmpasswordControllerValidator(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Confirmez votre mot de passe';
-    }
-
-    return null;
-  }
-
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
     emailControllerValidator = _emailControllerValidator;
     motdepasseVisibility = false;
     motdepasseControllerValidator = _motdepasseControllerValidator;
-    confirmpasswordVisibility = false;
-    confirmpasswordControllerValidator = _confirmpasswordControllerValidator;
   }
 
   void dispose() {
     emailController?.dispose();
     motdepasseController?.dispose();
-    confirmpasswordController?.dispose();
+    nomController?.dispose();
+    prenomController?.dispose(); 
   }
 
   /// Additional helper methods are added here.

@@ -1,4 +1,9 @@
+import 'package:pharmabox/auth/firebase_auth/email_auth.dart';
+import 'package:pharmabox/auth/firebase_auth/google_auth.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/custom_code/widgets/input.dart';
+import 'package:pharmabox/flutter_flow/flutter_flow_drop_down.dart';
+import 'package:pharmabox/flutter_flow/form_field_controller.dart';
 import 'dart:io' show Platform;
 
 import '/auth/firebase_auth/auth_util.dart';
@@ -12,7 +17,6 @@ import 'package:provider/provider.dart';
 import 'register_model.dart';
 export 'register_model.dart';
 
-
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({Key? key}) : super(key: key);
 
@@ -22,6 +26,8 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   late RegisterModel _model;
+
+  String typeConnexion = '';
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -33,7 +39,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
     _model.emailController ??= TextEditingController();
     _model.motdepasseController ??= TextEditingController();
-    _model.confirmpasswordController ??= TextEditingController();
+    _model.nomController ??= TextEditingController();
+    _model.prenomController ??= TextEditingController();
   }
 
   @override
@@ -89,383 +96,384 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             ),
                           ],
                         ),
-                        Form(
-                          key: _model.formKey,
-                          autovalidateMode: AutovalidateMode.disabled,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.emailController,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Email',
-                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context).focusColor,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if(typeConnexion == '' && Platform.isAndroid)
+                            Text('En Pharmacie vous êtes ...', style: FlutterFlowTheme.of(context).displaySmall),
+                            if(typeConnexion == '' && Platform.isAndroid)
+                            SizedBox(height: 10, width: 10),
+                            if(typeConnexion == '' || Platform.isIOS)
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: Color(0xFFD0D1DE),
                                   ),
-                                  style: FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.emailControllerValidator.asValidator(context),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.motdepasseController,
-                                  obscureText: !_model.motdepasseVisibility,
-                                  decoration: InputDecoration(
-                                    labelText: 'Mot de passe',
-                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFF42D2FF),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    suffixIcon: InkWell(
-                                      onTap: () => setState(
-                                        () => _model.motdepasseVisibility = !_model.motdepasseVisibility,
-                                      ),
-                                      focusNode: FocusNode(skipTraversal: true),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                                       child: Icon(
-                                        _model.motdepasseVisibility ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                        color: Color(0xFF757575),
-                                        size: 22.0,
+                                        Icons.work_outline,
+                                        color: FlutterFlowTheme.of(context).secondaryText,
+                                        size: 24,
                                       ),
                                     ),
-                                  ),
-                                  style: FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.motdepasseControllerValidator.asValidator(context),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                                child: TextFormField(
-                                  controller: _model.confirmpasswordController,
-                                  obscureText: !_model.confirmpasswordVisibility,
-                                  decoration: InputDecoration(
-                                    labelText: 'Confirmez le mot de passe',
-                                    hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFFD0D1DE),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xFF42D2FF),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    suffixIcon: InkWell(
-                                      onTap: () => setState(
-                                        () => _model.confirmpasswordVisibility = !_model.confirmpasswordVisibility,
-                                      ),
-                                      focusNode: FocusNode(skipTraversal: true),
-                                      child: Icon(
-                                        _model.confirmpasswordVisibility ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                        color: Color(0xFF757575),
-                                        size: 22.0,
-                                      ),
-                                    ),
-                                  ),
-                                  style: FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.confirmpasswordControllerValidator.asValidator(context),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 50.0,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 4.0,
-                                        color: Color(0x301F5C67),
-                                        offset: Offset(0.0, 4.0),
-                                      )
-                                    ],
-                                    gradient: LinearGradient(
-                                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                      stops: [0.0, 1.0],
-                                      begin: AlignmentDirectional(1.0, -1.0),
-                                      end: AlignmentDirectional(-1.0, 1.0),
-                                    ),
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: FFButtonWidget(
-                                    onPressed: () async {
-                                      // GoRouter.of(context).prepareAuthEvent();
-                                      if (_model.motdepasseController.text != _model.confirmpasswordController.text) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Les mots de passes ne correspondent pas',
-                                            ),
+                                    FlutterFlowDropDown<String>(
+                                      controller: _model.posteValueController ??= FormFieldController<String>('Pharmacien'),
+                                      options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien', 'Pharmacien titulaire'],
+                                      onChanged: (val) => setState(() => _model.posteValue = val),
+                                      width: MediaQuery.of(context).size.width * 0.78,
+                                      height: 50,
+                                      textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black,
                                           ),
+                                      hintText: 'Poste',
+                                      fillColor: Colors.white,
+                                      elevation: 2,
+                                      borderColor: Colors.transparent,
+                                      borderWidth: 0,
+                                      borderRadius: 0,
+                                      margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+                                      hidesUnderline: true,
+                                      isSearchable: false,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            if(typeConnexion == '')
+                            Text('Comment créer votre compte ?', style: FlutterFlowTheme.of(context).displaySmall),
+                            SizedBox(height: 10, width: 10),
+                            if(typeConnexion == '')
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => setState(() => typeConnexion = 'email'),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: Color(0xFFD0D1DE),
+                                    ),
+                                  ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                                      child: Column(
+                                        children: [
+                                         Image.asset('assets/images/Mail.png', width: 80,),
+                                          SizedBox(height: 10),
+                                          Text('Par E-mail', style: FlutterFlowTheme.of(context).bodyMedium),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    print('Poste : ${_model.posteValue}');
+                                        final user = await createAccountWithGoogle(
+                                          context,
+                                          _model.posteValue ?? 'Pharmacien',
                                         );
-                                        return;
-                                      }
-
-                                      final user = await authManager.createAccountWithEmail(
-                                        context,
-                                        _model.emailController.text,
-                                        _model.motdepasseController.text,
-                                      );
-                                      if (user == null) {
-                                        return;
-                                      }
-
-                                      context.pushNamed('RegisterStep');
-                                    },
-                                    text: 'S\'enregistrer',
-                                    options: FFButtonOptions(
-                                      width: double.infinity,
-                                      height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                      color: Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                                            fontFamily: 'Poppins',
-                                            color: Colors.white,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w600,
+                                        if (user == null) {
+                                          return;
+                                        }
+                                                        
+                                        context.pushNamed('Explorer');
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: Color(0xFFD0D1DE),
+                                    ),
+                                  ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Image.asset('assets/images/Google.png', width: 50,),
                                           ),
-                                      elevation: 0.0,
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
+                                          SizedBox(height: 10),
+                                          Text('Avec Google', style: FlutterFlowTheme.of(context).bodyMedium),
+                                        ],
                                       ),
-                                      borderRadius: BorderRadius.circular(8.0),
                                     ),
                                   ),
                                 ),
-                              ),
-                              if(Platform.isAndroid)
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 50.0,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 4.0,
-                                        color: Color(0x301F5C67),
-                                        offset: Offset(0.0, 4.0),
-                                      )
-                                    ],
-                                    gradient: LinearGradient(
-                                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                      stops: [0.0, 1.0],
-                                      begin: AlignmentDirectional(1.0, -1.0),
-                                      end: AlignmentDirectional(-1.0, 1.0),
-                                    ),
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: FFButtonWidget(
-                                    onPressed: () async {
-                                      // GoRouter.of(context).prepareAuthEvent();
-                                      final user = await authManager.signInWithGoogle(context);
-                                      if (user == null) {
-                                        return;
-                                      }
-
-                                      context.pushNamed('RegisterStep');
-                                    },
-                                    text: 'S\'inscire avec Google',
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.google,
-                                      color: FlutterFlowTheme.of(context).primaryBtnText,
-                                    ),
-                                    options: FFButtonOptions(
-                                      width: double.infinity,
-                                      height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                      color: Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                                            fontFamily: 'Poppins',
-                                            color: Colors.white,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                      elevation: 0.0,
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
+                              ],
+                            ),
+                            if(typeConnexion == 'email' || Platform.isIOS)
+                            Column(
+                              children: [
+                                Input(controller: _model.nomController, label: 'Nom'),
+                                Input(controller: _model.prenomController, label: 'Prénom'),
+                                Input(controller: _model.emailController, label: 'Email'),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                                  child: TextFormField(
+                                    controller: _model.motdepasseController,
+                                    obscureText: !_model.motdepasseVisibility,
+                                    decoration: InputDecoration(
+                                      labelText: 'Mot de passe',
+                                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFD0D1DE),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
                                       ),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFF42D2FF),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      suffixIcon: InkWell(
+                                        onTap: () => setState(
+                                          () => _model.motdepasseVisibility = !_model.motdepasseVisibility,
+                                        ),
+                                        focusNode: FocusNode(skipTraversal: true),
+                                        child: Icon(
+                                          _model.motdepasseVisibility ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                          color: Color(0xFF757575),
+                                          size: 22.0,
+                                        ),
+                                      ),
+                                    ),
+                                    style: FlutterFlowTheme.of(context).bodyMedium,
+                                    validator: _model.motdepasseControllerValidator.asValidator(context),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 50.0,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 4.0,
+                                          color: Color(0x301F5C67),
+                                          offset: Offset(0.0, 4.0),
+                                        )
+                                      ],
+                                      gradient: LinearGradient(
+                                        colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                                        stops: [0.0, 1.0],
+                                        begin: AlignmentDirectional(1.0, -1.0),
+                                        end: AlignmentDirectional(-1.0, 1.0),
+                                      ),
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        print('Nom : ${_model.nomController.text}');
+                                        print('Prenom : ${_model.prenomController.text}');
+                                        final user = await createAccountWithEmail(
+                                          context,
+                                          _model.emailController.text,
+                                          _model.motdepasseController.text,
+                                          _model.nomController.text,
+                                          _model.prenomController.text,
+                                          _model.posteValue ?? 'Pharmacien',
+                                        );
+                                        if (user == null) {
+                                          return;
+                                        }
+                                                        
+                                        context.pushNamed('Explorer');
+                                      },
+                                      text: 'S\'enregistrer',
+                                      options: FFButtonOptions(
+                                        width: double.infinity,
+                                        height: 40.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                        iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                        color: Color(0x00FFFFFF),
+                                        textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.white,
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                        elevation: 0.0,
+                                        borderSide: BorderSide(
+                                          color: Colors.transparent,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              
-                              // Padding(
-                              //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                              //   child: Container(
-                              //     width: double.infinity,
-                              //     height: 50.0,
-                              //     decoration: BoxDecoration(
-                              //       boxShadow: [
-                              //         BoxShadow(
-                              //           blurRadius: 4.0,
-                              //           color: Color(0x301F5C67),
-                              //           offset: Offset(0.0, 4.0),
-                              //         )
-                              //       ],
-                              //       // gradient: LinearGradient(
-                              //       //   colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                              //       //   stops: [0.0, 1.0],
-                              //       //   begin: AlignmentDirectional(1.0, -1.0),
-                              //       //   end: AlignmentDirectional(-1.0, 1.0),
-                              //       // ),
-                              //       color: Colors.white,
-                              //       borderRadius: BorderRadius.circular(15.0),
-                              //     ),
-                              //     child: FFButtonWidget(
-                              //       onPressed: () async {
-                              //         GoRouter.of(context).prepareAuthEvent();
-                              //         final user = await authManager.signInWithApple(context);
-                              //         if (user == null) {
-                              //           return;
-                              //         }
-                              //         context.goNamedAuth('RegisterStep', mounted);
-
-                              //       },
-                              //       text: 'Inscription avec Apple',
-                              //       icon: FaIcon(
-                              //         FontAwesomeIcons.apple,
-                              //         color: blackColor,
-                              //       ),
-                              //       options: FFButtonOptions(
-                              //         width: double.infinity,
-                              //         height: 40.0,
-                              //         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                              //         iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                              //         color: Color(0x00FFFFFF),
-                              //         textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                              //               fontFamily: 'Poppins',
-                              //               color: blackColor,
-                              //               fontSize: 18.0,
-                              //               fontWeight: FontWeight.w600,
-                              //             ),
-                              //         elevation: 0.0,
-                              //         borderSide: BorderSide(
-                              //           color: Colors.transparent,
-                              //           width: 1.0,
-                              //         ),
-                              //         borderRadius: BorderRadius.circular(8.0),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
-                          ),
+                              ],
+                            ),
+                            // if(Platform.isAndroid)
+                            // Padding(
+                            //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                            //   child: Container(
+                            //     width: double.infinity,
+                            //     height: 50.0,
+                            //     decoration: BoxDecoration(
+                            //       boxShadow: [
+                            //         BoxShadow(
+                            //           blurRadius: 4.0,
+                            //           color: Color(0x301F5C67),
+                            //           offset: Offset(0.0, 4.0),
+                            //         )
+                            //       ],
+                            //       gradient: LinearGradient(
+                            //         colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                            //         stops: [0.0, 1.0],
+                            //         begin: AlignmentDirectional(1.0, -1.0),
+                            //         end: AlignmentDirectional(-1.0, 1.0),
+                            //       ),
+                            //       borderRadius: BorderRadius.circular(15.0),
+                            //     ),
+                            //     child: FFButtonWidget(
+                            //       onPressed: () async {
+                            //         // GoRouter.of(context).prepareAuthEvent();
+                            //         final user = await authManager.signInWithGoogle(context);
+                            //         if (user == null) {
+                            //           return;
+                            //         }
+                        
+                            //         context.pushNamed('RegisterStep');
+                            //       },
+                            //       text: 'S\'inscire avec Google',
+                            //       icon: FaIcon(
+                            //         FontAwesomeIcons.google,
+                            //         color: FlutterFlowTheme.of(context).primaryBtnText,
+                            //       ),
+                            //       options: FFButtonOptions(
+                            //         width: double.infinity,
+                            //         height: 40.0,
+                            //         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                            //         iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                            //         color: Color(0x00FFFFFF),
+                            //         textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                            //               fontFamily: 'Poppins',
+                            //               color: Colors.white,
+                            //               fontSize: 18.0,
+                            //               fontWeight: FontWeight.w600,
+                            //             ),
+                            //         elevation: 0.0,
+                            //         borderSide: BorderSide(
+                            //           color: Colors.transparent,
+                            //           width: 1.0,
+                            //         ),
+                            //         borderRadius: BorderRadius.circular(8.0),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                        
+                            // Padding(
+                            //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                            //   child: Container(
+                            //     width: double.infinity,
+                            //     height: 50.0,
+                            //     decoration: BoxDecoration(
+                            //       boxShadow: [
+                            //         BoxShadow(
+                            //           blurRadius: 4.0,
+                            //           color: Color(0x301F5C67),
+                            //           offset: Offset(0.0, 4.0),
+                            //         )
+                            //       ],
+                            //       // gradient: LinearGradient(
+                            //       //   colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                            //       //   stops: [0.0, 1.0],
+                            //       //   begin: AlignmentDirectional(1.0, -1.0),
+                            //       //   end: AlignmentDirectional(-1.0, 1.0),
+                            //       // ),
+                            //       color: Colors.white,
+                            //       borderRadius: BorderRadius.circular(15.0),
+                            //     ),
+                            //     child: FFButtonWidget(
+                            //       onPressed: () async {
+                            //         GoRouter.of(context).prepareAuthEvent();
+                            //         final user = await authManager.signInWithApple(context);
+                            //         if (user == null) {
+                            //           return;
+                            //         }
+                            //         context.goNamedAuth('RegisterStep', mounted);
+                        
+                            //       },
+                            //       text: 'Inscription avec Apple',
+                            //       icon: FaIcon(
+                            //         FontAwesomeIcons.apple,
+                            //         color: blackColor,
+                            //       ),
+                            //       options: FFButtonOptions(
+                            //         width: double.infinity,
+                            //         height: 40.0,
+                            //         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                            //         iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                            //         color: Color(0x00FFFFFF),
+                            //         textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                            //               fontFamily: 'Poppins',
+                            //               color: blackColor,
+                            //               fontSize: 18.0,
+                            //               fontWeight: FontWeight.w600,
+                            //             ),
+                            //         elevation: 0.0,
+                            //         borderSide: BorderSide(
+                            //           color: Colors.transparent,
+                            //           width: 1.0,
+                            //         ),
+                            //         borderRadius: BorderRadius.circular(8.0),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
                         ),
                         FFButtonWidget(
                           onPressed: () async {

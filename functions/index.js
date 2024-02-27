@@ -216,21 +216,21 @@ exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite
 const htmlPath = path.join(__dirname, '/email_template/code_validation.html');
 const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-// Envoi du code de verification du compte
-exports.updateUserOnCreate = functions.firestore.document('users/{userId}').onCreate((snap, context) => {
+// // Envoi du code de verification du compte
+// exports.updateUserOnCreate = functions.firestore.document('users/{userId}').onCreate((snap, context) => {
 
-    // Mise à jour du document utilisateur avec le code de validation
-    return admin.firestore().collection('users').doc(snap.id).update({
-        isVerified: false,
-        isComplete: false,
-        isValid: false,
-    }).then(() => {
+//     // Mise à jour du document utilisateur avec le code de validation
+//     return admin.firestore().collection('users').doc(snap.id).update({
+//         isVerified: false,
+//         isComplete: false,
+//         isValid: false,
+//     }).then(() => {
 
-    }).catch((error) => {
-        console.log(error);
-        throw new functions.https.HttpsError('internal', 'Failed to update user document.');
-    });
-});
+//     }).catch((error) => {
+//         console.log(error);
+//         throw new functions.https.HttpsError('internal', 'Failed to update user document.');
+//     });
+// });
 
 
 exports.sendCodeVerification = functions.https.onRequest((req, res) => {
@@ -550,6 +550,8 @@ exports.disableInactiveDocuments = functions.pubsub.schedule('every 24 hours').t
   const oneMonthAgo = new Date();
   oneMonthAgo.setUTCMonth(oneMonthAgo.getUTCMonth() - 1);
 
+  const currentDate = new Date();
+
   const offresCollection = admin.firestore().collection('offres');
   const recherchesCollection = admin.firestore().collection('recherches');
 
@@ -557,26 +559,43 @@ exports.disableInactiveDocuments = functions.pubsub.schedule('every 24 hours').t
 
   // Mise à jour de la collection 'offres'
   const offresQuery = offresCollection.where('date_created', '<=', admin.firestore.Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
-  updatePromises.push(updateDocuments(offresQuery));
+  updatePromises.push(updateDocuments(offresQuery, currentDate, 'proposition_dispo_interim'));
 
   // Mise à jour de la collection 'recherches'
   const recherchesQuery = recherchesCollection.where('date_created', '<=', admin.firestore.Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
-  updatePromises.push(updateDocuments(recherchesQuery));
+  updatePromises.push(updateDocuments(recherchesQuery, currentDate, 'horaire_dispo_interim'));
 
   return Promise.all(updatePromises);
 });
 
-function updateDocuments(query) {
+function updateDocuments(query, currentDate, dateField) {
   return query.get().then(snapshot => {
-      const updatePromises = [];
-      snapshot.forEach(doc => {
+    const updatePromises = [];
+    snapshot.forEach(doc => {
+      const dates = doc.data()[dateField];
+
+      if (Array.isArray(dates) && dates.length > 0) {
+        const hasFutureDates = dates.some(date => admin.firestore.Timestamp.toDate() > currentDate);
+        const hasPastDates = dates.some(date => admin.firestore.Timestamp.toDate() < currentDate);
+
+        if (dates.length === 1 && hasPastDates) {
+          // Si une seule date passée, on désactive le document
           updatePromises.push(doc.ref.update({ isActive: false }));
-      });
-      return Promise.all(updatePromises);
+        } else if (dates.length > 1 && hasPastDates && hasFutureDates) {
+          // Si plusieurs dates passées, mais il y a aussi des dates futures, on laisse le document actif
+          // Vous pouvez ajouter d'autres conditions ici si nécessaire
+        } else if (!hasFutureDates) {
+          // Si aucune date future, on désactive le document
+          updatePromises.push(doc.ref.update({ isActive: false }));
+        }
+        // Sinon, on laisse le document actif
+      } else {
+        // Si le champ de dates est vide, appliquer la logique de désactivation après un mois
+        if (doc.data().date_created <= admin.firestore.Timestamp.fromDate(oneMonthAgo)) {
+          updatePromises.push(doc.ref.update({ isActive: false }));
+        }
+      }
+    });
+    return Promise.all(updatePromises);
   });
 }
-
-
-
-
-

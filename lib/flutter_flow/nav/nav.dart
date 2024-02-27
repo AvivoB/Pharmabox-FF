@@ -34,146 +34,55 @@ export 'serialization_util.dart';
 
 const kTransitionInfoKey = '__transition_info__';
 
-// class AppStateNotifier extends ChangeNotifier {
-//   BaseAuthUser? initialUser;
-//   BaseAuthUser? user;
-//   bool showSplashImage = true;
-//   String? _redirectLocation;
-
-//   /// Determines whether the app will refresh and build again when a sign
-//   /// in or sign out happens. This is useful when the app is launched or
-//   /// on an unexpected logout. However, this must be turned off when we
-//   /// intend to sign in/out and then navigate or perform any actions after.
-//   /// Otherwise, this will trigger a refresh and interrupt the action(s).
-//   bool notifyOnAuthChange = true;
-
-//   bool isComplete = true;
-//   bool isVerified = true;
-//   bool isValid = true;
-
-//   bool get loading => user == null || showSplashImage;
-//   bool get loggedIn => user?.loggedIn ?? false;
-//   bool get initiallyLoggedIn => initialUser?.loggedIn ?? false;
-//   bool get shouldRedirect => loggedIn && _redirectLocation != null;
-
-//   String getRedirectLocation() => _redirectLocation!;
-//   bool hasRedirect() => _redirectLocation != null;
-//   void setRedirectLocationIfUnset(String loc) => _redirectLocation ??= loc;
-//   void clearRedirectLocation() => _redirectLocation = null;
-
-//   /// Mark as not needing to notify on a sign in / out when we intend
-//   /// to perform subsequent actions (such as navigation) afterwards.
-//   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
-
-//   Future<void> update(BaseAuthUser newUser) async {
-//     initialUser ??= newUser;
-//     user = newUser;
-//     await checkIfUserIsComplete();
-
-//     // Refresh the app on auth change unless explicitly marked otherwise.
-//     if (notifyOnAuthChange) {
-//       notifyListeners();
-//     }
-//     // Once again mark the notifier as needing to update on auth change
-//     // (in order to catch sign in / out events).
-//     updateNotifyOnAuthChange(true);
-//   }
-
-//   void stopShowingSplashImage() {
-//     showSplashImage = false;
-//     notifyListeners();
-//   }
-
-//   Future<void> checkIfUserIsComplete() async {
-//     Map<String, dynamic> userData = await getCurrentUserData();
-
-//     isComplete = userData.isNotEmpty ? userData['isComplete'] : false;
-//     isVerified = userData.isNotEmpty ? userData['isVerified'] : false;
-//     isValid = userData.isNotEmpty ? userData['isValid'] : false;
-
-//     print('PROFIL COMPLETE : ' + isComplete.toString());
-//     print('PROFIL VERIFIED : ' + isVerified.toString());
-//     print('PROFIL VALID : ' + userData['isValid'].toString());
-
-//     // Informez les écouteurs que la propriété a changé
-//     notifyListeners();
-//   }
-// }
-
-// Widget decideInitialPage(AppStateNotifier appStateNotifier) {
-//   print('ETAT NOTIFIER : ' + appStateNotifier.loggedIn.toString());
-//   if (!appStateNotifier.authDataReady) {
-//     // Afficher une page de chargement
-//     return ProgressIndicatorPharmabox(); // Remplacez "LoadingPage" par votre propre widget de chargement
-//   }
-
-//   if (appStateNotifier.loggedIn == false) {
-//     return RegisterWidget();
-//   }
-//   if (appStateNotifier.loggedIn) {
-//     return NavBarPage();
-//   }
-
-//   // if (appStateNotifier.isComplete == false) {
-//   //   return RegisterStepWidget();
-//   // }
-
-//   // if (appStateNotifier.isVerified == false) {
-//   //   return ValidateAccount();
-//   // }
-
-//   // if (appStateNotifier.isValid == false) {
-//   //   print('desactived account');
-//   //   return DesactivatedAccount();
-//   // }
-
-//   return NavBarPage();
-// }
-
-// Widget redirectIfAlreadyInscrit(AppStateNotifier appStateNotifier) {
-//   // if (appStateNotifier.isComplete == true && appStateNotifier.isVerified == true) {
-//   //   return NavBarPage();
-//   // }
-
-//   return RegisterStepWidget();
-// }
-
 final AppStateNotifier appStateNotifier = AppStateNotifier();
+
+
+
+Widget decideFirstPage(context) {
+  final authProvider = Provider.of<AuthProvider>(context);
+
+  if(authProvider.isLoadingAuth){
+    return ProgressIndicatorPharmabox();
+  }
+
+  if(authProvider.user == null){
+    return RegisterWidget();
+  }
+
+  return NavBarPage();
+}
 
 final GoRouter routerApp = GoRouter(
     initialLocation: '/',
     debugLogDiagnostics: true,
     // refreshListenable: appStateNotifier,
     // errorBuilder: (context, _) => decideInitialPage(appStateNotifier),
-    redirect: (BuildContext context, GoRouterState state) {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    // redirect: (BuildContext context, GoRouterState state) {
+    //   final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-      // Si l'utilisateur est déconnecté
-      if (authProvider.user == null && state.path == '/register') {
-          return '/register';
-      }
-      if (authProvider.user == null && state.path == '/login') {
-          return '/login';
-      }
-      if (authProvider.user == null && state.path == '/passwordReset') {
-          return '/passwordReset';
-      }
-      if (authProvider.user != null && authProvider.isComplete == false) {
-          return '/registerStep';
-      }
-      if (authProvider.user != null && state.path == '/registerPharmacy' && authProvider.isComplete == true) {
-          return '/registerPharmacy';
-      }
-      if (authProvider.user != null && authProvider.isVerified == false && authProvider.isComplete && authProvider.duringRegister == false) {
-          return '/validateAccount';
-      }
+    //   print('state authProvider.user : ' + authProvider.user.toString());
+    //   print('state PAth : ' + state.path.toString());
 
-    },
+    //   // Si l'utilisateur est déconnecté
+    //   // if (authProvider.user == null && state.path == null) {
+    //   //     return '/register';
+    //   // }
+    //   if (authProvider.user == null && state.path == '/register') {
+    //       return '/register';
+    //   }
+    //   if (authProvider.user == null && state.path == '/login') {
+    //       return '/login';
+    //   }
+    //   if (authProvider.user == null && state.path == '/passwordReset') {
+    //       return '/passwordReset';
+    //   }
+
+    // },
     routes: [
       GoRoute(
         name: '_initialize',
         path: '/',
-        builder: (context, state) => NavBarPage(),
+        builder: (context, state) => decideFirstPage(context),
       ),
       GoRoute(
         name: 'Register',

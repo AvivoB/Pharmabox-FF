@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:pharmabox/auth/firebase_auth/email_auth.dart';
+import 'package:pharmabox/auth/firebase_auth/google_auth.dart';
 import 'package:pharmabox/constant.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
@@ -25,6 +27,9 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+
+  
+  String typeConnexion = '';
 
   @override
   void initState() {
@@ -97,6 +102,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
+                              if(typeConnexion == 'email')
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
@@ -151,6 +157,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   validator: _model.emailControllerValidator.asValidator(context),
                                 ),
                               ),
+                              if(typeConnexion == 'email')
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
@@ -205,6 +212,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   validator: _model.motdepasseControllerValidator.asValidator(context),
                                 ),
                               ),
+                              if(typeConnexion == 'email')
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                 child: Container(
@@ -230,7 +238,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     onPressed: () async {
                                       // GoRouter.of(context).prepareAuthEvent();
 
-                                      final user = await authManager.signInWithEmail(
+                                      final user = await emailSignIn(
                                         context,
                                         _model.emailController.text,
                                         _model.motdepasseController.text,
@@ -265,65 +273,69 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   ),
                                 ),
                               ),
-                              if(Platform.isAndroid)
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 50.0,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 4.0,
-                                        color: Color(0x301F5C67),
-                                        offset: Offset(0.0, 4.0),
-                                      )
-                                    ],
-                                    gradient: LinearGradient(
-                                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                      stops: [0.0, 1.0],
-                                      begin: AlignmentDirectional(1.0, -1.0),
-                                      end: AlignmentDirectional(-1.0, 1.0),
+                              if(typeConnexion == '')
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => setState(() => typeConnexion = 'email'),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: Color(0xFFD0D1DE),
                                     ),
-                                    borderRadius: BorderRadius.circular(15.0),
                                   ),
-                                  child: FFButtonWidget(
-                                    onPressed: () async {
-                                      // GoRouter.of(context).prepareAuthEvent();
-                                      final user = await authManager.signInWithGoogle(context);
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                                      child: Column(
+                                        children: [
+                                         Image.asset('assets/images/Mail.png', width: 80,),
+                                          SizedBox(height: 10),
+                                          Text('Par E-mail', style: FlutterFlowTheme.of(context).bodyMedium),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final user = await connectAccountWithGoogle(context);
                                       if (user == null) {
                                         return;
                                       }
 
                                       context.pushNamed('Explorer');
-                                    },
-                                    text: 'Connexion via Google',
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.google,
-                                      color: Colors.white,
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: Color(0xFFD0D1DE),
                                     ),
-                                    options: FFButtonOptions(
-                                      width: double.infinity,
-                                      height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                      iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                      color: Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                                            fontFamily: 'Poppins',
-                                            color: Colors.white,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w600,
+                                  ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Image.asset('assets/images/Google.png', width: 50,),
                                           ),
-                                      elevation: 0.0,
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
+                                          SizedBox(height: 10),
+                                          Text('Avec Google', style: FlutterFlowTheme.of(context).bodyMedium),
+                                        ],
                                       ),
-                                      borderRadius: BorderRadius.circular(8.0),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
+                            ),
+                              // if(Platform.isAndroid)
                               // Padding(
                               //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                               //   child: Container(

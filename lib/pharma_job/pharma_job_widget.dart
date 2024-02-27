@@ -90,10 +90,13 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
         isLoading = false;
       });
     } else {
-      // Handle the case when the user denies the location permission
-      // Add your own logic or show a message to the user
-      isLoading = false;
-      setState(() {});
+      setState(() {
+        _currentCameraPosition = CameraPosition(
+          target: LatLng(48.866667, 2.333333),
+          zoom: 16.0,
+        );
+        isLoading = false;
+      });
     }
   }
 
