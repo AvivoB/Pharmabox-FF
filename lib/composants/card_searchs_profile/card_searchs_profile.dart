@@ -730,7 +730,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                   Container(
                                                     height: 390,
                                                     child: DateSelector(
-                                                      initialSelectedDates: widget.searchI['horaire_dispo_interim'] != null ? (widget.searchI['horaire_dispo_interim'] as List).map((item) => (item as Timestamp).toDate()).toList() : <DateTime>[],
+                                                      initialSelectedDates: widget.searchI['horaire_dispo_interim'] != null ? widget.searchI['horaire_dispo_interim'] : [],
                                                       onDatesChanged: (selectedDates) {
                                                         _model.horaireDispoInterim = selectedDates;
                                                       },
@@ -1016,18 +1016,32 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                           Text(widget.searchI['temps'] != null ? widget.searchI['temps'] : '', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                         ]),
                                       ),
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
-                                      child: Row(children: [
-                                        Icon(
-                                          Icons.calendar_today,
-                                          color: greyColor,
-                                          size: 28.0,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Text(widget.searchI['debut_immediat'] && widget.searchI['debut_contrat'] == '' ? 'Démarrage immédiat' : 'Démarrage le ' + widget.searchI['debut_contrat'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
-                                      ]),
-                                    ),
+                                    if(widget.searchI['debut_immediat'])
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.calendar_today,
+                                            color: greyColor,
+                                            size: 28.0,
+                                          ),
+                                          SizedBox(width: 10),
+                                          Text('Démarrage immédiat', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
+                                        ]),
+                                      ),
+                                    if(widget.searchI['debut_contrat'] != '')
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.calendar_today,
+                                            color: greyColor,
+                                            size: 28.0,
+                                          ),
+                                          SizedBox(width: 10),
+                                          Text('Démarrage le ' + widget.searchI['debut_contrat'], style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
+                                        ]),
+                                      ),
                                     if (widget.searchI['duree'] != '')
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
@@ -1041,7 +1055,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                           Text(widget.searchI['duree'] + ' mois', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                         ]),
                                       ),
-                                    if (widget.searchI['salaire_mensuel'] != '')
+                                    if(!widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['salaire_mensuel'] != '')
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Row(children: [
@@ -1051,21 +1065,33 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                             size: 28.0,
                                           ),
                                           SizedBox(width: 10),
-                                          Text(widget.searchI['contrats'].contains('Intérimaire') ? widget.searchI['salaire_mensuel'] + ' €/mois net souhaité' : widget.searchI['salaire_mensuel'] + ' €/H net souhaité',
-                                              style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
+                                          Text(widget.searchI['salaire_mensuel'] + ' €/mois net', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
+                                        ]),
+                                      ),
+                                    if(widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['salaire_mensuel'] != '')
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.payments_outlined,
+                                            color: greyColor,
+                                            size: 28.0,
+                                          ),
+                                          SizedBox(width: 10),
+                                          Text(widget.searchI['salaire_mensuel'] + ' €/H net', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                         ]),
                                       ),
                                     if (!widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['grille_horaire'] != null && widget.searchI['grille_horaire'] != '')
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
-                                        child: Text('Horaires', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16, fontWeight: FontWeight.w600)),
+                                        child: Text('Planning de présence souhaité', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16, fontWeight: FontWeight.w600)),
                                       ),
-                                    if (widget.searchI['grille_horaire'] != null && widget.searchI['grille_horaire'] != [])
+                                    if (widget.searchI['grille_horaire'] != null && widget.searchI['grille_horaire'] != [] && !widget.searchI['contrats'].contains('Intérimaire'))
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: GrilleHoraire(onSelectionChanged: (data) => {}, onInitialValue: widget.searchI['grille_horaire'] != [] ? widget.searchI['grille_horaire'] : [], isEditable: false),
                                       ),
-                                    if (widget.searchI['grille_pair_impaire_identique'])
+                                    if (widget.searchI['grille_pair_impaire_identique'] && !widget.searchI['contrats'].contains('Intérimaire'))
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Row(children: [
@@ -1075,14 +1101,21 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                             size: 28.0,
                                           ),
                                           SizedBox(width: 10),
-                                          Flexible(child: Text('Semaines pairs et impaires identiques', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)))
+                                          Flexible(child: Text('Semaines pairs et impaires identiques', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 14)))
                                         ]),
                                       ),
-                                    if (widget.searchI['grille_pair_impaire_identique'] == false && widget.searchI['grille_horaire_impaire'] != [])
+                                    if (widget.searchI['grille_pair_impaire_identique'] == false && widget.searchI['grille_horaire_impaire'] != [] && !widget.searchI['contrats'].contains('Intérimaire'))
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: GrilleHoraire(onSelectionChanged: (data) => {}, onInitialValue: widget.searchI['grille_horaire_impaire'] != [] ? widget.searchI['grille_horaire_impaire'] : [], isEditable: false),
                                       ),
+                                    if (widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['horaire_dispo_interim'] != null)
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                        child: Container(
+                                          height: 370,
+                                          child: DateSelector(initialSelectedDates: widget.searchI['horaire_dispo_interim'] != null ? widget.searchI['horaire_dispo_interim'] : [], onDatesChanged: (dates){}, isEditable: false),
+                                        )),
                                   ],
                                 ),
                             ],

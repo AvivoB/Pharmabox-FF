@@ -38,8 +38,6 @@ class _CardUserWidgetState extends State<CardUserWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CardUserModel());
-
-    print(widget.data);
   }
 
   @override

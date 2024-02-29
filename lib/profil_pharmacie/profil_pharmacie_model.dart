@@ -230,8 +230,8 @@ class PharmacieModel extends FlutterFlowModel {
   TextEditingController? nbEtudiants6emeController;
   String? Function(BuildContext, String?)? nbEtudiants6emeControllerValidator;
 
-  bool isValid = true;
-  bool isComplete = true;
+  bool? isValid;
+  bool? isComplete;
 
   TextEditingController? groupementAutre;
 

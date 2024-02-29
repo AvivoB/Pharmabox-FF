@@ -114,7 +114,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    QuerySnapshot querySnapshot = await _firestore.collection('pharmacies').where('user_id', isNotEqualTo: await getCurrentUserId()).get();
+    QuerySnapshot querySnapshot = await _firestore.collection('pharmacies').where('user_id', isNotEqualTo: await getCurrentUserId()).where('isValid', isEqualTo: true).get();
     int countArray = 0;
     for (var doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -133,10 +133,10 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       String pharmacieId = dataWithId['documentId'];
       Place place = Place(name: name, latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace, id: pharmacieId);
       setState(() {
-        if (dataWithId['isValid']) {
+        // if (dataWithId['isValid']) {
           items.add(place);
           pharmacieInPlace.add(dataWithId);
-        }
+        // }
       });
 
     }

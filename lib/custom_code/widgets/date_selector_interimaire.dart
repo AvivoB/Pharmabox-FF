@@ -5,7 +5,7 @@ import '../../flutter_flow/flutter_flow_theme.dart';
 
 class DateSelector extends StatefulWidget {
   final ValueChanged<List<DateTime>> onDatesChanged;
-  final List<DateTime> initialSelectedDates;
+  final List initialSelectedDates;
   final bool isEditable;
 
   DateSelector({required this.onDatesChanged, this.initialSelectedDates = const [], this.isEditable = true});
@@ -17,6 +17,7 @@ class DateSelector extends StatefulWidget {
 class _DateSelectorState extends State<DateSelector> {
   DateTime selectedDate = DateTime.now();
   DateTime currentDate = DateTime.now();
+
   List<DateTime> selectedDates = [];
 
   static const List<String> weekdays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
@@ -40,8 +41,12 @@ class _DateSelectorState extends State<DateSelector> {
   void initState() {
     super.initState();
 
-    print(widget.initialSelectedDates);
-    selectedDates = List.from(widget.initialSelectedDates);
+    for (var date in widget.initialSelectedDates) {
+      selectedDates.add(DateTime(date.toDate().year, date.toDate().month, date.toDate().day));
+    }
+
+    // selectedDate.for
+    print('DATES AT MIDNIGHT : ${selectedDate.toString()}');
   }
 
   @override
@@ -110,12 +115,13 @@ class _DateSelectorState extends State<DateSelector> {
                   }
 
                   final isSelectable = itemDate.isAfter(currentDate.subtract(Duration(days: 1)));
+                  final isPastDate = itemDate.isBefore(currentDate.subtract(Duration(days: 1)));
 
                   return GestureDetector(
                     onTap: () {
                       if (isSelectable) {
                         setState(() {
-                          _toggleDate(itemDate);
+                          if (widget.isEditable) _toggleDate(itemDate);
                         });
                       }
                     },
@@ -124,10 +130,10 @@ class _DateSelectorState extends State<DateSelector> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: selectedDates.contains(itemDate) ? greenColor : Colors.grey.shade200,
+                          color: selectedDates.contains(itemDate) ? (isPastDate ? Colors.black54 : greenColor) : Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(2),
                         ),
-                        child: Text(day.toString(), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isSelectable && selectedDates.contains(itemDate) ? Colors.white : Colors.grey.shade500, fontSize: 14.0, fontWeight: FontWeight.w400)),
+                        child: Text(day.toString(), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isSelectable && selectedDates.contains(itemDate) ? Colors.white : Colors.grey.shade700, fontSize: 14.0, fontWeight: FontWeight.w400)),
                       ),
                     ),
                   );

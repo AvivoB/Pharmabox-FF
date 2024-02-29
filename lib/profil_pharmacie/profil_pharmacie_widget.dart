@@ -173,6 +173,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
     _model.imagePharmacie = userData != null ? List<String>.from(userData['photo_url']) : [];
 
     _model.nomdelapharmacieController1.text = userData != null ? userData['situation_geographique']['adresse'] : '';
+    _model.pharmacieAdresseController.text = userData != null ? userData['situation_geographique']['data']['rue'] + ', ' + userData['situation_geographique']['data']['ville'] + ', ' + userData['situation_geographique']['data']['postcode'] + ', ' + userData['situation_geographique']['data']['country'] : '';
 
     _model.nomdelapharmacieController2.text = userData != null ? userData['titulaire_principal'] : userTituData['nom'] + ' ' + userTituData['prenom'];
     _model.presentationController.text = userData != null ? userData['presentation'] : '';
@@ -226,12 +227,14 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
 
     final providerPharmacieUser = Provider.of<ProviderPharmacieUser>(context, listen: false);
 
-    // if (_model.nomdelapharmacieController1.text == '') {
-    //   showCustomSnackBar(
-    //       context, 'Le nom de la pharmacie ne peut pas être vide',
-    //       isError: true);
-    //   return;
-    // }
+    if (_model.nomdelapharmacieController1.text == '') {
+      showCustomSnackBar(context, 'Le nom de la pharmacie ne peut pas être vide', isError: true);
+      return;
+    }
+    if (_model.pharmacieAdresseController.text == '') {
+      showCustomSnackBar(context, 'L\'adresse de la Pharmacie ne peut pas être vide', isError: true);
+      return;
+    }
 
     List missions = [];
     if (_model.missioTestCovidValue) {
@@ -317,12 +320,14 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
             'nb_apprentis': (_model.nbApprentiController.text != '') ? _model.nbApprentiController.text : '0',
             'nb_etudiants': (_model.nbEtudiantsController.text != '') ? _model.nbEtudiantsController.text : '0',
             'nb_etudiants_6eme_annee': (_model.nbEtudiants6emeController.text != '') ? _model.nbEtudiants6emeController.text : '0',
-            'isValid': _model.isValid,
-            'isComplete': _model.isComplete
-          }
+          },
+          'isValid': _model.isValid ?? true,
+          'isComplete': _model.isComplete ?? true,
         }, SetOptions(merge: true))
         .then((value) => showCustomSnackBar(context, 'Vos informations ont été enregistrés'))
         .catchError((error) => showCustomSnackBar(context, 'Erreur d\'enregistrement', isError: true));
+    print(' ISVALID : ${_model.isValid}');
+    print(' ISCOMPLETE : ${_model.isComplete}');
   }
 
   @override
@@ -391,8 +396,9 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                       child: PredictionNomPhamracie(
                                           countryCode: countryCode ?? 'fr',
-                                          initialValue: userData != null ? userData['situation_geographique']['adresse'] : '',
+                                          initialValue: _model.nomdelapharmacieController1.text,
                                           onPlaceSelected: (adresse) {
+                                            _model.nomdelapharmacieController1.text = adresse;
                                             providerPharmacieUser.setAdresseRue(adresse);
                                           })),
                                   Padding(
@@ -958,7 +964,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                     ),
                                     MapAdressePharmacie(
                                         countryCode: countryCode ?? 'fr',
-                                        onInitialValue: userData != null ? userData['situation_geographique']['data']['rue'] + ', ' + userData['situation_geographique']['data']['ville'] + ', ' + userData['situation_geographique']['data']['postcode'] + ', ' + userData['situation_geographique']['data']['country'] : '',
+                                        onInitialValue: _model.pharmacieAdresseController.text,
                                         onAdressSelected: (latitude, longitude, adresse, postcode, ville, arrondissement, region, country) {
                                           _model.pharmacieAdresseController.text = adresse;
                                           providerPharmacieUser.setAdresse(latitude, longitude, postcode, adresse, ville, region, arrondissement, country);
@@ -1930,7 +1936,6 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                             value: providerPharmacieUser.selectedMissions.contains('Test COVID') ? true : false,
                                             onChanged: (newValue) {
                                               setState(() => providerPharmacieUser.updateMissions(newValue, 'Test COVID'));
-                                              
                                             },
                                             activeColor: Color(0xFF7CEDAC),
                                           ),
