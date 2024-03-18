@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:pharmabox/auth/firebase_auth/apple_auth.dart';
 import 'package:pharmabox/auth/firebase_auth/email_auth.dart';
 import 'package:pharmabox/auth/firebase_auth/google_auth.dart';
 import 'package:pharmabox/constant.dart';
@@ -280,7 +281,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 GestureDetector(
                                   onTap: () => setState(() => typeConnexion = 'email'),
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    width: MediaQuery.of(context).size.width * 0.28,
                                     decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context).secondaryBackground,
                                     borderRadius: BorderRadius.circular(4),
@@ -294,7 +295,11 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         children: [
                                          Image.asset('assets/images/Mail.png', width: 80,),
                                           SizedBox(height: 10),
-                                          Text('Par E-mail', style: FlutterFlowTheme.of(context).bodyMedium),
+                                          Text('Par E-mail', style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black,
+                                            fontSize: 10
+                                          )),
                                         ],
                                       ),
                                     ),
@@ -310,7 +315,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       context.pushNamed('Explorer');
                                   },
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width * 0.4,
+                                    width: MediaQuery.of(context).size.width * 0.28,
                                     decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context).secondaryBackground,
                                     borderRadius: BorderRadius.circular(4),
@@ -327,7 +332,48 @@ class _LoginWidgetState extends State<LoginWidget> {
                                             child: Image.asset('assets/images/Google.png', width: 50,),
                                           ),
                                           SizedBox(height: 10),
-                                          Text('Avec Google', style: FlutterFlowTheme.of(context).bodyMedium),
+                                          Text('Avec Google', style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black,
+                                            fontSize: 10
+                                          )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final user = await connectAccountWithApple(context);
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.pushNamed('Explorer');
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.28,
+                                    decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: Color(0xFFD0D1DE),
+                                    ),
+                                  ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Image.asset('assets/images/AppleConnect.png', width: 50,),
+                                          ),
+                                          SizedBox(height: 10),
+                                          Text('Avec Apple', style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black,
+                                            fontSize: 10
+                                          )),
                                         ],
                                       ),
                                     ),

@@ -82,7 +82,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
   void initState() {
     super.initState();
     _model = createModel(context, () => PharmacieModel());
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     getUserData();
 
     _model.nomdelapharmacieController1 ??= TextEditingController();
@@ -3054,6 +3054,17 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                         CardOfferProfilWidget(
                           searchI: searchI,
                           onSave: (data) {},
+                          onDelete: () => {
+                            FirebaseFirestore.instance.collection('offres').doc(searchI['doc_id']).delete().then((_) {
+                              setState(() {
+                                offresPharma.remove(searchI);
+                              });
+                              showCustomSnackBar(context, 'Offre supprimée avec succès');
+                            }).catchError((error) {
+                              print('Erreur lors de la suppression du document : $error');
+                              showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                            })
+                          },
                         )
                   ],
                 ),

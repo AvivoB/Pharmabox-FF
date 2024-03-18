@@ -147,7 +147,7 @@ final GoRouter routerApp = GoRouter(
           builder: (context, state) => NavBarPage(
               initialPage: 'PharmaBlabla',
               page: PharmaBlablaSinglePost(
-                postId: state.uri.queryParameters['postId'], //TODO : FAIRE PAREIL PARTOUT ET CHANGER SUR LES WIDGETS
+                postId: state.uri.queryParameters['postId'],
               ))),
       GoRoute(
         name: 'Reseau',

@@ -24,12 +24,13 @@ import '../../flutter_flow/flutter_flow_model.dart';
 import '../../flutter_flow/form_field_controller.dart';
 
 class CardOfferProfilWidget extends StatefulWidget {
-  CardOfferProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false, required this.onSave});
+  CardOfferProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false, required this.onSave, required this.onDelete}) : super(key: key);
 
   var searchI;
   final bool isEditable;
   bool isSelected;
   final Function(dynamic) onSave;
+  final Function() onDelete;
   @override
   State<CardOfferProfilWidget> createState() => _CardOfferProfilWidgetState();
 }
@@ -58,6 +59,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
     _model.grilleHoraire = widget.searchI['grille_horaire'];
     _model.grilleHoraireImpaire = widget.searchI['grille_horaire_impaire'];
     _model.descriptionOffreController ??= TextEditingController(text: widget.searchI['description_offre']);
+    _model.horaireDispoInterim = widget.searchI['proposition_dispo_interim'];
     _model.nomOffreController ??= TextEditingController(text: widget.searchI['nom']);
     _model.isActive = widget.searchI['isActive'];
   }
@@ -141,6 +143,39 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                   setState(() {
                     isExpendedSearchOffer = !isExpendedSearchOffer;
                   });
+                },
+                onLongPress: () {
+                  if (widget.isEditable) {
+                    //Afficher un dialogue pour supprimer l'offre
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Supprimer l\'offre '+ widget.searchI['nom'], style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18.0,
+                                      fontFamily: 'Poppins',
+                                    ),),
+                          content: Text('Voulez-vous vraiment supprimer cette offre ?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Annuler'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                widget.onDelete();
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Supprimer', style: TextStyle(color: redColor)),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 1.0,
@@ -764,7 +799,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           Container(
                                             height: 350,
                                             child: DateSelector(
-                                              initialSelectedDates: widget.searchI['proposition_dispo_interim'] != null ? widget.searchI['proposition_dispo_interim'] : [],
+                                              initialSelectedDates: _model.horaireDispoInterim,
                                               onDatesChanged: (selectedDates) {
                                                 _model.horaireDispoInterim = selectedDates;
                                               },
@@ -1383,7 +1418,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Container(
-                                          height: 370,
+                                          // height: 370,
                                           child: DateSelector(initialSelectedDates: widget.searchI['proposition_dispo_interim'] != null ? widget.searchI['proposition_dispo_interim'] : [], onDatesChanged: (dates){}, isEditable: false),
                                         )),
                                     if (widget.searchI['description_offre'] != '')

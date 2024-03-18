@@ -237,7 +237,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
       final providerProfilUser = Provider.of<ProviderProfilUser>(context, listen: false);
       providerProfilUser.setSpecialisation(userData?['specialisations'] ?? []);
       providerProfilUser.setLGO(userData?['lgo'] ?? []);
-      providerProfilUser.setCompetence(userData?['competences']?? []);
+      providerProfilUser.setCompetence(userData?['competences'] ?? []);
       providerProfilUser.setLangues(userData?['langues'] ?? []);
       providerProfilUser.setExperiences(userData?['experiences'] ?? []);
       setState(() {
@@ -252,11 +252,10 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     Future<void> _pickImage({required ImageSource source}) async {
-      
       final pickedFile = await ImagePicker().pickImage(source: source);
 
-      if(pickedFile != null) {
-          final croppedImage = await ImageCropper().cropImage(
+      if (pickedFile != null) {
+        final croppedImage = await ImageCropper().cropImage(
           sourcePath: pickedFile.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           compressQuality: 50,
@@ -269,30 +268,28 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
           ],
         );
 
-      if (croppedImage != null) {
-        setState(() {
-          _image = File(croppedImage.path);
-          _isLoading = true;
-        });
+        if (croppedImage != null) {
+          setState(() {
+            _image = File(croppedImage.path);
+            _isLoading = true;
+          });
 
-        final Reference storageRef = FirebaseStorage.instance.ref().child('profile_pictures/${DateTime.now()}.png');
-        final UploadTask uploadTask = storageRef.putFile(_image!);
-        final TaskSnapshot downloadUrl = (await uploadTask);
+          final Reference storageRef = FirebaseStorage.instance.ref().child('profile_pictures/${DateTime.now()}.png');
+          final UploadTask uploadTask = storageRef.putFile(_image!);
+          final TaskSnapshot downloadUrl = (await uploadTask);
 
-        String url = (await downloadUrl.ref.getDownloadURL());
-        
+          String url = (await downloadUrl.ref.getDownloadURL());
 
-        setState(() {
-          _model.imageURL = url;
-          userData['photoUrl'] = url;
-          _isLoading = false;
-        });
+          setState(() {
+            _model.imageURL = url;
+            userData['photoUrl'] = url;
+            _isLoading = false;
+          });
 
-         final CollectionReference<Map<String, dynamic>> usersRef = FirebaseFirestore.instance.collection('users');
+          final CollectionReference<Map<String, dynamic>> usersRef = FirebaseFirestore.instance.collection('users');
 
-         usersRef.doc(currentUser?.uid).update({'photoUrl': url});
-
-      }
+          usersRef.doc(currentUser?.uid).update({'photoUrl': url});
+        }
       }
     }
 
@@ -715,24 +712,6 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                     child: TextFormField(
                                       controller: _model.birthDateController,
-                                      onFieldSubmitted: (_) async {
-                                        final _datePickedDate = await showDatePicker(
-                                          context: context,
-                                          initialDate: getCurrentTimestamp,
-                                          firstDate: DateTime(1900),
-                                          lastDate: getCurrentTimestamp,
-                                        );
-
-                                        if (_datePickedDate != null) {
-                                          setState(() {
-                                            _model.datePicked = DateTime(
-                                              _datePickedDate.year,
-                                              _datePickedDate.month,
-                                              _datePickedDate.day,
-                                            );
-                                          });
-                                        }
-                                      },
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         labelText: 'Date de naissance',
@@ -1826,21 +1805,23 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: (){
-                                      Navigator.push(context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ProfilDeleteAccount(),
-                                        ),
-                                      );
-                                    }, 
-                                    child: Text(
-                                      'Supprimer mon compte', 
-                                      style: FlutterFlowTheme.of(context).titleSmall.override(
-                                      fontFamily: 'Poppins',
-                                      color: blueColor,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),))
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ProfilDeleteAccount(),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        'Supprimer mon compte',
+                                        style: FlutterFlowTheme.of(context).titleSmall.override(
+                                              fontFamily: 'Poppins',
+                                              color: blueColor,
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ))
                                 ],
                               ),
                             ),
@@ -1862,13 +1843,45 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                             for (var searchI in recherchesUser)
                               CardSearchProfilWidget(
                                 searchI: searchI,
-                                onSave: (data) {},
+                                onSave: (data) {
+                                  setState(() {
+                                   int idRech = recherchesUser.indexOf(searchI);
+                                    recherchesUser[idRech] = data;
+                                  });
+                                },
+                                onDelete: () => {
+                                    FirebaseFirestore.instance.collection('recherches').doc(searchI['doc_id']).delete().then((_) {
+                                      setState(() {
+                                        recherchesUser.remove(searchI);
+                                      });
+                                      showCustomSnackBar(context, 'Recherche supprimée avec succès');
+                                    }).catchError((error) {
+                                      print('Erreur lors de la suppression du document : $error');
+                                      showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                                    })
+                                },
                               ),
                           if (_selectedIndex == 2 && offresUser.isNotEmpty)
                             for (var searchI in offresUser)
                               CardOfferProfilWidget(
                                 searchI: searchI,
-                                onSave: (data) {},
+                                onSave: (data) {
+                                  setState(() {
+                                   int idOfre = offresUser.indexOf(searchI);
+                                    offresUser[idOfre] = data;
+                                  });
+                                },
+                                onDelete: () => {
+                                    FirebaseFirestore.instance.collection('offres').doc(searchI['doc_id']).delete().then((_) {
+                                      setState(() {
+                                        offresUser.remove(searchI);
+                                      });
+                                      showCustomSnackBar(context, 'Offre supprimée avec succès');
+                                    }).catchError((error) {
+                                      print('Erreur lors de la suppression du document : $error');
+                                      showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                                    })
+                                },
                               )
                         ],
                       ),

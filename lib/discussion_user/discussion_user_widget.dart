@@ -151,7 +151,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                         padding: const EdgeInsets.all(3.0),
                         child: CircleAvatar(
                           backgroundImage: NetworkImage(
-                            userMessage != null ? userMessage['photoUrl'] : '',
+                            userMessage != null &&  userMessage['photoUrl'] != null  ? userMessage['photoUrl'] : '',
                           ),
                           maxRadius: 25,
                         ),
@@ -174,7 +174,7 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                         ],
                       ),
                     ),
-                    if (userMessage['afficher_tel'])
+                    if (userMessage['afficher_tel'] != null && userMessage['afficher_tel'])
                       ClipOval(
                         child: Material(
                           elevation: 2,

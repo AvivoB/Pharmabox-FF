@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
 import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../constant.dart';
 import '../../custom_code/widgets/date_selector_interimaire.dart';
@@ -95,7 +96,7 @@ class _PopupRechercheWidgetState extends State<PopupRechercheWidget> {
       'grille_horaire': grilleHoraireNetsed,
       'grille_pair_impaire_identique': _model.pairImpaireValue,
       'grille_horaire_impaire': grilleHoraireImpaireNetsed,
-      'horaire_dispo_interim': _model.horaireDispoInterim.map((date) => Timestamp.fromDate(date)).toList(),
+      'horaire_dispo_interim': _model.horaireDispoInterim,
       'user_id': currentUser?.uid,
       'date_created': Timestamp.now(),
       'isActive': true,

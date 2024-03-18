@@ -38,7 +38,7 @@ class _PredictionVilleState extends State<PredictionVille> {
 
     widget.onPlaceSelected({'city': query, 'country': 'France'});
     try {
-      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&key=$googleMapsApi&language=fr'));
+      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=(cities)&key=$googleMapsApi&language=fr'));
       final json = jsonDecode(response.body);
 
       if (json['status'] == 'OK') {

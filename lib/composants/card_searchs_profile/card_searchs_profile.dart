@@ -23,12 +23,13 @@ import '../../flutter_flow/flutter_flow_model.dart';
 import '../../flutter_flow/form_field_controller.dart';
 
 class CardSearchProfilWidget extends StatefulWidget {
-  CardSearchProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false, required this.onSave});
+  CardSearchProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false, required this.onSave, required this.onDelete});
 
   var searchI;
   final bool isEditable;
   bool isSelected;
   final Function(dynamic) onSave;
+  final Function() onDelete;
   @override
   State<CardSearchProfilWidget> createState() => _CardSearchProfilWidgetState();
 }
@@ -55,6 +56,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
     _model.pairImpaireValue = widget.searchI['grille_pair_impaire_identique'];
     _model.grilleHoraire = widget.searchI['grille_horaire'];
     _model.grilleHoraireImpaire = widget.searchI['grille_horaire_impaire'];
+    _model.horaireDispoInterim = widget.searchI['horaire_dispo_interim'];
     _model.isActive = widget.searchI['isActive'];
   }
 
@@ -132,6 +134,39 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                   setState(() {
                     isExpendedSearchOffer = !isExpendedSearchOffer;
                   });
+                },
+                onLongPress: () {
+                  if (widget.isEditable) {
+                    //Afficher un dialogue pour supprimer l'offre
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Supprimer l\'offre '+ widget.searchI['nom'], style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18.0,
+                                      fontFamily: 'Poppins',
+                                    ),),
+                          content: Text('Voulez-vous vraiment supprimer cette offre ?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Annuler'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                widget.onDelete();
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Supprimer', style: TextStyle(color: redColor)),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 1.0,
@@ -728,7 +763,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                 if (_model.contratType.contains('Intérimaire')) Text('Vos disponibilités', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                                                 if (_model.contratType.contains('Intérimaire'))
                                                   Container(
-                                                    height: 390,
+                                                    height: 350,
                                                     child: DateSelector(
                                                       initialSelectedDates: widget.searchI['horaire_dispo_interim'] != null ? widget.searchI['horaire_dispo_interim'] : [],
                                                       onDatesChanged: (selectedDates) {
@@ -1113,7 +1148,6 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Container(
-                                          height: 370,
                                           child: DateSelector(initialSelectedDates: widget.searchI['horaire_dispo_interim'] != null ? widget.searchI['horaire_dispo_interim'] : [], onDatesChanged: (dates){}, isEditable: false),
                                         )),
                                   ],

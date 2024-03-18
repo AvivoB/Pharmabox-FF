@@ -6,6 +6,7 @@ import 'package:pharmabox/custom_code/widgets/horaire_select_widget.dart';
 import 'package:pharmabox/custom_code/widgets/index.dart';
 import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_user/card_user_widget.dart';
@@ -225,7 +226,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                                                   decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
                                                   ),
-                                                  child: userData != null && userData['photoUrl'] != ''
+                                                  child: userData != null && userData['photoUrl'] != null && userData['photoUrl'] != ''
                                                       ? Image.network(
                                                           userData['photoUrl'],
                                                           fit: BoxFit.cover,
@@ -1463,6 +1464,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                             searchI: searchI,
                             isEditable: false,
                             onSave: (data) {},
+                            onDelete: () => {},
                           )
                     ],
                   ),

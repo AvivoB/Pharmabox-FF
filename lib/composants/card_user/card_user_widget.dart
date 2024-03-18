@@ -116,12 +116,12 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      widget.data['nom'].toString().toCapitalized(),
+                                      widget.data?['nom'].toString().toCapitalized() ?? '',
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
                                     ),
                                     SizedBox(width: 3),
                                     Text(
-                                      widget.data['prenom'].toString().toCapitalized(),
+                                      widget.data?['prenom'].toString().toCapitalized() ?? '',
                                       style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600,),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -131,7 +131,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.44,
                                 child: Text(
-                                  widget.data['poste'] ?? '',
+                                  widget.data?['poste'] ?? '',
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Color(0xFF8D8D97),
@@ -158,9 +158,10 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                 ],
               ),
             ),
+            
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
-              child: Row(
+              child: widget.data['city'] != null ? Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -169,7 +170,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     color: Color(0xFF595A71),
                     size: 35.0,
                   ),
-                  if (widget.data['country'] != null)
+                  if (widget.data['country'] != null && widget.data['city'] != null)
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                       child: Text(
@@ -184,7 +185,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                       child: Text(
-                        widget.data['city'],
+                        widget.data?['city'] ?? '',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Poppins',
                               color: Color(0xFF595A71),
@@ -192,7 +193,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                       ),
                     ),
                 ],
-              ),
+              ) : Container(),
             ),
             Container(
               width: MediaQuery.of(context).size.width * 1.0,
@@ -224,7 +225,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          if(widget.data['afficher_tel'])
+                          if(widget.data['afficher_tel'] != null && widget.data['afficher_tel'] && widget.data['telephone'] != null)
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                             child: Container(
@@ -257,7 +258,7 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                               ),
                             ),
                           ),
-                          if(widget.data['afficher_email'])
+                          if(widget.data['afficher_email'] != null && widget.data['afficher_email'] && widget.data['email'] != null)
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                             child: Container(

@@ -6,6 +6,7 @@ import 'package:pharmabox/composants/card_offers_profile/card_offers_profile.dar
 import 'package:pharmabox/composants/card_searchs_profile/card_searchs_profile.dart';
 import 'package:pharmabox/custom_code/widgets/button_network_manager.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:pharmabox/discussion_user/discussion_user_widget.dart';
 import 'package:pharmabox/popups/popup_signalement/popup_signalement_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -340,7 +341,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
-                                              if (userData['telephone'] != '' && userData['afficher_tel'])
+                                              if (userData['telephone'] != null && userData['telephone'] != '' && userData['afficher_tel'] != null && userData['afficher_tel'])
                                                 Padding(
                                                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                                                   child: Container(
@@ -373,7 +374,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                     ),
                                                   ),
                                                 ),
-                                              if (userData['email'] != '' && userData['afficher_email'])
+                                              if (userData['email'] != null && userData['email'] != '' && userData['afficher_email'] != null && userData['afficher_email'])
                                                 Padding(
                                                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 5.0, 0.0),
                                                   child: Container(
@@ -540,7 +541,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            if (userData != null && userData['date_naissance'] != '')
+                            if (userData != null && userData['date_naissance'] != null && userData['date_naissance'] != '')
                               Padding(
                                 padding: EdgeInsets.only(bottom: 5),
                                 child: Row(
@@ -555,7 +556,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ],
                                 ),
                               ),
-                            if (userData['country'] != null)
+                            if (userData['country'] != null && userData['city'] != null && userData['country'] != '' && userData['city'] != '')
                               Padding(
                                 padding: EdgeInsets.only(bottom: 5),
                                 child: Row(
@@ -570,7 +571,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ],
                                 ),
                               ),
-                            if (userData['country'] == null)
+                            if (userData['country'] == null && userData['city'] != null && userData['city'] != '')
                               Padding(
                                 padding: EdgeInsets.only(bottom: 5),
                                 child: Row(
@@ -585,7 +586,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ],
                                 ),
                               ),
-                            if (userData['email'] != '' && userData['afficher_email'])
+                            if (userData['email'] != '' && userData['afficher_email'] != null && userData['afficher_email'])
                               Padding(
                                 padding: EdgeInsets.only(bottom: 5),
                                 child: Row(
@@ -600,7 +601,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ],
                                 ),
                               ),
-                            if (userData['telephone'] != '' && userData['afficher_tel'])
+                            if (userData['telephone'] != '' && userData['afficher_tel'] != null && userData['afficher_tel'])
                               Padding(
                                 padding: EdgeInsets.only(bottom: 5),
                                 child: Row(
@@ -615,10 +616,8 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ],
                                 ),
                               ),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Text(userData != null ? userData['presentation'] : '', style: FlutterFlowTheme.of(context).bodyMedium)
+                            if(userData['presentation'] != null && userData['presentation'] != '')
+                              Text(userData?['presentation'] ?? '', style: FlutterFlowTheme.of(context).bodyMedium)
                           ]),
                         ),
                       ),
@@ -674,6 +673,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
+                              if(userData != null && userData['specialisations'] != null && userData['specialisations'].isNotEmpty)
                               Padding(
                                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
@@ -730,7 +730,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                                     shrinkWrap: true,
                                                     scrollDirection: Axis.vertical,
                                                     physics: const NeverScrollableScrollPhysics(),
-                                                    itemCount: userData != null ? userData['specialisations'].length : 0,
+                                                    itemCount: userData != null && userData['specialisations'] != null ? userData['specialisations'].length : 0,
                                                     itemBuilder: (context, index) {
                                                       return Padding(
                                                         padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
@@ -771,6 +771,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ),
                                 ),
                               ),
+                              if(userData != null && userData['lgo'] != null && userData['lgo'].isNotEmpty)
                               Padding(
                                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
@@ -831,7 +832,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                             shrinkWrap: true,
                                             physics: const NeverScrollableScrollPhysics(),
                                             scrollDirection: Axis.vertical,
-                                            itemCount: userData != null ? userData['lgo'].length : 0,
+                                            itemCount: userData != null && userData['lgo'] != null ? userData['lgo'].length : 0,
                                             itemBuilder: (context, index) {
                                               return Row(
                                                 mainAxisSize: MainAxisSize.max,
@@ -874,6 +875,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ),
                                 ),
                               ),
+                              if(userData != null && userData['competences'] != null && userData['competences'].isNotEmpty)
                               Padding(
                                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
@@ -1053,6 +1055,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ),
                                 ),
                               ),
+                              if(userData != null && userData['langues'] != null && userData['langues'].isNotEmpty)
                               Padding(
                                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
@@ -1167,6 +1170,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                   ),
                                 ),
                               ),
+                              if(userData != null && userData['experiences'] != null && userData['experiences'].isNotEmpty)
                               Padding(
                                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Container(
@@ -1267,6 +1271,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                             searchI: searchI,
                             isEditable: false,
                             onSave: (p0) => {},
+                            onDelete: () => {},
                           ),
                       if (_selectedIndex == 2 && offresUser.isNotEmpty)
                         for (var searchI in offresUser)
@@ -1274,6 +1279,8 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                             searchI: searchI,
                             isEditable: false,
                             onSave: (data) {},
+                            onDelete: () => {},
+
                           )
                     ],
                   ),

@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/animation.dart';
+import 'package:pharmabox/custom_code/widgets/FlutterMap.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/explorer/predictionVilleExplorer.dart';
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
@@ -31,10 +33,11 @@ import 'explorer_model.dart';
 export 'explorer_model.dart';
 import 'classPlaceClusterExplorer.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pharmabox/custom_code/widgets/prediction_ville.dart';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 
 import 'explorer_provider.dart';
 
@@ -52,19 +55,14 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   late AnimationController _animationController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
-  late ClusterManager _manager;
-  Completer<GoogleMapController> _controller = Completer();
-  Set<Marker> markers = Set();
+  final MapController mapController = MapController();
   String? searchTerms;
   List searchResults = [];
   String? selectedItem;
   bool isLoading = true;
   bool searchLoading = false;
-  // CameraPosition _currentCameraPosition = CameraPosition(
-  //   target: LatLng(0, 0),
-  //   zoom: 16.0,
-  // );
-  CameraPosition? _currentCameraPosition;
+  LatLng _currentPosition = LatLng(0, 0);
+  double initialZoom = 13.0;
 
   List _predictions = [];
 
@@ -73,7 +71,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     bool isLocationPermissionGranted = await requestLocationPermission();
     var permission = await Geolocator.checkPermission();
 
-    print(permission);
+    print('PErmissions :  ${permission.toString()}');
     if (isLocationPermissionGranted || permission == LocationPermission.whileInUse) {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
@@ -81,18 +79,14 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       print(position);
 
       setState(() {
-        _currentCameraPosition = CameraPosition(
-          target: LatLng(position.latitude, position.longitude),
-          zoom: 16.0,
-        );
+        _currentPosition = LatLng(position.latitude, position.longitude);
+        initialZoom = 13.0;
         isLoading = false;
       });
     } else {
       setState(() {
-        _currentCameraPosition = CameraPosition(
-          target: LatLng(48.866667, 2.333333),
-          zoom: 16.0,
-        );
+         _currentPosition = LatLng(48.866667, 2.333333);
+        initialZoom = 13.0;
         isLoading = false;
       });
     }
@@ -109,13 +103,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   List userSearch = [];
 
   Future<void> getAllPharmacies() async {
-    items.clear();
+
     pharmacieInPlace.clear();
 
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     QuerySnapshot querySnapshot = await _firestore.collection('pharmacies').where('user_id', isNotEqualTo: await getCurrentUserId()).where('isValid', isEqualTo: true).get();
-    int countArray = 0;
     for (var doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
@@ -125,24 +118,22 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
         'documentId': doc.id,
       };
 
-      print('MESDATA ' + doc.id.toString());
+      // print('MESDATA ' + doc.id.toString());
 
-      String name = dataWithId['situation_geographique']['adresse'];
-      List<dynamic> location = dataWithId['situation_geographique']['lat_lng'];
-      String groupementDataPlace = dataWithId['groupement'][0]['name'];
-      String pharmacieId = dataWithId['documentId'];
-      Place place = Place(name: name, latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace, id: pharmacieId);
+      // String name = dataWithId['situation_geographique']['adresse'];
+      // List<dynamic> location = dataWithId['situation_geographique']['lat_lng'];
+      // String groupementDataPlace = dataWithId['groupement'][0]['name'];
+      // String pharmacieId = dataWithId['documentId'];
+      // Place place = Place(name: name, latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace, id: pharmacieId);
       setState(() {
         // if (dataWithId['isValid']) {
-          items.add(place);
-          pharmacieInPlace.add(dataWithId);
+        // items.add(place);
+        pharmacieInPlace.add(dataWithId);
         // }
       });
-
     }
-    print('ITEMS LENGHT '+items.length.toString());
-    _manager.setItems(items);
-    _manager.updateMap();
+    // _manager.setItems(items);
+    // _manager.updateMap();
   }
 
   Future<void> searchPharmacies(String query) async {
@@ -199,28 +190,29 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       final Map<String, dynamic> userData = pharmacieDoc.data() as Map<String, dynamic>;
       if (!addedUserIds.contains(pharmacieId)) {
         userData['documentId'] = pharmacieId;
-        print(userData);
-        List<dynamic> location = userData['situation_geographique']['lat_lng'];
-        String groupementDataPlace = userData['groupement'][0]['name'];
-        Place place = Place(name: userData['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace, id: pharmacieId);
+        // print(userData);
+        // List<dynamic> location = userData['situation_geographique']['lat_lng'];
+        // String groupementDataPlace = userData['groupement'][0]['name'];
+        // Place place = Place(name: userData['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace, id: pharmacieId);
 
-        uniqueItem.add(place);
+        // uniqueItem.add(place);
         uniquePharmacie.add(userData);
       }
       setState(() {
-        items.clear();
+        // isLoading = false;
+        // items.clear();
         pharmacieInPlace.clear();
 
-        for (var un in uniqueItem) {
-          items.add(un);
-        }
+        // for (var un in uniqueItem) {
+        //   items.add(un);
+        // }
 
         for (var pharma in uniquePharmacie) {
           pharmacieInPlace.add(pharma);
         }
       });
-      _manager.setItems(items);
-      _manager.updateMap();
+      // _manager.setItems(items);
+      // _manager.updateMap();
     });
 
     // print(uniqueItem);
@@ -233,7 +225,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     getAllPharmacies();
     _model = createModel(context, () => ExplorerModel());
     _model.textController ??= TextEditingController();
-    _manager = _initClusterManager();
+    // _manager = _initClusterManager();
     _tabController = TabController(length: 2, vsync: this);
     _animationController = AnimationController(
       vsync: this,
@@ -242,29 +234,28 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-        authProvider.isComplete == false ?
-        showAlertCompleteProfile(context) : print('OKKK proifle complet');
+      authProvider.isComplete == false ? showAlertCompleteProfile(context) : print('OKKK proifle complet');
     });
   }
 
-  void _playAnimation() {
-    _animationController.reset();
-    _animationController.forward();
-  }
+  // void _playAnimation() {
+  //   _animationController.reset();
+  //   _animationController.forward();
+  // }
 
-  ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder, 
-      levels: [1, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 20.0], // Optional : Configure this if you want to change zoom levels at which the clustering precision change
-      extraPercent: 0.2, // Optional : This number represents the percentage (0.2 for 20%) of latitude and longitude (in each direction) to be considered on top of the visible map bounds to render clusters. This way, clusters don't "pop out" when you cross the map.
-      stopClusteringZoom: 15.0 // Optional : The zoom level to stop clustering, so it's only rendering single item "clusters"
-    );
-  }
+  // ClusterManager _initClusterManager() {
+  //   return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder,
+  //     levels: [1, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 20.0], // Optional : Configure this if you want to change zoom levels at which the clustering precision change
+  //     extraPercent: 0.2, // Optional : This number represents the percentage (0.2 for 20%) of latitude and longitude (in each direction) to be considered on top of the visible map bounds to render clusters. This way, clusters don't "pop out" when you cross the map.
+  //     stopClusteringZoom: 15.0 // Optional : The zoom level to stop clustering, so it's only rendering single item "clusters"
+  //   );
+  // }
 
-  void _updateMarkers(Set<Marker> markers) {
-    setState(() {
-      this.markers = markers;
-    });
-  }
+  // void _updateMarkers(Set<Marker> markers) {
+  //   setState(() {
+  //     this.markers = markers;
+  //   });
+  // }
 
   void _search(String query) async {
     print('predictionnn' + query.toString());
@@ -330,7 +321,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    print(selectedItem);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
@@ -399,9 +389,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                   await getAllPharmacies();
                                   searchLoading = false;
                                 } else {
-                                  searchLoading = true;
-                                  pharmacieInPlace.clear();
-                                  await searchPharmacies(query);
+                                  // searchLoading = true;
+                                  // pharmacieInPlace.clear();
+                                  // await searchPharmacies(query);
                                   searchLoading = false;
                                 }
                               }
@@ -430,12 +420,13 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                       // Les coordonnées GPS sont disponibles dans la liste des locations
                                       double latitude = locations[0].latitude;
                                       double longitude = locations[0].longitude;
-                                      GoogleMapController controller = await _controller.future;
-                                      controller.animateCamera(CameraUpdate.newCameraPosition(
-                                          // on below line we have given positions of Location 5
-                                          CameraPosition(target: LatLng(latitude, longitude), zoom: 10.0)));
+                                      // GoogleMapController controller = await _controller.future;
+                                      // controller.animateCamera(CameraUpdate.newCameraPosition(
+                                      //     // on below line we have given positions of Location 5
+                                      //     CameraPosition(target: LatLng(latitude, longitude), zoom: 10.0)));
                                       setState(() {
                                         _predictions.clear();
+                                        mapController.move(LatLng(latitude, longitude), 16.0);
                                       });
                                     }
                                   });
@@ -530,7 +521,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                         color: Color(0xFFEFF6F7),
                       ),
                       child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance.collection('users').where(FieldPath.documentId, isNotEqualTo: currentUserUid).where('isVerified', isEqualTo: true).where('isComplete', isEqualTo: true).where('isValid', isEqualTo: true).snapshots(),
+                          stream: FirebaseFirestore.instance.collection('users').where(FieldPath.documentId, isNotEqualTo: currentUserUid).where('isValid', isEqualTo: true).snapshots(),
                           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                             final users = snapshot.data?.docs;
 
@@ -580,11 +571,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                       final data = document.data() as Map<String, dynamic>;
                                       return Padding(
                                         padding: const EdgeInsets.all(16.0),
-                                        child: data['nom'] != null && data['prenom'] != null
-                                            ? CardUserWidget(
-                                                data: data,
-                                              )
-                                            : Container(),
+                                        child:CardUserWidget(data: data)
                                       );
                                     },
                                   ),
@@ -601,31 +588,16 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                     child: Stack(children: [
                       isLoading
                           ? ProgressIndicatorPharmabox()
-                          : Container(
-                              child: GoogleMap(
-                                mapType: MapType.normal,
-                                initialCameraPosition: _currentCameraPosition ?? CameraPosition(target: LatLng(0, 0), zoom: 16.0),
-                                markers: markers,
-                                myLocationEnabled: true,
-                                zoomGesturesEnabled: true,
-                                zoomControlsEnabled: false,
-                                myLocationButtonEnabled: false,
-                                // onMapCreated:
-                                //     (GoogleMapController controller) {
-                                //   _controller.complete(controller);
-                                //   _manager.setMapId(controller.mapId);
-                                // },
-                                onCameraMove: (position) {
-                                  _manager.onCameraMove(position);
-                                  _currentCameraPosition = position;
-                                },
-                                // onCameraMove: _manager.onCameraMove,
-                                onCameraIdle: _manager.updateMap,
-                                onMapCreated: (GoogleMapController controller) {
-                                  _controller.complete(controller);
-                                  _manager.setMapId(controller.mapId);
-                                },
-                              ),
+                          : MyMapWidget(
+                              pharmacies: pharmacieInPlace,
+                              currentPosition: _currentPosition,
+                              initialZoom: initialZoom,
+                              mapController: mapController,
+                              onMarkerTap: (documentId) {
+                                setState(() {
+                                  selectedItem = documentId;
+                                });
+                              },
                             ),
 
                       if (selectedItem != null)
@@ -719,126 +691,126 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     );
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
-        return Marker(
-          markerId: MarkerId(cluster.getId()),
-          position: cluster.location,
-          onTap: () {
-            print('--LIST : ' + cluster.items.toList().toString());
-            setState(() {
-              cluster.isMultiple ? selectedItem = null : selectedItem = cluster.items.first.id;
-            });
-            //
-          },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, text: cluster.isMultiple ? cluster.count.toString() : cluster.count.toString(), icons: cluster.items.first.groupement.toString()),
-        );
-      };
+//   Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
+//         return Marker(
+//           markerId: MarkerId(cluster.getId()),
+//           position: cluster.location,
+//           onTap: () {
+//             print('--LIST : ' + cluster.items.toList().toString());
+//             setState(() {
+//               cluster.isMultiple ? selectedItem = null : selectedItem = cluster.items.first.id;
+//             });
+//             //
+//           },
+//           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, text: cluster.isMultiple ? cluster.count.toString() : cluster.count.toString(), icons: cluster.items.first.groupement.toString()),
+//         );
+//       };
 
-  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text = '', icons = ''}) async {
-    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
+//   Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text = '', icons = ''}) async {
+//     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+//     final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
 
-    if (text == '1') {
-      final double markerSize = 120.0;
-      final double radius = markerSize / 2;
+//     if (text == '1') {
+//       final double markerSize = 120.0;
+//       final double radius = markerSize / 2;
 
-      // Starting a new drawing on a canvas
-      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-      final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(markerSize, markerSize + radius))); // Extra space for the pointy bottom
+//       // Starting a new drawing on a canvas
+//       final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+//       final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(markerSize, markerSize + radius))); // Extra space for the pointy bottom
 
-      // Drawing gradient circle
-      final Paint paint = Paint()
-        ..shader = ui.Gradient.linear(
-          Offset(0, 0),
-          Offset(markerSize, markerSize),
-          [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-        );
-      canvas.drawCircle(Offset(radius, radius), radius, paint);
+//       // Drawing gradient circle
+//       final Paint paint = Paint()
+//         ..shader = ui.Gradient.linear(
+//           Offset(0, 0),
+//           Offset(markerSize, markerSize),
+//           [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+//         );
+//       canvas.drawCircle(Offset(radius, radius), radius, paint);
 
-      // Drawing a white circle
-      final Paint bgWhite = Paint()..color = Color(0xFFFFFFFF);
-      canvas.drawCircle(Offset(radius, radius), radius - 10, bgWhite);
+//       // Drawing a white circle
+//       final Paint bgWhite = Paint()..color = Color(0xFFFFFFFF);
+//       canvas.drawCircle(Offset(radius, radius), radius - 10, bgWhite);
 
-      // Load and resize the image
-      const double padding = 10.0;
-      double imageSize = 2 * (radius - padding);
+//       // Load and resize the image
+//       const double padding = 10.0;
+//       double imageSize = 2 * (radius - padding);
 
-      // Largeur souhaitée
-      const double desiredWidth = 150.0;
+//       // Largeur souhaitée
+//       const double desiredWidth = 150.0;
 
-      final ByteData data = await rootBundle.load('assets/groupements/' + icons + '.jpg');
-      final Uint8List bytes = Uint8List.view(data.buffer);
-      final Codec codec = await ui.instantiateImageCodec(bytes); // Load original image first
-      final FrameInfo frameInfo = await codec.getNextFrame();
+//       final ByteData data = await rootBundle.load('assets/groupements/' + icons + '.jpg');
+//       final Uint8List bytes = Uint8List.view(data.buffer);
+//       final Codec codec = await ui.instantiateImageCodec(bytes); // Load original image first
+//       final FrameInfo frameInfo = await codec.getNextFrame();
 
-      // Calculate the scale factor based on desired width
-      double scaleFactor = desiredWidth / frameInfo.image.width.toDouble();
+//       // Calculate the scale factor based on desired width
+//       double scaleFactor = desiredWidth / frameInfo.image.width.toDouble();
 
-      // New width and height based on the scale factor
-      double newWidth = frameInfo.image.width.toDouble() * scaleFactor;
-      double newHeight = frameInfo.image.height.toDouble() * scaleFactor;
+//       // New width and height based on the scale factor
+//       double newWidth = frameInfo.image.width.toDouble() * scaleFactor;
+//       double newHeight = frameInfo.image.height.toDouble() * scaleFactor;
 
-      // Re-decode the image with the new dimensions
-      final Codec resizedCodec = await ui.instantiateImageCodec(bytes, targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
-      final FrameInfo resizedFrameInfo = await resizedCodec.getNextFrame();
+//       // Re-decode the image with the new dimensions
+//       final Codec resizedCodec = await ui.instantiateImageCodec(bytes, targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
+//       final FrameInfo resizedFrameInfo = await resizedCodec.getNextFrame();
 
-      // Calculate the proper offset to center the image within the circle
-      final Offset imageOffset = Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
+//       // Calculate the proper offset to center the image within the circle
+//       final Offset imageOffset = Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
 
-      // Clip the canvas to make sure the image is drawn inside the circle
-      final Path clipOvalPath = Path()..addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
-      canvas.clipPath(clipOvalPath);
+//       // Clip the canvas to make sure the image is drawn inside the circle
+//       final Path clipOvalPath = Path()..addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
+//       canvas.clipPath(clipOvalPath);
 
-      canvas.drawImage(resizedFrameInfo.image, imageOffset, Paint());
+//       canvas.drawImage(resizedFrameInfo.image, imageOffset, Paint());
 
-      // Remove clipping so we can draw the bottom part
-      canvas.restore();
+//       // Remove clipping so we can draw the bottom part
+//       canvas.restore();
 
-      // Draw the pointy bottom
-      final path = Path()
-        ..moveTo(radius / 2, markerSize)
-        ..lineTo(markerSize - (radius / 2), markerSize)
-        ..lineTo(radius, markerSize + radius / 1.5) // Makes the triangle more pointy
-        ..close();
+//       // Draw the pointy bottom
+//       final path = Path()
+//         ..moveTo(radius / 2, markerSize)
+//         ..lineTo(markerSize - (radius / 2), markerSize)
+//         ..lineTo(radius, markerSize + radius / 1.5) // Makes the triangle more pointy
+//         ..close();
 
-      canvas.drawPath(path, paint);
+//       canvas.drawPath(path, paint);
 
-      // Converting the canvas into a PNG
-      final img = await pictureRecorder.endRecording().toImage(markerSize.toInt(), (markerSize + radius / 1.5).toInt()); // Adjust height based on pointiness
-      final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
+//       // Converting the canvas into a PNG
+//       final img = await pictureRecorder.endRecording().toImage(markerSize.toInt(), (markerSize + radius / 1.5).toInt()); // Adjust height based on pointiness
+//       final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
 
-      // Creating a BitmapDescriptor from the PNG
-      return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
-    } else {
-      // Code for cluster icon with numbers
-      final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
-      final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
+//       // Creating a BitmapDescriptor from the PNG
+//       return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
+//     } else {
+//       // Code for cluster icon with numbers
+//       final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
+//       final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
 
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
+//       canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+//       canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
 
-      if (text != '1') {
-        TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
-        painter.text = TextSpan(
-          text: text,
-          style: TextStyle(
-            // Using TextStyle for now, adjust as per your theme and requirements
-            fontFamily: 'Poppins',
-            color: Color(0xFFFFFFFF),
-            fontSize: size / 3,
-          ),
-        );
-        painter.layout();
-        painter.paint(
-          canvas,
-          Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
-        );
-      }
-    }
+//       if (text != '1') {
+//         TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
+//         painter.text = TextSpan(
+//           text: text,
+//           style: TextStyle(
+//             // Using TextStyle for now, adjust as per your theme and requirements
+//             fontFamily: 'Poppins',
+//             color: Color(0xFFFFFFFF),
+//             fontSize: size / 3,
+//           ),
+//         );
+//         painter.layout();
+//         painter.paint(
+//           canvas,
+//           Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+//         );
+//       }
+//     }
 
-    final img = await pictureRecorder.endRecording().toImage(size, size);
-    final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
+//     final img = await pictureRecorder.endRecording().toImage(size, size);
+//     final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
 
-    return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
-  }
+//     return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
+//   }
 }

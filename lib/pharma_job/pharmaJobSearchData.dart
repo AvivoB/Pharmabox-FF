@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:pharmabox/auth/base_auth_user_provider.dart';
 
 import '../constant.dart';
@@ -38,7 +39,7 @@ class PharmaJobSearchData {
     }
 
     if (filters['horaire_dispo_interim'] != null && filters['horaire_dispo_interim'].isNotEmpty && filters['contrats'].contains('Intérimaire')) {
-      filteredQuery = filteredQuery.where('proposition_dispo_interim', arrayContainsAny: filters['horaire_dispo_interim']).where('contrats', arrayContainsAny: filters['contrats']);
+      filteredQuery = filteredQuery.where('proposition_dispo_interim', arrayContainsAny: filters['horaire_dispo_interim']);
     }
 
     if (filters['temps'] != '') {
@@ -60,25 +61,31 @@ class PharmaJobSearchData {
     for (var data in snapshot.docs) {
       var offreData = data.data() as Map<String, dynamic>?;
       var pharmacieId = offreData != null ? offreData['pharmacie_id'] : '';
-      DocumentSnapshot pharmaDoc = await pharmaref.doc(pharmacieId).get();
-      Map<String, dynamic> pharmaData = pharmaDoc.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
+      if(pharmacieId != null && pharmacieId != '') {
+        DocumentSnapshot pharmaDoc = await pharmaref.doc(pharmacieId).get();
+        Map<String, dynamic> pharmaData = pharmaDoc.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
+        pharmaData = {
+          ...pharmaData,
+          'documentId': pharmacieId,
+        };
 
-      DocumentSnapshot userRef = await FirebaseFirestore.instance.collection('users').doc(pharmaData['user_id']).get();
-      Map<String, dynamic> userData = userRef.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
+        DocumentSnapshot userRef = await FirebaseFirestore.instance.collection('users').doc(pharmaData['user_id']).get();
+        Map<String, dynamic> userData = userRef.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
 
-      if (cityJob != '' && cityJob == pharmaData['situation_geographique']['data']['ville'] && filters['rayon'] == '') {
-        foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
-      }
-      if (cityJob == '') {
-        foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
-      }
-
-      if (cityJob != '' && filters['rayon'] != '') {
-        // Calculate the distance using Haversine formula
-        double distance = calculateHaversineDistance(cityLatitude, cityLongitude, pharmaData['situation_geographique']['data']['latitude'], pharmaData['situation_geographique']['data']['longitude']);
-        print('DISTANCE : ' + distance.toString());
-        if (distance <= double.parse(filters['rayon'])) {
+        if (cityJob != '' && cityJob == pharmaData['situation_geographique']['data']['ville'] && filters['rayon'] == '') {
           foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+        }
+        if (cityJob == '') {
+          foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+        }
+
+        if (cityJob != '' && filters['rayon'] != '') {
+          // Calculate the distance using Haversine formula
+          double distance = calculateHaversineDistance(cityLatitude, cityLongitude, pharmaData['situation_geographique']['data']['latitude'], pharmaData['situation_geographique']['data']['longitude']);
+          print('DISTANCE : ' + distance.toString());
+          if (distance <= double.parse(filters['rayon'])) {
+            foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+          }
         }
       }
     }
@@ -114,8 +121,8 @@ class PharmaJobSearchData {
 
     if (filters['proposition_dispo_interim'] != null && filters['proposition_dispo_interim'].isNotEmpty && filters['contrats'].contains('Intérimaire')) {
       // Cherche les offres qui ont les horaires de disponibilité de l'intérim et des dates de dispo contenu dans la proposition_dispo_interim
-       
-      filteredQuery = filteredQuery.where('contrats', arrayContainsAny: filters['contrats']).where('horaire_dispo_interim', arrayContains: filters['proposition_dispo_interim']);
+       print("recherche de proposition_dispo_interim" + filters['proposition_dispo_interim'].toString());
+      filteredQuery = filteredQuery.where('horaire_dispo_interim', arrayContainsAny: filters['proposition_dispo_interim']);
     }
 
     if (filters['temps'] != '') {
@@ -129,6 +136,7 @@ class PharmaJobSearchData {
     Set<Map<String, dynamic>> uniqueSearch = {}; // Pour stocker les userData uniques
 
     CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
+
     for (var data in snapshot.docs) {
       print("Document ID: ${data.id}");
       print("Data: ${data.data()}");
@@ -136,6 +144,8 @@ class PharmaJobSearchData {
 
       var rechercheData = data.data() as Map<String, dynamic>?;
       var userId = rechercheData != null ? rechercheData['user_id'] : '';
+
+     
 
       if (!uniqueUserIds.contains(userId)) {
         // Si l'userId n'a pas encore été traité
@@ -170,8 +180,6 @@ class PharmaJobSearchData {
       data['doc_id'] = search.id;
       if (data['user_id'] == currenuserID) {
         mySearch.add(data);
-
-        print('SAVED SEARCHS ' + mySearch.toString());
       }
     }
 

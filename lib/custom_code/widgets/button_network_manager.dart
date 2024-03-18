@@ -172,7 +172,9 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
             },
             child: GradientText(
               messageButton,
-              radius: this.widget.radius,
+              radius: this.
+              
+              widget.radius,
               style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', fontSize: 14.0, fontWeight: FontWeight.w400),
               colors: [Color(0xff7CEDAC), Color(0xFF42D2FF)],
             ),

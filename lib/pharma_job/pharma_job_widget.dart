@@ -4,13 +4,16 @@ import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:pharmabox/composants/card_user/card_user_widget.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pharmabox/custom_code/widgets/FlutterMap.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/pharma_job/pharmaJobSearchData.dart';
 import 'package:pharmabox/popups/popup_recherches_saved/popup_recherches_saved_widget.dart';
@@ -32,8 +35,8 @@ import 'package:provider/provider.dart';
 import 'pharma_job_model.dart';
 export 'pharma_job_model.dart';
 import 'classPlaceClusterPharmaJob.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PharmaJobWidget extends StatefulWidget {
@@ -48,25 +51,25 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   bool isTitulaire = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  late ClusterManager _manager;
-  Completer<GoogleMapController> _controller = Completer();
-  Set<Marker> markers = Set();
+  // late ClusterManager _manager;
+  // Completer<GoogleMapController> _controller = Completer();
+  // Set<Marker> markers = Set();
   String? searchTerms;
 
-  final CameraPosition _parisCameraPosition = CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
+  // final CameraPosition _parisCameraPosition = CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
 
-  List<Place> items = [];
-  List pharmacieInPlace = [];
   List offres = [];
   List recherches = [];
 
   int selectedOffreSearchSaved = 0;
 
   List foundedOffres = [];
+  List foundedOffresLocation = [];
   List foundedRecherches = [];
   bool isLoading = true;
-  CameraPosition? _currentCameraPosition;
+  // CameraPosition? _currentCameraPosition;
   List selectedPharmaciesJobs = [];
+  final MapController mapController = MapController();
 
   bool isFromSaved = true;
 
@@ -83,18 +86,18 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
       );
 
       setState(() {
-        _currentCameraPosition = CameraPosition(
-          target: LatLng(position.latitude, position.longitude),
-          zoom: 16.0,
-        );
+        // _currentCameraPosition = CameraPosition(
+        //   target: LatLng(position.latitude, position.longitude),
+        //   zoom: 16.0,
+        // );
         isLoading = false;
       });
     } else {
       setState(() {
-        _currentCameraPosition = CameraPosition(
-          target: LatLng(48.866667, 2.333333),
-          zoom: 16.0,
-        );
+        // _currentCameraPosition = CameraPosition(
+        //   target: LatLng(48.866667, 2.333333),
+        //   zoom: 16.0,
+        // );
         isLoading = false;
       });
     }
@@ -113,20 +116,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     _model = createModel(context, () => PharmaJobModel());
     _model.searchJobController ??= TextEditingController();
     _model.searchJobController ??= TextEditingController();
-    _manager = _initClusterManager();
-    // getPharmaciesLocations();
     checkTitulaireStatus();
     _getMesRecherches();
-  }
-
-  ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder);
-  }
-
-  void _updateMarkers(Set<Marker> markers) {
-    setState(() {
-      this.markers = markers;
-    });
   }
 
   @override
@@ -146,14 +137,13 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
 
   void _getMesRecherches() async {
     var mesRecherches = await PharmaJobSearchData().getMesRecherches();
-    print('MYSEARCH . ' + mesRecherches.toString());
-    // if(foundedOffres.isNotEmpty || foundedRecherches.isNotEmpty) {
+
     setState(() {
-      // mesRecherches.clear();
-      isTitulaire ? offres = mesRecherches : recherches = mesRecherches;
-      isTitulaire ? _findRecherche(mesRecherches[0]) : _findOffres(mesRecherches[0]);
+      foundedOffres.clear();
+      selectedPharmaciesJobs.clear();
     });
-    // }
+    isTitulaire ? offres = mesRecherches : recherches = mesRecherches;
+    isTitulaire ? _findRecherche(mesRecherches[0]) : _findOffres(mesRecherches[0]);
   }
 
   void _findRecherche(filters) async {
@@ -167,21 +157,20 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   void _findOffres(filters) async {
     foundedOffres.clear();
     selectedPharmaciesJobs.clear();
-    items.clear();
+    foundedOffresLocation.clear();
+
+    setState(() {
+      isLoading = true;
+    });
+
     var data = await PharmaJobSearchData().filterRechercheToFindOffre(filters);
+
     setState(() {
       foundedOffres = data;
-      int countArray = 0;
-
-      for (var job in data) {
-        List<dynamic> location = job['pharma_data']['situation_geographique']['lat_lng'];
-        Place place = Place(name: job['pharma_data']['situation_geographique']['adresse'], latLng: LatLng(location[0], location[1]), groupement: job['pharma_data']['groupement'][0]['name'], id: countArray++);
-        setState(() {
-          items.add(place);
-        });
+      for (var pharmaLocation in foundedOffres) {
+        foundedOffresLocation.add(pharmaLocation['pharma_data']);
       }
-      _manager.setItems(items);
-      _manager.updateMap();
+      isLoading = false;
     });
   }
 
@@ -275,9 +264,18 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                                     });
                                                   },
                                                   onSave: (data) {
-                                                    _findRecherche(data);
                                                     setState(() {
+                                                      _findRecherche(data);
                                                       offres[selectedOffreSearchSaved] = data;
+                                                    });
+                                                  },
+                                                  onDelete: (index) {
+                                                    setState(() {
+                                                      if (offres.length > 0) {
+                                                        selectedOffreSearchSaved = 0;
+                                                      } else {
+                                                        offres.clear();
+                                                      }
                                                     });
                                                   },
                                                 ),
@@ -353,9 +351,18 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                                 });
                                               },
                                               onSave: (data) {
-                                                _findOffres(data);
                                                 setState(() {
+                                                  _findOffres(data);
                                                   recherches[selectedOffreSearchSaved] = data;
+                                                });
+                                              },
+                                              onDelete: (index) {
+                                                setState(() {
+                                                  if (recherches.length > 0) {
+                                                    selectedOffreSearchSaved = 0;
+                                                  } else {
+                                                    recherches.clear();
+                                                  }
                                                 });
                                               },
                                             ),
@@ -501,9 +508,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                           )),
                             ),
                             for (var user in foundedRecherches)
-                              CardUserWidget(
-                                data: user,
-                              ),
+                              CardUserWidget(data: user),
                           ],
                         ),
                       ),
@@ -517,25 +522,16 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                   child: Stack(children: [
                     isLoading
                         ? ProgressIndicatorPharmabox()
-                        : Container(
-                            child: GoogleMap(
-                                mapType: MapType.normal,
-                                initialCameraPosition: _currentCameraPosition ?? CameraPosition(target: LatLng(0, 0), zoom: 16.0),
-                                markers: markers,
-                                myLocationEnabled: true,
-                                zoomGesturesEnabled: true,
-                                zoomControlsEnabled: false,
-                                myLocationButtonEnabled: false,
-                                onMapCreated: (GoogleMapController controller) {
-                                  _controller.complete(controller);
-                                  _manager.setMapId(controller.mapId);
-                                },
-                                onCameraMove: (position) {
-                                  _manager.onCameraMove(position);
-                                },
-                                onCameraIdle: _manager.updateMap),
+                        : MyMapWidget(
+                            pharmacies: foundedOffresLocation,
+                            mapController: mapController,
+                            onMarkerTap: (id) {
+                              setState(() {
+                                selectedPharmaciesJobs.clear();
+                                selectedPharmaciesJobs.addAll(foundedOffres.where((element) => element['pharma_data']['documentId'].toString() == id));
+                              });
+                            },
                           ),
-
                     if (selectedPharmaciesJobs.isNotEmpty)
                       AnimatedPositioned(
                         duration: Duration(seconds: 1),
@@ -553,7 +549,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                   for (var i in selectedPharmaciesJobs)
                                     Padding(
                                       padding: const EdgeInsets.only(right: 10.0, left: 10.0),
-                                      child: Container(width: MediaQuery.of(context).size.width * 0.9, child: CardPharmacieOffreRechercheWidget(data: foundedOffres[i])),
+                                      child: Container(width: MediaQuery.of(context).size.width * 0.9, child: CardPharmacieOffreRechercheWidget(data: i)),
                                     )
                                 ],
                               ),
@@ -625,146 +621,146 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     );
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
-        bool isSamePoint = false;
-        cluster.items.forEach((p) {
-          double distance = haversineDistance(p.location, cluster.location);
-          print('--- FOREACH ITEMS : ' + (distance < 10 ? 'VRAI' : 'FAUX')); // Seuil de 10 mètres
-          distance < 10 ? isSamePoint = true : isSamePoint = false;
-        });
-        // bool isSamePoint = false;
-        return Marker(
-          markerId: MarkerId(cluster.getId()),
-          position: cluster.location,
-          onTap: () {
-            setState(() {
-              selectedPharmaciesJobs.clear();
-              cluster.items.forEach((p) {
-                selectedPharmaciesJobs.add(p.id);
-                print(selectedPharmaciesJobs);
-              });
-            });
-          },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, isSamePoint, text: cluster.isMultiple ? cluster.count.toString() : cluster.count.toString(), icons: cluster.items.first.groupement.toString()),
-        );
-      };
-  Future<BitmapDescriptor> _getMarkerBitmap(int size, bool isSamePoint, {String text = '', icons = ''}) async {
-    print(isSamePoint);
-    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
+  // Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
+  //       bool isSamePoint = false;
+  //       cluster.items.forEach((p) {
+  //         double distance = haversineDistance(p.location, cluster.location);
+  //         print('--- FOREACH ITEMS : ' + (distance < 10 ? 'VRAI' : 'FAUX')); // Seuil de 10 mètres
+  //         distance < 10 ? isSamePoint = true : isSamePoint = false;
+  //       });
+  //       // bool isSamePoint = false;
+  //       return Marker(
+  //         markerId: MarkerId(cluster.getId()),
+  //         position: cluster.location,
+  //         onTap: () {
+  //           setState(() {
+  //             selectedPharmaciesJobs.clear();
+  //             cluster.items.forEach((p) {
+  //               selectedPharmaciesJobs.add(p.id);
+  //               print(selectedPharmaciesJobs);
+  //             });
+  //           });
+  //         },
+  //         icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, isSamePoint, text: cluster.isMultiple ? cluster.count.toString() : cluster.count.toString(), icons: cluster.items.first.groupement.toString()),
+  //       );
+  //     };
+  // Future<BitmapDescriptor> _getMarkerBitmap(int size, bool isSamePoint, {String text = '', icons = ''}) async {
+  //   print(isSamePoint);
+  //   final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+  //   final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
 
-    if (isSamePoint) {
-      print('IS SAME POINT');
-      final double markerSize = 120.0;
-      final double radius = markerSize / 2;
+  //   if (isSamePoint) {
+  //     print('IS SAME POINT');
+  //     final double markerSize = 120.0;
+  //     final double radius = markerSize / 2;
 
-      // Starting a new drawing on a canvas
-      final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-      final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(markerSize, markerSize + radius))); // Extra space for the pointy bottom
+  //     // Starting a new drawing on a canvas
+  //     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+  //     final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(markerSize, markerSize + radius))); // Extra space for the pointy bottom
 
-      // Drawing gradient circle
-      final Paint paint = Paint()
-        ..shader = ui.Gradient.linear(
-          Offset(0, 0),
-          Offset(markerSize, markerSize),
-          [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-        );
-      canvas.drawCircle(Offset(radius, radius), radius, paint);
+  //     // Drawing gradient circle
+  //     final Paint paint = Paint()
+  //       ..shader = ui.Gradient.linear(
+  //         Offset(0, 0),
+  //         Offset(markerSize, markerSize),
+  //         [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+  //       );
+  //     canvas.drawCircle(Offset(radius, radius), radius, paint);
 
-      // Drawing a white circle
-      final Paint bgWhite = Paint()..color = Color(0xFFFFFFFF);
-      canvas.drawCircle(Offset(radius, radius), radius - 10, bgWhite);
+  //     // Drawing a white circle
+  //     final Paint bgWhite = Paint()..color = Color(0xFFFFFFFF);
+  //     canvas.drawCircle(Offset(radius, radius), radius - 10, bgWhite);
 
-      // Load and resize the image
-      const double padding = 10.0;
-      double imageSize = 2 * (radius - padding);
+  //     // Load and resize the image
+  //     const double padding = 10.0;
+  //     double imageSize = 2 * (radius - padding);
 
-      // Largeur souhaitée
-      const double desiredWidth = 150.0;
+  //     // Largeur souhaitée
+  //     const double desiredWidth = 150.0;
 
-      final ByteData data = await rootBundle.load('assets/groupements/' + icons + '.jpg');
-      final Uint8List bytes = Uint8List.view(data.buffer);
-      final Codec codec = await ui.instantiateImageCodec(bytes); // Load original image first
-      final FrameInfo frameInfo = await codec.getNextFrame();
+  //     final ByteData data = await rootBundle.load('assets/groupements/' + icons + '.jpg');
+  //     final Uint8List bytes = Uint8List.view(data.buffer);
+  //     final Codec codec = await ui.instantiateImageCodec(bytes); // Load original image first
+  //     final FrameInfo frameInfo = await codec.getNextFrame();
 
-      // Calculate the scale factor based on desired width
-      double scaleFactor = desiredWidth / frameInfo.image.width.toDouble();
+  //     // Calculate the scale factor based on desired width
+  //     double scaleFactor = desiredWidth / frameInfo.image.width.toDouble();
 
-      // New width and height based on the scale factor
-      double newWidth = frameInfo.image.width.toDouble() * scaleFactor;
-      double newHeight = frameInfo.image.height.toDouble() * scaleFactor;
+  //     // New width and height based on the scale factor
+  //     double newWidth = frameInfo.image.width.toDouble() * scaleFactor;
+  //     double newHeight = frameInfo.image.height.toDouble() * scaleFactor;
 
-      // Re-decode the image with the new dimensions
-      final Codec resizedCodec = await ui.instantiateImageCodec(bytes, targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
-      final FrameInfo resizedFrameInfo = await resizedCodec.getNextFrame();
+  //     // Re-decode the image with the new dimensions
+  //     final Codec resizedCodec = await ui.instantiateImageCodec(bytes, targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
+  //     final FrameInfo resizedFrameInfo = await resizedCodec.getNextFrame();
 
-      // Calculate the proper offset to center the image within the circle
-      final Offset imageOffset = Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
+  //     // Calculate the proper offset to center the image within the circle
+  //     final Offset imageOffset = Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
 
-      // Clip the canvas to make sure the image is drawn inside the circle
-      final Path clipOvalPath = Path()..addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
-      canvas.clipPath(clipOvalPath);
+  //     // Clip the canvas to make sure the image is drawn inside the circle
+  //     final Path clipOvalPath = Path()..addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
+  //     canvas.clipPath(clipOvalPath);
 
-      canvas.drawImage(resizedFrameInfo.image, imageOffset, Paint());
+  //     canvas.drawImage(resizedFrameInfo.image, imageOffset, Paint());
 
-      // Remove clipping so we can draw the bottom part
-      canvas.restore();
+  //     // Remove clipping so we can draw the bottom part
+  //     canvas.restore();
 
-      // Draw the pointy bottom
-      final path = Path()
-        ..moveTo(radius / 2, markerSize)
-        ..lineTo(markerSize - (radius / 2), markerSize)
-        ..lineTo(radius, markerSize + radius / 1.5) // Makes the triangle more pointy
-        ..close();
+  //     // Draw the pointy bottom
+  //     final path = Path()
+  //       ..moveTo(radius / 2, markerSize)
+  //       ..lineTo(markerSize - (radius / 2), markerSize)
+  //       ..lineTo(radius, markerSize + radius / 1.5) // Makes the triangle more pointy
+  //       ..close();
 
-      canvas.drawPath(path, paint);
+  //     canvas.drawPath(path, paint);
 
-      // Converting the canvas into a PNG
-      final img = await pictureRecorder.endRecording().toImage(markerSize.toInt(), (markerSize + radius / 1.5).toInt()); // Adjust height based on pointiness
-      final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
+  //     // Converting the canvas into a PNG
+  //     final img = await pictureRecorder.endRecording().toImage(markerSize.toInt(), (markerSize + radius / 1.5).toInt()); // Adjust height based on pointiness
+  //     final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
 
-      // Creating a BitmapDescriptor from the PNG
-      return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
-    } else {
-      // Code for cluster icon with numbers
-      final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
-      final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
+  //     // Creating a BitmapDescriptor from the PNG
+  //     return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
+  //   } else {
+  //     // Code for cluster icon with numbers
+  //     final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
+  //     final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
 
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
-      TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
-      painter.text = TextSpan(
-        text: text,
-        style: TextStyle(
-          // Using TextStyle for now, adjust as per your theme and requirements
-          fontFamily: 'Poppins',
-          color: Color(0xFFFFFFFF),
-          fontSize: size / 3,
-        ),
-      );
-      painter.layout();
-      painter.paint(
-        canvas,
-        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
-      );
-    }
+  //     canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+  //     canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
+  //     TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
+  //     painter.text = TextSpan(
+  //       text: text,
+  //       style: TextStyle(
+  //         // Using TextStyle for now, adjust as per your theme and requirements
+  //         fontFamily: 'Poppins',
+  //         color: Color(0xFFFFFFFF),
+  //         fontSize: size / 3,
+  //       ),
+  //     );
+  //     painter.layout();
+  //     painter.paint(
+  //       canvas,
+  //       Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+  //     );
+  //   }
 
-    final img = await pictureRecorder.endRecording().toImage(size, size);
-    final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
+  //   final img = await pictureRecorder.endRecording().toImage(size, size);
+  //   final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
 
-    return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
-  }
+  //   return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
+  // }
 
-  double haversineDistance(LatLng p1, LatLng p2) {
-    const R = 6371000; // rayon de la Terre en mètres
-    var lat1Rad = p1.latitude * (pi / 180);
-    var lat2Rad = p2.latitude * (pi / 180);
-    var deltaLat = (p2.latitude - p1.latitude) * (pi / 180);
-    var deltaLon = (p2.longitude - p1.longitude) * (pi / 180);
+  // double haversineDistance(LatLng p1, LatLng p2) {
+  //   const R = 6371000; // rayon de la Terre en mètres
+  //   var lat1Rad = p1.latitude * (pi / 180);
+  //   var lat2Rad = p2.latitude * (pi / 180);
+  //   var deltaLat = (p2.latitude - p1.latitude) * (pi / 180);
+  //   var deltaLon = (p2.longitude - p1.longitude) * (pi / 180);
 
-    var a = sin(deltaLat / 2) * sin(deltaLat / 2) + cos(lat1Rad) * cos(lat2Rad) * sin(deltaLon / 2) * sin(deltaLon / 2);
-    var c = 2 * atan2(sqrt(a), sqrt(1 - a));
+  //   var a = sin(deltaLat / 2) * sin(deltaLat / 2) + cos(lat1Rad) * cos(lat2Rad) * sin(deltaLon / 2) * sin(deltaLon / 2);
+  //   var c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
-    return R * c;
-  }
+  //   return R * c;
+  // }
 }

@@ -481,7 +481,6 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                     itemBuilder: (context, index) {
                                       final userData = documents[index].data() as Map<String, dynamic>;
                                       // Utilisez les données de l'utilisateur ici
-                                      if (userData['nom'] != null && userData['prenom'] != null)
                                         return Padding(
                                           padding: const EdgeInsets.all(10.0),
                                           child: CardUserWidget(data: userData),

@@ -1,6 +1,7 @@
 import 'package:pharmabox/composants/card_offers_profile/card_offers_profile.dart';
 import 'package:pharmabox/composants/card_searchs_profile/card_searchs_profile.dart';
 import 'package:pharmabox/constant.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:pharmabox/register_step/register_provider.dart';
 
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -13,9 +14,10 @@ import 'popup_recherches_saved_model.dart';
 export 'popup_recherches_saved_model.dart';
 
 class PopupSearchSaved extends StatefulWidget {
-  PopupSearchSaved({Key? key, required this.onTap, required this.searchSaved, required this.isOffer, this.itemSelected = 0, required this.onSave}) : super(key: key);
+  PopupSearchSaved({Key? key, required this.onTap, required this.searchSaved, required this.isOffer, this.itemSelected = 0, required this.onSave, required this.onDelete}) : super(key: key);
   final Function onTap;
   final Function onSave;
+  final Function(dynamic) onDelete;
   final List searchSaved;
   final bool? isOffer;
   int itemSelected;
@@ -103,7 +105,7 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
                     if (widget.isOffer == false)
                       for (int index = 0; index < widget.searchSaved.length; index++)
                         GestureDetector(
-                          onLongPress: () {
+                          onDoubleTap: () {
                             setState(() {
                               widget.itemSelected = index;
                             });
@@ -120,10 +122,29 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
                                   child: Text('Recherche séléctionnée', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                                 ),
                               CardSearchProfilWidget(
-                                searchI: widget.searchSaved[index], 
+                                searchI: widget.searchSaved[index],
                                 isSelected: widget.itemSelected == index ? true : false,
                                 onSave: (data) {
-                                  widget.onSave(data);
+                                  setState(() {
+                                    print("in popup save");
+                                    widget.onSave(data);
+                                    widget.searchSaved[index] = data;
+                                  });
+                                },
+                                onDelete: () => {
+                                  setState(() {
+                                    FirebaseFirestore.instance.collection('recherches').doc(widget.searchSaved[index]['doc_id']).delete().then((_) {
+                                      setState(() {
+                                        widget.onDelete(widget.searchSaved[index]);
+                                        widget.searchSaved.removeAt(index);
+                                      });
+                                      Navigator.pop(context);
+                                      showCustomSnackBar(context, 'Recherche supprimée avec succès');
+                                    }).catchError((error) {
+                                      print('Erreur lors de la suppression du document : $error');
+                                      showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                                    });
+                                  }),
                                 },
                               ),
                             ],
@@ -132,7 +153,7 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
                     if (widget.isOffer == true)
                       for (int index = 0; index < widget.searchSaved.length; index++)
                         GestureDetector(
-                          onLongPress: () {
+                          onDoubleTap: () {
                             setState(() {
                               widget.itemSelected = index;
                             });
@@ -152,7 +173,26 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
                                 searchI: widget.searchSaved[index],
                                 isSelected: widget.itemSelected == index ? true : false,
                                 onSave: (data) {
-                                  widget.onSave(data);
+                                  setState(() {
+                                    print("in popup save");
+                                    widget.searchSaved[index] = data;
+                                    widget.onSave(data);
+                                  });
+                                },
+                                onDelete: () => {
+                                  setState(() {
+                                    FirebaseFirestore.instance.collection('offres').doc(widget.searchSaved[index]['doc_id']).delete().then((_) {
+                                      setState(() {
+                                        widget.onDelete(widget.searchSaved[index]);
+                                        widget.searchSaved.removeAt(index);
+                                      });
+                                      Navigator.pop(context);
+                                      showCustomSnackBar(context, 'Offre supprimée avec succès');
+                                    }).catchError((error) {
+                                      print('Erreur lors de la suppression du document : $error');
+                                      showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                                    });
+                                  }),
                                 },
                               ),
                             ],
