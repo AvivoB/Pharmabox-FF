@@ -149,10 +149,15 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(3.0),
-                        child: CircleAvatar(
+                        child: userMessage['photoUrl'] != null ? CircleAvatar(
                           backgroundImage: NetworkImage(
                             userMessage != null &&  userMessage['photoUrl'] != null  ? userMessage['photoUrl'] : '',
                           ),
+                          maxRadius: 25,
+                        ) :
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Image.asset('assets/images/Group_18.png'),
                           maxRadius: 25,
                         ),
                       ),

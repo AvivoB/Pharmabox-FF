@@ -181,14 +181,14 @@ class _DisucssionsWidgetState extends State<DisucssionsWidget> {
                                                             decoration: BoxDecoration(
                                                               shape: BoxShape.circle,
                                                             ),
-                                                            child: FadeInImage.assetNetwork(
+                                                            child: userData['photoUrl'] != null ? FadeInImage.assetNetwork(
                                                               image: userData['photoUrl'],
                                                               placeholder: 'assets/images/Group_18.png',
                                                               fit: BoxFit.cover,
                                                               imageErrorBuilder: (context, error, stackTrace) {
                                                                 return Image.asset('assets/images/Group_18.png');
                                                               },
-                                                            ),
+                                                            ) : Image.asset('assets/images/Group_18.png'),
                                                           ),
                                                         ),
                                                         Column(

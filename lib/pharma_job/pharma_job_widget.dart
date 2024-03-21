@@ -50,6 +50,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   late PharmaJobModel _model;
   bool isTitulaire = false;
 
+  LatLng? _currentPosition;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // late ClusterManager _manager;
   // Completer<GoogleMapController> _controller = Completer();
@@ -66,8 +68,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List foundedOffres = [];
   List foundedOffresLocation = [];
   List foundedRecherches = [];
-  bool isLoading = true;
-  // CameraPosition? _currentCameraPosition;
+  bool isLoading = false;
   List selectedPharmaciesJobs = [];
   final MapController mapController = MapController();
 
@@ -76,28 +77,27 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   double widgetOpacity = 0.0; // 0.0 est totalement transparent, 1.0 est totalement opaque
 
   Future<void> getCurrentPosition() async {
-    isLoading = true;
+
+    setState(() {
+      isLoading = true;
+    });
     bool isLocationPermissionGranted = await requestLocationPermission();
     var permission = await Geolocator.checkPermission();
 
+    print('PErmissions :  ${permission.toString()}');
     if (isLocationPermissionGranted || permission == LocationPermission.whileInUse) {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+      print(position);
 
       setState(() {
-        // _currentCameraPosition = CameraPosition(
-        //   target: LatLng(position.latitude, position.longitude),
-        //   zoom: 16.0,
-        // );
+        _currentPosition = LatLng(position.latitude, position.longitude);
         isLoading = false;
       });
     } else {
       setState(() {
-        // _currentCameraPosition = CameraPosition(
-        //   target: LatLng(48.866667, 2.333333),
-        //   zoom: 16.0,
-        // );
+        _currentPosition = LatLng(48.866667, 2.333333);
         isLoading = false;
       });
     }
@@ -143,6 +143,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
       selectedPharmaciesJobs.clear();
     });
     isTitulaire ? offres = mesRecherches : recherches = mesRecherches;
+    
     isTitulaire ? _findRecherche(mesRecherches[0]) : _findOffres(mesRecherches[0]);
   }
 
@@ -523,6 +524,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                     isLoading
                         ? ProgressIndicatorPharmabox()
                         : MyMapWidget(
+                            currentPosition: _currentPosition ?? LatLng(48.866667, 2.333333),
                             pharmacies: foundedOffresLocation,
                             mapController: mapController,
                             onMarkerTap: (id) {

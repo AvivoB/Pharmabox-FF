@@ -138,7 +138,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
       'photo_url': _model.imagePharmacie,
       'name': providerPharmacieRegister.selectedPharmacieAdresse,
       'presentation': _model.presentationController.text,
-      'titulaire_principal': _model.nomdelapharmacieController2.text,
+      'titulaire_principal': '',
       'contact_pharma': {
         'email': _model.emailPharmacieController.text,
         'telephone': _model.phonePharmacieController1.text,
@@ -237,52 +237,52 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                                           });
                                         },
                                       )),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                                    child: TextFormField(
-                                      textCapitalization: TextCapitalization.sentences,
-                                      controller: _model.nomdelapharmacieController2,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        labelText: 'Titulaire',
-                                        hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFD0D1DE),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context).focusColor,
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        prefixIcon: Icon(
-                                          Icons.person,
-                                          color: FlutterFlowTheme.of(context).secondaryText,
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context).bodyMedium,
-                                      validator: _model.nomdelapharmacieController2Validator.asValidator(context),
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                  //   child: TextFormField(
+                                  //     textCapitalization: TextCapitalization.sentences,
+                                  //     controller: _model.nomdelapharmacieController2,
+                                  //     obscureText: false,
+                                  //     decoration: InputDecoration(
+                                  //       labelText: 'Titulaire',
+                                  //       hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                                  //       enabledBorder: OutlineInputBorder(
+                                  //         borderSide: BorderSide(
+                                  //           color: Color(0xFFD0D1DE),
+                                  //           width: 1,
+                                  //         ),
+                                  //         borderRadius: BorderRadius.circular(4),
+                                  //       ),
+                                  //       focusedBorder: OutlineInputBorder(
+                                  //         borderSide: BorderSide(
+                                  //           color: FlutterFlowTheme.of(context).focusColor,
+                                  //           width: 1,
+                                  //         ),
+                                  //         borderRadius: BorderRadius.circular(4),
+                                  //       ),
+                                  //       errorBorder: OutlineInputBorder(
+                                  //         borderSide: BorderSide(
+                                  //           color: Color(0x00000000),
+                                  //           width: 1,
+                                  //         ),
+                                  //         borderRadius: BorderRadius.circular(4),
+                                  //       ),
+                                  //       focusedErrorBorder: OutlineInputBorder(
+                                  //         borderSide: BorderSide(
+                                  //           color: Color(0x00000000),
+                                  //           width: 1,
+                                  //         ),
+                                  //         borderRadius: BorderRadius.circular(4),
+                                  //       ),
+                                  //       prefixIcon: Icon(
+                                  //         Icons.person,
+                                  //         color: FlutterFlowTheme.of(context).secondaryText,
+                                  //       ),
+                                  //     ),
+                                  //     style: FlutterFlowTheme.of(context).bodyMedium,
+                                  //     validator: _model.nomdelapharmacieController2Validator.asValidator(context),
+                                  //   ),
+                                  // ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                     child: providerPharmacieRegister.selectedGroupement[0]['image'] != 'Autre.jpg'

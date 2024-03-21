@@ -14,6 +14,8 @@ class AuthProvider extends ChangeNotifier {
   bool _duringRegister = true;
   bool _isLoadingAuth = true;
 
+  bool _isPLusTArd = false;
+
   User? get user => _user;
   Map<String, dynamic>? get userData => _userData;
 
@@ -22,6 +24,7 @@ class AuthProvider extends ChangeNotifier {
   bool get isVerified => _isVerified;
   bool get duringRegister => _duringRegister;
   bool get isLoadingAuth => _isLoadingAuth;
+  bool get isPLusTArd => _isPLusTArd;
 
   AuthProvider() {
     _auth.authStateChanges().listen((User? newUser) async {
@@ -49,6 +52,10 @@ class AuthProvider extends ChangeNotifier {
 
   void setDuringRegister() {
     _duringRegister = true;
+  }
+
+  void setPLusTArd() {
+    _isPLusTArd = true;
   }
 
   Future<void> signInWithEmailAndPassword(String email, String password) async {

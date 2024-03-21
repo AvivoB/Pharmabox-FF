@@ -40,10 +40,12 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
         .where('document_id', isEqualTo: widget.documentId) // Check for likes of this specific document
         .get();
 
-    setState(() {
-      isLiked = likesRef.docs.isNotEmpty;
-      likesCount = likesCountNumber.docs.length;
-    });
+    if(mounted) {
+        setState(() {
+          isLiked = likesRef.docs.isNotEmpty;
+          likesCount = likesCountNumber.docs.length;
+        });
+    }
   }
 
   Future<void> _toggleLike() async {

@@ -82,7 +82,9 @@ final GoRouter routerApp = GoRouter(
       GoRoute(
         name: '_initialize',
         path: '/',
-        builder: (context, state) => decideFirstPage(context),
+        builder: (context, state) => UpgradeAlert(
+          child: decideFirstPage(context),
+        ),
       ),
       GoRoute(
         name: 'Register',

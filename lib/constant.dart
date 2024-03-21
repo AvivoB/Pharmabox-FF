@@ -5,7 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_theme.dart';
 import 'package:provider/provider.dart';
-import 'package:pharmabox/auth/AuthProvider.dart' as customAuthProvider;
+import 'package:pharmabox/auth/AuthProvider.dart' as authProvider;
 
 const redColor = Color(0xFFF89999);
 const greenColor = Color(0xFF7CEDAC);
@@ -139,6 +139,8 @@ void showAlertCompleteProfile(BuildContext context) {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Fermer l'alerte
+              final authProviderData = Provider.of<authProvider.AuthProvider>(context, listen: false);
+              authProviderData.setPLusTArd();
             },
             child: Text('Plus tard', style: FlutterFlowTheme.of(context).bodyMedium.copyWith(color: redColor)),
           ),

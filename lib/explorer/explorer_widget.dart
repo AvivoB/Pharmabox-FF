@@ -16,6 +16,7 @@ import 'package:flutter/animation.dart';
 import 'package:pharmabox/custom_code/widgets/FlutterMap.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/explorer/predictionVilleExplorer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
 import '../composants/card_user/card_user_widget.dart';
@@ -61,13 +62,12 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   String? selectedItem;
   bool isLoading = true;
   bool searchLoading = false;
-  LatLng _currentPosition = LatLng(0, 0);
-  double initialZoom = 13.0;
+  LatLng? _currentPosition;
+  double initialZoom = 10.0;
 
   List _predictions = [];
 
   Future<void> getCurrentPosition() async {
-    isLoading = true;
     bool isLocationPermissionGranted = await requestLocationPermission();
     var permission = await Geolocator.checkPermission();
 
@@ -80,14 +80,14 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
-        initialZoom = 13.0;
-        isLoading = false;
+        initialZoom = 10.0;
+
       });
     } else {
       setState(() {
-         _currentPosition = LatLng(48.866667, 2.333333);
-        initialZoom = 13.0;
-        isLoading = false;
+        _currentPosition = LatLng(48.866667, 2.333333);
+        initialZoom = 10.0;
+
       });
     }
   }
@@ -104,12 +104,16 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
   Future<void> getAllPharmacies() async {
 
-    pharmacieInPlace.clear();
+    setState(() {
+      pharmacieInPlace.clear();
+      isLoading = true;
+    });
 
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     QuerySnapshot querySnapshot = await _firestore.collection('pharmacies').where('user_id', isNotEqualTo: await getCurrentUserId()).where('isValid', isEqualTo: true).get();
     for (var doc in querySnapshot.docs) {
+      print('il y a des données');
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
       // Create a new map that includes all keys from `data` and also adds `documentId`
@@ -118,27 +122,24 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
         'documentId': doc.id,
       };
 
-      // print('MESDATA ' + doc.id.toString());
-
-      // String name = dataWithId['situation_geographique']['adresse'];
-      // List<dynamic> location = dataWithId['situation_geographique']['lat_lng'];
-      // String groupementDataPlace = dataWithId['groupement'][0]['name'];
-      // String pharmacieId = dataWithId['documentId'];
-      // Place place = Place(name: name, latLng: LatLng(location[0], location[1]), groupement: groupementDataPlace, id: pharmacieId);
       setState(() {
-        // if (dataWithId['isValid']) {
-        // items.add(place);
         pharmacieInPlace.add(dataWithId);
-        // }
       });
+
     }
+
+    setState(() {
+      isLoading = false;
+    });
     // _manager.setItems(items);
     // _manager.updateMap();
   }
 
   Future<void> searchPharmacies(String query) async {
-    items.clear();
-    pharmacieInPlace.clear();
+    setState(() {
+      isLoading = true;
+      pharmacieInPlace.clear();
+    });
 
     final lowerCaseQuery = query.toLowerCase();
 
@@ -199,20 +200,18 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
         uniquePharmacie.add(userData);
       }
       setState(() {
-        // isLoading = false;
-        // items.clear();
         pharmacieInPlace.clear();
-
-        // for (var un in uniqueItem) {
-        //   items.add(un);
-        // }
-
         for (var pharma in uniquePharmacie) {
           pharmacieInPlace.add(pharma);
         }
       });
       // _manager.setItems(items);
       // _manager.updateMap();
+    });
+
+    setState(() {
+      isLoading = false;
+      searchLoading = false;
     });
 
     // print(uniqueItem);
@@ -225,7 +224,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     getAllPharmacies();
     _model = createModel(context, () => ExplorerModel());
     _model.textController ??= TextEditingController();
-    // _manager = _initClusterManager();
+
     _tabController = TabController(length: 2, vsync: this);
     _animationController = AnimationController(
       vsync: this,
@@ -234,28 +233,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      authProvider.isComplete == false ? showAlertCompleteProfile(context) : print('OKKK proifle complet');
+      authProvider.isComplete == false && authProvider.isPLusTArd == false ? showAlertCompleteProfile(context) : print('OKKK proifle complet');
     });
   }
-
-  // void _playAnimation() {
-  //   _animationController.reset();
-  //   _animationController.forward();
-  // }
-
-  // ClusterManager _initClusterManager() {
-  //   return ClusterManager<Place>(items, _updateMarkers, markerBuilder: _markerBuilder,
-  //     levels: [1, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 20.0], // Optional : Configure this if you want to change zoom levels at which the clustering precision change
-  //     extraPercent: 0.2, // Optional : This number represents the percentage (0.2 for 20%) of latitude and longitude (in each direction) to be considered on top of the visible map bounds to render clusters. This way, clusters don't "pop out" when you cross the map.
-  //     stopClusteringZoom: 15.0 // Optional : The zoom level to stop clustering, so it's only rendering single item "clusters"
-  //   );
-  // }
-
-  // void _updateMarkers(Set<Marker> markers) {
-  //   setState(() {
-  //     this.markers = markers;
-  //   });
-  // }
 
   void _search(String query) async {
     print('predictionnn' + query.toString());
@@ -383,16 +363,10 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                               _search(query);
                               if (currentTAB == 0) {
                                 if (query.isEmpty) {
-                                  searchLoading = true;
-                                  items.clear();
-                                  pharmacieInPlace.clear();
                                   await getAllPharmacies();
-                                  searchLoading = false;
-                                } else {
-                                  // searchLoading = true;
-                                  // pharmacieInPlace.clear();
-                                  // await searchPharmacies(query);
-                                  searchLoading = false;
+                                }
+                                if(query.length >= 4) {
+                                  await searchPharmacies(query);
                                 }
                               }
                             });
@@ -420,13 +394,9 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                       // Les coordonnées GPS sont disponibles dans la liste des locations
                                       double latitude = locations[0].latitude;
                                       double longitude = locations[0].longitude;
-                                      // GoogleMapController controller = await _controller.future;
-                                      // controller.animateCamera(CameraUpdate.newCameraPosition(
-                                      //     // on below line we have given positions of Location 5
-                                      //     CameraPosition(target: LatLng(latitude, longitude), zoom: 10.0)));
                                       setState(() {
                                         _predictions.clear();
-                                        mapController.move(LatLng(latitude, longitude), 16.0);
+                                        mapController.move(LatLng(latitude, longitude), 14.0);
                                       });
                                     }
                                   });
@@ -569,10 +539,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                     itemBuilder: (context, index) {
                                       final document = filteredDocuments![index];
                                       final data = document.data() as Map<String, dynamic>;
-                                      return Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child:CardUserWidget(data: data)
-                                      );
+                                      return Padding(padding: const EdgeInsets.all(16.0), child: CardUserWidget(data: data));
                                     },
                                   ),
                                 ),
@@ -590,7 +557,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                           ? ProgressIndicatorPharmabox()
                           : MyMapWidget(
                               pharmacies: pharmacieInPlace,
-                              currentPosition: _currentPosition,
+                              currentPosition: _currentPosition ?? LatLng(48.866667, 2.333333),
                               initialZoom: initialZoom,
                               mapController: mapController,
                               onMarkerTap: (documentId) {
@@ -616,7 +583,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                   icon: Icon(
                                     // <-- Icon
                                     Icons.close,
-                                    size: 18.0,
+                                    size: 10.0,
                                     color: redColor,
                                   ),
                                   onPressed: () {

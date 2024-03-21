@@ -8,7 +8,7 @@ import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_theme.dart';
 
 class MyMapWidget extends StatefulWidget {
-  MyMapWidget({Key? key, required this.pharmacies, this.currentPosition = const LatLng(0, 0), this.onMarkerTap, this.mapController, this.initialZoom = 13.0}) : super(key: key);
+  MyMapWidget({Key? key, required this.pharmacies, this.currentPosition = const LatLng(0, 0), this.onMarkerTap, this.mapController, this.initialZoom = 10.0}) : super(key: key);
 
   final List pharmacies;
   final LatLng currentPosition;
@@ -86,7 +86,7 @@ class _MyMapWidgetState extends State<MyMapWidget> {
     return FlutterMap(
         mapController: widget.mapController,
         options: MapOptions(
-          initialCenter: _currentPosition, // Centre sur Londres (latitude, longitude)
+          initialCenter: widget.currentPosition, // Centre sur Londres (latitude, longitude)
           initialZoom: widget.initialZoom, // Zoom initial
         ),
         children: <Widget>[
