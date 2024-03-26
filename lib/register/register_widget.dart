@@ -5,7 +5,6 @@ import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/custom_code/widgets/input.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_drop_down.dart';
 import 'package:pharmabox/flutter_flow/form_field_controller.dart';
-import 'dart:io' show Platform;
 
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -101,11 +100,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if(typeConnexion == '' && Platform.isAndroid)
+                            if(typeConnexion == '')
                             Text('En Pharmacie vous êtes ...', style: FlutterFlowTheme.of(context).displaySmall),
-                            if(typeConnexion == '' && Platform.isAndroid)
+                            if(typeConnexion == '')
                             SizedBox(height: 10, width: 10),
-                            if(typeConnexion == '' || Platform.isIOS)
+                            if(typeConnexion == '')
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                               child: Container(
@@ -279,7 +278,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                 ),
                               ],
                             ),
-                            if(typeConnexion == 'email' || Platform.isIOS)
+                            if(typeConnexion == 'email')
                             Column(
                               children: [
                                 Input(controller: _model.nomController, label: 'Nom'),
@@ -417,125 +416,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                 ),
                               ],
                             ),
-                            // if(Platform.isAndroid)
-                            // Padding(
-                            //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                            //   child: Container(
-                            //     width: double.infinity,
-                            //     height: 50.0,
-                            //     decoration: BoxDecoration(
-                            //       boxShadow: [
-                            //         BoxShadow(
-                            //           blurRadius: 4.0,
-                            //           color: Color(0x301F5C67),
-                            //           offset: Offset(0.0, 4.0),
-                            //         )
-                            //       ],
-                            //       gradient: LinearGradient(
-                            //         colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                            //         stops: [0.0, 1.0],
-                            //         begin: AlignmentDirectional(1.0, -1.0),
-                            //         end: AlignmentDirectional(-1.0, 1.0),
-                            //       ),
-                            //       borderRadius: BorderRadius.circular(15.0),
-                            //     ),
-                            //     child: FFButtonWidget(
-                            //       onPressed: () async {
-                            //         // GoRouter.of(context).prepareAuthEvent();
-                            //         final user = await authManager.signInWithGoogle(context);
-                            //         if (user == null) {
-                            //           return;
-                            //         }
-                        
-                            //         context.pushNamed('RegisterStep');
-                            //       },
-                            //       text: 'S\'inscire avec Google',
-                            //       icon: FaIcon(
-                            //         FontAwesomeIcons.google,
-                            //         color: FlutterFlowTheme.of(context).primaryBtnText,
-                            //       ),
-                            //       options: FFButtonOptions(
-                            //         width: double.infinity,
-                            //         height: 40.0,
-                            //         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                            //         iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                            //         color: Color(0x00FFFFFF),
-                            //         textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                            //               fontFamily: 'Poppins',
-                            //               color: Colors.white,
-                            //               fontSize: 18.0,
-                            //               fontWeight: FontWeight.w600,
-                            //             ),
-                            //         elevation: 0.0,
-                            //         borderSide: BorderSide(
-                            //           color: Colors.transparent,
-                            //           width: 1.0,
-                            //         ),
-                            //         borderRadius: BorderRadius.circular(8.0),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                        
-                            // Padding(
-                            //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                            //   child: Container(
-                            //     width: double.infinity,
-                            //     height: 50.0,
-                            //     decoration: BoxDecoration(
-                            //       boxShadow: [
-                            //         BoxShadow(
-                            //           blurRadius: 4.0,
-                            //           color: Color(0x301F5C67),
-                            //           offset: Offset(0.0, 4.0),
-                            //         )
-                            //       ],
-                            //       // gradient: LinearGradient(
-                            //       //   colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                            //       //   stops: [0.0, 1.0],
-                            //       //   begin: AlignmentDirectional(1.0, -1.0),
-                            //       //   end: AlignmentDirectional(-1.0, 1.0),
-                            //       // ),
-                            //       color: Colors.white,
-                            //       borderRadius: BorderRadius.circular(15.0),
-                            //     ),
-                            //     child: FFButtonWidget(
-                            //       onPressed: () async {
-                            //         GoRouter.of(context).prepareAuthEvent();
-                            //         final user = await authManager.signInWithApple(context);
-                            //         if (user == null) {
-                            //           return;
-                            //         }
-                            //         context.goNamedAuth('RegisterStep', mounted);
-                        
-                            //       },
-                            //       text: 'Inscription avec Apple',
-                            //       icon: FaIcon(
-                            //         FontAwesomeIcons.apple,
-                            //         color: blackColor,
-                            //       ),
-                            //       options: FFButtonOptions(
-                            //         width: double.infinity,
-                            //         height: 40.0,
-                            //         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                            //         iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                            //         color: Color(0x00FFFFFF),
-                            //         textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                            //               fontFamily: 'Poppins',
-                            //               color: blackColor,
-                            //               fontSize: 18.0,
-                            //               fontWeight: FontWeight.w600,
-                            //             ),
-                            //         elevation: 0.0,
-                            //         borderSide: BorderSide(
-                            //           color: Colors.transparent,
-                            //           width: 1.0,
-                            //         ),
-                            //         borderRadius: BorderRadius.circular(8.0),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
                           ],
                         ),
                         FFButtonWidget(
