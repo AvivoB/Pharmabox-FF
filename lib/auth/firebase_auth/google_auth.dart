@@ -47,8 +47,8 @@ Future<UserCredential?> createAccountWithGoogle(context, String poste) async {
 
     // Ajouter les champs supplémentaires à la collection "users" de Firestore
     await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
-      'nom': userCredential.user!.displayName?.split(' ')[0].toCapitalized(),
-      'prenom': userCredential.user!.displayName?.split(' ')[1].toCapitalized(),
+      'nom': userCredential.user!.displayName,
+      'prenom': userCredential.user!.displayName,
       'poste': poste,
       'email': userCredential.user!.email,
       'uid': userCredential.user!.uid,
@@ -91,11 +91,13 @@ Future<UserCredential?> connectAccountWithGoogle(context) async {
    
   FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).get().then((value) async {
      if(value.exists){
+      print('COMPTE EXISTE');
        return userCredential;  
      }else{
+      print('compte existe pas');
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
-        'nom': userCredential.user!.displayName?.split(' ')[0].toCapitalized(),
-        'prenom': userCredential.user!.displayName?.split(' ')[1].toCapitalized(),
+        'nom': userCredential.user!.displayName,
+        'prenom': userCredential.user!.displayName, 
         'poste': 'Pharmacien',
         'email': userCredential.user!.email,
         'uid': userCredential.user!.uid,
