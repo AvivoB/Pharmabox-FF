@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -138,6 +139,71 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                                         fontSize: 13.0,
                                       ),
                                 ),
+                              ),
+                              SizedBox(height: 2),
+                              StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection('recherches').where('user_id', isEqualTo: widget.data?['uid']).where('isActive', isEqualTo: true).snapshots(), 
+                                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if(snapshot.connectionState == ConnectionState.waiting) {
+                                    return Container();
+                                  }
+
+                                  if(snapshot.data!.docs.isEmpty) {
+                                    return Container();
+                                  }
+
+                                  return Container(
+                                decoration: BoxDecoration(
+                                  color: blueColor,
+                                  borderRadius: BorderRadius.all(Radius.circular(20))
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0, left: 8.0, top: 4.0, bottom: 4.0),
+                                  child: Text(
+                                  'EN RECHERCHE',
+                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                      fontWeight: FontWeight.bold,
+                                          fontFamily: 'Poppins',
+                                          color: Colors.white,
+                                          fontSize: 10.0,
+                                        ),
+                                  ),
+                                ),
+                              );
+                                  
+                                }
+                              ),
+                              StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection('offres').where('user_id', isEqualTo: widget.data?['uid']).where('isActive', isEqualTo: true).snapshots(), 
+                                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if(snapshot.connectionState == ConnectionState.waiting) {
+                                    return Container();
+                                  }
+
+                                  if(snapshot.data!.docs.isEmpty) {
+                                    return Container();
+                                  }
+
+                                  return Container(
+                                decoration: BoxDecoration(
+                                  color: greenColor,
+                                  borderRadius: BorderRadius.all(Radius.circular(20))
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0, left: 8.0, top: 4.0, bottom: 4.0),
+                                  child: Text(
+                                  'OFFRE DISPO',
+                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                      fontWeight: FontWeight.bold,
+                                          fontFamily: 'Poppins',
+                                          color: Colors.white,
+                                          fontSize: 10.0,
+                                        ),
+                                  ),
+                                ),
+                              );
+                                  
+                                }
                               ),
                             ],
                           ),

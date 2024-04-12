@@ -93,6 +93,8 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
@@ -160,6 +162,41 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                 ),
               ),
             ),
+            StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection('offres').where('user_id', isEqualTo: widget.data?['user_id']).where('isActive', isEqualTo: true).snapshots(), 
+                                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if(snapshot.connectionState == ConnectionState.waiting) {
+                                    return Container();
+                                  }
+
+                                  if(snapshot.data!.docs.isEmpty) {
+                                    return Container();
+                                  }
+
+                                  return Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 5.0, 0.0),
+                                    child: Container(
+                                                                    decoration: BoxDecoration(
+                                    color: greenColor,
+                                    borderRadius: BorderRadius.all(Radius.circular(20))
+                                                                    ),
+                                                                    child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0, left: 8.0, top: 4.0, bottom: 4.0),
+                                    child: Text(
+                                    'OFFRE DISPO',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        fontWeight: FontWeight.bold,
+                                            fontFamily: 'Poppins',
+                                            color: Colors.white,
+                                            fontSize: 10.0,
+                                          ),
+                                    ),
+                                                                    ),
+                                                                  ),
+                                  );
+                                  
+                                }
+                              ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
               child: Row(

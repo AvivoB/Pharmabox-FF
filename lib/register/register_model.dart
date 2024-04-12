@@ -19,7 +19,7 @@ class RegisterModel extends FlutterFlowModel {
 
   var posteValueController;
 
-  String? posteValue = 'Pharmacien';
+  String? posteValue = '';
 
   String? _emailControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {

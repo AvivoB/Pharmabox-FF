@@ -268,6 +268,10 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                   return true;
                 }
 
+                if(data['poste'] != null && data['poste'].toString() == 'Tous') {
+                  return true;
+                }
+
                 if (currentUser['poste'] != null && currentUser['poste'] == data['poste']) {
                   return true;
                 }

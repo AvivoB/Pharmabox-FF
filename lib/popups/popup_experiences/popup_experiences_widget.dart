@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import '../../constant.dart';
 import '../../register_step/register_provider.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -271,9 +273,12 @@ class _PopupExperiencesWidgetState extends State<PopupExperiencesWidget> {
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly
+                                          ],
                             validator: _model.experienceDebutControllerValidator.asValidator(context),
-                            inputFormatters: [_model.experienceDebutMask],
+                            
                           ),
                         ),
                       ),

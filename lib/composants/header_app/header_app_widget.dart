@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pharmabox/constant.dart';
 
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -70,7 +71,7 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                       ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -78,6 +79,36 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 5.0, 0.0),
+                        child: Container(
+                              decoration: BoxDecoration(
+                                color: blueColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 4.0,
+                                    color: Color(0x33000000),
+                                    offset: Offset(0.0, 5.0),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(200.0),
+                              ),
+                              child: FlutterFlowIconButton(
+                                borderColor: Colors.transparent,
+                                borderRadius: 30.0,
+                                borderWidth: 1.0,
+                                buttonSize: 40.0,
+                                icon: Icon(
+                                  Icons.help_rounded,
+                                  color: Colors.white,
+                                  size: 25.0,
+                                ),
+                                onPressed: () async {
+                                  context.pushNamed('HelperCenter');
+                                },
+                              ),
+                            ),
+                      ),
                       Stack(
                         alignment: AlignmentDirectional(2.0, -3.5),
                         children: [

@@ -497,23 +497,23 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
-                                  // if (updateData.isEmpty)
-                                  //   ElevatedButton(
-                                  //     onPressed: () async {
-                                  //       await _selectVideoAndImage();
-                                  //     },
-                                  //     style: ButtonStyle(
-                                  //       backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Couleur de fond blanche
-                                  //     ),
-                                  //     child: Row(
-                                  //       mainAxisSize: MainAxisSize.min,
-                                  //       children: [
-                                  //         Icon(Icons.add_circle_outlined, color: greyColor), // Icône de média
-                                  //         SizedBox(width: 8), // Espace entre l'icône et le texte
-                                  //         Text('Photos & Vidéos', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 11, fontWeight: FontWeight.w400)), // Texte du bouton
-                                  //       ],
-                                  //     ),
-                                  //   ),
+                                  if (updateData.isEmpty)
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        await _selectVideoAndImage();
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all<Color>(Colors.white), // Couleur de fond blanche
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.add_circle_outlined, color: greyColor), // Icône de média
+                                          SizedBox(width: 8), // Espace entre l'icône et le texte
+                                          Text('Photos & Vidéos', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 11, fontWeight: FontWeight.w400)), // Texte du bouton
+                                        ],
+                                      ),
+                                    ),
                                 ],
                               ),
                               if (_pickedImages != null)

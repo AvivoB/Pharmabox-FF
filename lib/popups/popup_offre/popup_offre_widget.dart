@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -400,8 +401,12 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
                                         validator: _model.dureMoisControllerValidator.asValidator(context),
+                                        
                                       ),
                                     ),
                                   ),
@@ -697,7 +702,10 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                                             ),
                                           ),
                                           style: FlutterFlowTheme.of(context).bodyMedium,
-                                          keyboardType: TextInputType.number,
+                                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly
+                                          ],
                                           validator: _model.salaireMensuelNetControllerValidator.asValidator(context),
                                         ),
                                       ),

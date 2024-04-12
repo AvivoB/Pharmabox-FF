@@ -7,6 +7,7 @@ import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/desactivated_account/desactivated_account.dart';
+import 'package:pharmabox/helper_center/helper_center_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_edit_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_single_post_widget.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_widget.dart';
@@ -224,6 +225,11 @@ final GoRouter routerApp = GoRouter(
         // builder: (context, params) => params.isEmpty ? NavBarPage(initialPage: 'DeleteAccount') : ProfilDeleteAccount(),
         builder: (context, params) => params.pathParameters.isEmpty ? NavBarPage(initialPage: 'DeleteAccount') : ProfilDeleteAccount(),
       ),
+      GoRoute(
+        name: 'HelperCenter',
+        path: '/helperCenter',
+        builder: (context, params) => HelpPage()
+      )
     ] /* .map((r) => r.toRoute(appStateNotifier)).toList(), */
     // urlPathStrategy: UrlPathStrategy.path,
     );

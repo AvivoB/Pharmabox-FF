@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharmabox/composants/card_offers_profile/card_offers_profile.dart';
@@ -2713,7 +2714,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                          ],
                                         validator: _model.nbPharmaciensControllerValidator.asValidator(context),
                                       ),
                                     ),
@@ -2759,7 +2763,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                          ],
                                         validator: _model.nbPreparateurControllerValidator.asValidator(context),
                                       ),
                                     ),
@@ -2805,7 +2812,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                          ],
                                         validator: _model.nbRayonnistesControllerValidator.asValidator(context),
                                       ),
                                     ),
@@ -2851,7 +2861,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                          ],
                                         validator: _model.nbConseillersControllerValidator.asValidator(context),
                                       ),
                                     ),
@@ -2897,7 +2910,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                          ],
                                         validator: _model.nbApprentiControllerValidator.asValidator(context),
                                       ),
                                     ),
@@ -2943,7 +2959,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                          ],
                                         validator: _model.nbEtudiantsControllerValidator.asValidator(context),
                                       ),
                                     ),
@@ -2989,7 +3008,10 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                                           ),
                                         ),
                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly
+                                          ],
                                         validator: _model.nbEtudiants6emeControllerValidator.asValidator(context),
                                       ),
                                     ),

@@ -3,6 +3,7 @@ import 'package:pharmabox/auth/firebase_auth/email_auth.dart';
 import 'package:pharmabox/auth/firebase_auth/google_auth.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/custom_code/widgets/input.dart';
+import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_drop_down.dart';
 import 'package:pharmabox/flutter_flow/form_field_controller.dart';
 
@@ -128,7 +129,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       ),
                                     ),
                                     FlutterFlowDropDown<String>(
-                                      controller: _model.posteValueController ??= FormFieldController<String>('Pharmacien'),
+                                      controller: _model.posteValueController ??= FormFieldController<String>(''),
                                       options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien', 'Pharmacien titulaire'],
                                       onChanged: (val) => setState(() => _model.posteValue = val),
                                       width: MediaQuery.of(context).size.width * 0.78,
@@ -137,7 +138,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                             fontFamily: 'Poppins',
                                             color: Colors.black,
                                           ),
-                                      hintText: 'Poste',
+                                      hintText: 'Sélectionnez votre poste',
                                       fillColor: Colors.white,
                                       elevation: 2,
                                       borderColor: Colors.transparent,
@@ -159,7 +160,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 GestureDetector(
-                                  onTap: () => setState(() => typeConnexion = 'email'),
+                                  onTap: () => setState(() {
+                                    if(_model.posteValue == '') {
+                                      showCustomSnackBar(context, 'Veuillez sélectionner votre poste', isError: true);
+                                    }else {
+                                      typeConnexion = 'email';
+                                    }
+                                  }),
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.28,
                                     decoration: BoxDecoration(
@@ -188,6 +195,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                 GestureDetector(
                                   onTap: () async {
                                     print('Poste : ${_model.posteValue}');
+                                    if(_model.posteValue == '') {
+                                      showCustomSnackBar(context, 'Veuillez sélectionner votre poste', isError: true);
+                                    } else {
                                         final user = await createAccountWithGoogle(
                                           context,
                                           _model.posteValue ?? 'Pharmacien',
@@ -201,6 +211,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         } else {
                                           context.pushNamed('Explorer');
                                         }
+                                    }
+                                        
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.28,
@@ -233,7 +245,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                 GestureDetector(
                                   onTap: () async {
                                     print('Poste : ${_model.posteValue}');
-                                        final user = await signInWithApple(
+                                    if(_model.posteValue == '') {
+                                      showCustomSnackBar(context, 'Veuillez sélectionner votre poste', isError: true);
+                                    } else {
+                                      final user = await signInWithApple(
                                           context,
                                           _model.posteValue ?? 'Pharmacien',
                                         );
@@ -246,6 +261,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         } else {
                                           context.pushNamed('Explorer');
                                         }
+                                    }
+                                        
                
                                   },
                                   child: Container(

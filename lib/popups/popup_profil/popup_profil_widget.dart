@@ -113,7 +113,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                                 child: Text(
-                                  'Ma pharmacie',
+                                  'Gérer ma pharmacie',
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                         fontFamily: 'Poppins',
                                         color: Color(0xFF161730),
@@ -147,7 +147,7 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                             child: Text(
-                              'Mon profil',
+                              'Gérer mon profil',
                               style: FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Poppins',
                                     color: Color(0xFF161730),

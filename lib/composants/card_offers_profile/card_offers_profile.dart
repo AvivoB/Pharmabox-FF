@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -480,7 +481,10 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                                           ),
                                                         ),
                                                         style: FlutterFlowTheme.of(context).bodyMedium,
-                                                        keyboardType: TextInputType.number,
+                                                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly
+                                          ],
                                                         validator: _model.dureMoisControllerValidator.asValidator(context),
                                                       ),
                                                     ),
@@ -777,7 +781,10 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                                             ),
                                                           ),
                                                           style: FlutterFlowTheme.of(context).bodyMedium,
-                                                          keyboardType: TextInputType.number,
+                                                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                          ],
                                                           validator: _model.salaireMensuelNetControllerValidator.asValidator(context),
                                                         ),
                                                       ),

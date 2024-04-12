@@ -226,30 +226,29 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                     ),
                   ),
                 //   if(postAndUserData['post']['media'] != null)
-                // Padding(
-                //     padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
-                //     child: Container(
-                //       height: 200,
-                //       child: SingleChildScrollView(
-                //         scrollDirection: Axis.horizontal,
-                //         physics: BouncingScrollPhysics(),
-                //         child: Row(
-                //           children: [
-                //             for (final media in postAndUserData['post']['media'].toList())
-                //               media.toString().contains('.mp4')
-                //                   ? Padding(
-                //                     padding: const EdgeInsets.all(4.0),
-                //                     child: VideoPlayerWidget(videoUrl: media),
-                //                   )
-                //                   : Padding(
-                //                     padding: const EdgeInsets.all(4.0),
-                //                     child: Image.network(media),
-                //                   ),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
+                Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
+                    child: Container(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: BouncingScrollPhysics(),
+                        child: Row(
+                          children: [
+                            for (final media in postAndUserData['post']['media'].toList())
+                              media.toString().contains('.mp4')
+                                  ? Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Container(height: 200, child: VideoPlayerWidget(videoUrl: media)),
+                                  )
+                                  : Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Container(height: 200, child: Image.network(media)),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

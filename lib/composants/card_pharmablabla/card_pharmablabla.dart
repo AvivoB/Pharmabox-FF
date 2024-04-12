@@ -90,11 +90,10 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: FadeInImage.assetNetwork(
-                              image: widget.data != null ? widget.data['user']['photoUrl'] : '',
-                              placeholder: 'assets/images/Group_18.png',
+                            child: Image.network(
+                              widget.data != null && widget.data!['user']['photoUrl'] != null ? widget.data!['user']['photoUrl'] : '',
                               fit: BoxFit.cover,
-                              imageErrorBuilder: (context, error, stackTrace) {
+                              errorBuilder: (context, error, stackTrace) {
                                 return Image.asset('assets/images/Group_18.png');
                               },
                             ),
@@ -149,31 +148,30 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                 ),
               ),
             ),
-            // if(widget.data['post']['media'] != null && widget.data['post']['media'].toList().isNotEmpty)
-            // Padding(
-            //     padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
-            //     child: Container(
-            //       height: 350,
-            //       child: SingleChildScrollView(
-            //         scrollDirection: Axis.horizontal,
-            //         physics: BouncingScrollPhysics(),
-            //         child: Row(
-            //           children: [
-            //             for (final media in widget.data['post']['media'].toList())
-            //               media.toString().contains('.mp4')
-            //                   ? Padding(
-            //                     padding: const EdgeInsets.all(4.0),
-            //                     child: VideoPlayerWidget(videoUrl: media),
-            //                   )
-            //                   : Padding(
-            //                     padding: const EdgeInsets.all(4.0),
-            //                     child: Image.network(media),
-            //                   ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
+            if(widget.data['post']['media'] != null )
+            Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 10.0),
+                child: Container(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    child: Row(
+                      children: [
+                        for (final media in widget.data['post']['media'].toList())
+                          media.toString().contains('.mp4')
+                              ? Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Container(height: 350, child: VideoPlayerWidget(videoUrl: media)),
+                              )
+                              : Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Container(height: 350, child: Image.network(media)),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             Container(
               width: MediaQuery.of(context).size.width * 1.0,
               decoration: BoxDecoration(

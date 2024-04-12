@@ -140,6 +140,7 @@ dependencies:
   # apple_sign_in: ^0.1.0
   another_flushbar: ^1.12.30
   syncfusion_flutter_datepicker: 22.2.12
+  chewie: ^1.7.5
 
 dev_dependencies:
   analyzer: ^6.2.0
