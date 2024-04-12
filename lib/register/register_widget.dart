@@ -207,7 +207,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         }
                                                         
                                         if(_model.posteValue != null && _model.posteValue == 'Pharmacien titulaire') {
-                                          context.pushNamed('RegisterPharmacy', queryParameters: {'titulaire': _model.nomController.text + ' ' + _model.prenomController.text});
+                                          context.pushNamed('RegisterPharmacy');
                                         } else {
                                           context.pushNamed('Explorer');
                                         }
