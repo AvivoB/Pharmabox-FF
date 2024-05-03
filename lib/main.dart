@@ -355,8 +355,11 @@ class _NavBarPageState extends State<NavBarPage> {
                   )
                 ],
               ),
-              StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection('pharmablabla').where('network', isEqualTo: 'Tout Pharmabox').snapshots(),
+              FutureBuilder<QuerySnapshot>(
+                  future: FirebaseFirestore.instance.collection('pharmablabla')
+                  .where('LGO', isEqualTo: 'Par LGO')
+                  .where('network', isEqualTo: 'Tout Pharmabox')
+                  .get(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       // Display the error message

@@ -545,10 +545,10 @@ exports.deleteAccount = functions.https.onRequest( async (req, res) => {
     await admin.auth().deleteUser(userId);
 });
 
-// Desactive les offres et recherches qui ont plus d'un mois
-exports.disableInactiveDocuments = functions.pubsub.schedule('every 24 hours').timeZone('UTC').onRun((context) => {
+// Desactive les offres et recherches qui ont plus d'un mois les dates sont au format UTC
+exports.disableInactiveDocumentss = functions.https.onRequest((req, res) => {
   const oneMonthAgo = new Date();
-  oneMonthAgo.setUTCMonth(oneMonthAgo.getUTCMonth() - 1);
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
   const currentDate = new Date();
 
@@ -559,43 +559,82 @@ exports.disableInactiveDocuments = functions.pubsub.schedule('every 24 hours').t
 
   // Mise à jour de la collection 'offres'
   const offresQuery = offresCollection.where('date_created', '<=', admin.firestore.Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
-  updatePromises.push(updateDocuments(offresQuery, currentDate, 'proposition_dispo_interim'));
+  updatePromises.push(updateDocuments(offresQuery, currentDate, 'proposition_dispo_interim', oneMonthAgo));
 
   // Mise à jour de la collection 'recherches'
   const recherchesQuery = recherchesCollection.where('date_created', '<=', admin.firestore.Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
-  updatePromises.push(updateDocuments(recherchesQuery, currentDate, 'horaire_dispo_interim'));
+  updatePromises.push(updateDocuments(recherchesQuery, currentDate, 'horaire_dispo_interim', oneMonthAgo));
 
   return Promise.all(updatePromises);
 });
 
-function updateDocuments(query, currentDate, dateField) {
+function updateDocuments(query, currentDate, dateField, oneMonthAgo) {
   return query.get().then(snapshot => {
     const updatePromises = [];
     snapshot.forEach(doc => {
       const dates = doc.data()[dateField];
 
       if (Array.isArray(dates) && dates.length > 0) {
-        const hasFutureDates = dates.some(date => admin.firestore.Timestamp.toDate() > currentDate);
-        const hasPastDates = dates.some(date => admin.firestore.Timestamp.toDate() < currentDate);
+        // Les dates sont sous formes jj/mm/aaaa
+        const hasFutureDates = dates.map(date => {
+          const [day, month, year] = date.split('/');
+          return new Date(`${month}/${day}/${year}`);
+        }
+        ).some(date => date > currentDate);
+
+        const hasPastDates = dates.map(date => {
+          const [day, month, year] = date.split('/');
+          return new Date(`${month}/${day}/${year}`);
+        }
+        ).some(date => date < currentDate);
 
         if (dates.length === 1 && hasPastDates) {
           // Si une seule date passée, on désactive le document
           updatePromises.push(doc.ref.update({ isActive: false }));
+          console.log('ID desactivée: '+ doc.id + ' date: ' + dates[0]);
         } else if (dates.length > 1 && hasPastDates && hasFutureDates) {
           // Si plusieurs dates passées, mais il y a aussi des dates futures, on laisse le document actif
           // Vous pouvez ajouter d'autres conditions ici si nécessaire
         } else if (!hasFutureDates) {
           // Si aucune date future, on désactive le document
           updatePromises.push(doc.ref.update({ isActive: false }));
+          console.log('ID desactivée: '+ doc.id + ' date: ' + dates[0]);
         }
         // Sinon, on laisse le document actif
       } else {
         // Si le champ de dates est vide, appliquer la logique de désactivation après un mois
         if (doc.data().date_created <= admin.firestore.Timestamp.fromDate(oneMonthAgo)) {
           updatePromises.push(doc.ref.update({ isActive: false }));
+          console.log('ID desactivée: '+ doc.id + ' date: ' + dates[0]);
         }
       }
     });
     return Promise.all(updatePromises);
   });
 }
+
+
+// Run function to update all users to get his nom and prenom in users collection and set displayname in auth
+// Check if nom equals to prenom, if true set displayname to nom
+exports.updateDisplayName = functions.pubsub.schedule('every 15 minutes').timeZone('UTC').onRun((context) => {
+  const usersCollection = admin.firestore().collection('users');
+  const updatePromises = [];
+
+  return usersCollection.get().then(snapshot => {
+    snapshot.forEach(doc => {
+      const nom = doc.data().nom;
+      const prenom = doc.data().prenom;
+      const displayName = doc.data().displayName;
+
+      
+      if (nom === prenom) {
+        const Dnom = nom.split(' ');
+        const Dprenom = prenom.split(' ');
+        updatePromises.push(doc.ref.update({ displayName: nom, nom: Dnom[0], prenom: Dprenom[1]}));
+        console.log('MAJ NOM: '+ doc.id + ' nom: ' + Dnom[0] + ' prenom: ' + Dprenom[1]);
+      }
+    });
+    return Promise.all(updatePromises);
+  });
+});
+

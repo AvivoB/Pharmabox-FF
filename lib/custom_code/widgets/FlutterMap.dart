@@ -91,7 +91,7 @@ class _MyMapWidgetState extends State<MyMapWidget> {
         ),
         children: <Widget>[
           TileLayer(
-            urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+            urlTemplate: "https://api.mapbox.com/styles/v1/pharmaboxdb/clvp81ywq01nc01qvab5ucl8e/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoicGhhcm1hYm94ZGIiLCJhIjoiY2x2cDd6bDFtMDJkODJscjFrYnBnc3pwaSJ9.HGzdTcllcS7pG0a7At6wzg",
           ),
           MarkerClusterLayerWidget(
             options: MarkerClusterLayerOptions(

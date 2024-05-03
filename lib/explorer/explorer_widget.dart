@@ -490,8 +490,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                       decoration: BoxDecoration(
                         color: Color(0xFFEFF6F7),
                       ),
-                      child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance.collection('users').where(FieldPath.documentId, isNotEqualTo: currentUserUid).where('isValid', isEqualTo: true).snapshots(),
+                      child: FutureBuilder<QuerySnapshot>(
+                          future: FirebaseFirestore.instance.collection('users').where(FieldPath.documentId, isNotEqualTo: currentUserUid).where('isValid', isEqualTo: true).get(),
                           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                             final users = snapshot.data?.docs;
 
@@ -522,6 +522,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                   country.toLowerCase().contains(searchTerms?.toLowerCase() ?? ''));
                             }).toList();
 
+                            filteredDocuments?.shuffle();
+
                             return Column(
                               children: [
                                 Padding(
@@ -539,7 +541,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                     itemBuilder: (context, index) {
                                       final document = filteredDocuments![index];
                                       final data = document.data() as Map<String, dynamic>;
-                                      return Padding(padding: const EdgeInsets.all(16.0), child: CardUserWidget(data: data));
+                                      return Padding(padding: const EdgeInsets.all(8.0), child: CardUserWidget(data: data));
                                     },
                                   ),
                                 ),

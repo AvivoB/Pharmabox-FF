@@ -61,6 +61,25 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
 
   Map<String, dynamic> currentUser = {};
 
+  void updateAllDocuments() async {
+    // Get a reference to the collection
+    final collection = FirebaseFirestore.instance.collection('pharmablabla');
+
+    // Get all documents
+    final documents = await collection.get();
+
+    // Update each document
+    for (final doc in documents.docs) {
+      doc.reference.update({
+        'users_viewed': FieldValue.arrayUnion([currentUserUid]),
+      }).then((value) {
+        // Update successful
+      }).catchError((error) {
+        print('Error updating document: $error');
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +94,8 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
         this.currentUser = user_data;
       });
     });
+
+    updateAllDocuments();
   }
 
   @override
@@ -195,8 +216,8 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
             ),
           ),
           Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true).snapshots(),
+              child: FutureBuilder<QuerySnapshot>(
+            future: FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true).get(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
                 return Text('Erreur: ${snapshot.error}');
@@ -268,7 +289,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                   return true;
                 }
 
-                if(data['poste'] != null && data['poste'].toString() == 'Tous') {
+                if (data['poste'] != null && data['poste'].toString() == 'Tous') {
                   return true;
                 }
 
@@ -289,16 +310,9 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                   data['post'] = document.data();
                   data['postId'] = document.id;
 
-                  print('PAGE '+widget.currentPage.toString());
-                  if (widget.currentPage.toString() == 'PharmaBlabla' && !data['users_viewed'].contains(currentUser['id'])) {
-                    FirebaseFirestore.instance.collection('pharmablabla').doc(document.id).update({
-                      'users_viewed': FieldValue.arrayUnion([currentUserUid]),
-                    }).then((value) {
-                      // Update successful
-                    }).catchError((error) {
-                      print('Error updating document: $error');
-                    });
-                  }
+                  // print('PAGE '+widget.currentPage.toString());
+                  // if (widget.currentPage.toString() == 'PharmaBlabla' ) {
+                  // }
 
                   return FutureBuilder<DocumentSnapshot>(
                     future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
@@ -363,13 +377,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                                                           Navigator.pop(context);
                                                           context.pushNamed(
                                                             'PharmaBlablaEditPost',
-                                                            queryParameters: {
-                                                              'content': data['post_content'].toString(),
-                                                              'postId': data['postId'].toString(),
-                                                              'LGO': data['LGO'].toString(), 
-                                                              'network': data['network'].toString(), 
-                                                              'poste': data['poste'].toString()
-                                                            },
+                                                            queryParameters: {'content': data['post_content'].toString(), 'postId': data['postId'].toString(), 'LGO': data['LGO'].toString(), 'network': data['network'].toString(), 'poste': data['poste'].toString()},
                                                           );
                                                         },
                                                       ),
@@ -395,9 +403,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                                       onTap: () {
                                         context.pushNamed(
                                           'PharmaBlablaSinglePost',
-                                          queryParameters: {
-                                            'postId': data['postId']
-                                          },
+                                          queryParameters: {'postId': data['postId']},
                                         );
                                       }),
                                 );
