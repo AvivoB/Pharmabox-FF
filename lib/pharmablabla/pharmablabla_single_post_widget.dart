@@ -145,7 +145,6 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
       body: SafeArea(
         child: Stack(
           children: [
-            
             Expanded(
               child: SingleChildScrollView(
                 child: Column(

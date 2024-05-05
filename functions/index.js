@@ -628,10 +628,15 @@ exports.updateDisplayName = functions.pubsub.schedule('every 15 minutes').timeZo
 
       
       if (nom === prenom) {
-        const Dnom = nom.split(' ');
-        const Dprenom = prenom.split(' ');
-        updatePromises.push(doc.ref.update({ displayName: nom, nom: Dnom[0], prenom: Dprenom[1]}));
-        console.log('MAJ NOM: '+ doc.id + ' nom: ' + Dnom[0] + ' prenom: ' + Dprenom[1]);
+        // Transform nom to string
+        try {
+          const Dnom = nom.toString().split(' ');
+          const Dprenom = prenom.toString().split(' ');
+          updatePromises.push(doc.ref.update({ displayName: nom, nom: Dnom[0], prenom: Dprenom[1]}));
+          console.log('MAJ NOM: '+ doc.id + ' nom: ' + Dnom[0] + ' prenom: ' + Dprenom[1]);
+        } catch (error) {
+          
+        }
       }
     });
     return Promise.all(updatePromises);
