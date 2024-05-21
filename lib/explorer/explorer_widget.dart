@@ -16,6 +16,7 @@ import 'package:flutter/animation.dart';
 import 'package:pharmabox/custom_code/widgets/FlutterMap.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/explorer/predictionVilleExplorer.dart';
+import 'package:pharmabox/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
@@ -51,7 +52,7 @@ class ExplorerWidget extends StatefulWidget {
 
 class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStateMixin {
   TabController? _tabController;
-  int currentTAB = 0;
+  int currentTAB = 1;
   late ExplorerModel _model;
   late AnimationController _animationController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -225,7 +226,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     _model = createModel(context, () => ExplorerModel());
     _model.textController ??= TextEditingController();
 
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(initialIndex: 1, length: 3, vsync: this);
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -316,6 +317,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                 updateCallback: () => setState(() {}),
                 child: HeaderAppWidget(),
               ),
+              
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 10.0),
                 child: Container(
@@ -327,6 +329,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                     mainAxisSize: MainAxisSize.max,
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      if(currentTAB == 1 || currentTAB == 2)
                       TextFormField(
                           textCapitalization: TextCapitalization.sentences,
                           controller: _model.textController,
@@ -361,7 +364,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             setState(() async {
                               searchTerms = query;
                               _search(query);
-                              if (currentTAB == 0) {
+                              if (currentTAB == 1) {
                                 if (query.isEmpty) {
                                   await getAllPharmacies();
                                 }
@@ -371,7 +374,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                               }
                             });
                           }),
-                      if (_predictions.isNotEmpty && _predictions[0]['city'] != '' && currentTAB == 0)
+                      if (_predictions.isNotEmpty && _predictions[0]['city'] != '' && currentTAB == 1)
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
@@ -435,6 +438,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             ),
                         labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                         tabs: [
+                          Tab(text: 'Relations'),
                           Tab(text: 'Pharmacies'),
                           Tab(text: 'Membres'),
                         ],
@@ -443,49 +447,10 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                   ),
                 ),
               ),
-              if (currentTAB == 1)
+              if(currentTAB == 0)
+                ReseauWidget(),
+              if (currentTAB == 2)
                 Expanded(
-                  // child: Container(
-                  //     decoration: BoxDecoration(
-                  //       color: Color(0xFFEFF6F7),
-                  //     ),
-                  //     width: MediaQuery.of(context).size.width * 1.0,
-                  //     // height: MediaQuery.of(context).size.height * 0.67,
-                  //     child: SingleChildScrollView(
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.all(16.0),
-                  //         child: Column(
-                  //           children: [
-                  //             if (searchLoading)
-                  //               Padding(
-                  //                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  //                 child: CircularProgressIndicator(color: Color(0xFF595A71)),
-                  //               ),
-                  //             if (searchLoading == false)
-                  //               Padding(
-                  //                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  //                 child: userSearch.length == 1
-                  //                     ? Text(userSearch.length.toString() + ' résultat',
-                  //                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                  //                               fontFamily: 'Poppins',
-                  //                               color: Color(0xFF595A71),
-                  //                               fontSize: 14.0,
-                  //                             ))
-                  //                     : Text(userSearch.length.toString() + ' résultats',
-                  //                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                  //                               fontFamily: 'Poppins',
-                  //                               color: Color(0xFF595A71),
-                  //                               fontSize: 14.0,
-                  //                             )),
-                  //               ),
-                  //             for (var user in userSearch)
-                  //               CardUserWidget(
-                  //                 data: user,
-                  //               ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     )),
                   child: Container(
                       decoration: BoxDecoration(
                         color: Color(0xFFEFF6F7),
@@ -549,7 +514,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             );
                           })),
                 ),
-              if (currentTAB == 0)
+              if (currentTAB == 1)
                 Expanded(
                   child: Container(
                     width: MediaQuery.of(context).size.width * 1.0,
@@ -639,7 +604,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                           CardUserWidget(
                                             data: user,
                                           ),
-                                      if (currentTAB == 0)
+                                      if (currentTAB == 1)
                                         for (var pharmacie in pharmacieInPlace)
                                           CardPharmacieWidget(
                                             data: pharmacie,
@@ -659,127 +624,4 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       ),
     );
   }
-
-//   Future<Marker> Function(Cluster<Place>) get _markerBuilder => (cluster) async {
-//         return Marker(
-//           markerId: MarkerId(cluster.getId()),
-//           position: cluster.location,
-//           onTap: () {
-//             print('--LIST : ' + cluster.items.toList().toString());
-//             setState(() {
-//               cluster.isMultiple ? selectedItem = null : selectedItem = cluster.items.first.id;
-//             });
-//             //
-//           },
-//           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, text: cluster.isMultiple ? cluster.count.toString() : cluster.count.toString(), icons: cluster.items.first.groupement.toString()),
-//         );
-//       };
-
-//   Future<BitmapDescriptor> _getMarkerBitmap(int size, {String text = '', icons = ''}) async {
-//     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-//     final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(size.toDouble(), size.toDouble())));
-
-//     if (text == '1') {
-//       final double markerSize = 120.0;
-//       final double radius = markerSize / 2;
-
-//       // Starting a new drawing on a canvas
-//       final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-//       final Canvas canvas = Canvas(pictureRecorder, Rect.fromPoints(Offset(0, 0), Offset(markerSize, markerSize + radius))); // Extra space for the pointy bottom
-
-//       // Drawing gradient circle
-//       final Paint paint = Paint()
-//         ..shader = ui.Gradient.linear(
-//           Offset(0, 0),
-//           Offset(markerSize, markerSize),
-//           [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-//         );
-//       canvas.drawCircle(Offset(radius, radius), radius, paint);
-
-//       // Drawing a white circle
-//       final Paint bgWhite = Paint()..color = Color(0xFFFFFFFF);
-//       canvas.drawCircle(Offset(radius, radius), radius - 10, bgWhite);
-
-//       // Load and resize the image
-//       const double padding = 10.0;
-//       double imageSize = 2 * (radius - padding);
-
-//       // Largeur souhaitée
-//       const double desiredWidth = 150.0;
-
-//       final ByteData data = await rootBundle.load('assets/groupements/' + icons + '.jpg');
-//       final Uint8List bytes = Uint8List.view(data.buffer);
-//       final Codec codec = await ui.instantiateImageCodec(bytes); // Load original image first
-//       final FrameInfo frameInfo = await codec.getNextFrame();
-
-//       // Calculate the scale factor based on desired width
-//       double scaleFactor = desiredWidth / frameInfo.image.width.toDouble();
-
-//       // New width and height based on the scale factor
-//       double newWidth = frameInfo.image.width.toDouble() * scaleFactor;
-//       double newHeight = frameInfo.image.height.toDouble() * scaleFactor;
-
-//       // Re-decode the image with the new dimensions
-//       final Codec resizedCodec = await ui.instantiateImageCodec(bytes, targetWidth: newWidth.toInt(), targetHeight: newHeight.toInt());
-//       final FrameInfo resizedFrameInfo = await resizedCodec.getNextFrame();
-
-//       // Calculate the proper offset to center the image within the circle
-//       final Offset imageOffset = Offset((markerSize - newWidth) / 2, (markerSize - newHeight) / 2);
-
-//       // Clip the canvas to make sure the image is drawn inside the circle
-//       final Path clipOvalPath = Path()..addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius));
-//       canvas.clipPath(clipOvalPath);
-
-//       canvas.drawImage(resizedFrameInfo.image, imageOffset, Paint());
-
-//       // Remove clipping so we can draw the bottom part
-//       canvas.restore();
-
-//       // Draw the pointy bottom
-//       final path = Path()
-//         ..moveTo(radius / 2, markerSize)
-//         ..lineTo(markerSize - (radius / 2), markerSize)
-//         ..lineTo(radius, markerSize + radius / 1.5) // Makes the triangle more pointy
-//         ..close();
-
-//       canvas.drawPath(path, paint);
-
-//       // Converting the canvas into a PNG
-//       final img = await pictureRecorder.endRecording().toImage(markerSize.toInt(), (markerSize + radius / 1.5).toInt()); // Adjust height based on pointiness
-//       final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
-
-//       // Creating a BitmapDescriptor from the PNG
-//       return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
-//     } else {
-//       // Code for cluster icon with numbers
-//       final Paint paint1 = Paint()..color = Color.fromARGB(255, 65, 79, 232);
-//       final Paint paint2 = Paint()..color = Color.fromARGB(177, 41, 57, 227);
-
-//       canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
-//       canvas.drawCircle(Offset(size / 2, size / 2), size / 3.2, paint1);
-
-//       if (text != '1') {
-//         TextPainter painter = TextPainter(textDirection: ui.TextDirection.ltr);
-//         painter.text = TextSpan(
-//           text: text,
-//           style: TextStyle(
-//             // Using TextStyle for now, adjust as per your theme and requirements
-//             fontFamily: 'Poppins',
-//             color: Color(0xFFFFFFFF),
-//             fontSize: size / 3,
-//           ),
-//         );
-//         painter.layout();
-//         painter.paint(
-//           canvas,
-//           Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
-//         );
-//       }
-//     }
-
-//     final img = await pictureRecorder.endRecording().toImage(size, size);
-//     final dataBytes = await img.toByteData(format: ui.ImageByteFormat.png);
-
-//     return BitmapDescriptor.fromBytes(dataBytes!.buffer.asUint8List());
-//   }
 }

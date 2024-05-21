@@ -216,14 +216,14 @@ class _CardPharmacieOffreRechercheWidgetState extends State<CardPharmacieOffreRe
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                        width: 100.0,
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).secondaryBackground,
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        child: LikeButtonWidget(documentId: widget.data['offer_id'])),
+                    // Container(
+                    //     width: 100.0,
+                    //     height: 50.0,
+                    //     decoration: BoxDecoration(
+                    //       color: FlutterFlowTheme.of(context).secondaryBackground,
+                    //       borderRadius: BorderRadius.circular(50.0),
+                    //     ),
+                    //     child: LikeButtonWidget(documentId: widget.data['offer_id'])),
                     Container(
                       decoration: BoxDecoration(
                         color: Color(0x00FFFFFF),

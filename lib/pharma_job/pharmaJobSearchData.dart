@@ -61,7 +61,7 @@ class PharmaJobSearchData {
     for (var data in snapshot.docs) {
       var offreData = data.data() as Map<String, dynamic>?;
       var pharmacieId = offreData != null ? offreData['pharmacie_id'] : '';
-      if(pharmacieId != null && pharmacieId != '') {
+      if (pharmacieId != null && pharmacieId != '') {
         DocumentSnapshot pharmaDoc = await pharmaref.doc(pharmacieId).get();
         Map<String, dynamic> pharmaData = pharmaDoc.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
         pharmaData = {
@@ -121,7 +121,7 @@ class PharmaJobSearchData {
 
     if (filters['proposition_dispo_interim'] != null && filters['proposition_dispo_interim'].isNotEmpty && filters['contrats'].contains('Intérimaire')) {
       // Cherche les offres qui ont les horaires de disponibilité de l'intérim et des dates de dispo contenu dans la proposition_dispo_interim
-       print("recherche de proposition_dispo_interim" + filters['proposition_dispo_interim'].toString());
+      print("recherche de proposition_dispo_interim" + filters['proposition_dispo_interim'].toString());
       filteredQuery = filteredQuery.where('horaire_dispo_interim', arrayContainsAny: filters['proposition_dispo_interim']);
     }
 
@@ -144,8 +144,6 @@ class PharmaJobSearchData {
 
       var rechercheData = data.data() as Map<String, dynamic>?;
       var userId = rechercheData != null ? rechercheData['user_id'] : '';
-
-     
 
       if (!uniqueUserIds.contains(userId)) {
         // Si l'userId n'a pas encore été traité
@@ -184,6 +182,70 @@ class PharmaJobSearchData {
     }
 
     return mySearch.toList();
+  }
+
+  Future<List> getAllrecherches() async {
+    List allSearch = [];
+    Future<QuerySnapshot<Map<String, dynamic>>> recherches = FirebaseFirestore.instance.collection('recherches').where('isActive', isEqualTo: true).orderBy('date_created', descending: true).get();
+
+    Set<String> uniqueUserIds = {}; // Pour stocker les userId uniques
+    Set<Map<String, dynamic>> uniqueSearch = {}; // Pour stocker les userData uniques
+
+    CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
+
+    var recherchess = await recherches;
+    for (var data in recherchess.docs) {
+      print("Document ID: ${data.id}");
+      print("Data: ${data.data()}");
+      print("-----------------------");
+
+      var rechercheData = data.data() as Map<String, dynamic>?;
+      var userId = rechercheData != null ? rechercheData['user_id'] : '';
+
+      if (!uniqueUserIds.contains(userId)) {
+        // Si l'userId n'a pas encore été traité
+        DocumentSnapshot userDoc = await usersRef.doc(userId).get();
+        Map<String, dynamic> userData = userDoc.exists ? userDoc.data() as Map<String, dynamic> : {};
+        print('Prenom: ${userData['prenom']}');
+        if (userData['nom'] != null && userData['prenom'] != null) {
+          uniqueSearch.add(userData); // Les Sets n'ajouteront pas de doublons
+          uniqueUserIds.add(userId); // Ajouter l'userId au Set
+        }
+      }
+    }
+
+    return uniqueSearch.toList();
+  }
+
+  // TODO: A revoir pour les offres
+  Future<List> getAllOffres() async {
+    List allOffres = [];
+    CollectionReference offres = FirebaseFirestore.instance.collection('offres');
+    Query queryOffres = offres;
+
+    queryOffres = queryOffres.where('isActive', isEqualTo: true);
+
+    QuerySnapshot snapshot = await queryOffres.get();
+    List foundedOffres = [];
+    CollectionReference pharmaref = FirebaseFirestore.instance.collection('pharmacies');
+    for (var data in snapshot.docs) {
+      var offreData = data.data() as Map<String, dynamic>?;
+      var pharmacieId = offreData != null ? offreData['pharmacie_id'] : '';
+      if (pharmacieId != null && pharmacieId != '') {
+        DocumentSnapshot pharmaDoc = await pharmaref.doc(pharmacieId).get();
+        Map<String, dynamic> pharmaData = pharmaDoc.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
+        pharmaData = {
+          ...pharmaData,
+          'documentId': pharmacieId,
+        };
+
+        DocumentSnapshot userRef = await FirebaseFirestore.instance.collection('users').doc(pharmaData['user_id']).get();
+        Map<String, dynamic> userData = userRef.exists ? pharmaDoc.data() as Map<String, dynamic> : {};
+        print('Offr dispooo');
+        foundedOffres.add({'offre': data.data(), 'offer_id': data.id, 'pharma_data': pharmaData, 'pharma_id': pharmacieId, 'user_data': userData});
+      }
+    }
+    return foundedOffres;
   }
 }
 

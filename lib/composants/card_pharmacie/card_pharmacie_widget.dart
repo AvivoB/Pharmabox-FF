@@ -248,11 +248,11 @@ class _CardPharmacieWidgetState extends State<CardPharmacieWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
+                    /* Container(
                       child: LikeButtonWidget(
                         documentId: widget.data['documentId'],
                       ),
-                    ),
+                    ), */
                     Container(
                       decoration: BoxDecoration(
                         color: Color(0x00FFFFFF),

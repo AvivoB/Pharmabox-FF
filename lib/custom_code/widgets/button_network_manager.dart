@@ -134,6 +134,8 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
   Widget build(BuildContext context) {
     if (isInNetwork && !isCurrentUser) {
       return Container(
+        width: 28,
+        height: 28,
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -148,10 +150,10 @@ class _ButtonNetworkManagerState extends State<ButtonNetworkManager> {
         ),
         child: IconButton(
           icon: Icon(
-            Icons.delete_outline,
+            Icons.close,
             color: redColor,
           ),
-          iconSize: 26,
+          iconSize: 12,
           onPressed: () async {
             await deleteNetwork(widget.typeCollection, widget.docId);
             setState(() {});

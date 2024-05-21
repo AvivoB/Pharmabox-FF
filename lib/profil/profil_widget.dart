@@ -457,12 +457,12 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                                               color: Colors.white,
                                             ),
                                       ),
-                                      Padding(
+                                      /* Padding(
                                           padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                                           child: LikeButtonWidget(
                                             documentId: userData?['id'] ?? '',
                                             isActive: false,
-                                          )),
+                                          )), */
                                     ],
                                   ),
                                 ),

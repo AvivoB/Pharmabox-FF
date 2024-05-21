@@ -212,7 +212,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'Explorer';
+  String _currentPageName = 'Reseau';
   late Widget? _currentPage;
 
   @override
@@ -225,10 +225,9 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'Explorer': ExplorerWidget(),
       'PharmaJob': PharmaJobWidget(),
       'PharmaBlabla': PharmaBlabla(currentPage: _currentPageName),
-      'Reseau': ReseauWidget(),
+      'Reseau': ExplorerWidget(),
       'Profil': ProfilWidget(),
       'Pharmacie': ProfilPharmacie(),
     };
@@ -273,34 +272,6 @@ class _NavBarPageState extends State<NavBarPage> {
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
-                          Icons.search,
-                          color: Colors.white,
-                          size: 24.0,
-                        ),
-                      )
-                    : Icon(
-                        Icons.search,
-                        color: greyColor,
-                        size: 24.0,
-                      ),
-                Text('Explorer', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 0 ? FontWeight.w500 : FontWeight.w400)),
-              ],
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: '',
-            icon: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                currentIndex == 1
-                    ? ShaderMask(
-                        shaderCallback: (bounds) => LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
-                          stops: [0.0, 1.0],
-                        ).createShader(bounds),
-                        child: Icon(
                           Icons.campaign_outlined,
                           color: Colors.white,
                           size: 24.0,
@@ -324,7 +295,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  currentIndex == 2
+                  currentIndex == 1
                       ? ShaderMask(
                           shaderCallback: (bounds) => LinearGradient(
                             begin: Alignment.topLeft,
@@ -350,7 +321,7 @@ class _NavBarPageState extends State<NavBarPage> {
                           fontFamily: 'Poppins',
                           color: FlutterFlowTheme.of(context).primaryText,
                           fontSize: 10,
-                          fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400,
+                          fontWeight: currentIndex == 1 ? FontWeight.w500 : FontWeight.w400,
                         ),
                   )
                 ],
@@ -407,7 +378,7 @@ class _NavBarPageState extends State<NavBarPage> {
                  Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  currentIndex == 3
+                  currentIndex == 2
                       ? ShaderMask(
                           shaderCallback: (bounds) => LinearGradient(
                             begin: Alignment.topLeft,
@@ -433,7 +404,7 @@ class _NavBarPageState extends State<NavBarPage> {
                           fontFamily: 'Poppins',
                           color: FlutterFlowTheme.of(context).primaryText,
                           fontSize: 10,
-                          fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400,
+                          fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400,
                         ),
                   )
                 ],
@@ -484,7 +455,7 @@ class _NavBarPageState extends State<NavBarPage> {
             icon: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                currentIndex == 4 || currentIndex == -1
+                currentIndex == 3 || currentIndex == -1
                     ? ShaderMask(
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
@@ -503,7 +474,7 @@ class _NavBarPageState extends State<NavBarPage> {
                         color: greyColor,
                         size: 24.0,
                       ),
-                Text('Profil', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 4 ? FontWeight.w500 : FontWeight.w400)),
+                Text('Profil', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400)),
               ],
             ),
           ),

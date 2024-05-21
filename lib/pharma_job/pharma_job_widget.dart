@@ -8,6 +8,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/composants/card_user/card_user_widget.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
@@ -49,6 +50,7 @@ class PharmaJobWidget extends StatefulWidget {
 class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   late PharmaJobModel _model;
   bool isTitulaire = false;
+  bool pharmaExist = true;
 
   LatLng? _currentPosition;
 
@@ -72,12 +74,11 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List selectedPharmaciesJobs = [];
   final MapController mapController = MapController();
 
-  bool isFromSaved = true;
+  bool isFromSaved = false;
 
   double widgetOpacity = 0.0; // 0.0 est totalement transparent, 1.0 est totalement opaque
 
   Future<void> getCurrentPosition() async {
-
     setState(() {
       isLoading = true;
     });
@@ -109,6 +110,21 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     return status == PermissionStatus.granted;
   }
 
+  Future _getAllRecherches() async {
+    var data = await PharmaJobSearchData().getAllrecherches();
+    print('Offres : ' + data.toString());
+    setState(() {
+      foundedRecherches = data;
+    });
+  }
+
+  Future _getAlloffres() async {
+    var data = await PharmaJobSearchData().getAllOffres();
+    setState(() {
+      foundedOffres = data;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -118,6 +134,10 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     _model.searchJobController ??= TextEditingController();
     checkTitulaireStatus();
     _getMesRecherches();
+    // WidgetsBinding.instance?.addPostFrameCallback((_) {
+    //   print('PharmaJobWidget initState ' + pharmaExist.toString());
+    //   pharmaExist ? '' : showDialogAlertCreatePharma(context);
+    // });
   }
 
   @override
@@ -129,22 +149,63 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
 
   void checkTitulaireStatus() {
     checkIsTitulaire().then((isTitulaire) {
+
+      if(isTitulaire) {
+        getPharmacyByUserId().then((pharmaExist) {
+        print('MaPharma' + pharmaExist.toString());
+        if (pharmaExist != '') {
+          setState(() {
+            this.pharmaExist = true;
+
+          });
+        } else {
+          setState(() {
+            this.pharmaExist = false;
+            showDialogAlertCreatePharma(context);
+          });
+        }
+      });
+      }
       setState(() {
         this.isTitulaire = isTitulaire;
       });
     });
+    
   }
 
   void _getMesRecherches() async {
     var mesRecherches = await PharmaJobSearchData().getMesRecherches();
+    isTitulaire ? offres = mesRecherches : recherches = mesRecherches;
 
     setState(() {
       foundedOffres.clear();
       selectedPharmaciesJobs.clear();
     });
-    isTitulaire ? offres = mesRecherches : recherches = mesRecherches;
-    
-    isTitulaire ? _findRecherche(mesRecherches[0]) : _findOffres(mesRecherches[0]);
+
+    if (isTitulaire) {
+      setState(() {
+        isLoading = true;
+      });
+      foundedRecherches = await PharmaJobSearchData().getAllrecherches();
+      recherches = foundedRecherches;
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = true;
+      });
+      foundedOffres = await PharmaJobSearchData().getAllOffres();
+      for (var pharmaLocation in foundedOffres) {
+        foundedOffresLocation.add(pharmaLocation['pharma_data']);
+      }
+      offres = foundedOffres;
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    // isTitulaire ? _findRecherche(mesRecherches[0]) : _findOffres(mesRecherches[0]);
   }
 
   void _findRecherche(filters) async {
@@ -204,7 +265,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Mes dernières recherches enregistrées', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                             GestureDetector(
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 1.0,
@@ -229,7 +289,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Icon(Icons.work_outline),
-                                      Text(offres[selectedOffreSearchSaved]['poste'] ?? '', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
+                                      Text('Mes recherches enregistrées', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
                                       // Text(offres[0]['contrats'] != '' ? offres[0]['contrats'].toList().toString() : '', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
                                       // Text(offres[0]['salaire_mensuel'] + ' €' ?? '', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
                                       Icon(Icons.edit_note_outlined)
@@ -294,7 +354,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Mes dernières recherches enregistrées', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
                             GestureDetector(
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 1.0,
@@ -317,12 +376,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(Icons.work_outline),
-                                      Text(recherches[selectedOffreSearchSaved]['poste'] ?? '' /*   ?? '' + ' ' + recherches[0]['contrats'].toString() ?? '' + ' ' + recherches[0]['salaire_mensuel'] + ' €' ?? '', */,
-                                          overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                      Icon(Icons.edit_note_outlined)
-                                    ],
+                                    children: [Icon(Icons.work_outline), Text('Mes recherches enregistrées', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)), Icon(Icons.edit_note_outlined)],
                                   ),
                                 ),
                               ),
@@ -508,8 +562,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                                             fontSize: 14.0,
                                           )),
                             ),
-                            for (var user in foundedRecherches)
-                              CardUserWidget(data: user),
+                            for (var user in foundedRecherches) CardUserWidget(data: user),
                           ],
                         ),
                       ),

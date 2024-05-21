@@ -278,11 +278,11 @@ class _CardUserWidgetState extends State<CardUserWidget> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
+                    /* Container(
                       child: LikeButtonWidget(
                         documentId: widget.data?['id'] ?? '',
                       ),
-                    ),
+                    ), */
                     Container(
                       decoration: BoxDecoration(
                         color: Color(0x00FFFFFF),

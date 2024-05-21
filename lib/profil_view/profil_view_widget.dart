@@ -519,11 +519,11 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                               ]),
                                             ) : Container(),
                                           ),
-                                        Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                                            child: LikeButtonWidget(
-                                              documentId: userData != null ? userData['id'] : '',
-                                            )),
+                                        // Padding(
+                                        //     padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                                        //     child: LikeButtonWidget(
+                                        //       documentId: userData != null ? userData['id'] : '',
+                                        //     )),
                                       ],
                                     ),
                                   ),

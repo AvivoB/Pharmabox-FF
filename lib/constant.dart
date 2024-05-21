@@ -149,3 +149,46 @@ void showAlertCompleteProfile(BuildContext context) {
     },
   );
 }
+void showDialogAlertCreatePharma(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Votre Pharmacie n\'est pas encore créé',
+          style: FlutterFlowTheme.of(context).bodyLarge,
+        ),
+        content: Text('Veuillez compléter votre profil Pharmacie pour continuer.', style: FlutterFlowTheme.of(context).bodyMedium),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.pushNamed('PharmacieProfil');
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 4,
+                      color: Color(0x301F5C67),
+                      offset: Offset(0, 4),
+                    )
+                  ],
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                    stops: [0, 1],
+                    begin: AlignmentDirectional(1, -1),
+                    end: AlignmentDirectional(-1, 1),
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Créer ma Pharmacie', style: FlutterFlowTheme.of(context).bodyMedium.copyWith(color: Colors.white)),
+                )),
+          ),
+        ],
+      );
+    },
+  );
+}
