@@ -145,6 +145,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
       body: SafeArea(
         child: Stack(
           children: [
+            
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -360,10 +361,10 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                                                           children: [
                                                             Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(doc['timestamp']?.toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
                                                             SizedBox(width: 10),
-                                                            /* LikeButtonWidget(
+                                                            LikeButtonWidget(
                                                               documentId: doc.id,
                                                               size: 10,
-                                                            ), */
+                                                            ),
                                                           ],
                                                         ),
                                                       ),

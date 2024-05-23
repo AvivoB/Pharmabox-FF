@@ -189,11 +189,11 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    /* Container(
+                    Container(
                       child: LikeButtonWidget(
                         documentId: widget.data['postId'],
                       ),
-                    ), */
+                    ),
                     Container(
                         child: Padding(
                       padding: const EdgeInsets.all(0.0),

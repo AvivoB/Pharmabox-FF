@@ -3076,6 +3076,7 @@ class _ProfilPharmacieState extends State<ProfilPharmacie> with SingleTickerProv
                         CardOfferProfilWidget(
                           searchI: searchI,
                           onSave: (data) {},
+                          onTap: () {},
                           onDelete: () => {
                             FirebaseFirestore.instance.collection('offres').doc(searchI['doc_id']).delete().then((_) {
                               setState(() {

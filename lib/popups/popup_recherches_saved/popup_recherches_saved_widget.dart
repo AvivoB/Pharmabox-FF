@@ -14,8 +14,8 @@ import 'popup_recherches_saved_model.dart';
 export 'popup_recherches_saved_model.dart';
 
 class PopupSearchSaved extends StatefulWidget {
-  PopupSearchSaved({Key? key, required this.onTap, required this.searchSaved, required this.isOffer, this.itemSelected = 0, required this.onSave, required this.onDelete}) : super(key: key);
-  final Function onTap;
+  PopupSearchSaved({Key? key, required this.onSelect, required this.searchSaved, required this.isOffer, this.itemSelected = 0, required this.onSave, required this.onDelete}) : super(key: key);
+  final Function onSelect;
   final Function onSave;
   final Function(dynamic) onDelete;
   final List searchSaved;
@@ -104,100 +104,98 @@ class _PopupSearchSavedState extends State<PopupSearchSaved> {
                   child: Column(children: [
                     if (widget.isOffer == false)
                       for (int index = 0; index < widget.searchSaved.length; index++)
-                        GestureDetector(
-                          onDoubleTap: () {
-                            setState(() {
-                              widget.itemSelected = index;
-                            });
-                            widget.onTap(index);
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (widget.itemSelected == index)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0, bottom: 4.0, left: 10.0),
-                                  child: Text('Recherche séléctionnée', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
-                                ),
-                              CardSearchProfilWidget(
-                                searchI: widget.searchSaved[index],
-                                isSelected: widget.itemSelected == index ? true : false,
-                                onSave: (data) {
-                                  setState(() {
-                                    print("in popup save");
-                                    widget.onSave(data);
-                                    widget.searchSaved[index] = data;
-                                  });
-                                },
-                                onDelete: () => {
-                                  setState(() {
-                                    FirebaseFirestore.instance.collection('recherches').doc(widget.searchSaved[index]['doc_id']).delete().then((_) {
-                                      setState(() {
-                                        widget.onDelete(widget.searchSaved[index]);
-                                        widget.searchSaved.removeAt(index);
-                                      });
-                                      Navigator.pop(context);
-                                      showCustomSnackBar(context, 'Recherche supprimée avec succès');
-                                    }).catchError((error) {
-                                      print('Erreur lors de la suppression du document : $error');
-                                      showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                        Container(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // if (widget.itemSelected == index)
+                            //   Padding(
+                            //     padding: const EdgeInsets.only(top: 8.0, bottom: 4.0, left: 10.0),
+                            //     child: Text('Recherche séléctionnée', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                            //   ),
+                            CardSearchProfilWidget(
+                              searchI: widget.searchSaved[index],
+                              isSelected: widget.itemSelected == index ? true : false,
+                              onTap: () {
+                                print('TAPPED GOOD');
+                                setState(() {
+                                  widget.itemSelected = index;
+                                });
+                                widget.onSelect(index);
+                                Navigator.pop(context);
+                              },
+                              onSave: (data) {
+                                setState(() {
+                                  print("in popup save searchhh");
+                                  widget.onSave(data);
+                                  widget.searchSaved[index] = data;
+                                });
+                              },
+                              onDelete: () => {
+                                setState(() {
+                                  FirebaseFirestore.instance.collection('recherches').doc(widget.searchSaved[index]['doc_id']).delete().then((_) {
+                                    setState(() {
+                                      widget.onDelete(widget.searchSaved[index]);
+                                      widget.searchSaved.removeAt(index);
                                     });
-                                  }),
-                                },
-                              ),
-                            ],
-                          )),
-                        ),
+                                    Navigator.pop(context);
+                                    showCustomSnackBar(context, 'Recherche supprimée avec succès');
+                                  }).catchError((error) {
+                                    print('Erreur lors de la suppression du document : $error');
+                                    showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                                  });
+                                }),
+                              },
+                            ),
+                          ],
+                        )),
                     if (widget.isOffer == true)
                       for (int index = 0; index < widget.searchSaved.length; index++)
-                        GestureDetector(
-                          onDoubleTap: () {
-                            setState(() {
-                              widget.itemSelected = index;
-                            });
-                            widget.onTap(index);
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (widget.itemSelected == index)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0, bottom: 4.0, left: 10.0),
-                                  child: Text('Recherche séléctionnée', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
-                                ),
-                              CardOfferProfilWidget(
-                                searchI: widget.searchSaved[index],
-                                isSelected: widget.itemSelected == index ? true : false,
-                                onSave: (data) {
-                                  setState(() {
-                                    print("in popup save");
-                                    widget.searchSaved[index] = data;
-                                    widget.onSave(data);
-                                  });
-                                },
-                                onDelete: () => {
-                                  setState(() {
-                                    FirebaseFirestore.instance.collection('offres').doc(widget.searchSaved[index]['doc_id']).delete().then((_) {
-                                      setState(() {
-                                        widget.onDelete(widget.searchSaved[index]);
-                                        widget.searchSaved.removeAt(index);
-                                      });
-                                      Navigator.pop(context);
-                                      showCustomSnackBar(context, 'Offre supprimée avec succès');
-                                    }).catchError((error) {
-                                      print('Erreur lors de la suppression du document : $error');
-                                      showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                        Container(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // if (widget.itemSelected == index)
+                            //   Padding(
+                            //     padding: const EdgeInsets.only(top: 8.0, bottom: 4.0, left: 10.0),
+                            //     child: Text('Recherche séléctionnée', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600)),
+                            //   ),
+                            CardOfferProfilWidget(
+                              searchI: widget.searchSaved[index],
+                              isSelected: widget.itemSelected == index ? true : false,
+                              onTap: () {
+                                print('TAPPED GOOD');
+                                setState(() {
+                                  widget.itemSelected = index;
+                                });
+                                widget.onSelect(index);
+                                Navigator.pop(context);
+                              },
+                              onSave: (data) {
+                                setState(() {
+                                  print("in popup save search offres");
+                                  widget.searchSaved[index] = data;
+                                  widget.onSave(data);
+                                });
+                              },
+                              onDelete: () => {
+                                setState(() {
+                                  FirebaseFirestore.instance.collection('offres').doc(widget.searchSaved[index]['doc_id']).delete().then((_) {
+                                    setState(() {
+                                      widget.onDelete(widget.searchSaved[index]);
+                                      widget.searchSaved.removeAt(index);
                                     });
-                                  }),
-                                },
-                              ),
-                            ],
-                          )),
-                        )
+                                    Navigator.pop(context);
+                                    showCustomSnackBar(context, 'Offre supprimée avec succès');
+                                  }).catchError((error) {
+                                    print('Erreur lors de la suppression du document : $error');
+                                    showCustomSnackBar(context, 'Erreur lors de la suppression de l\'offre', isError: true);
+                                  });
+                                }),
+                              },
+                            ),
+                          ],
+                        ))
                   ]),
                 ),
               ),

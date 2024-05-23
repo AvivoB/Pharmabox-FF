@@ -31,8 +31,12 @@ class _MyMapWidgetState extends State<MyMapWidget> {
 
     Set<String> markerIds = Set<String>();
 
+          print('PharmaID : ' + widget.pharmacies.asMap().toString());
+
     widget.pharmacies.asMap().forEach((index, element) {
       String markerId = widget.pharmacies[index]['documentId'].toString();
+
+
       
       // Vérifie si l'ID du marqueur existe déjà dans l'ensemble des IDs
       if (!markerIds.contains(markerId)) {

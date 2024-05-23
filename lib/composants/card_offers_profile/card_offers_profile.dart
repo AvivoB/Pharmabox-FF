@@ -25,13 +25,14 @@ import '../../flutter_flow/flutter_flow_model.dart';
 import '../../flutter_flow/form_field_controller.dart';
 
 class CardOfferProfilWidget extends StatefulWidget {
-  CardOfferProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false, required this.onSave, required this.onDelete}) : super(key: key);
+  CardOfferProfilWidget({Key? key, required this.searchI, this.isEditable = true, this.isSelected = false, required this.onSave, required this.onDelete, required this.onTap}) : super(key: key);
 
   var searchI;
   final bool isEditable;
   bool isSelected;
   final Function(dynamic) onSave;
   final Function() onDelete;
+  final Function() onTap;
   @override
   State<CardOfferProfilWidget> createState() => _CardOfferProfilWidgetState();
 }
@@ -140,7 +141,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
           child: Column(
             children: [
               InkWell(
-                onTap: () {
+                onDoubleTap: () {
                   setState(() {
                     isExpendedSearchOffer = !isExpendedSearchOffer;
                   });
@@ -152,11 +153,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Supprimer l\'offre '+ widget.searchI['nom'], style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18.0,
-                                      fontFamily: 'Poppins',
-                                    ),),
+                          title: Text('Supprimer l\'offre ' + widget.searchI['nom'], style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)),
                           content: Text('Voulez-vous vraiment supprimer cette offre ?'),
                           actions: [
                             TextButton(
@@ -177,6 +174,9 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                       },
                     );
                   }
+                },
+                onTap: () {
+                  widget.onTap();
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 1.0,
@@ -239,8 +239,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                 ],
                               ),
                               SizedBox(width: 10, height: 10),
-                              if(widget.searchI['date_created'] != null)
-                              Text('Offre valable 1 mois à partir du ' + DateFormat('dd/MM/yyyy').format(widget.searchI['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodySmall),
+                              if (widget.searchI['date_created'] != null) Text('Offre valable 1 mois à partir du ' + DateFormat('dd/MM/yyyy').format(widget.searchI['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodySmall),
                               if (isExpendedSearchOffer)
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
@@ -482,9 +481,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                                         ),
                                                         style: FlutterFlowTheme.of(context).bodyMedium,
                                                         keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
-                                          inputFormatters: [
-                                            FilteringTextInputFormatter.digitsOnly
-                                          ],
+                                                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                                         validator: _model.dureMoisControllerValidator.asValidator(context),
                                                       ),
                                                     ),
@@ -782,9 +779,9 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                                           ),
                                                           style: FlutterFlowTheme.of(context).bodyMedium,
                                                           keyboardType: TextInputType.numberWithOptions(signed: true, decimal: false),
-                                          inputFormatters: [
-                                            FilteringTextInputFormatter.digitsOnly,
-                                          ],
+                                                          inputFormatters: [
+                                                            FilteringTextInputFormatter.digitsOnly,
+                                                          ],
                                                           validator: _model.salaireMensuelNetControllerValidator.asValidator(context),
                                                         ),
                                                       ),
@@ -1181,18 +1178,18 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     if (widget.searchI != null && widget.searchI['localisation_job'] != null)
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
-                                      child: Row(children: [
-                                        Icon(
-                                          Icons.place_outlined,
-                                          color: greyColor,
-                                          size: 28.0,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Flexible(child: Text(widget.searchI['localisation_job'] ?? '', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)))
-                                      ]),
-                                    ),
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.place_outlined,
+                                            color: greyColor,
+                                            size: 28.0,
+                                          ),
+                                          SizedBox(width: 10),
+                                          Flexible(child: Text(widget.searchI['localisation_job'] ?? '', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16)))
+                                        ]),
+                                      ),
                                     for (var contrat in widget.searchI['contrats'] as List)
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
@@ -1219,7 +1216,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           Text(widget.searchI['temps'] != null ? widget.searchI['temps'] : '', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                         ]),
                                       ),
-                                      if(widget.searchI['debut_immediat'])
+                                    if (widget.searchI['debut_immediat'])
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Row(children: [
@@ -1232,7 +1229,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           Text('Démarrage immédiat', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                         ]),
                                       ),
-                                      if(widget.searchI['debut_contrat'] != '')
+                                    if (widget.searchI['debut_contrat'] != '')
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Row(children: [
@@ -1258,7 +1255,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           Text(widget.searchI['duree'] + ' mois', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                         ]),
                                       ),
-                                      if(!widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['salaire_mensuel'] != '')
+                                    if (!widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['salaire_mensuel'] != '')
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Row(children: [
@@ -1271,7 +1268,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           Text(widget.searchI['salaire_mensuel'] + ' €/mois net', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                         ]),
                                       ),
-                                      if(widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['salaire_mensuel'] != '')
+                                    if (widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['salaire_mensuel'] != '')
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Row(children: [
@@ -1284,7 +1281,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           Text(widget.searchI['salaire_mensuel'] + ' €/H net', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16))
                                         ]),
                                       ),
-                                      if(widget.searchI['salaire_negocier_ensemble'])
+                                    if (widget.searchI['salaire_negocier_ensemble'])
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Row(children: [
@@ -1416,18 +1413,18 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: GrilleHoraire(onSelectionChanged: (data) => {}, onInitialValue: widget.searchI['grille_horaire_impaire'] != [] ? widget.searchI['grille_horaire_impaire'] : [], isEditable: false),
                                       ),
-                                    if(widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['proposition_dispo_interim'] != null)
+                                    if (widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['proposition_dispo_interim'] != null)
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
                                         child: Text('Jours de présence souhaité', style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 16, fontWeight: FontWeight.w600)),
                                       ),
                                     if (widget.searchI['contrats'].contains('Intérimaire') && widget.searchI['proposition_dispo_interim'] != null)
                                       Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
-                                        child: Container(
-                                          // height: 370,
-                                          child: DateSelector(initialSelectedDates: widget.searchI['proposition_dispo_interim'] != null ? widget.searchI['proposition_dispo_interim'] : [], onDatesChanged: (dates){}, isEditable: false),
-                                        )),
+                                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),
+                                          child: Container(
+                                            // height: 370,
+                                            child: DateSelector(initialSelectedDates: widget.searchI['proposition_dispo_interim'] != null ? widget.searchI['proposition_dispo_interim'] : [], onDatesChanged: (dates) {}, isEditable: false),
+                                          )),
                                     if (widget.searchI['description_offre'] != '')
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 15.0, 0.0),

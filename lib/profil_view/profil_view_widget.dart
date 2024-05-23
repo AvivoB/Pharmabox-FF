@@ -1272,6 +1272,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                             isEditable: false,
                             onSave: (p0) => {},
                             onDelete: () => {},
+                            onTap: () => {},
                           ),
                       if (_selectedIndex == 2 && offresUser.isNotEmpty)
                         for (var searchI in offresUser)
@@ -1280,7 +1281,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                             isEditable: false,
                             onSave: (data) {},
                             onDelete: () => {},
-
+                            onTap: () => {},
                           )
                     ],
                   ),

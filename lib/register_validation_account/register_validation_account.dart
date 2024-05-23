@@ -147,7 +147,7 @@ class _ValidateAccountState extends State<ValidateAccount> {
                     child: FFButtonWidget(
                       onPressed: () async {
                         if (await isVerificationCodeValid()) {
-                          context.pushNamed('Explorer');
+                          context.pushNamed('Reseau');
                         } else {
                           // Le code est incorrect
                           return ScaffoldMessenger.of(context).showSnackBar(

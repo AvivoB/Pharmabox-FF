@@ -1847,6 +1847,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                             for (var searchI in recherchesUser)
                               CardSearchProfilWidget(
                                 searchI: searchI,
+                                onTap: () => {},
                                 onSave: (data) {
                                   setState(() {
                                    int idRech = recherchesUser.indexOf(searchI);
@@ -1869,6 +1870,7 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                             for (var searchI in offresUser)
                               CardOfferProfilWidget(
                                 searchI: searchI,
+                                onTap: () {},
                                 onSave: (data) {
                                   setState(() {
                                    int idOfre = offresUser.indexOf(searchI);

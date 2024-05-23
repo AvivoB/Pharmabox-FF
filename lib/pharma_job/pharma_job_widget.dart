@@ -55,12 +55,8 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   LatLng? _currentPosition;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  // late ClusterManager _manager;
-  // Completer<GoogleMapController> _controller = Completer();
-  // Set<Marker> markers = Set();
-  String? searchTerms;
 
-  // final CameraPosition _parisCameraPosition = CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 16.0);
+  String? searchTerms;
 
   List offres = [];
   List recherches = [];
@@ -70,11 +66,12 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
   List foundedOffres = [];
   List foundedOffresLocation = [];
   List foundedRecherches = [];
-  bool isLoading = false;
+  bool isLoading = true;
   List selectedPharmaciesJobs = [];
   final MapController mapController = MapController();
 
   bool isFromSaved = false;
+  bool isFromAll = true;
 
   double widgetOpacity = 0.0; // 0.0 est totalement transparent, 1.0 est totalement opaque
 
@@ -94,12 +91,10 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
 
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
-        isLoading = false;
       });
     } else {
       setState(() {
         _currentPosition = LatLng(48.866667, 2.333333);
-        isLoading = false;
       });
     }
   }
@@ -110,20 +105,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     return status == PermissionStatus.granted;
   }
 
-  Future _getAllRecherches() async {
-    var data = await PharmaJobSearchData().getAllrecherches();
-    print('Offres : ' + data.toString());
-    setState(() {
-      foundedRecherches = data;
-    });
-  }
 
-  Future _getAlloffres() async {
-    var data = await PharmaJobSearchData().getAllOffres();
-    setState(() {
-      foundedOffres = data;
-    });
-  }
 
   @override
   void initState() {
@@ -134,10 +116,6 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     _model.searchJobController ??= TextEditingController();
     checkTitulaireStatus();
     _getMesRecherches();
-    // WidgetsBinding.instance?.addPostFrameCallback((_) {
-    //   print('PharmaJobWidget initState ' + pharmaExist.toString());
-    //   pharmaExist ? '' : showDialogAlertCreatePharma(context);
-    // });
   }
 
   @override
@@ -149,58 +127,93 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
 
   void checkTitulaireStatus() {
     checkIsTitulaire().then((isTitulaire) {
-
-      if(isTitulaire) {
+      if (isTitulaire) {
         getPharmacyByUserId().then((pharmaExist) {
-        print('MaPharma' + pharmaExist.toString());
-        if (pharmaExist != '') {
-          setState(() {
-            this.pharmaExist = true;
-
-          });
-        } else {
-          setState(() {
-            this.pharmaExist = false;
-            showDialogAlertCreatePharma(context);
-          });
-        }
-      });
+          print('MaPharma' + pharmaExist.toString());
+          if (pharmaExist != '') {
+            setState(() {
+              this.pharmaExist = true;
+            });
+          } else {
+            setState(() {
+              this.pharmaExist = false;
+              showDialogAlertCreatePharma(context);
+            });
+          }
+        });
       }
       setState(() {
         this.isTitulaire = isTitulaire;
       });
     });
-    
+  }
+
+  void _getAllOffres() async {
+    if(isTitulaire == false) {
+      foundedOffres.clear();
+      selectedPharmaciesJobs.clear();
+      foundedOffresLocation.clear();
+
+      setState(() {
+        isLoading = true;
+      });
+
+      var allOffres = await PharmaJobSearchData().getAllOffres();
+
+      setState(() {
+        foundedOffres = allOffres;
+        for (var pharmaLocationAllOffres in allOffres) {
+          foundedOffresLocation.add(pharmaLocationAllOffres['pharma_data']);
+        }
+        isLoading = false;
+      });
+    }
+  }
+  void _getAllrecherches() async {
+    if(isTitulaire == true) {
+      foundedRecherches.clear();
+
+      setState(() {
+        isLoading = true;
+      });
+
+      var allrecherces = await PharmaJobSearchData().getAllrecherches();
+
+      setState(() {
+        foundedRecherches = allrecherces;
+        isLoading = false;
+      });
+    }
   }
 
   void _getMesRecherches() async {
     var mesRecherches = await PharmaJobSearchData().getMesRecherches();
     isTitulaire ? offres = mesRecherches : recherches = mesRecherches;
 
-    setState(() {
+    if(isTitulaire == true) {
+       var allSearchs = await PharmaJobSearchData().getAllrecherches();
+        setState(() {
+          foundedRecherches = allSearchs;
+          isLoading = false;
+        });
+    }
+
+    if(isTitulaire == false) {
       foundedOffres.clear();
       selectedPharmaciesJobs.clear();
-    });
+      foundedOffresLocation.clear();
 
-    if (isTitulaire) {
       setState(() {
         isLoading = true;
       });
-      foundedRecherches = await PharmaJobSearchData().getAllrecherches();
-      recherches = foundedRecherches;
+
+      var allOffres = await PharmaJobSearchData().getAllOffres();
+
       setState(() {
-        isLoading = false;
-      });
-    } else {
-      setState(() {
-        isLoading = true;
-      });
-      foundedOffres = await PharmaJobSearchData().getAllOffres();
-      for (var pharmaLocation in foundedOffres) {
-        foundedOffresLocation.add(pharmaLocation['pharma_data']);
-      }
-      offres = foundedOffres;
-      setState(() {
+        foundedOffres = allOffres;
+        for (var pharmaLocationAllOffres in allOffres) {
+          foundedOffresLocation.add(pharmaLocationAllOffres['pharma_data']);
+        }
         isLoading = false;
       });
     }
@@ -261,275 +274,325 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                        Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                              child: Container(
+                                width: double.infinity,
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 4.0,
+                                      color: Color(0x301F5C67),
+                                      offset: Offset(0.0, 4.0),
+                                    )
+                                  ],
+                                  gradient: LinearGradient(
+                                    colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                                    stops: [0.0, 1.0],
+                                    begin: AlignmentDirectional(1.0, -1.0),
+                                    end: AlignmentDirectional(-1.0, 1.0),
+                                  ),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                child: FFButtonWidget(
+                                  showLoadingIndicator: false,
+                                  icon: Icon(
+                                    Icons.tune,
+                                    color: greyLightColor,
+                                    size: 20.0,
+                                  ),
+                                  onPressed: () async {
+                                    setState(() {
+                                      isFromSaved = false;
+                                    });
+                                    await showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      enableDrag: true,
+                                      backgroundColor: Colors.transparent,
+                                      context: context,
+                                      builder: (bottomSheetContext) {
+                                        return Container(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                            child: DraggableScrollableSheet(
+                                                initialChildSize: 0.80,
+                                                builder: (BuildContext context, ScrollController scrollController) {
+                                                  return Padding(
+                                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                    child: isTitulaire
+                                                        ? ListView(
+                                                            children: [
+                                                              PopupOffreWidget(
+                                                                onFilter: (filters, isSaved) {
+                                                                  if (isSaved) {
+                                                                    _getMesRecherches();
+                                                                  }
+                                                                  _findRecherche(filters);
+                                                                },
+                                                              )
+                                                            ],
+                                                          )
+                                                        : ListView(
+                                                            children: [
+                                                              PopupRechercheWidget(
+                                                                onFilter: (filters, isSaved) {
+                                                                  if (isSaved) {
+                                                                    _getMesRecherches();
+                                                                  }
+                                                                  _findOffres(filters);
+                                                                },
+                                                              )
+                                                            ],
+                                                          ),
+                                                  );
+                                                }),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  text: 'Nouvelle recherche',
+                                  options: FFButtonOptions(
+                                    width: double.infinity,
+                                    height: 20.0,
+                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                    color: Color(0x00FFFFFF),
+                                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                          fontFamily: 'Poppins',
+                                          color: Colors.white,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                    elevation: 0.0,
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(80.0),
+                                  ),
+                                ),
+                              ),
+                            ),
                       if (offres.isNotEmpty && isTitulaire == true)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 1.0,
-                                decoration: isFromSaved
-                                    ? BoxDecoration(
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topRight,
-                                          end: Alignment.bottomLeft,
-                                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                        ),
-                                      )
-                                    : null,
+                          Row(
+                            children: [
+                              GestureDetector(
                                 child: Container(
-                                  margin: EdgeInsets.all(2.0),
-                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
-                                  decoration: BoxDecoration(
-                                    color: Colors.white, // or whatever the inner color needs to be
-                                    borderRadius: BorderRadius.circular(5.0), // adjust as needed
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Icon(Icons.work_outline),
-                                      Text('Mes recherches enregistrées', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                      // Text(offres[0]['contrats'] != '' ? offres[0]['contrats'].toList().toString() : '', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                      // Text(offres[0]['salaire_mensuel'] + ' €' ?? '', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)),
-                                      Icon(Icons.edit_note_outlined)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              onTap: () async {
-                                setState(() {
-                                  isFromSaved = true;
-                                });
-                                await showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  enableDrag: true,
-                                  backgroundColor: Colors.transparent,
-                                  context: context,
-                                  builder: (bottomSheetContext) {
-                                    return DraggableScrollableSheet(
-                                        initialChildSize: 0.80,
-                                        builder: (BuildContext context, ScrollController scrollController) {
-                                          return Padding(
-                                            padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                            child: ListView(
-                                              children: [
-                                                PopupSearchSaved(
-                                                  itemSelected: selectedOffreSearchSaved,
-                                                  isOffer: true,
-                                                  searchSaved: offres,
-                                                  onTap: (index) {
-                                                    setState(() {
-                                                      _findRecherche(offres[index]);
-                                                      selectedOffreSearchSaved = index;
-                                                    });
-                                                  },
-                                                  onSave: (data) {
-                                                    setState(() {
-                                                      _findRecherche(data);
-                                                      offres[selectedOffreSearchSaved] = data;
-                                                    });
-                                                  },
-                                                  onDelete: (index) {
-                                                    setState(() {
-                                                      if (offres.length > 0) {
-                                                        selectedOffreSearchSaved = 0;
-                                                      } else {
-                                                        offres.clear();
-                                                      }
-                                                    });
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        });
+                                      margin: EdgeInsets.all(2.0),
+                                      padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                      width: MediaQuery.of(context).size.width * 0.45,
+                                      decoration: isFromAll
+                                          ? BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                                stops: [0, 0.5, 1],
+                                                begin: AlignmentDirectional(1, 0),
+                                                end: AlignmentDirectional(-1, 0),
+                                              ),
+                                              color: blueColor,
+                                              borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                            )
+                                          : null,
+                                      child: Text('Tous les profils', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isFromAll ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
+                                    ),
+                                  onTap: () async {
+                                    setState(() {
+                                      isFromSaved = false;
+                                      isFromAll = true;
+                                    });
+                                    _getAllrecherches();
                                   },
-                                ).then((value) => setState(() {}));
-                              },
-                            ),
+                                ),
+                              GestureDetector(
+                                child: Container(
+                                      margin: EdgeInsets.all(2.0),
+                                      padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                      width: MediaQuery.of(context).size.width * 0.45,
+                                      decoration: isFromSaved
+                                          ? BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                                stops: [0, 0.5, 1],
+                                                begin: AlignmentDirectional(1, 0),
+                                                end: AlignmentDirectional(-1, 0),
+                                              ),
+                                              color: blueColor,
+                                              borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                            )
+                                          : null,
+                                      child: Text('Mes recherches', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isFromSaved ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
+                                    ),
+                                  onTap: () async {
+                                    setState(() {
+                                      isFromSaved = true;
+                                      isFromAll = false;
+                                    });
+                                    await showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      enableDrag: true,
+                                      backgroundColor: Colors.transparent,
+                                      context: context,
+                                      builder: (bottomSheetContext) {
+                                        return DraggableScrollableSheet(
+                                            initialChildSize: 0.80,
+                                            builder: (BuildContext context, ScrollController scrollController) {
+                                              return Padding(
+                                                padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                child: ListView(
+                                                  children: [
+                                                    PopupSearchSaved(
+                                                      itemSelected: selectedOffreSearchSaved,
+                                                      isOffer: true,
+                                                      searchSaved: offres,
+                                                      onSelect: (index) {
+                                                        setState(() {
+                                                          _findRecherche(offres[index]);
+                                                          selectedOffreSearchSaved = index;
+                                                        });
+                                                      },
+                                                      onSave: (data) {
+                                                        setState(() {
+                                                          _findRecherche(data);
+                                                          offres[selectedOffreSearchSaved] = data;
+                                                        });
+                                                      },
+                                                      onDelete: (index) {
+                                                        setState(() {
+                                                          if (offres.length > 0) {
+                                                            selectedOffreSearchSaved = 0;
+                                                          } else {
+                                                            offres.clear();
+                                                          }
+                                                        });
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            });
+                                      },
+                                    ).then((value) => setState(() {}));
+                                  },
+                                ),
+                            ],
+                          ),
                           ],
                         ),
                       if (recherches.isNotEmpty && isTitulaire == false)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 1.0,
-                                decoration: isFromSaved
-                                    ? BoxDecoration(
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topRight,
-                                          end: Alignment.bottomLeft,
-                                          colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                                        ),
-                                      )
-                                    : null,
-                                child: Container(
-                                  margin: EdgeInsets.all(2.0),
-                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
-                                  decoration: BoxDecoration(
-                                    color: Colors.white, // or whatever the inner color needs to be
-                                    borderRadius: BorderRadius.circular(5.0), // adjust as needed
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [Icon(Icons.work_outline), Text('Mes recherches enregistrées', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w400)), Icon(Icons.edit_note_outlined)],
-                                  ),
-                                ),
-                              ),
-                              onTap: () async {
-                                setState(() {
-                                  isFromSaved = true;
-                                });
-                                await showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  enableDrag: true,
-                                  backgroundColor: Colors.transparent,
-                                  context: context,
-                                  builder: (bottomSheetContext) {
-                                    return DraggableScrollableSheet(
-                                        initialChildSize: 0.80,
-                                        builder: (BuildContext context, ScrollController scrollController) {
-                                          return Padding(
-                                            padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                            child: PopupSearchSaved(
-                                              itemSelected: selectedOffreSearchSaved,
-                                              isOffer: false,
-                                              searchSaved: recherches,
-                                              onTap: (index) {
-                                                setState(() {
-                                                  _findOffres(recherches[index]);
-                                                  selectedOffreSearchSaved = index;
-                                                });
-                                              },
-                                              onSave: (data) {
-                                                setState(() {
-                                                  _findOffres(data);
-                                                  recherches[selectedOffreSearchSaved] = data;
-                                                });
-                                              },
-                                              onDelete: (index) {
-                                                setState(() {
-                                                  if (recherches.length > 0) {
-                                                    selectedOffreSearchSaved = 0;
-                                                  } else {
-                                                    recherches.clear();
-                                                  }
-                                                });
-                                              },
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  child: Container(
+                                    margin: EdgeInsets.all(2.0),
+                                    padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                    width: MediaQuery.of(context).size.width * 0.45,
+                                    decoration: isFromAll
+                                        ? BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                              stops: [0, 0.5, 1],
+                                              begin: AlignmentDirectional(1, 0),
+                                              end: AlignmentDirectional(-1, 0),
                                             ),
-                                          );
-                                        });
+                                            color: blueColor,
+                                            borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                          )
+                                        : null,
+                                    child: Text('Toutes les offres', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isFromAll ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
+                                  ),
+                                  onTap: () async {
+                                    setState(() {
+                                      isFromSaved = false;
+                                      isFromAll = true;
+                                    });
+                                    _getAllOffres();
                                   },
-                                ).then((value) => setState(() {}));
-                              },
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    margin: EdgeInsets.all(2.0),
+                                    padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                    width: MediaQuery.of(context).size.width * 0.45,
+                                    decoration: isFromSaved
+                                        ? BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                              stops: [0, 0.5, 1],
+                                              begin: AlignmentDirectional(1, 0),
+                                              end: AlignmentDirectional(-1, 0),
+                                            ),
+                                            color: blueColor,
+                                            borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                          )
+                                        : null,
+                                    child: Text('Mes recherches', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: isFromSaved ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
+                                  ),
+                                  onTap: () async {
+                                    setState(() {
+                                      isFromSaved = true;
+                                      isFromAll = false;
+                                    });
+                                    await showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      enableDrag: true,
+                                      backgroundColor: Colors.transparent,
+                                      context: context,
+                                      builder: (bottomSheetContext) {
+                                        return DraggableScrollableSheet(
+                                            initialChildSize: 0.80,
+                                            builder: (BuildContext context, ScrollController scrollController) {
+                                              return Padding(
+                                                padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                                child: PopupSearchSaved(
+                                                  itemSelected: selectedOffreSearchSaved,
+                                                  isOffer: false,
+                                                  searchSaved: recherches,
+                                                  onSelect: (index) {
+                                                    setState(() {
+                                                      _findOffres(recherches[index]);
+                                                      selectedOffreSearchSaved = index;
+                                                      isFromSaved = true;
+                                                      isFromAll = false;
+                                                    });
+                                                  },
+                                                  onSave: (data) {
+                                                    setState(() {
+                                                      _findOffres(data);
+                                                      recherches[selectedOffreSearchSaved] = data;
+                                                      isFromSaved = true;
+                                                      isFromAll = false;
+                                                    });
+                                                  },
+                                                  onDelete: (index) {
+                                                    setState(() {
+                                                      if (recherches.length > 0) {
+                                                        selectedOffreSearchSaved = 0;
+                                                      } else {
+                                                        recherches.clear();
+                                                      }
+                                                    });
+                                                  },
+                                                ),
+                                              );
+                                            });
+                                      },
+                                    ).then((value) => setState(() {}));
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 50.0,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 4.0,
-                                color: Color(0x301F5C67),
-                                offset: Offset(0.0, 4.0),
-                              )
-                            ],
-                            gradient: LinearGradient(
-                              colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                              stops: [0.0, 1.0],
-                              begin: AlignmentDirectional(1.0, -1.0),
-                              end: AlignmentDirectional(-1.0, 1.0),
-                            ),
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: FFButtonWidget(
-                            showLoadingIndicator: false,
-                            icon: Icon(
-                              Icons.tune,
-                              color: greyLightColor,
-                              size: 20.0,
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                isFromSaved = false;
-                              });
-                              await showModalBottomSheet(
-                                isScrollControlled: true,
-                                enableDrag: true,
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (bottomSheetContext) {
-                                  return Container(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: DraggableScrollableSheet(
-                                          initialChildSize: 0.80,
-                                          builder: (BuildContext context, ScrollController scrollController) {
-                                            return Padding(
-                                              padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                              child: isTitulaire
-                                                  ? ListView(
-                                                      children: [
-                                                        PopupOffreWidget(
-                                                          onFilter: (filters, isSaved) {
-                                                            if (isSaved) {
-                                                              _getMesRecherches();
-                                                            }
-                                                            _findRecherche(filters);
-                                                          },
-                                                        )
-                                                      ],
-                                                    )
-                                                  : ListView(
-                                                      children: [
-                                                        PopupRechercheWidget(
-                                                          onFilter: (filters, isSaved) {
-                                                            if (isSaved) {
-                                                              _getMesRecherches();
-                                                            }
-                                                            _findOffres(filters);
-                                                          },
-                                                        )
-                                                      ],
-                                                    ),
-                                            );
-                                          }),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            text: 'Nouvelle recherche',
-                            options: FFButtonOptions(
-                              width: double.infinity,
-                              height: 20.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                              color: Color(0x00FFFFFF),
-                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                              elevation: 0.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                        ),
-                      ),
+                      
                     ],
                   )),
             ),

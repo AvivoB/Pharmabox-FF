@@ -209,7 +209,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         if(_model.posteValue != null && _model.posteValue == 'Pharmacien titulaire') {
                                           context.pushNamed('RegisterPharmacy');
                                         } else {
-                                          context.pushNamed('Explorer');
+                                          context.pushNamed('Reseau');
                                         }
                                     }
                                         
@@ -259,7 +259,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         if(_model.posteValue != null && _model.posteValue == 'Pharmacien titulaire') {
                                           context.pushNamed('RegisterPharmacy');
                                         } else {
-                                          context.pushNamed('Explorer');
+                                          context.pushNamed('Reseau');
                                         }
                                     }
                                         
@@ -405,7 +405,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         if(_model.posteValue != null && _model.posteValue == 'Pharmacien titulaire') {
                                           context.pushNamed('RegisterPharmacy');
                                         } else {
-                                          context.pushNamed('Explorer');
+                                          context.pushNamed('Reseau');
                                         }
                                       },
                                       text: 'S\'enregistrer',

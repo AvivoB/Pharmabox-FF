@@ -1465,6 +1465,7 @@ class _PharmacieProfilViewState extends State<PharmacieProfilView> with SingleTi
                             isEditable: false,
                             onSave: (data) {},
                             onDelete: () => {},
+                            onTap: () {},
                           )
                     ],
                   ),
