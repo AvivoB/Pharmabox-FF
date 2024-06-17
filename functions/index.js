@@ -643,3 +643,51 @@ exports.updateDisplayName = functions.pubsub.schedule('every 15 minutes').timeZo
   });
 });
 
+
+// Send push notification to user when post is added to pharmablabla to send notification to all users without the sender with postdata
+exports.sendNotificationOnPost = functions.firestore
+    .document('pharmablabla/{postId}')
+    .onCreate(async (snap, context) => {
+        const data = snap.data();
+        const senderId = data.userId;
+        const postContent = data.post_content;
+
+        // Retrieve all user documents
+        const userDocs = await admin.firestore().collection('users').get();
+
+        const notificationPromises = [];
+        userDocs.forEach(doc => {
+            const userId = doc.id;
+            if (userId !== senderId && data.network == 'Tout Pharmabox') {
+                const receiverFCMToken = doc.data().fcmToken;
+                if (receiverFCMToken) {
+                    const message = {
+                        "notification": {
+                            body: postContent,
+                            title: 'Nouveau post dans Pharmablabla'
+                        },
+                        token: receiverFCMToken,
+                    };
+                    notificationPromises.push(admin.messaging().send(message));
+                }
+            }
+
+            if(data.network == 'Mon réseau' && user.reseau.includes(senderId) && userId !== senderId) {
+              const receiverFCMToken = doc.data().fcmToken;
+              if (receiverFCMToken) {
+                  const message = {
+                      "notification": {
+                          body: postContent,
+                          title: 'Nouveau post dans votre réseau Pharmablabla'
+                      },
+                      token: receiverFCMToken,
+                  };
+                  notificationPromises.push(admin.messaging().send(message));
+              }
+            }
+        });
+
+        return Promise.all(notificationPromises);
+    });
+
+

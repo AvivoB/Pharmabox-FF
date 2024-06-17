@@ -227,7 +227,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                             padding: EdgeInsetsDirectional.fromSTEB(25.0, 10.0, 15.0, 15.0),
                             child: Text(
                               postAndUserData['post']['post_content'] ?? '',
-                              style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 15.0),
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 12.0),
                             ),
                           ),
                         //   if(postAndUserData['post']['media'] != null)
@@ -271,7 +271,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                     
                           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                             return Container(
-                              height: MediaQuery.of(context).size.height * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.8,
                               child: Center(
                                   child: Text(
                                 'Commentez en premier ce post.',

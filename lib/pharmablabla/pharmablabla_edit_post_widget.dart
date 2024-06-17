@@ -24,6 +24,7 @@ import 'package:pharmabox/pharmablabla/pharmablabla_model.dart';
 import 'package:pharmabox/popups/popup_groupement/popup_groupement_widget.dart';
 import 'package:pharmabox/popups/popup_lgo/popup_lgo_widget.dart';
 import 'package:pharmabox/popups/popup_pharmablabla/popup_pharmablabla_widget.dart';
+import 'package:pharmabox/popups/popup_themes_pharmablabla/popup_theme_pharmablabla_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:path/path.dart' as p;
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
@@ -46,8 +47,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:stopwordies/stopwordies.dart';
 
 class PharmaBlablaEditPost extends StatefulWidget {
-  const PharmaBlablaEditPost({Key? key, this.lgo, this.postId, this.content, this.network, this.poste}) : super(key: key);
-  final String? lgo;
+  const PharmaBlablaEditPost({Key? key, this.theme, this.postId, this.content, this.network, this.poste}) : super(key: key);
+  final String? theme;
   final String? postId;
   final String? content;
   final String? network;
@@ -80,13 +81,13 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
   @override
   void initState() {
     if (widget.postId != null) {
-      updateData = {'content': widget.content.toString(), 'postId': widget.postId.toString(), 'LGO':widget.lgo.toString(), 'network': widget.network.toString(), 'poste': widget.poste.toString()};
+      updateData = {'content': widget.content.toString(), 'postId': widget.postId.toString(), 'theme':widget.theme.toString(), 'network': widget.network.toString(), 'poste': widget.poste.toString()};
     }
 
     super.initState();
     _model = createModel(context, () => PharmaBlablaModel());
     _model.postContent ??= TextEditingController(text: updateData['content']);
-    _model.selectedLGO[0] = updateData.isNotEmpty && updateData['LGO'] != 'Par LGO' ? {"image": "${updateData['LGO']}.jpg", "name": updateData['LGO']} : {"image": "Autre.jpg", "name": "Par LGO"};
+    _model.selectedTheme = updateData.isNotEmpty && updateData['theme'] != 'Thème' ? updateData['theme'] : 'Thème';
     _model.reseauType = updateData.isNotEmpty && updateData['network'] != 'Tout Pharmabox' ? 'Mon réseau' : 'Tout Pharmabox';
     checkIsTitulaire().then((isTitulaire) {
       setState(() {
@@ -171,9 +172,6 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
           searchTerms.add(word);
         }
       }
-      _model.selectedGroupement[0]['name'].toString() != 'Par groupement' ? searchTerms.add(_model.selectedGroupement[0]['name'].toString().toLowerCase()) : '';
-      _model.selectedLGO[0]['name'].toString() != 'Par LGO' ? searchTerms.add(_model.selectedLGO[0]['name'].toString().toLowerCase()) : '';
-      _model.posteValue != null ? searchTerms.add(_model.posteValue.toString().toLowerCase()) : '';
 
       if (type == 'create') {
         try {
@@ -184,11 +182,10 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
             'userId': currentuserId,
             'search_terms': searchTerms,
             'network': _model.reseauType,
-            'LGO': _model.selectedLGO[0]['name'],
+            'theme': _model.selectedTheme,
             'poste': _model.posteValue,
             'media': url,
             'date_created': DateTime.now()
-            // 'groupement': _model.selectedGroupement[0]['name'],
           });
           return true;
         } catch (e) {
@@ -204,9 +201,8 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
             'userId': currentuserId,
             'search_terms': searchTerms,
             'network': _model.reseauType,
-            'LGO': _model.selectedLGO[0]['name'],
+            'theme': _model.selectedTheme,
             'poste': _model.posteValue,
-            // 'groupement': _model.selectedGroupement[0]['name'],
           });
           return true;
         } catch (e) {
@@ -271,65 +267,49 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
                       child: Text(
-                        'Filtres de publication',
+                        'Où souhaitez-vous publier ?',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 14),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 0.0, 5.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: 50.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
-                              borderRadius: BorderRadius.circular(4.0),
-                              border: Border.all(
-                                color: Color(0xFFD0D1DE),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                                  child: Icon(
-                                    Icons.work_outline,
-                                    color: FlutterFlowTheme.of(context).secondaryText,
-                                    size: 24.0,
-                                  ),
-                                ),
-                                FlutterFlowDropDown<String>(
-                                  controller: _model.posteValueController ??= FormFieldController<String>(updateData.isNotEmpty && updateData['poste'] != 'null' ? updateData['poste'] : 'Tous'),
-                                  options: ['Tous', 'Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Pharmacien titulaire', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien'],
-                                  onChanged: (val) => setState(() => _model.posteValue = val),
-                                  width: MediaQuery.of(context).size.width * 0.8,
-                                  height: 50.0,
-                                  textStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11),
-                                  fillColor: Colors.white,
-                                  elevation: 2.0,
-                                  borderColor: Colors.transparent,
-                                  borderWidth: 0.0,
-                                  borderRadius: 0.0,
-                                  margin: EdgeInsetsDirectional.fromSTEB(12.0, 4.0, 12.0, 4.0),
-                                  hidesUnderline: true,
-                                  isSearchable: false,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Padding(
+                    //       padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 0.0, 5.0),
+                    //       child: Container(
+                    //         width: MediaQuery.of(context).size.width * 0.9,
+                    //         height: 50.0,
+                    //         decoration: BoxDecoration(
+                    //           color: FlutterFlowTheme.of(context).secondaryBackground,
+                    //           borderRadius: BorderRadius.circular(4.0),
+                    //           border: Border.all(
+                    //             color: Color(0xFFD0D1DE),
+                    //           ),
+                    //         ),
+                    //         child: Row(
+                    //           mainAxisSize: MainAxisSize.max,
+                    //           children: [
+                    //             Padding(
+                    //               padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                    //               child: Icon(
+                    //                 Icons.work_outline,
+                    //                 color: FlutterFlowTheme.of(context).secondaryText,
+                    //                 size: 24.0,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.93,
+                      width: double.infinity,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 5.0),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.44,
                               decoration: BoxDecoration(
@@ -359,7 +339,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 15.0, 5.0),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.44,
                               decoration: BoxDecoration(
@@ -385,10 +365,10 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                                                 onTap: () => '',
                                                 child: Padding(
                                                   padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                                                  child: PopupLgoWidget(
-                                                    onTap: (lgo) {
+                                                  child: PopupThemePharmablablaWidget(
+                                                    onTap: (theme) {
                                                       setState(() {
-                                                        _model.selectedLGO[0] = lgo;
+                                                        _model.selectedTheme = theme;
                                                       });
                                                     },
                                                   ),
@@ -400,71 +380,18 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                                   },
                                   child: Row(
                                     children: [
-                                      _model.selectedLGO[0]['name'] == 'Par LGO' ? PharmaboxLogo(width: 25) : Image.asset('assets/lgo/' + _model.selectedLGO[0]['image']),
+                                      _model.selectedTheme == 'Thème' ? PharmaboxLogo(width: 25) : Container(),
                                       SizedBox(width: 5),
-                                      Text(updateData.isNotEmpty ? updateData['LGO'] : _model.selectedLGO[0]['name'].toString(), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11)),
+                                      Flexible(child: Container(child: Text(updateData.isNotEmpty ? updateData['theme'] : _model.selectedTheme, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11)))),
                                     ],
                                   )),
                             ),
                           ),
-                          // Padding(
-                          //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 15.0, 5.0),
-                          //   child: Container(
-                          //     width: MediaQuery.of(context).size.width * 0.45,
-                          //     decoration: BoxDecoration(
-                          //       color: FlutterFlowTheme.of(context).secondaryBackground,
-                          //       borderRadius: BorderRadius.circular(4.0),
-                          //       border: Border.all(
-                          //         color: Color(0xFFD0D1DE),
-                          //       ),
-                          //     ),
-                          //     height: 50,
-                          //     child: TextButton(
-                          //         onPressed: () async {
-                          //           await showModalBottomSheet(
-                          //             isScrollControlled: true,
-                          //             backgroundColor: Colors.transparent,
-                          //             enableDrag: false,
-                          //             context: context,
-                          //             builder: (bottomSheetContext) {
-                          //               return DraggableScrollableSheet(builder: (BuildContext context, ScrollController scrollController) {
-                          //                 return GestureDetector(
-                          //                   onTap: () => '',
-                          //                   child: Padding(
-                          //                     padding: MediaQuery.of(bottomSheetContext).viewInsets,
-                          //                     child: PopupGroupementWidget(
-                          //                       onTap: (groupement) {
-                          //                         setState(() {
-                          //                           _model.selectedGroupement[0] = groupement;
-                          //                         });
-                          //                       },
-                          //                     ),
-                          //                   ),
-                          //                 );
-                          //               });
-                          //             },
-                          //           ).then((value) => setState(() {}));
-                          //         },
-                          //         child: Row(
-                          //           children: [
-                          //             _model.selectedGroupement[0]['name'] == 'Par groupement' ? PharmaboxLogo(width: 25) : Image.asset('assets/groupements/' + _model.selectedGroupement[0]['image']),
-                          //             SizedBox(width: 5),
-                          //             Flexible(
-                          //               child: Text(
-                          //                 _model.selectedGroupement[0]['name'].toString(),
-                          //                 style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11),
-                          //                 overflow: TextOverflow.ellipsis,
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         )),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
                       child: Container(
                         decoration: BoxDecoration(
                           color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -475,7 +402,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                               offset: Offset(10, 10),
                             )
                           ],
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(0),
                           shape: BoxShape.rectangle,
                         ),
                         child: Padding(
@@ -582,7 +509,7 @@ class _PharmaBlablaEditPostState extends State<PharmaBlablaEditPost> {
                                 padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: TextFormField(
                                   textCapitalization: TextCapitalization.sentences,
-                                  minLines: 6,
+                                  minLines: 12,
                                   controller: _model.postContent,
                                   obscureText: false,
                                   decoration: InputDecoration(

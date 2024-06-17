@@ -55,7 +55,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
         // height: MediaQuery.of(context).size.height * 0.65,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(0.0),
           boxShadow: [
             BoxShadow(
               color: Color.fromRGBO(31, 92, 103, 0.17),
@@ -70,7 +70,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
           mainAxisSize: MainAxisSize.max,
           children: [
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 0.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,10 +112,10 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.35,
+                                width: MediaQuery.of(context).size.width * 0.45,
                                 child: Text(
                                   widget.data['user']['nom'] + ' ' + widget.data['user']['prenom'],
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                                 ),
                               ),
                               Container(
@@ -134,21 +134,21 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                       ],
                     ),
                   ),
-                  Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(widget.data['post']['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
+                  Text(DateFormat('dd/MM/yyyy à HH:mm', 'fr_FR').format(widget.data['date_created'].toDate()), style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 9.0)),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
+              padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                 child: Text(
-                  widget.data['post']['post_content'],
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 15.0),
+                  widget.data['post_content'],
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 12.0),
                 ),
               ),
             ),
-            if(widget.data['post']['media'] != null )
+            if(widget.data['media'] != null )
             Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(15.0, 5.0, 15.0, 10.0),
                 child: Container(
@@ -157,7 +157,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                     physics: BouncingScrollPhysics(),
                     child: Row(
                       children: [
-                        for (final media in widget.data['post']['media'].toList())
+                        for (final media in widget.data['media'].toList())
                           media.toString().contains('.mp4')
                               ? Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -165,7 +165,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                               )
                               : Padding(
                                 padding: const EdgeInsets.all(4.0),
-                                child: Container(height: 350, child: Image.network(media)),
+                                child: Container(width: MediaQuery.of(context).size.width * 0.9, child: Image.network(media)),
                               ),
                       ],
                     ),
@@ -177,8 +177,8 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
               decoration: BoxDecoration(
                 color: Color(0xFFEFF6F7),
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
+                  bottomLeft: Radius.circular(0.0),
+                  bottomRight: Radius.circular(0.0),
                   topLeft: Radius.circular(0.0),
                   topRight: Radius.circular(0.0),
                 ),
@@ -204,13 +204,13 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                         ),
                         width: 90,
                         child: Padding(
-                          padding: const EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: Row(
                             children: [
                               Icon(Icons.notes_outlined, color: greyColor),
                               SizedBox(width: 8),
                               Text(
-                                widget.data['post']['count_comment'].toString(),
+                                widget.data['count_comment'].toString(),
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: greyColor,

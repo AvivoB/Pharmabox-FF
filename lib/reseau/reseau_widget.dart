@@ -248,7 +248,9 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                                 return Container();
                                               }
           
-                                              final userData = snapshot.data!;
+                                              Map<String, dynamic>? userData = snapshot.data!.data() as Map<String, dynamic>?;
+                                              if(userData != null) {
+
                                               return Padding(
                                                   padding: const EdgeInsets.all(10.0),
                                                   child: Padding(
@@ -293,7 +295,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                                                             shape: BoxShape.circle,
                                                                           ),
                                                                           child: FadeInImage.assetNetwork(
-                                                                            image: userData != null && userData['photoUrl'] != null ? userData['photoUrl'] : '',
+                                                                            image: userData?['photoUrl'] != null ? userData!['photoUrl'] : '',
                                                                             placeholder: 'assets/images/Group_18.png',
                                                                             fit: BoxFit.cover,
                                                                             imageErrorBuilder: (context, error, stackTrace) {
@@ -306,7 +308,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                                                         onTap: () => {
                                                                           context.pushNamed('ProfilView',
                                                                               queryParameters: {
-                                                                                'userId': userData['id']
+                                                                                'userId': userData!['id']
                                                                               })
                                                                         },
                                                                         child: Column(
@@ -317,7 +319,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                                                             Container(
                                                                               width: MediaQuery.of(context).size.width * 0.40,
                                                                               child: Text(
-                                                                                userData['nom'] + ' ' + userData['prenom'],
+                                                                                userData['nom'] + ' ' + userData!['prenom'],
                                                                                 style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600),
                                                                               ),
                                                                             ),
@@ -341,12 +343,14 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                                               ],
                                                             ),
                                                           ),
+                                                          
                                                           Padding(
                                                             padding: EdgeInsetsDirectional.fromSTEB(15.0, 10.0, 15.0, 10.0),
                                                             child: Row(
                                                               mainAxisSize: MainAxisSize.max,
                                                               crossAxisAlignment: CrossAxisAlignment.center,
                                                               children: [
+                                                                if(userData['country'] != null || userData['city'] != null)
                                                                 Icon(
                                                                   Icons.location_on_outlined,
                                                                   color: Color(0xFF595A71),
@@ -363,11 +367,11 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                                                           ),
                                                                     ),
                                                                   ),
-                                                                if (userData['country'] == null)
+                                                                if (userData['country'] == null && userData['city'] != null)
                                                                   Padding(
                                                                     padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                                                                     child: Text(
-                                                                      userData['city'],
+                                                                      userData?['city'] ?? '',
                                                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                             fontFamily: 'Poppins',
                                                                             color: Color(0xFF595A71),
@@ -426,6 +430,9 @@ class _ReseauWidgetState extends State<ReseauWidget> {
                                                       ),
                                                     ),
                                                   ));
+                                              } else {
+                                                return Container();
+                                              }
                                             });
                                       },
                                     ),

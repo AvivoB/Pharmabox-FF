@@ -7,16 +7,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
 import 'package:pharmabox/composants/card_pharmablabla/card_pharmablabla.dart';
 import 'package:pharmabox/composants/card_user/card_user_widget.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/pharma_job/pharmaJobSearchData.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_model.dart';
 import 'package:pharmabox/pharmablabla/pharmablabla_search.dart';
+import 'package:pharmabox/popups/popup_themes_pharmablabla/popup_theme_pharmablabla_widget.dart';
 
 import '../composants/card_pharmacie/card_pharmacie_widget.dart';
 import '../composants/card_pharmacie_offre_recherche/card_pharmacie_offre_recherche_widget.dart';
@@ -48,11 +51,15 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
   late PharmaBlablaModel _model;
   bool isTitulaire = false;
   bool _isLoading = false;
+  List posts = [];
+  List filteredPosts = [];
+
+  bool displaySearch = true;
+  bool displayFilter = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   String? searchTerms;
-  List searchResults = [];
 
   int itemsPerPage = 10; // Nombre d'éléments par page
   DocumentSnapshot? lastDocument;
@@ -80,6 +87,55 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
     }
   }
 
+void getPosts() async {
+  setState(() {
+    _isLoading = true;
+  });
+  // Get a reference to the collection
+  final collection = FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true);
+
+  // Get all documents
+  final documents = await collection.get();
+
+  // List to store updated posts
+  List<Map<String, dynamic>> updatedPosts = [];
+
+  // Process each document
+  for (final doc in documents.docs) {
+
+
+    // Get comments count
+    final comments = await FirebaseFirestore.instance.collection('pharmablabla').doc(doc.id).collection('comments').get();
+    final commentsCount = comments.docs.length;
+
+    // Get user data
+    final userSnapshot = await FirebaseFirestore.instance.collection('users').doc(doc.data()['userId']).get();
+    Map<String, dynamic>? userData;
+    if (userSnapshot.exists) {
+      userData = userSnapshot.data();
+    }
+
+    // Create a new map with updated data
+    final updatedDocData = Map<String, dynamic>.from(doc.data());
+    updatedDocData['count_comment'] = commentsCount;
+    updatedDocData['postId'] = doc.id;
+    if (userData != null) {
+      updatedDocData['user'] = userData;
+    }
+
+    // Add updated data to the list
+    updatedPosts.add(updatedDocData);
+  }
+
+  // Update the state with the modified list of posts
+  setState(() {
+    posts = updatedPosts;
+    filteredPosts = posts;
+    _isLoading = false;
+  });
+}
+
+
   @override
   void initState() {
     super.initState();
@@ -89,6 +145,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
         this.isTitulaire = isTitulaire;
       });
     });
+    getPosts();
     getCurrentUserData().then((user_data) {
       setState(() {
         this.currentUser = user_data;
@@ -112,311 +169,274 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
       resizeToAvoidBottomInset: false,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
-        child: Column(children: [
+        child: _isLoading
+          ? ProgressIndicatorPharmabox() : 
+          Column(children: [
           wrapWithModel(
             model: _model.headerAppModel,
             updateCallback: () => setState(() {}),
             child: HeaderAppWidget(),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 1.0,
-            decoration: BoxDecoration(
-              color: FlutterFlowTheme.of(context).secondaryBackground,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextFormField(
-                textCapitalization: TextCapitalization.sentences,
-                controller: _model.searchPost,
-                obscureText: false,
-                decoration: InputDecoration(
-                  hintText: 'Rechercher...',
-                  hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                  contentPadding: EdgeInsets.all(15.0),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFD0D1DE),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(48.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xFFD0D1DE),
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(28.0),
-                  ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 24.0,
-                    color: Color(0xFFD0D1DE),
-                  ),
+          Row(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.84,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
-                style: FlutterFlowTheme.of(context).bodyMedium,
-                // onChanged: (value) => getDataPost(query: value),
-                onChanged: (value) async {
-                  // await Future.delayed(Duration(milliseconds: 1000), () {
-                  // });
-                  setState(() {
-                    searchTerm = value.toLowerCase(); // Mettez le terme de recherche en minuscules
-                  });
-                },
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 15.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'PharmaBlabla',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Poppins',
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.sentences,
+                    controller: _model.searchPost,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      hintText: 'Rechercher...',
+                      hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                      contentPadding: EdgeInsets.all(15.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFD0D1DE),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(48.0),
                       ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 4.0,
-                        color: Color(0x33000000),
-                        offset: Offset(0.0, 2.0),
-                      )
-                    ],
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
-                      stops: [0.0, 1.0],
-                      begin: AlignmentDirectional(1.0, -1.0),
-                      end: AlignmentDirectional(-1.0, 1.0),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFD0D1DE),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(28.0),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        size: 24.0,
+                        color: Color(0xFFD0D1DE),
+                      ),
                     ),
-                    shape: BoxShape.circle,
-                  ),
-                  child: FlutterFlowIconButton(
-                    borderColor: Colors.transparent,
-                    borderRadius: 30.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    icon: Icon(
-                      Icons.send_outlined,
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      size: 24.0,
-                    ),
-                    onPressed: () async {
-                      context.pushNamed('PharmaBlablaEditPost');
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    // onChanged: (value) => getDataPost(query: value),
+                    onChanged: (value) async {
+                      if(value.isEmpty) {
+                        setState(() {
+                          filteredPosts = posts;
+                        });
+                      }
+                      if(value.length > 3) {
+                        setState(() {
+                          filteredPosts = posts.where((post) => post['post_content'].toString().toLowerCase().contains(value.toLowerCase())).toList();
+                        });
+                      }
                     },
                   ),
                 ),
-              ],
-            ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.16,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 18.0, bottom: 18.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Color(0x33000000),
+                          offset: Offset(0.0, 2.0),
+                        )
+                      ],
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)],
+                        stops: [0.0, 1.0],
+                        begin: AlignmentDirectional(1.0, -1.0),
+                        end: AlignmentDirectional(-1.0, 1.0),
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 30.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      icon: Icon(
+                        Icons.add_comment_rounded,
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        size: 24.0,
+                      ),
+                      onPressed: () async {
+                        context.pushNamed('PharmaBlablaEditPost');
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                ),
+                height: 50,
+                child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        if (_model.reseauType == 'Tout Pharmabox' && currentUser['reseau'] != null) {
+                          _model.reseauType = 'Mon réseau';
+                          // Filter posts where user_id is present in my network
+                          filteredPosts = posts.where((post) => currentUser['reseau'].contains(post['userId'])).toList();
+                        } else {
+                          _model.reseauType = 'Tout Pharmabox';
+                          filteredPosts = posts;
+                        }
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        _model.reseauType == 'Tout Pharmabox'
+                            ? PharmaboxLogo(width: 25)
+                            : Icon(
+                                Icons.group_outlined,
+                                color: greyColor,
+                              ),
+                        SizedBox(width: 5),
+                        Text(_model.reseauType, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11)),
+                      ],
+                    )),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                ),
+                height: 50,
+                child: TextButton(
+                    onPressed: () async {
+                      await showModalBottomSheet(
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        enableDrag: false,
+                        context: context,
+                        builder: (bottomSheetContext) {
+                          return DraggableScrollableSheet(
+                              initialChildSize: 0.75,
+                              builder: (BuildContext context, ScrollController scrollController) {
+                                return GestureDetector(
+                                  onTap: () => '',
+                                  child: Padding(
+                                    padding: MediaQuery.of(bottomSheetContext).viewInsets,
+                                    child: PopupThemePharmablablaWidget(
+                                      onTap: (theme) {
+                                        setState(() {
+                                          _model.selectedTheme = theme;
+                                          filteredPosts = posts.where((post) => post['theme'] == theme).toList();
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                );
+                              });
+                        },
+                      ).then((value) => setState(() {}));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.filter_list,
+                          color: greyColor,
+                        ),
+                        SizedBox(width: 5),
+                        Flexible(child: Container(child: Text(_model.selectedTheme, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11)))),
+                      ],
+                    )),
+              ),
+            ],
           ),
           Expanded(
-              child: FutureBuilder<QuerySnapshot>(
-            future: FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true).get(),
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Text('Erreur: ${snapshot.error}');
-              }
+            child: ListView.builder(
+            itemCount: filteredPosts.length,
+            itemBuilder: (BuildContext context, int index) {
+              final document = posts[index];
+              // final data = document.data() as Map<String, dynamic>;
+              final title = document['post_content'] as String;
+              final userId = document['userId'] as String;
+              // data['post'] = document.data();
+              // document['postId'] = document.id;
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container();
-              }
-
-              final documents = snapshot.data!.docs;
-              if (documents.isEmpty) {
-                return Text('');
-              }
-
-              var filteredDocuments = documents.where((document) {
-                final data = document.data() as Map<String, dynamic>;
-                final title = data['post_content'] as String;
-
-                // Comparez le titre avec le terme de recherche (en minuscules).
-                return title.toLowerCase().contains(searchTerm ?? '');
-              }).toList();
-
-              // Filtrer les documents en fonction de mon réseau
-              filteredDocuments = filteredDocuments.where((document) {
-                final data = document.data() as Map<String, dynamic>;
-
-                if (currentUser['id'] == data['userId']) {
-                  return true;
-                }
-
-                if (data['network'] == 'Tout Pharmabox') {
-                  return true;
-                }
-
-                if (currentUser['reseau'] != null && data['network'] == 'Mon réseau' && currentUser['reseau'].contains(data['userId'])) {
-                  return true;
-                }
-
-                return false;
-              }).toList();
-
-              // Filtre sur les LGO
-              filteredDocuments = filteredDocuments.where((document) {
-                final data = document.data() as Map<String, dynamic>;
-                //final names = currentUser['lgo'] != null ? currentUser['lgo'].map((item) => item['name']).toList() : [] ;
-
-                if (currentUser['id'] == data['userId']) {
-                  return true;
-                }
-                if (data['LGO'] == 'Par LGO' || !data.containsKey('LGO')) {
-                  return true;
-                }
-                if (currentUser['lgo'] != null && currentUser['lgo'].map((item) => item['name']).toList().contains(data['LGO'])) {
-                  return true;
-                }
-
-                return false;
-              }).toList();
-
-              // Filtre sur les postes visées
-              filteredDocuments = filteredDocuments.where((document) {
-                final data = document.data() as Map<String, dynamic>;
-
-                if (currentUser['id'] == data['userId']) {
-                  return true;
-                }
-
-                if (data['poste'] == null || !data.containsKey('poste')) {
-                  return true;
-                }
-
-                if (data['poste'] != null && data['poste'].toString() == 'Tous') {
-                  return true;
-                }
-
-                if (currentUser['poste'] != null && currentUser['poste'] == data['poste']) {
-                  return true;
-                }
-
-                return false;
-              }).toList();
-
-              return ListView.builder(
-                itemCount: filteredDocuments.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final document = filteredDocuments[index];
-                  final data = document.data() as Map<String, dynamic>;
-                  final title = data['post_content'] as String;
-                  final userId = data['userId'] as String;
-                  data['post'] = document.data();
-                  data['postId'] = document.id;
-
-                  // print('PAGE '+widget.currentPage.toString());
-                  // if (widget.currentPage.toString() == 'PharmaBlabla' ) {
-                  // }
-
-                  return FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
-                    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> userSnapshot) {
-                      if (userSnapshot.connectionState == ConnectionState.waiting) {
-                        return Container();
-                      }
-
-                      if (userSnapshot.hasError) {
-                        return Text('Erreur: ${userSnapshot.error}');
-                      }
-
-                      if (userSnapshot.hasData) {
-                        final userData = userSnapshot.data?.data() != null ? userSnapshot.data?.data() as Map<String, dynamic> : null;
-                        data['user'] = userData;
-
-                        return FutureBuilder<QuerySnapshot>(
-                            future: FirebaseFirestore.instance.collection('pharmablabla').doc(document.id).collection('comments').get(),
-                            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> subSnapshot) {
-                              if (subSnapshot.connectionState == ConnectionState.waiting) {
-                                return Container();
-                              }
-
-                              if (subSnapshot.hasData) {
-                                final numSubDocuments = subSnapshot.data!.docs.length;
-                                data['post']['count_comment'] = numSubDocuments;
-
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                                  child: GestureDetector(
-                                      child: userData != null ? CardPharmablabla(data: data) : Container(),
-                                      onLongPress: () {
-                                        if (currentUserUid == userId)
-                                          showModalBottomSheet(
-                                            context: context,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                                            ),
-                                            builder: (BuildContext context) {
-                                              return Container(
-                                                height: MediaQuery.of(context).size.height * 0.60,
-                                                // Contenu du BottomSheet
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(25.0),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        'Apporter des modifications',
-                                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                              fontFamily: 'Poppins',
-                                                              fontSize: 18.0,
-                                                              fontWeight: FontWeight.w600,
-                                                            ),
-                                                      ),
-                                                      ListTile(
-                                                        title: Text('Modifier votre post'),
-                                                        onTap: () {
-                                                          // Action à effectuer lors du clic sur "Modifier"
-                                                          Map postEdit = {'content': data['post_content'].toString(), 'postId': data['postId'].toString(), 'LGO': data['LGO'].toString(), 'network': data['network'].toString(), 'poste': data['poste'].toString()};
-                                                          Navigator.pop(context);
-                                                          context.pushNamed(
-                                                            'PharmaBlablaEditPost',
-                                                            queryParameters: {'content': data['post_content'].toString(), 'postId': data['postId'].toString(), 'LGO': data['LGO'].toString(), 'network': data['network'].toString(), 'poste': data['poste'].toString()},
-                                                          );
-                                                        },
-                                                      ),
-                                                      Divider(), // Ajoute une séparation entre les options
-                                                      ListTile(
-                                                        title: Text(
-                                                          'Supprimer le post du Pharmablabla',
-                                                          style: TextStyle(color: redColor), // Couleur rouge
-                                                        ),
-                                                        onTap: () async {
-                                                          // Action à effectuer lors du clic sur "Supprimer"
-                                                          Navigator.pop(context);
-                                                          await FirebaseFirestore.instance.collection('pharmablabla').doc(data['postId'].toString()).delete();
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                      },
+              return Padding(
+                padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 2.0, bottom: 2.0),
+                child: GestureDetector(
+                    child: document['user'] != null ? CardPharmablabla(data: document) : Container(),
+                    onLongPress: () {
+                      if (currentUserUid == userId)
+                        showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                          ),
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.60,
+                              // Contenu du BottomSheet
+                              child: Padding(
+                                padding: const EdgeInsets.all(25.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Apporter des modifications',
+                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                    ),
+                                    ListTile(
+                                      title: Text('Modifier votre post'),
                                       onTap: () {
+                                        // Action à effectuer lors du clic sur "Modifier"
+                                        Map postEdit = {'content': document['post_content'].toString(), 'postId': document['postId'].toString(), 'theme': document['theme'].toString(), 'network': document['network'].toString(), 'poste': document['poste'].toString()};
+                                        Navigator.pop(context);
                                         context.pushNamed(
-                                          'PharmaBlablaSinglePost',
-                                          queryParameters: {'postId': data['postId']},
+                                          'PharmaBlablaEditPost',
+                                          queryParameters: {'content': document['post_content'].toString(), 'postId': document['postId'].toString(), 'theme': document['theme'].toString(), 'network': document['network'].toString(), 'poste': document['poste'].toString()},
                                         );
-                                      }),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            });
-                      } else {
-                        return Container();
-                      }
+                                      },
+                                    ),
+                                    Divider(), // Ajoute une séparation entre les options
+                                    ListTile(
+                                      title: Text(
+                                        'Supprimer le post du Pharmablabla',
+                                        style: TextStyle(color: redColor), // Couleur rouge
+                                      ),
+                                      onTap: () async {
+                                        // Action à effectuer lors du clic sur "Supprimer"
+                                        Navigator.pop(context);
+                                        await FirebaseFirestore.instance.collection('pharmablabla').doc(document['postId'].toString()).delete();
+                                        setState(() {
+                                          posts.removeAt(index);
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
                     },
-                  );
-                },
+                    onTap: () {
+                      context.pushNamed(
+                        'PharmaBlablaSinglePost',
+                        queryParameters: {'postId': document['postId']},
+                      );
+                    }),
               );
             },
           ))

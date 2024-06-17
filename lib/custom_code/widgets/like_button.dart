@@ -108,7 +108,7 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
             ).then((value) => setState(() {}));
           },
           child: Padding(
-            padding: EdgeInsets.all(widget.size ?? 15.0),
+            padding: EdgeInsets.all(widget.size ?? 10.0),
             child: Row(
               children: [
                 Icon(

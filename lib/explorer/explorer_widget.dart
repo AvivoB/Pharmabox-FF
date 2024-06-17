@@ -406,41 +406,119 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             },
                           ),
                         ),
-                      TabBar(
-                        labelColor: blackColor,
-                        unselectedLabelColor: blackColor,
-                        indicator: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF7CEDAC),
-                              Color(0xFF42D2FF),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        indicatorWeight: 1,
-                        dividerHeight: 0,
-                        indicatorPadding: EdgeInsets.only(top: 40),
-                        controller: _tabController,
-                        onTap: (value) async {
-                          currentTAB = value;
-                          setState(() {
-                            selectedItem = null;
-                            // items.clear();
-                          });
-                        },
-                        unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Poppins',
-                              color: Color(0xFF595A71),
-                              fontSize: 14.0,
+                      // TabBar(
+                      //   labelColor: blackColor,
+                      //   unselectedLabelColor: blackColor,
+                      //   indicator: BoxDecoration(
+                      //     gradient: LinearGradient(
+                      //       colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                      //       stops: [0, 0.5, 1],
+                      //       begin: AlignmentDirectional(1, 0),
+                      //       end: AlignmentDirectional(-1, 0),
+                      //     ),
+                      //     color: blueColor,
+                      //     borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                      //   ),
+                      //   indicatorWeight: 1,
+                      //   dividerHeight: 0,
+                      //   indicatorPadding: EdgeInsets.only(top: 40),
+                      //   controller: _tabController,
+                      //   onTap: (value) async {
+                      //     currentTAB = value;
+                      //     setState(() {
+                      //       selectedItem = null;
+                      //       // items.clear();
+                      //     });
+                      //   },
+                      //   unselectedLabelStyle: FlutterFlowTheme.of(context).bodyMedium.override(
+                      //         fontFamily: 'Poppins',
+                      //         color: Color(0xFF595A71),
+                      //         fontSize: 14.0,
+                      //       ),
+                      //   labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
+                      //   tabs: [
+                      //     Tab(text: 'Relations'),
+                      //     Tab(text: 'Pharmacies'),
+                      //     Tab(text: 'Membres'),
+                      //   ],
+                      // ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            child: Container(
+                                  margin: EdgeInsets.all(2.0),
+                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                  width: MediaQuery.of(context).size.width * 0.30,
+                                  decoration: currentTAB == 0
+                                      ? BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                            stops: [0, 0.5, 1],
+                                            begin: AlignmentDirectional(1, 0),
+                                            end: AlignmentDirectional(-1, 0),
+                                          ),
+                                          color: blueColor,
+                                          borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                        )
+                                      : null,
+                                  child: Text('Relations', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 0 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
+                                ),
+                              onTap: () async {
+                                setState(() {
+                                  currentTAB = 0;
+                                });
+                              },
                             ),
-                        labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
-                        tabs: [
-                          Tab(text: 'Relations'),
-                          Tab(text: 'Pharmacies'),
-                          Tab(text: 'Membres'),
+                          GestureDetector(
+                            child: Container(
+                                  margin: EdgeInsets.all(2.0),
+                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                  width: MediaQuery.of(context).size.width * 0.30,
+                                  decoration: currentTAB == 1
+                                      ? BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                            stops: [0, 0.5, 1],
+                                            begin: AlignmentDirectional(1, 0),
+                                            end: AlignmentDirectional(-1, 0),
+                                          ),
+                                          color: blueColor,
+                                          borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                        )
+                                      : null,
+                                  child: Text('Pharmacies', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 1 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
+                                ),
+                              onTap: () async {
+                                setState(() {
+                                  currentTAB = 1;
+                                });
+                              },
+                            ),
+                          GestureDetector(
+                            child: Container(
+                                  margin: EdgeInsets.all(2.0),
+                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
+                                  width: MediaQuery.of(context).size.width * 0.30,
+                                  decoration: currentTAB == 2
+                                      ? BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                            stops: [0, 0.5, 1],
+                                            begin: AlignmentDirectional(1, 0),
+                                            end: AlignmentDirectional(-1, 0),
+                                          ),
+                                          color: blueColor,
+                                          borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                        )
+                                      : null,
+                                  child: Text('Membres', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 2 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
+                                ),
+                              onTap: () async {
+                                setState(() {
+                                  currentTAB = 2;
+                                });
+                              },
+                            ),
                         ],
                       ),
                     ],

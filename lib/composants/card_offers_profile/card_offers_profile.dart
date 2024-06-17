@@ -197,7 +197,15 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                       fontFamily: 'Poppins',
                                     ),
                                   ),
-                                  Icon(isExpendedSearchOffer ? Icons.expand_less : Icons.expand_more),
+                                  // Button expend
+                                  IconButton(
+                                    icon: Icon(isExpendedSearchOffer ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                                    onPressed: () {
+                                      setState(() {
+                                        isExpendedSearchOffer = !isExpendedSearchOffer;
+                                      });
+                                    },
+                                  ),
                                 ],
                               ),
                               Row(
@@ -224,7 +232,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                           ),
                                         ),
                                         SizedBox(width: 10),
-                                        Text(_model.isActive != null && _model.isActive! ? 'actif' : 'inactif', style: FlutterFlowTheme.of(context).bodySmall),
+                                        Text(_model.isActive != null && _model.isActive! ? 'Offre active' : 'Offre inactive', style: FlutterFlowTheme.of(context).bodySmall),
                                       ],
                                     ),
                                   ),
@@ -1168,7 +1176,7 @@ class _CardOfferProfilWidgetState extends State<CardOfferProfilWidget> {
                                         ),
                                       ),
                                       SizedBox(width: 10),
-                                      Text(_model.isActive != null && _model.isActive! ? 'actif' : 'inactif', style: FlutterFlowTheme.of(context).bodySmall),
+                                      Text(_model.isActive != null && _model.isActive! ? 'Offre active' : 'Offre inactive', style: FlutterFlowTheme.of(context).bodySmall),
                                     ],
                                   ),
                                 ],

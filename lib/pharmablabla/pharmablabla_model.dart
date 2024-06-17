@@ -24,6 +24,10 @@ class PharmaBlablaModel extends FlutterFlowModel {
 
   var searchPost;
 
+
+  String selectedTheme = 'Thème de discussion';
+
+
   List<Map> selectedLGO = [
     {"image": "Autre.jpg", "name": "Par LGO"}
   ];

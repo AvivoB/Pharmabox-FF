@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
+import 'package:pharmabox/constant.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
@@ -44,28 +45,31 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     if (!_isVideoInitialized) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: Container());
     }
 
     _chewieController = ChewieController(
       videoPlayerController: _controller,
-      autoPlay: true,
+      autoPlay: false,
       looping: false,
       allowPlaybackSpeedChanging: false,
       allowMuting: true,
       showControls: true,
       materialProgressColors: ChewieProgressColors(
-        playedColor: Colors.red,
+        playedColor: blueColor,
         handleColor: Colors.blue,
         backgroundColor: Colors.grey,
-        bufferedColor: Colors.lightGreen,
+        bufferedColor: Colors.transparent,
       ),
     );
 
-    return AspectRatio(
-      aspectRatio: _controller.value.aspectRatio,
-      child: Chewie(
-        controller: _chewieController,
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: AspectRatio(
+        aspectRatio: _controller.value.aspectRatio,
+        child: Chewie(
+          controller: _chewieController,
+        ),
       ),
     );
   }

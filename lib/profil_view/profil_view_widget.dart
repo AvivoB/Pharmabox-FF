@@ -663,7 +663,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                               text: 'Réseau',
                             ),
                             Tab(
-                              text: userData != null && userData['poste'] == 'Pharmacien titulaire' ? 'Offres' : 'Recherches',
+                              text: userData != null && userData['poste'] == 'Pharmacien titulaire' ? 'Offres proposées' : 'Postes visés',
                             ),
                           ],
                         ),

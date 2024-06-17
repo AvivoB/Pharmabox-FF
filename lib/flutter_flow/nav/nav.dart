@@ -132,7 +132,7 @@ final GoRouter routerApp = GoRouter(
           builder: (context, state) => NavBarPage(
               initialPage: 'PharmaBlabla',
               page: PharmaBlablaEditPost(
-                lgo: state.uri.queryParameters['LGO'],
+                theme: state.uri.queryParameters['theme'],
                 postId: state.uri.queryParameters['postId'],
                 content: state.uri.queryParameters['content'],
                 network: state.uri.queryParameters['network'],

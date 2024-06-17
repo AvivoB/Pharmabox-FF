@@ -923,13 +923,13 @@ class _ProfilWidgetState extends State<ProfilWidget> with SingleTickerProviderSt
                               labelStyle: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                               tabs: [
                                 Tab(
-                                  text: 'Profil',
+                                  text: 'Mon profil',
                                 ),
                                 Tab(
-                                  text: 'Réseau',
+                                  text: 'Mon réseau',
                                 ),
                                 Tab(
-                                  text: userData != null && userData['poste'] == 'Pharmacien titulaire' ? 'Offres' : 'Recherches',
+                                  text: userData != null && userData['poste'] == 'Pharmacien titulaire' ? 'Mes offres' : 'Mes recherches',
                                 ),
                               ],
                             ),

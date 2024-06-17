@@ -188,7 +188,14 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                       fontFamily: 'Poppins',
                                     ),
                                   ),
-                                  Icon(isExpendedSearchOffer ? Icons.expand_less : Icons.expand_more),
+                                  IconButton(
+                                    icon: Icon(isExpendedSearchOffer ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                                    onPressed: () {
+                                      setState(() {
+                                        isExpendedSearchOffer = !isExpendedSearchOffer;
+                                      });
+                                    },
+                                  ),
                                 ],
                               ),
                               Padding(
@@ -220,7 +227,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                                   ),
                                                 ),
                                                 SizedBox(width: 10),
-                                                Text(_model.isActive != null && _model.isActive! ? 'actif' : 'inactif', style: FlutterFlowTheme.of(context).bodySmall),
+                                                Text(_model.isActive != null && _model.isActive! ? 'Recherche active' : 'Recherche inactive', style: FlutterFlowTheme.of(context).bodySmall),
                                               ],
                                             ),
                                           ),
@@ -986,7 +993,14 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                       fontFamily: 'Poppins',
                                     ),
                                   ),
-                                  Icon(isExpendedSearchOffer ? Icons.expand_less : Icons.expand_more),
+                                  IconButton(
+                                    icon: Icon(isExpendedSearchOffer ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                                    onPressed: () {
+                                      setState(() {
+                                        isExpendedSearchOffer = !isExpendedSearchOffer;
+                                      });
+                                    },
+                                  ),
                                 ],
                               ),
                               Row(
@@ -1011,7 +1025,7 @@ class _CardSearchProfilWidgetState extends State<CardSearchProfilWidget> {
                                         ),
                                       ),
                                       SizedBox(width: 10),
-                                      Text(_model.isActive != null && _model.isActive! ? 'actif' : 'inactif', style: FlutterFlowTheme.of(context).bodySmall),
+                                      Text(_model.isActive != null && _model.isActive! ? 'Recherche active' : 'Recherche inactive', style: FlutterFlowTheme.of(context).bodySmall),
                                     ],
                                   ),
                                 ],

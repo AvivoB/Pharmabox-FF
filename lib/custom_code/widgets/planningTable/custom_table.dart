@@ -109,7 +109,7 @@ class _GrilleHoraireState extends State<GrilleHoraire> {
                     child: Text(
                       period,
                       textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 11.0, fontWeight: FontWeight.w600),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: greyColor, fontSize: 9.0, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
