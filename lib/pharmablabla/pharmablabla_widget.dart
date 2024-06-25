@@ -278,7 +278,7 @@ void getPosts() async {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 0.5,
+                width: MediaQuery.of(context).size.width * 0.45,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
@@ -289,7 +289,7 @@ void getPosts() async {
                         if (_model.reseauType == 'Tout Pharmabox' && currentUser['reseau'] != null) {
                           _model.reseauType = 'Mon réseau';
                           // Filter posts where user_id is present in my network
-                          filteredPosts = posts.where((post) => currentUser['reseau'].contains(post['userId'])).toList();
+                          filteredPosts = posts.where((post) => currentUser['reseau'].contains(post['userId']) && post['user']['reseau'].contains(currentUser['id'])).toList();
                         } else {
                           _model.reseauType = 'Tout Pharmabox';
                           filteredPosts = posts;
@@ -310,7 +310,7 @@ void getPosts() async {
                     )),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.5,
+                width: MediaQuery.of(context).size.width * 0.45,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
@@ -332,9 +332,11 @@ void getPosts() async {
                                     padding: MediaQuery.of(bottomSheetContext).viewInsets,
                                     child: PopupThemePharmablablaWidget(
                                       onTap: (theme) {
+                                        var postst = posts.where((post) => post['theme'] == theme).toList();
                                         setState(() {
                                           _model.selectedTheme = theme;
-                                          filteredPosts = posts.where((post) => post['theme'] == theme).toList();
+                                          print('Selected theme: $theme');
+                                          filteredPosts = postst;
                                         });
                                       },
                                     ),
@@ -354,6 +356,25 @@ void getPosts() async {
                         Flexible(child: Container(child: Text(_model.selectedTheme, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.black, fontSize: 11)))),
                       ],
                     )),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.1,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                ),
+                height: 50,
+                child: TextButton(
+                    onPressed: () async {
+                      setState(() {
+                        filteredPosts = posts;
+                        _model.selectedTheme = 'Thème de discussion';
+                      });
+                    },
+                    child: Icon(
+                          Icons.change_circle_outlined,
+                          color: greyColor,
+                        )
+                    ),
               ),
             ],
           ),

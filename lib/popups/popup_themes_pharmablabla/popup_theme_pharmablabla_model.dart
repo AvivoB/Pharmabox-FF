@@ -29,7 +29,7 @@ class PopupThemePharmablablaModel extends FlutterFlowModel {
       'Emploi et installation',
       'Vente et achat',
       'Recommandation et contact',
-      'Anectode et coup de gueule',
+      'Anecdote et coup de gueule',
       'Desctockage et commandes groupée',
       'Info et aide',
     ];

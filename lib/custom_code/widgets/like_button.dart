@@ -118,7 +118,7 @@ class _LikeButtonWidgetState extends State<LikeButtonWidget> {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  likesCount.toString(),
+                  likesCount.toString() == '0' ? '' : likesCount.toString(),
                   style: TextStyle(
                     fontSize: widget.size ?? 14,
                     color: isLiked ? blueColor : greyColor,

@@ -622,6 +622,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                         ),
                       ),
                       Container(
+                        padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
                         width: MediaQuery.of(context).size.width * 1.0,
                         // height: MediaQuery.of(context).size.height * 1,
                         decoration: BoxDecoration(
@@ -663,7 +664,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                               text: 'Réseau',
                             ),
                             Tab(
-                              text: userData != null && userData['poste'] == 'Pharmacien titulaire' ? 'Offres proposées' : 'Postes visés',
+                              child: Text(userData != null && userData['poste'] == 'Pharmacien titulaire' ? 'Propositions' : 'Postes visés', ),
                             ),
                           ],
                         ),

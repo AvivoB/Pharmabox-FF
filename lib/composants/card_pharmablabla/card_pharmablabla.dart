@@ -48,6 +48,30 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
 
   @override
   Widget build(BuildContext context) {
+    Color textColor;
+    switch (widget.data['theme']) {
+      case 'Emploi et installation':
+        textColor = blueColor; // Rouge pour Emploi et Installation
+        break;
+      case 'Vente et achat':
+        textColor = greenColor; // Bleu pour Emploi et Installation
+        break;
+      case 'Recommandation et contact':
+        textColor = Color.fromARGB(255, 87, 224, 154); // Orange pour Recommandation et Contact
+        break;
+      case 'Anecdote et coup de gueule':
+        textColor = Colors.green; // Vert pour Vente et Achat
+        break;
+      case 'Desctockage et commandes groupée':
+        textColor = const Color.fromARGB(255, 137, 51, 152); // Violet pour Anecdote et Coup de Gueule
+        break;
+      case 'Info et aide':
+        textColor = const Color.fromARGB(255, 111, 111, 111); // Jaune pour Info et Aide
+        break;
+      default:
+        textColor = Color(0xFF595A71); // Couleur par défaut
+    }
+
     return Padding(
       padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
       child: Container(
@@ -194,6 +218,15 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                         documentId: widget.data['postId'],
                       ),
                     ),
+                    // Déterminez la couleur en fonction de la valeur de widget.data['theme']
+
+                    if(widget.data['theme'] != null && widget.data['theme'] != '' && widget.data['theme'] != 'Thème')
+                    Container(
+                      child:  TextButton.icon(
+                        onPressed: () {}, icon: Icon(Icons.label_important_outline, size: 20.0, color: textColor), label: Text(widget.data['theme'] ?? '',
+                        style: FlutterFlowTheme.of(context).bodyText1.override(fontFamily: 'Poppins', color: textColor, fontWeight: FontWeight.w500, fontSize: 11.0)
+                        )),
+                    ),
                     Container(
                         child: Padding(
                       padding: const EdgeInsets.all(0.0),
@@ -210,7 +243,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                               Icon(Icons.notes_outlined, color: greyColor),
                               SizedBox(width: 8),
                               Text(
-                                widget.data['count_comment'].toString(),
+                                widget.data['count_comment'].toString() == '0' ? '' : widget.data['count_comment'].toString(),
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: greyColor,
