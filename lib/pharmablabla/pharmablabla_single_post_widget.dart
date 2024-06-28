@@ -339,7 +339,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
                                                                     shape: BoxShape.circle,
                                                                   ),
                                                                   child: FadeInImage.assetNetwork(
-                                                                    image: userData != null ? userData['photoUrl'] : '',
+                                                                    image: userData != null &&userData['photoUrl'] != null ? userData['photoUrl'] : '',
                                                                     placeholder: 'assets/images/Group_18.png',
                                                                     fit: BoxFit.cover,
                                                                     imageErrorBuilder: (context, error, stackTrace) {
