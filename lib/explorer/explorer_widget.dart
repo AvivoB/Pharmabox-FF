@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
@@ -8,6 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pharmabox/auth/AuthProvider.dart';
+import 'package:pharmabox/backend/googlesheeet/laboratoires_db.dart';
+import 'package:pharmabox/composants/card_labo_annuaire/card_labo_widget.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +71,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
   List _predictions = [];
 
+  List _laboDB = [];
+
   Future<void> getCurrentPosition() async {
     bool isLocationPermissionGranted = await requestLocationPermission();
     var permission = await Geolocator.checkPermission();
@@ -82,13 +87,11 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       setState(() {
         _currentPosition = LatLng(position.latitude, position.longitude);
         initialZoom = 10.0;
-
       });
     } else {
       setState(() {
         _currentPosition = LatLng(48.866667, 2.333333);
         initialZoom = 10.0;
-
       });
     }
   }
@@ -104,7 +107,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   List userSearch = [];
 
   Future<void> getAllPharmacies() async {
-
     setState(() {
       pharmacieInPlace.clear();
       isLoading = true;
@@ -126,7 +128,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
       setState(() {
         pharmacieInPlace.add(dataWithId);
       });
-
     }
 
     setState(() {
@@ -218,11 +219,49 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     // print(uniqueItem);
   }
 
+  Future<void> getLaboDB() async {
+    final String url = 'https://script.google.com/macros/s/AKfycbxrqjg978ezEg4gI4lM_BPIWoS_bIay5cQItBBsBCG4AK22rE3qtcRsRiYAkiTrLT4uLw/exec';
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final cachedData = prefs.getString('laboDB');
+
+      if (cachedData != null) {
+        // Utiliser les données en cache
+        final List<dynamic> decodedData = json.decode(cachedData);
+        setState(() {
+          _laboDB = decodedData.cast<Map<String, dynamic>>();
+          isLoading = false;
+        });
+      } else {
+        // Pas de données en cache, récupérer depuis l'API
+        final response = await http.get(Uri.parse(url));
+        if (response.statusCode == 200) {
+          final List fetchedData = json.decode(response.body);
+          // Mettre en cache les nouvelles données
+          await prefs.setString('laboDB', json.encode(fetchedData));
+          setState(() {
+            _laboDB = fetchedData.cast<Map<String, dynamic>>();
+            isLoading = false;
+          });
+        } else {
+          throw Exception('Erreur de chargement des données: ${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Erreur: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getCurrentPosition();
     getAllPharmacies();
+    getLaboDB();
     _model = createModel(context, () => ExplorerModel());
     _model.textController ??= TextEditingController();
 
@@ -317,7 +356,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                 updateCallback: () => setState(() {}),
                 child: HeaderAppWidget(),
               ),
-              
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 10.0),
                 child: Container(
@@ -329,51 +367,51 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                     mainAxisSize: MainAxisSize.max,
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if(currentTAB == 1 || currentTAB == 2)
-                      TextFormField(
-                          textCapitalization: TextCapitalization.sentences,
-                          controller: _model.textController,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                            hintText: 'Rechercher...',
-                            hintStyle: FlutterFlowTheme.of(context).bodySmall,
-                            contentPadding: EdgeInsets.all(15.0),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFD0D1DE),
-                                width: 1,
+                      if (currentTAB == 1 || currentTAB == 2 || currentTAB == 3)
+                        TextFormField(
+                            textCapitalization: TextCapitalization.sentences,
+                            controller: _model.textController,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: 'Rechercher...',
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
+                              contentPadding: EdgeInsets.all(15.0),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFD0D1DE),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(48.0),
                               ),
-                              borderRadius: BorderRadius.circular(48.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFD0D1DE),
-                                width: 1,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFD0D1DE),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(28.0),
                               ),
-                              borderRadius: BorderRadius.circular(28.0),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                size: 24.0,
+                                color: Color(0xFFD0D1DE),
+                              ),
                             ),
-                            prefixIcon: Icon(
-                              Icons.search,
-                              size: 24.0,
-                              color: Color(0xFFD0D1DE),
-                            ),
-                          ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
-                          validator: _model.textControllerValidator.asValidator(context),
-                          onChanged: (query) async {
-                            setState(() async {
-                              searchTerms = query;
-                              _search(query);
-                              if (currentTAB == 1) {
-                                if (query.isEmpty) {
-                                  await getAllPharmacies();
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                            validator: _model.textControllerValidator.asValidator(context),
+                            onChanged: (query) async {
+                              setState(() async {
+                                searchTerms = query;
+                                _search(query);
+                                if (currentTAB == 1) {
+                                  if (query.isEmpty) {
+                                    await getAllPharmacies();
+                                  }
+                                  if (query.length >= 4) {
+                                    await searchPharmacies(query);
+                                  }
                                 }
-                                if(query.length >= 4) {
-                                  await searchPharmacies(query);
-                                }
-                              }
-                            });
-                          }),
+                              });
+                            }),
                       if (_predictions.isNotEmpty && _predictions[0]['city'] != '' && currentTAB == 1)
                         Container(
                           decoration: BoxDecoration(
@@ -446,87 +484,111 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                         children: [
                           GestureDetector(
                             child: Container(
-                                  margin: EdgeInsets.all(2.0),
-                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
-                                  width: MediaQuery.of(context).size.width * 0.30,
-                                  decoration: currentTAB == 0
-                                      ? BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
-                                            stops: [0, 0.5, 1],
-                                            begin: AlignmentDirectional(1, 0),
-                                            end: AlignmentDirectional(-1, 0),
-                                          ),
-                                          color: blueColor,
-                                          borderRadius: BorderRadius.circular(50.0), // adjust as needed
-                                        )
-                                      : null,
-                                  child: Text('Relations', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 0 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
-                                ),
-                              onTap: () async {
-                                setState(() {
-                                  currentTAB = 0;
-                                });
-                              },
+                              margin: EdgeInsets.only(top: 5.0),
+                              padding: EdgeInsets.all(5.0), // adjust as needed for border width
+                              width: MediaQuery.of(context).size.width * 0.23,
+                              decoration: currentTAB == 0
+                                  ? BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                        stops: [0, 0.5, 1],
+                                        begin: AlignmentDirectional(1, 0),
+                                        end: AlignmentDirectional(-1, 0),
+                                      ),
+                                      color: blueColor,
+                                      borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                    )
+                                  : null,
+                              child: Text('Relations', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 0 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)),
                             ),
+                            onTap: () async {
+                              setState(() {
+                                currentTAB = 0;
+                              });
+                            },
+                          ),
                           GestureDetector(
                             child: Container(
-                                  margin: EdgeInsets.all(2.0),
-                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
-                                  width: MediaQuery.of(context).size.width * 0.30,
-                                  decoration: currentTAB == 1
-                                      ? BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
-                                            stops: [0, 0.5, 1],
-                                            begin: AlignmentDirectional(1, 0),
-                                            end: AlignmentDirectional(-1, 0),
-                                          ),
-                                          color: blueColor,
-                                          borderRadius: BorderRadius.circular(50.0), // adjust as needed
-                                        )
-                                      : null,
-                                  child: Text('Pharmacies', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 1 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
-                                ),
-                              onTap: () async {
-                                setState(() {
-                                  currentTAB = 1;
-                                });
-                              },
+                              margin: EdgeInsets.only(top: 5.0),
+                              padding: EdgeInsets.all(5.0), // adjust as needed for border width
+                              width: MediaQuery.of(context).size.width * 0.23,
+                              decoration: currentTAB == 1
+                                  ? BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                        stops: [0, 0.5, 1],
+                                        begin: AlignmentDirectional(1, 0),
+                                        end: AlignmentDirectional(-1, 0),
+                                      ),
+                                      color: blueColor,
+                                      borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                    )
+                                  : null,
+                              child: Text('Pharmacies', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 1 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)),
                             ),
+                            onTap: () async {
+                              setState(() {
+                                currentTAB = 1;
+                              });
+                            },
+                          ),
                           GestureDetector(
                             child: Container(
-                                  margin: EdgeInsets.all(2.0),
-                                  padding: EdgeInsets.all(10.0), // adjust as needed for border width
-                                  width: MediaQuery.of(context).size.width * 0.30,
-                                  decoration: currentTAB == 2
-                                      ? BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
-                                            stops: [0, 0.5, 1],
-                                            begin: AlignmentDirectional(1, 0),
-                                            end: AlignmentDirectional(-1, 0),
-                                          ),
-                                          color: blueColor,
-                                          borderRadius: BorderRadius.circular(50.0), // adjust as needed
-                                        )
-                                      : null,
-                                  child: Text('Membres', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 2 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)), 
-                                ),
-                              onTap: () async {
-                                setState(() {
-                                  currentTAB = 2;
-                                });
-                              },
+                              margin: EdgeInsets.only(top: 5.0),
+                              padding: EdgeInsets.all(5.0), // adjust as needed for border width
+                              width: MediaQuery.of(context).size.width * 0.23,
+                              decoration: currentTAB == 3
+                                  ? BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                        stops: [0, 0.5, 1],
+                                        begin: AlignmentDirectional(1, 0),
+                                        end: AlignmentDirectional(-1, 0),
+                                      ),
+                                      color: blueColor,
+                                      borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                    )
+                                  : null,
+                              child: Text('Annuaire', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 3 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)),
                             ),
+                            onTap: () async {
+                              setState(() {
+                                currentTAB = 3;
+                              });
+                            },
+                          ),
+                          GestureDetector(
+                            child: Container(
+                              margin: EdgeInsets.only(top: 5.0),
+                              padding: EdgeInsets.all(5.0), // adjust as needed for border width
+                              width: MediaQuery.of(context).size.width * 0.23,
+                              decoration: currentTAB == 2
+                                  ? BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                        stops: [0, 0.5, 1],
+                                        begin: AlignmentDirectional(1, 0),
+                                        end: AlignmentDirectional(-1, 0),
+                                      ),
+                                      color: blueColor,
+                                      borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                    )
+                                  : null,
+                              child: Text('Membres', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 2 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)),
+                            ),
+                            onTap: () async {
+                              setState(() {
+                                currentTAB = 2;
+                              });
+                            },
+                          ),
                         ],
                       ),
                     ],
                   ),
                 ),
               ),
-              if(currentTAB == 0)
-                ReseauWidget(),
+              if (currentTAB == 0) ReseauWidget(),
               if (currentTAB == 2)
                 Expanded(
                   child: Container(
@@ -591,6 +653,65 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                               ],
                             );
                           })),
+                ),
+              if (currentTAB == 3)
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFEFF6F7),
+                    ),
+                    // child: FutureBuilder<List>(
+                    //     future: GoogleSheetsApi().fetchData(),
+                    //     builder: (BuildContext context, snapshot) {
+                    //       if (snapshot.connectionState == ConnectionState.waiting) {
+                    //         return Center(child: ProgressIndicatorPharmabox());
+                    //       } else if (snapshot.hasError) {
+                    //         return Center(child: Text('Erreur: ${snapshot.error}'));
+                    //       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    //         return Center(child: Text('Aucune donnée disponible'));
+                    //       } else {
+                    //         final data = snapshot.data!;
+
+                    //         // Simule ici la recherche en Full Text en filtrants les requetes Firestores
+                    //       
+
+                    //         return ListView.builder(
+                    //           itemCount: data.length,
+                    //           itemBuilder: (context, index) {
+                    //             final row = filteredDocuments[index];
+                    //             return CardLaboWidget(data: row);
+                    //           },
+                    //         );
+                    //       }
+
+                    //       // filteredDocuments?.shuffle();
+
+
+                              
+
+                    child: Builder(
+                            builder: (context) {
+                              // Filtrer les documents en fonction du terme de recherche
+                              final filteredDocuments = _laboDB.where((document) {
+                                final data = document as Map<String, dynamic>;
+                                final nom = data['name'] ?? '';
+
+                                // Comparez le titre avec le terme de recherche (en minuscules).
+                                return nom.toLowerCase().contains(searchTerms?.toLowerCase() ?? '');
+                              }).toList();
+
+                              // Utiliser filteredDocuments dans le ListView.builder
+                              return ListView.builder(
+                                itemCount: filteredDocuments.length,  // Utiliser la longueur de filteredDocuments
+                                itemBuilder: (context, index) {
+                                  final itemLabo = filteredDocuments[index];  // Utiliser filteredDocuments au lieu de _laboDB
+                                  return CardLaboWidget(data: itemLabo);
+                                },
+                              );
+                            },
+                          ),
+
+                  ),
                 ),
               if (currentTAB == 1)
                 Expanded(

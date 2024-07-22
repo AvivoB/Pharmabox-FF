@@ -16,6 +16,7 @@ class PredictionNomPhamracie extends StatefulWidget {
   static void _emptyFunction(String value) {}
   String? initialValue;
   String countryCode;
+  String pays = 'France';
   @override
   _PredictionNomPhamracieState createState() => _PredictionNomPhamracieState();
 }
@@ -32,7 +33,18 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
 
   void _onSearchChanged(String query) async {
     if (query.isNotEmpty) {
-      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&components=country:' + widget.countryCode + '&key=$googleMapsApi&language=fr'));
+      var countrycoderef = '';
+      supportedCountry.forEach((key, value) {
+          // Si c'est le dernier élément de la liste
+          if (key == supportedCountry.keys.last) {
+            countrycoderef += 'country'+':'+value;
+          } else {
+            countrycoderef += 'country'+':'+value+'|';
+          }
+      });
+
+      print('list of country code: $countrycoderef');
+      final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$query&types=pharmacy&key=$googleMapsApi&language=fr'));
       final json = jsonDecode(response.body);
        widget.onPlaceSelected(query);
       if (json['status'] == 'OK') {
@@ -73,12 +85,16 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
           textCapitalization: TextCapitalization.sentences,
           controller: _searchController,
           obscureText: false,
           onChanged: _onSearchChanged,
+          onTapOutside: ((event) => setState(() => _predictions = [])),
+          onEditingComplete: (() => setState(() => _predictions = [])),
           decoration: InputDecoration(
             labelText: 'Nom de la pharmacie *',
             hintStyle: FlutterFlowTheme.of(context).bodySmall,
@@ -117,6 +133,7 @@ class _PredictionNomPhamracieState extends State<PredictionNomPhamracie> {
           ),
           style: FlutterFlowTheme.of(context).bodyMedium,
         ),
+
         if (_predictions.isNotEmpty)
           Container(
             decoration: BoxDecoration(
