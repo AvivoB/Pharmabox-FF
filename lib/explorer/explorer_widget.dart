@@ -224,16 +224,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
 
     try {
       final prefs = await SharedPreferences.getInstance();
-      final cachedData = prefs.getString('laboDB');
 
-      if (cachedData != null) {
-        // Utiliser les données en cache
-        final List<dynamic> decodedData = json.decode(cachedData);
-        setState(() {
-          _laboDB = decodedData.cast<Map<String, dynamic>>();
-          isLoading = false;
-        });
-      } else {
         // Pas de données en cache, récupérer depuis l'API
         final response = await http.get(Uri.parse(url));
         if (response.statusCode == 200) {
@@ -247,7 +238,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
         } else {
           throw Exception('Erreur de chargement des données: ${response.statusCode}');
         }
-      }
+      
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -537,31 +528,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                               margin: EdgeInsets.only(top: 5.0),
                               padding: EdgeInsets.all(5.0), // adjust as needed for border width
                               width: MediaQuery.of(context).size.width * 0.23,
-                              decoration: currentTAB == 3
-                                  ? BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
-                                        stops: [0, 0.5, 1],
-                                        begin: AlignmentDirectional(1, 0),
-                                        end: AlignmentDirectional(-1, 0),
-                                      ),
-                                      color: blueColor,
-                                      borderRadius: BorderRadius.circular(50.0), // adjust as needed
-                                    )
-                                  : null,
-                              child: Text('Annuaire', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 3 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)),
-                            ),
-                            onTap: () async {
-                              setState(() {
-                                currentTAB = 3;
-                              });
-                            },
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              margin: EdgeInsets.only(top: 5.0),
-                              padding: EdgeInsets.all(5.0), // adjust as needed for border width
-                              width: MediaQuery.of(context).size.width * 0.23,
                               decoration: currentTAB == 2
                                   ? BoxDecoration(
                                       gradient: LinearGradient(
@@ -582,6 +548,32 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                               });
                             },
                           ),
+                          GestureDetector(
+                            child: Container(
+                              margin: EdgeInsets.only(top: 5.0),
+                              padding: EdgeInsets.all(5.0), // adjust as needed for border width
+                              width: MediaQuery.of(context).size.width * 0.23,
+                              decoration: currentTAB == 3
+                                  ? BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
+                                        stops: [0, 0.5, 1],
+                                        begin: AlignmentDirectional(1, 0),
+                                        end: AlignmentDirectional(-1, 0),
+                                      ),
+                                      color: blueColor,
+                                      borderRadius: BorderRadius.circular(50.0), // adjust as needed
+                                    )
+                                  : null,
+                              child: Text('Annuaire', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 3 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)),
+                            ),
+                            onTap: () async {
+                              setState(() {
+                                currentTAB = 3;
+                              });
+                            },
+                          ),
+                          
                         ],
                       ),
                     ],

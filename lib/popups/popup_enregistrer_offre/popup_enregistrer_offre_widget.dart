@@ -148,6 +148,7 @@ class _PopupEnregistrerOffreWidgetState extends State<PopupEnregistrerOffreWidge
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
+                            textInputAction: TextInputAction.done,
                             validator: _model.lgoFilterControllerValidator.asValidator(context),
                           ),
                         ),

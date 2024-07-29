@@ -1019,6 +1019,7 @@ class _PopupOffreWidgetState extends State<PopupOffreWidget> {
                               style: FlutterFlowTheme.of(context).bodyMedium,
                               maxLines: null,
                               keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.done,
                               validator: _model.nomOffreControllerValidator.asValidator(context),
                             ),
                           ),
