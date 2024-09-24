@@ -123,6 +123,7 @@ class _PharmaBlablaSinglePostState extends State<PharmaBlablaSinglePost> {
     super.initState();
     _model = createModel(context, () => PharmaBlablaModel());
     getPostAndUserData();
+    setStatistics('Pharmablabla', 'Open Pharmablabla Post');
   }
 
   @override

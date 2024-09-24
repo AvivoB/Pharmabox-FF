@@ -10,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
+import 'package:pharmabox/home/home_widget.dart';
 import 'package:pharmabox/notifications/firebase_notifications_service.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
 import 'package:pharmabox/profil_pharmacie/profil_pharmacie_provider.dart';
@@ -176,35 +177,35 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProviderPharmacieUser()),
       ],
       child: MaterialApp.router(
-        title: 'Pharmabox',
-        localizationsDelegates: [
-          FFLocalizationsDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        locale: _locale,
-        supportedLocales: const [Locale('fr', 'FR')],
-        theme: ThemeData(
-          useMaterial3: false,
-          brightness: Brightness.light,
-        ),
-        debugShowCheckedModeBanner: false,
-        // darkTheme: ThemeData(brightness: Brightness.dark),
-        themeMode: _themeMode,
-        // routeInformationParser: _router.routeInformationParser,
-        // routerDelegate: _router.routerDelegate,
-        routerConfig: routerApp
-      ),
+          title: 'Pharmabox',
+          localizationsDelegates: [
+            FFLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          locale: _locale,
+          supportedLocales: const [Locale('fr', 'FR')],
+          theme: ThemeData(
+            useMaterial3: false,
+            brightness: Brightness.light,
+          ),
+          debugShowCheckedModeBanner: false,
+          // darkTheme: ThemeData(brightness: Brightness.dark),
+          themeMode: _themeMode,
+          // routeInformationParser: _router.routeInformationParser,
+          // routerDelegate: _router.routerDelegate,
+          routerConfig: routerApp),
     );
   }
 }
 
 class NavBarPage extends StatefulWidget {
-  NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
+  NavBarPage({Key? key, this.initialPage, this.page, this.statePage}) : super(key: key);
 
   final String? initialPage;
   final Widget? page;
+  final String? statePage;
 
   @override
   _NavBarPageState createState() => _NavBarPageState();
@@ -212,9 +213,9 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'Reseau';
+  String _currentPageName = 'Accueil';
   late Widget? _currentPage;
-
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -227,13 +228,13 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'PharmaJob': PharmaJobWidget(),
       'PharmaBlabla': PharmaBlabla(currentPage: _currentPageName),
-      'Reseau': ExplorerWidget(),
+      'Accueil': HomePage(),
+      'Reseau': ExplorerWidget(tabSTart: int.parse(widget.statePage ?? '1')),
       'Profil': ProfilWidget(),
       'Pharmacie': ProfilPharmacie(),
     };
 
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
-    
 
     return Scaffold(
       body: _currentPage ?? tabs[_currentPageName],
@@ -282,16 +283,14 @@ class _NavBarPageState extends State<NavBarPage> {
                         color: greyColor,
                         size: 24.0,
                       ),
-                Text('Jobs', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 1 ? FontWeight.w500 : FontWeight.w400)),
+                Text('Jobs', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 0 ? FontWeight.w500 : FontWeight.w400)),
               ],
             ),
           ),
           BottomNavigationBarItem(
             label: '',
-            icon: Stack(
-              alignment: Alignment.center,
-              children: [
-                 Column(
+            icon: Stack(alignment: Alignment.center, children: [
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -327,10 +326,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 ],
               ),
               FutureBuilder<QuerySnapshot>(
-                  future: FirebaseFirestore.instance.collection('pharmablabla')
-                  .where('LGO', isEqualTo: 'Par LGO')
-                  .where('network', isEqualTo: 'Tout Pharmabox')
-                  .get(),
+                  future: FirebaseFirestore.instance.collection('pharmablabla').where('LGO', isEqualTo: 'Par LGO').where('network', isEqualTo: 'Tout Pharmabox').get(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       // Display the error message
@@ -367,18 +363,55 @@ class _NavBarPageState extends State<NavBarPage> {
                       return Container();
                     }
                   }),
-             
             ]),
           ),
           BottomNavigationBarItem(
             label: '',
-            icon: Stack(
-              alignment: Alignment.center,
-              children: [
-                 Column(
+            icon: Stack(alignment: Alignment.center, children: [
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   currentIndex == 2
+                      ? ShaderMask(
+                          shaderCallback: (bounds) => LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                            stops: [0.0, 1.0],
+                          ).createShader(bounds),
+                          child: Icon(
+                            Icons.home_outlined,
+                            color: Colors.white,
+                            size: 27.0,
+                          ),
+                        )
+                      : Icon(
+                          Icons.home_outlined,
+                          color: greyColor,
+                          size: 27.0,
+                        ),
+                  Text(
+                    'Accueil',
+                    overflow: TextOverflow.ellipsis,
+                    style: FlutterFlowTheme.of(context).headlineMedium.override(
+                          fontFamily: 'Poppins',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          fontSize: 10,
+                          fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400,
+                        ),
+                  )
+                ],
+              ),
+            ]),
+          ),
+          BottomNavigationBarItem(
+            label: '',
+            icon: Stack(alignment: Alignment.center, children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  currentIndex == 3
                       ? ShaderMask(
                           shaderCallback: (bounds) => LinearGradient(
                             begin: Alignment.topLeft,
@@ -404,7 +437,7 @@ class _NavBarPageState extends State<NavBarPage> {
                           fontFamily: 'Poppins',
                           color: FlutterFlowTheme.of(context).primaryText,
                           fontSize: 10,
-                          fontWeight: currentIndex == 2 ? FontWeight.w500 : FontWeight.w400,
+                          fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400,
                         ),
                   )
                 ],
@@ -447,7 +480,6 @@ class _NavBarPageState extends State<NavBarPage> {
                       return Container();
                     }
                   }),
-             
             ]),
           ),
           BottomNavigationBarItem(
@@ -455,7 +487,7 @@ class _NavBarPageState extends State<NavBarPage> {
             icon: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                currentIndex == 3 || currentIndex == -1
+                currentIndex == 4 || currentIndex == -1
                     ? ShaderMask(
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
@@ -484,11 +516,9 @@ class _NavBarPageState extends State<NavBarPage> {
   }
 }
 
-
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }

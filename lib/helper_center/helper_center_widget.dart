@@ -5,6 +5,7 @@ import 'package:pharmabox/custom_code/widgets/VideoPlayer.dart';
 import 'package:video_player/video_player.dart';
 
 class HelpPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

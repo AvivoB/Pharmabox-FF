@@ -87,51 +87,114 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
     }
   }
 
+  // void getPosts() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   // Get a reference to the collection
+  //   final collection = FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true).limit(10);
+
+  //   // Get all documents
+  //   final documents = await collection.get();
+
+  //   // List to store updated posts
+  //   List<Map<String, dynamic>> updatedPosts = [];
+
+  //   // Process each document
+  //   for (final doc in documents.docs) {
+  //     // Get comments count
+  //     final comments = await FirebaseFirestore.instance.collection('pharmablabla').doc(doc.id).collection('comments').get();
+  //     final commentsCount = comments.docs.length;
+
+  //     // Get user data
+  //     final userSnapshot = await FirebaseFirestore.instance.collection('users').doc(doc.data()['userId']).get();
+  //     Map<String, dynamic>? userData;
+  //     if (userSnapshot.exists) {
+  //       userData = userSnapshot.data();
+  //     }
+
+  //     // Create a new map with updated data
+  //     final updatedDocData = Map<String, dynamic>.from(doc.data());
+  //     updatedDocData['count_comment'] = commentsCount;
+  //     updatedDocData['postId'] = doc.id;
+  //     if (userData != null) {
+  //       updatedDocData['user'] = userData;
+  //     }
+
+  //     // Add updated data to the list
+  //     updatedPosts.add(updatedDocData);
+  //   }
+
+  //   // Update the state with the modified list of posts
+  //   setState(() {
+  //     posts = updatedPosts;
+  //     filteredPosts = posts;
+  //     _isLoading = false;
+  //   });
+  // }
+
+
   void getPosts() async {
     setState(() {
       _isLoading = true;
     });
-    // Get a reference to the collection
-    final collection = FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true);
 
-    // Get all documents
+    // Récupérer la collection des posts
+    final collection = FirebaseFirestore.instance
+        .collection('pharmablabla')
+        .orderBy('date_created', descending: true)
+        .limit(20);
+
     final documents = await collection.get();
 
-    // List to store updated posts
     List<Map<String, dynamic>> updatedPosts = [];
 
-    // Process each document
-    for (final doc in documents.docs) {
-      // Get comments count
-      final comments = await FirebaseFirestore.instance.collection('pharmablabla').doc(doc.id).collection('comments').get();
-      final commentsCount = comments.docs.length;
+    // Récupérer les commentaires et utilisateurs en parallèle
+    await Future.wait(documents.docs.map((doc) async {
+      // Requête pour les commentaires
+      Future<int> commentsCountFuture = FirebaseFirestore.instance
+          .collection('pharmablabla')
+          .doc(doc.id)
+          .collection('comments')
+          .get()
+          .then((comments) => comments.docs.length);
 
-      // Get user data
-      final userSnapshot = await FirebaseFirestore.instance.collection('users').doc(doc.data()['userId']).get();
-      Map<String, dynamic>? userData;
-      if (userSnapshot.exists) {
-        userData = userSnapshot.data();
-      }
+      // Requête pour les données utilisateur
+      Future<Map<String, dynamic>?> userDataFuture = FirebaseFirestore.instance
+          .collection('users')
+          .doc(doc.data()['userId'])
+          .get()
+          .then((userSnapshot) {
+        if (userSnapshot.exists) {
+          return userSnapshot.data();
+        } else {
+          return null;
+        }
+      });
 
-      // Create a new map with updated data
+      // Exécuter les futures en parallèle
+      final results = await Future.wait([commentsCountFuture, userDataFuture]);
+
+      // Construire les données mises à jour
       final updatedDocData = Map<String, dynamic>.from(doc.data());
-      updatedDocData['count_comment'] = commentsCount;
+      updatedDocData['count_comment'] = results[0];
       updatedDocData['postId'] = doc.id;
-      if (userData != null) {
-        updatedDocData['user'] = userData;
+      if (results[1] != null) {
+        updatedDocData['user'] = results[1];
       }
 
-      // Add updated data to the list
       updatedPosts.add(updatedDocData);
-    }
+    }));
 
-    // Update the state with the modified list of posts
+    // Mettre à jour l'état avec la liste modifiée des posts
     setState(() {
       posts = updatedPosts;
       filteredPosts = posts;
       _isLoading = false;
     });
   }
+
+  
 
   @override
   void initState() {
@@ -150,6 +213,7 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
     });
 
     updateAllDocuments();
+    setStatistics('Pharmablabla', 'Open Pharmablabla');
   }
 
   @override

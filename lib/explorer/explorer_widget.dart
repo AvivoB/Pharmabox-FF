@@ -47,7 +47,8 @@ import 'package:latlong2/latlong.dart';
 import 'explorer_provider.dart';
 
 class ExplorerWidget extends StatefulWidget {
-  const ExplorerWidget({Key? key}) : super(key: key);
+  final int? tabSTart;
+  const ExplorerWidget({Key? key, this.tabSTart}) : super(key: key);
 
   @override
   _ExplorerWidgetState createState() => _ExplorerWidgetState();
@@ -72,6 +73,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   List _predictions = [];
 
   List _laboDB = [];
+  
 
   Future<void> getCurrentPosition() async {
     bool isLocationPermissionGranted = await requestLocationPermission();
@@ -253,9 +255,10 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     getCurrentPosition();
     getAllPharmacies();
     getLaboDB();
+    setStatistics('Reseau', 'Open Explorer');
     _model = createModel(context, () => ExplorerModel());
     _model.textController ??= TextEditingController();
-
+    currentTAB = widget.tabSTart ?? 1;
     _tabController = TabController(initialIndex: 1, length: 3, vsync: this);
     _animationController = AnimationController(
       vsync: this,

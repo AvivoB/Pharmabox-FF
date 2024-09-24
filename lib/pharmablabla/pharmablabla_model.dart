@@ -35,6 +35,8 @@ class PharmaBlablaModel extends FlutterFlowModel {
     {"image": "Autre.jpg", "name": "Par groupement"}
   ];
 
+
+
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {

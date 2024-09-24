@@ -100,6 +100,7 @@ class _ReseauWidgetState extends State<ReseauWidget> {
     super.initState();
     _model = createModel(context, () => ReseauModel());
     getNetworkData();
+    setStatistics('Reseau', 'Open My Network');
   }
 
   @override

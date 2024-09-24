@@ -116,6 +116,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
     _model.searchJobController ??= TextEditingController();
     checkTitulaireStatus();
     _getMesRecherches();
+    setStatistics('Jobs', 'Open Jobs');
   }
 
   @override

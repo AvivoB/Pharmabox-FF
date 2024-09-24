@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pharmabox/flutter_flow/flutter_flow_theme.dart';
+import 'package:pharmabox/flutter_flow/flutter_flow_util.dart';
 import 'package:provider/provider.dart';
 import 'package:pharmabox/auth/AuthProvider.dart' as authProvider;
 
@@ -191,4 +192,17 @@ void showDialogAlertCreatePharma(BuildContext context) {
       );
     },
   );
+}
+
+
+void setStatistics(String type, String action) async {
+  // Formater la date au format dd/MM/yyyy
+  String formattedDate = DateFormat('dd/MM/yyyy').format(DateTime.now().toLocal());
+
+  // Ajouter une entrée dans la collection des statistiques
+  FirebaseFirestore.instance.collection('statistics').add({
+    'type': type,
+    'action': action,
+    'created_at': formattedDate,
+  });
 }
