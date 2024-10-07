@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pharmabox/annuaire/annuaire_widget.dart';
 import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
 import 'package:pharmabox/home/home_widget.dart';
@@ -230,6 +231,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'PharmaBlabla': PharmaBlabla(currentPage: _currentPageName),
       'Accueil': HomePage(),
       'Reseau': ExplorerWidget(tabSTart: int.parse(widget.statePage ?? '1')),
+      'Annuaire': AnnuaireWidget(),
       'Profil': ProfilWidget(),
       'Pharmacie': ProfilPharmacie(),
     };
@@ -246,13 +248,7 @@ class _NavBarPageState extends State<NavBarPage> {
           _currentPageName = tabs.keys.toList()[i];
         }),
         backgroundColor: Colors.white,
-        // selectedItemColor: Color(0xFF7CEDAC),
         unselectedItemColor: Colors.transparent,
-        // borderRadius: 8.0,
-        // itemBorderRadius: 8.0,
-        // margin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-        // padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 5.0),
-        // width: double.infinity,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
@@ -487,7 +483,7 @@ class _NavBarPageState extends State<NavBarPage> {
             icon: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                currentIndex == 4 || currentIndex == -1
+                currentIndex == 4
                     ? ShaderMask(
                         shaderCallback: (bounds) => LinearGradient(
                           begin: Alignment.topLeft,
@@ -496,17 +492,17 @@ class _NavBarPageState extends State<NavBarPage> {
                           stops: [0.0, 1.0],
                         ).createShader(bounds),
                         child: Icon(
-                          Icons.account_circle_outlined,
+                          Icons.sort_outlined,
                           color: Colors.white,
                           size: 24.0,
                         ),
                       )
                     : Icon(
-                        Icons.account_circle_outlined,
+                        Icons.sort_outlined,
                         color: greyColor,
                         size: 24.0,
                       ),
-                Text('Profil', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400)),
+                Text('Annuaire', overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 10, fontWeight: currentIndex == 3 ? FontWeight.w500 : FontWeight.w400)),
               ],
             ),
           ),

@@ -133,66 +133,113 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
   //   });
   // }
 
+  // void getPosts() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
 
-  void getPosts() async {
-    setState(() {
-      _isLoading = true;
-    });
+  //   // Récupérer la collection des posts
+  //   final collection = FirebaseFirestore.instance.collection('pharmablabla').orderBy('date_created', descending: true);
 
-    // Récupérer la collection des posts
-    final collection = FirebaseFirestore.instance
+  //   final documents = await collection.get();
+
+  //   List<Map<String, dynamic>> updatedPosts = [];
+
+  //   // Récupérer les commentaires et utilisateurs en parallèle
+  //   await Future.wait(documents.docs.map((doc) async {
+  //     // Requête pour les commentaires
+  //     Future<int> commentsCountFuture = FirebaseFirestore.instance.collection('pharmablabla').doc(doc.id).collection('comments').get().then((comments) => comments.docs.length);
+
+  //     // Requête pour les données utilisateur
+  //     Future<Map<String, dynamic>?> userDataFuture = FirebaseFirestore.instance.collection('users').doc(doc.data()['userId']).get().then((userSnapshot) {
+  //       if (userSnapshot.exists) {
+  //         return userSnapshot.data();
+  //       } else {
+  //         return null;
+  //       }
+  //     });
+
+  //     // Exécuter les futures en parallèle
+  //     final results = await Future.wait([commentsCountFuture, userDataFuture]);
+
+  //     // Construire les données mises à jour
+  //     final updatedDocData = Map<String, dynamic>.from(doc.data());
+  //     updatedDocData['count_comment'] = results[0];
+  //     updatedDocData['postId'] = doc.id;
+  //     if (results[1] != null) {
+  //       updatedDocData['user'] = results[1];
+  //       print(DateFormat('dd/MM/yyyy à HH:mm').format(updatedDocData['date_created'].toDate()));
+  //     }
+
+  //     updatedPosts.add(updatedDocData);
+  //   }));
+
+  //   // Mettre à jour l'état avec la liste modifiée des posts
+  //   setState(() {
+  //     posts = updatedPosts;
+  //     filteredPosts = posts;
+  //     _isLoading = false;
+  //   });
+  // }
+
+void getPosts() async {
+  setState(() {
+    _isLoading = true;
+  });
+
+  // Récupérer la collection des posts triés par date
+  final collection = FirebaseFirestore.instance
+      .collection('pharmablabla')
+      .orderBy('date_created', descending: true).limit(20);
+
+  final documents = await collection.get();
+
+  List<Map<String, dynamic>> updatedPosts = [];
+
+  // Itérer séquentiellement sur les documents
+  for (var doc in documents.docs) {
+    // Récupérer les commentaires et utilisateurs en parallèle pour chaque post
+    Future<int> commentsCountFuture = FirebaseFirestore.instance
         .collection('pharmablabla')
-        .orderBy('date_created', descending: true)
-        .limit(20);
+        .doc(doc.id)
+        .collection('comments')
+        .get()
+        .then((comments) => comments.docs.length);
 
-    final documents = await collection.get();
-
-    List<Map<String, dynamic>> updatedPosts = [];
-
-    // Récupérer les commentaires et utilisateurs en parallèle
-    await Future.wait(documents.docs.map((doc) async {
-      // Requête pour les commentaires
-      Future<int> commentsCountFuture = FirebaseFirestore.instance
-          .collection('pharmablabla')
-          .doc(doc.id)
-          .collection('comments')
-          .get()
-          .then((comments) => comments.docs.length);
-
-      // Requête pour les données utilisateur
-      Future<Map<String, dynamic>?> userDataFuture = FirebaseFirestore.instance
-          .collection('users')
-          .doc(doc.data()['userId'])
-          .get()
-          .then((userSnapshot) {
-        if (userSnapshot.exists) {
-          return userSnapshot.data();
-        } else {
-          return null;
-        }
-      });
-
-      // Exécuter les futures en parallèle
-      final results = await Future.wait([commentsCountFuture, userDataFuture]);
-
-      // Construire les données mises à jour
-      final updatedDocData = Map<String, dynamic>.from(doc.data());
-      updatedDocData['count_comment'] = results[0];
-      updatedDocData['postId'] = doc.id;
-      if (results[1] != null) {
-        updatedDocData['user'] = results[1];
+    Future<Map<String, dynamic>?> userDataFuture = FirebaseFirestore.instance
+        .collection('users')
+        .doc(doc.data()['userId'])
+        .get()
+        .then((userSnapshot) {
+      if (userSnapshot.exists) {
+        return userSnapshot.data();
+      } else {
+        return null;
       }
-
-      updatedPosts.add(updatedDocData);
-    }));
-
-    // Mettre à jour l'état avec la liste modifiée des posts
-    setState(() {
-      posts = updatedPosts;
-      filteredPosts = posts;
-      _isLoading = false;
     });
+
+    // Attendre les futures pour chaque document
+    final results = await Future.wait([commentsCountFuture, userDataFuture]);
+
+    // Construire les données mises à jour
+    final updatedDocData = Map<String, dynamic>.from(doc.data());
+    updatedDocData['count_comment'] = results[0];
+    updatedDocData['postId'] = doc.id;
+    if (results[1] != null) {
+      updatedDocData['user'] = results[1];
+    }
+
+    // Ajouter directement dans la liste (qui conserve l'ordre reçu de Firestore)
+    updatedPosts.add(updatedDocData);
   }
+
+  // Mettre à jour l'état avec la liste modifiée des posts
+  setState(() {
+    posts = updatedPosts;
+    filteredPosts = posts;
+    _isLoading = false;
+  });
+}
 
   
 
@@ -403,7 +450,6 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                                                 List filteredPosts2 = [];
                                                 posts.forEach((element) {
                                                   if (element['theme'].toString().trim().toLowerCase() == theme.trim().toLowerCase()) {
-                                                    print('post theme :' + element['theme'].toString() + ' - selected theme :' + theme);
                                                     filteredPosts2.add(element);
                                                   }
                                                 });
@@ -458,7 +504,6 @@ class _PharmaBlablaState extends State<PharmaBlabla> {
                     final userId = document['userId'] as String;
                     // data['post'] = document.data();
                     // document['postId'] = document.id;
-
 
                     return Padding(
                       padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 2.0, bottom: 2.0),

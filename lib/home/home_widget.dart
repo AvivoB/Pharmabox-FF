@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                           btnText: 'Accéder',
                           icon: Icons.sort_outlined,
                           onTap: () {
-                            context.pushNamed('Reseau', queryParameters: {'typeIndex': '3'});
+                            context.pushNamed('Annuaire');
                           },
                         ),
                       ),

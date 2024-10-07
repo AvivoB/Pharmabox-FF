@@ -480,7 +480,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             child: Container(
                               margin: EdgeInsets.only(top: 5.0),
                               padding: EdgeInsets.all(5.0), // adjust as needed for border width
-                              width: MediaQuery.of(context).size.width * 0.23,
+                              width: MediaQuery.of(context).size.width * 0.30,
                               decoration: currentTAB == 0
                                   ? BoxDecoration(
                                       gradient: LinearGradient(
@@ -505,7 +505,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             child: Container(
                               margin: EdgeInsets.only(top: 5.0),
                               padding: EdgeInsets.all(5.0), // adjust as needed for border width
-                              width: MediaQuery.of(context).size.width * 0.23,
+                              width: MediaQuery.of(context).size.width * 0.30,
                               decoration: currentTAB == 1
                                   ? BoxDecoration(
                                       gradient: LinearGradient(
@@ -530,7 +530,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             child: Container(
                               margin: EdgeInsets.only(top: 5.0),
                               padding: EdgeInsets.all(5.0), // adjust as needed for border width
-                              width: MediaQuery.of(context).size.width * 0.23,
+                              width: MediaQuery.of(context).size.width * 0.30,
                               decoration: currentTAB == 2
                                   ? BoxDecoration(
                                       gradient: LinearGradient(
@@ -551,32 +551,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                               });
                             },
                           ),
-                          GestureDetector(
-                            child: Container(
-                              margin: EdgeInsets.only(top: 5.0),
-                              padding: EdgeInsets.all(5.0), // adjust as needed for border width
-                              width: MediaQuery.of(context).size.width * 0.23,
-                              decoration: currentTAB == 3
-                                  ? BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [Color(0xFF7F7FD5), Color(0xFF86A8E7), Color(0xFF91EAE4)],
-                                        stops: [0, 0.5, 1],
-                                        begin: AlignmentDirectional(1, 0),
-                                        end: AlignmentDirectional(-1, 0),
-                                      ),
-                                      color: blueColor,
-                                      borderRadius: BorderRadius.circular(50.0), // adjust as needed
-                                    )
-                                  : null,
-                              child: Text('Annuaire', textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: currentTAB == 3 ? Colors.white : blackColor, fontSize: 12.0, fontWeight: FontWeight.w400)),
-                            ),
-                            onTap: () async {
-                              setState(() {
-                                currentTAB = 3;
-                              });
-                            },
-                          ),
-                          
                         ],
                       ),
                     ],
@@ -648,65 +622,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                               ],
                             );
                           })),
-                ),
-              if (currentTAB == 3)
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFEFF6F7),
-                    ),
-                    // child: FutureBuilder<List>(
-                    //     future: GoogleSheetsApi().fetchData(),
-                    //     builder: (BuildContext context, snapshot) {
-                    //       if (snapshot.connectionState == ConnectionState.waiting) {
-                    //         return Center(child: ProgressIndicatorPharmabox());
-                    //       } else if (snapshot.hasError) {
-                    //         return Center(child: Text('Erreur: ${snapshot.error}'));
-                    //       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    //         return Center(child: Text('Aucune donnée disponible'));
-                    //       } else {
-                    //         final data = snapshot.data!;
-
-                    //         // Simule ici la recherche en Full Text en filtrants les requetes Firestores
-                    //       
-
-                    //         return ListView.builder(
-                    //           itemCount: data.length,
-                    //           itemBuilder: (context, index) {
-                    //             final row = filteredDocuments[index];
-                    //             return CardLaboWidget(data: row);
-                    //           },
-                    //         );
-                    //       }
-
-                    //       // filteredDocuments?.shuffle();
-
-
-                              
-
-                    child: Builder(
-                            builder: (context) {
-                              // Filtrer les documents en fonction du terme de recherche
-                              final filteredDocuments = _laboDB.where((document) {
-                                final data = document as Map<String, dynamic>;
-                                final nom = data['name'] ?? '';
-
-                                // Comparez le titre avec le terme de recherche (en minuscules).
-                                return nom.toLowerCase().contains(searchTerms?.toLowerCase() ?? '');
-                              }).toList();
-
-                              // Utiliser filteredDocuments dans le ListView.builder
-                              return ListView.builder(
-                                itemCount: filteredDocuments.length,  // Utiliser la longueur de filteredDocuments
-                                itemBuilder: (context, index) {
-                                  final itemLabo = filteredDocuments[index];  // Utiliser filteredDocuments au lieu de _laboDB
-                                  return CardLaboWidget(data: itemLabo);
-                                },
-                              );
-                            },
-                          ),
-
-                  ),
                 ),
               if (currentTAB == 1)
                 Expanded(

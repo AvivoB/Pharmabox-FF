@@ -90,6 +90,11 @@ final GoRouter routerApp = GoRouter(
         builder: (context, state) => ValidateAccount(),
       ),
       GoRoute(
+        name: 'Annuaire',
+        path: '/annuaire',
+        builder: (context, state) => NavBarPage(initialPage: 'Annuaire'),
+      ),
+      GoRoute(
         name: 'Explorer',
         path: '/explorer',
         builder: (context, state) => NavBarPage(initialPage: 'Explorer'),
@@ -133,13 +138,13 @@ final GoRouter routerApp = GoRouter(
       GoRoute(
         name: 'Profil',
         path: '/profil',
-        builder: (context, state) => state.pathParameters.isEmpty
-            ? NavBarPage(initialPage: 'Profil')
-            : ProfilWidget(
-                tyeRedirect: state.uri.queryParameters['tyeRedirect'],
-              ),
+        builder: (context, state) => /* state.pathParameters.isEmpty */
+            NavBarPage(initialPage: 'Accueil', page: ProfilWidget( tyeRedirect: state.uri.queryParameters['tyeRedirect']))
+            // : ProfilWidget(
+            //     tyeRedirect: state.uri.queryParameters['tyeRedirect'],
+            //   ),
       ),
-      GoRoute(name: 'PharmacieProfil', path: '/pharmacieProfil', builder: (context, params) => NavBarPage(initialPage: 'Profil', page: ProfilPharmacie())),
+      GoRoute(name: 'PharmacieProfil', path: '/pharmacieProfil', builder: (context, params) => NavBarPage(initialPage: 'Accueil', page: ProfilPharmacie())),
       GoRoute(
         name: 'PharmacieProfilView',
         path: '/pharmacieProfilView',
