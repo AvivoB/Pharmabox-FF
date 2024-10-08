@@ -35,7 +35,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'pharma_job_model.dart';
 export 'pharma_job_model.dart';
-import 'classPlaceClusterPharmaJob.dart';
 // import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';

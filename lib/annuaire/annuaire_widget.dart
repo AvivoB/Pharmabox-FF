@@ -35,7 +35,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'annuaire_model.dart';
 export 'annuaire_model.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pharmabox/custom_code/widgets/prediction_ville.dart';

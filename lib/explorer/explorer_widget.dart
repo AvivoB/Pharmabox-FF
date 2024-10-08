@@ -36,8 +36,6 @@ import 'package:provider/provider.dart';
 import 'explorerSearchData.dart';
 import 'explorer_model.dart';
 export 'explorer_model.dart';
-import 'classPlaceClusterExplorer.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pharmabox/custom_code/widgets/prediction_ville.dart';
@@ -104,7 +102,6 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     return status == PermissionStatus.granted;
   }
 
-  List<Place> items = [];
   List pharmacieInPlace = [];
   List userSearch = [];
 
@@ -187,7 +184,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
     // Remove duplicate users and convert to list of user data
     final Set<String> addedUserIds = {}; // Set to keep track of added user IDs
     final List<Map<String, dynamic>> uniquePharmacie = [];
-    final List<Place> uniqueItem = []; // List to store unique user data
+    // final List<Place> uniqueItem = []; // List to store unique user data
 
     int countArray = 0;
     userDocs.forEach((pharmacieDoc) {

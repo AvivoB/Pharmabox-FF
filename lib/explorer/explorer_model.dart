@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pharmabox/explorer/classPlaceClusterExplorer.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
 import '/composants/header_app/header_app_widget.dart';
@@ -36,9 +35,7 @@ class ExplorerModel extends FlutterFlowModel {
     textController?.dispose();
   }
 
-  List<Place> _explorerData = [];
 
-  List<Place> get explorerData => _explorerData;
 
   // Search pharmacie, jobs and memeber in explorer
   getPharmaciesLocations({searchTerm}) async {
@@ -54,10 +51,8 @@ class ExplorerModel extends FlutterFlowModel {
       List location = data['situation_geographique']['lat_lng'];
 
       // Création d'un objet Place
-      Place place = Place(name: name, latLng: LatLng(location[0], location[1]));
 
       // Ajout de l'objet Place à la liste des places
-      _explorerData.add(place);
     }
   }
 }
