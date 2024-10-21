@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 20),
                   ItemAccueil(
-                    color1: greyColor,
+                    color1: blueColor,
                     color2: greyColor,
                     title: 'Gérer mon profil, pour être visible',
                     description: 'Enrichissez votre profil, démontrez vos compétences et faites-vous remarquer. Gérez votre pharmacie pour augmenter sa visibilité, renseignez les informations essentielles.',
@@ -127,6 +127,23 @@ class _HomePageState extends State<HomePage> {
                     icon2: Icons.medication_outlined,
                     onTap2: () {
                       context.pushNamed('PharmacieProfil');
+                    },
+                    isTitulaire: isTitulaire,
+                  ),
+                  SizedBox(height: 20),
+                  ItemAccueil(
+                    color1: greenColor,
+                    color2: greyColor,
+                    title: 'Centre d\'aide',
+                    description: 'Retrouvez les réponses à vos questions, consultez les tutoriels et les guides pour vous aider à utiliser l\'application.',
+                    btnText: 'Accéder au centre d\'aide',
+                    icon: Icons.help_outline,
+                    onTap: () {
+                      context.pushNamed('HelperCenter');
+                    },
+                    
+                    onTap2: () {
+                      
                     },
                     isTitulaire: isTitulaire,
                   ),

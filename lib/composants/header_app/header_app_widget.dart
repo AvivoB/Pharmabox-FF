@@ -83,7 +83,7 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 5.0, 0.0),
                         child: Container(
                               decoration: BoxDecoration(
-                                color: blueColor,
+                                color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
                                     blurRadius: 4.0,
@@ -99,12 +99,12 @@ class _HeaderAppWidgetState extends State<HeaderAppWidget> {
                                 borderWidth: 1.0,
                                 buttonSize: 40.0,
                                 icon: Icon(
-                                  Icons.help_rounded,
-                                  color: Colors.white,
+                                  Icons.account_circle_outlined,
+                                  color: blackColor,
                                   size: 25.0,
                                 ),
                                 onPressed: () async {
-                                  context.pushNamed('HelperCenter');
+                                  context.pushNamed('Profil');
                                 },
                               ),
                             ),
