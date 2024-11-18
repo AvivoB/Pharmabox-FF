@@ -597,6 +597,14 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                   )),
             ),
             if (isTitulaire)
+            isLoading ? 
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ProgressIndicatorPharmabox(),
+                ],
+              ) :
               Expanded(
                 child: Container(
                     decoration: BoxDecoration(

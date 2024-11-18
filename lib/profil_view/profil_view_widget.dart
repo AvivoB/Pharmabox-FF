@@ -455,7 +455,7 @@ class _ProfilViewWidgetState extends State<ProfilViewWidget> with SingleTickerPr
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          userData != null ? userData['prenom'] + ' ' + userData['nom'] : '',
+                                          userData != null ? '${userData['prenom'].toString().toCapitalized()}' + ' ' + '${userData['nom'].toString().toCapitalized()}' : '',
                                           style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                 fontFamily: 'Poppins',
                                                 color: Colors.white,

@@ -2771,7 +2771,7 @@ class _RegisterPharmacyWidgetState extends State<RegisterPharmacyWidget> {
                               showCustomSnackBar(context, 'Merci de renseigner le nom de la pharmacie', isError: true);
                             } else {
                               createPharmacie(context);
-                              context.pushNamed('Reseau');
+                              context.pushNamed('Accueil');
                             }
                           },
                           text: 'Créer ma pharmacie',

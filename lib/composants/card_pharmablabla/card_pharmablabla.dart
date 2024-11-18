@@ -138,7 +138,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 child: Text(
-                                  widget.data['user']['nom'] + ' ' + widget.data['user']['prenom'],
+                                  '${widget.data['user']['nom'].toString().toCapitalized()}' + ' ' + '${widget.data['user']['prenom'].toString().toCapitalized()}',
                                   style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 14.0, fontWeight: FontWeight.w600),
                                 ),
                               ),

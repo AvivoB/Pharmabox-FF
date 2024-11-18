@@ -168,9 +168,17 @@ class _DiscussionUserWidgetState extends State<DiscussionUserWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            userMessage['prenom'] + ' ' + userMessage['nom'],
-                            style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                          GestureDetector(
+                            onTap: () {
+                              context.pushNamed('ProfilView',
+                                queryParameters: {
+                                  'userId': userMessage['id'],
+                                });
+                            },
+                            child: Text(
+                              '${userMessage['prenom'].toString().toCapitalized()}' + ' ' + '${userMessage['nom'].toString().toCapitalized()}',
+                              style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                            ),
                           ),
                           Text(
                             userMessage['poste'],

@@ -219,31 +219,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
   }
 
   Future<void> getLaboDB() async {
-    final String url = 'https://script.google.com/macros/s/AKfycbxrqjg978ezEg4gI4lM_BPIWoS_bIay5cQItBBsBCG4AK22rE3qtcRsRiYAkiTrLT4uLw/exec';
-
-    try {
-      final prefs = await SharedPreferences.getInstance();
-
-        // Pas de données en cache, récupérer depuis l'API
-        final response = await http.get(Uri.parse(url));
-        if (response.statusCode == 200) {
-          final List fetchedData = json.decode(response.body);
-          // Mettre en cache les nouvelles données
-          await prefs.setString('laboDB', json.encode(fetchedData));
-          setState(() {
-            _laboDB = fetchedData.cast<Map<String, dynamic>>();
-            isLoading = false;
-          });
-        } else {
-          throw Exception('Erreur de chargement des données: ${response.statusCode}');
-        }
-      
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      print('Erreur: $e');
-    }
+    
   }
 
   @override
@@ -567,7 +543,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                             final users = snapshot.data?.docs;
 
                             if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Container();
+                              return ProgressIndicatorPharmabox();
                             }
 
                             // Simule ici la recherche en Full Text en filtrants les requetes Firestores
@@ -687,8 +663,8 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                         width: 60,
                                         colorFilter: ColorFilter.mode(Color(0xFFD0D1DE), BlendMode.srcIn),
                                       ),
-                                      if (searchLoading) Padding(padding: const EdgeInsets.only(top: 8.0, bottom: 8.0), child: CircularProgressIndicator(color: Color(0xFF595A71), value: 5.0)),
-                                      if (searchLoading == false)
+                                      if (pharmacieInPlace.length == 0) Padding(padding: const EdgeInsets.only(top: 8.0, bottom: 8.0), child: Text('Récupération des pharmacies...', style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: Color(0xFF595A71), fontSize: 11.0))),
+                                      if (pharmacieInPlace.length > 0)
                                         Padding(
                                           padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                                           child: pharmacieInPlace.length == 1
@@ -698,7 +674,7 @@ class _ExplorerWidgetState extends State<ExplorerWidget> with TickerProviderStat
                                                         color: Color(0xFF595A71),
                                                         fontSize: 14.0,
                                                       ))
-                                              : Text(pharmacieInPlace.length.toString() + ' résultats',
+                                              : Text(pharmacieInPlace.length.toString() + ' pharmacies',
                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                         fontFamily: 'Poppins',
                                                         color: Color(0xFF595A71),

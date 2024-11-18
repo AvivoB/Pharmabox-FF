@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmabox/auth/firebase_auth/auth_util.dart';
+import 'package:pharmabox/backend/DataProvider/DataProvider.dart';
 import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
 import 'package:pharmabox/popups/popup_import_contact/popup_import_contact_model.dart';
@@ -35,28 +36,11 @@ class _ReseauWidgetState extends State<ReseauWidget> {
   int demandesPending = 0;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  List titulairesNetwork = [];
   List userNetwork = [];
 
   Future<void> getNetworkData() async {
-    String currentUserId = await getCurrentUserId();
-
-    // Use collection group to make query across all collections
-    QuerySnapshot queryUsers = await FirebaseFirestore.instance.collection('users').where('reseau', arrayContains: currentUserId).get();
-
-    List listUserNetwork = [];
-
-    // Split users based on their 'poste' field
-    for (var doc in queryUsers?.docs ?? []) {
-      var data = doc.data();
-      data['type'] = 'user';
-      listUserNetwork.add(data);
-    }
-
-    print(listUserNetwork);
-
     setState(() {
-      userNetwork = listUserNetwork;
+      userNetwork = Provider.of<DataProvider>(context).getUserNetwork;
     });
   }
 

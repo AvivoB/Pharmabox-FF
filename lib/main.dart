@@ -10,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:pharmabox/annuaire/annuaire_widget.dart';
 import 'package:pharmabox/auth/AuthProvider.dart';
+import 'package:pharmabox/backend/DataProvider/DataProvider.dart';
 import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
 import 'package:pharmabox/home/home_widget.dart';
 import 'package:pharmabox/notifications/firebase_notifications_service.dart';
@@ -176,6 +177,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProviderPharmacieRegister()),
         ChangeNotifierProvider(create: (_) => ProviderProfilUser()),
         ChangeNotifierProvider(create: (_) => ProviderPharmacieUser()),
+        ChangeNotifierProvider(create: (_) => DataProvider()),
       ],
       child: MaterialApp.router(
           title: 'Pharmabox',
@@ -222,6 +224,11 @@ class _NavBarPageState extends State<NavBarPage> {
     super.initState();
     _currentPageName = widget.initialPage ?? _currentPageName;
     _currentPage = widget.page;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Charger les pharmacies au démarrage
+      Provider.of<DataProvider>(context, listen: false).fetchAllData();
+    });
   }
 
   @override

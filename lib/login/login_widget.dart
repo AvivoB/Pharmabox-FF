@@ -247,7 +247,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       if (user == null) {
                                         return;
                                       } else {
-                                        context.pushNamed('Reseau');
+                                        context.pushNamed('Accueil');
                                       } 
                                       
                                     },
@@ -312,7 +312,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         return;
                                       }
 
-                                      context.pushNamed('Reseau');
+                                      context.pushNamed('Accueil');
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.28,
@@ -349,7 +349,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         return;
                                       }
 
-                                      context.pushNamed('Reseau');
+                                      context.pushNamed('Accueil');
                                   },
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * 0.28,

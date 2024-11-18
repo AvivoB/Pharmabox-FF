@@ -5,7 +5,7 @@ import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 class ProgressIndicatorPharmabox extends StatelessWidget {
   Color background;
 
-  ProgressIndicatorPharmabox({Key? key, this.background = Colors.white});
+  ProgressIndicatorPharmabox({Key? key, this.background = Colors.white, String});
 
   @override
   Widget build(BuildContext context) {

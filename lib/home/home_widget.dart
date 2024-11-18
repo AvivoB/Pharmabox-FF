@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pharmabox/composants/header_app/header_app_widget.dart';
@@ -18,10 +19,30 @@ class _HomePageState extends State<HomePage> {
   late HomeModel _model;
   bool isTitulaire = false;
   var userData = '';
+  var dynamicMessage = {};
+
+
+  Future<void>getDynamiqueMessage() async {
+  //  Get collection
+    FirebaseFirestore.instance.collection('dynamic_message').doc('koYYh0hYhGcHA8fi41iA').get().then(
+      (DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          print('Document data: ${documentSnapshot.data()}');
+          setState(() {
+            dynamicMessage = documentSnapshot.data() as Map<String, dynamic>;
+          });
+        } else {
+          print('Document does not exist on the database');
+        }
+      }
+    );
+    
+  }
 
   @override
   void initState() {
     super.initState();
+    getDynamiqueMessage();
     checkIsTitulaire().then((value) {
       setState(() {
         isTitulaire = value;
@@ -55,6 +76,38 @@ class _HomePageState extends State<HomePage> {
                   Text('Bonjour, dès aujourd\'hui', style: FlutterFlowTheme.of(context).bodyMedium.override(color: blackColor, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'Poppins')),
                   Text('Prenez le contrôle de votre réseau', style: FlutterFlowTheme.of(context).bodyMedium.override(color: blackColor, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'Poppins')),
                   SizedBox(height: 20),
+                  StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance.collection('dynamic_message').doc('accueil').snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Container();
+                      }
+
+                      var dynamicMessage = snapshot.data!.data() as Map<String, dynamic>;
+                      if(dynamicMessage['title'] == '') {
+                        return Container();
+                      }
+
+                      return ItemAccueil(
+                        color1: dynamicMessage['color1'] != null
+                            ? Color(int.parse('0xFF${dynamicMessage['color1']}'))
+                            : Color.fromARGB(0, 255, 255, 255),
+                        color2: dynamicMessage['color2'] != null
+                            ? Color(int.parse('0xFF${dynamicMessage['color2']}'))
+                            : Color.fromARGB(0, 127, 127, 213),
+                        title: dynamicMessage['title'] ?? '',
+                        description: dynamicMessage['text'] ?? '',
+                        btnText: dynamicMessage['button_text'] ?? '',
+                        icon: Icons.arrow_forward_ios,
+                        onTap: () {
+                          if(dynamicMessage['link'] != null) {
+                            launchURL(dynamicMessage['link']);
+                          }
+                        },
+                      );
+                    },
+                  ),
+                  SizedBox(height: 20),
                   ItemAccueil(
                     color1: Color(0xFF7F7FD5),
                     color2: Color(0xFF91EAE4),
@@ -85,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.43,
+                        width: MediaQuery.of(context).size.width * 0.44,
                         child: ItemAccueil(
                           color1: Color(0xFF42D2FF),
                           color2: Color(0xFF42D2FF),
@@ -161,7 +214,7 @@ class ItemAccueil extends StatelessWidget {
   final String title;
   final String description;
   final String btnText;
-  final IconData icon;
+  final IconData? icon;
   final Function onTap;
   final Color color1;
   final Color color2;
@@ -177,7 +230,7 @@ class ItemAccueil extends StatelessWidget {
     required this.title,
     required this.description,
     required this.btnText,
-    required this.icon,
+    this.icon,
     required this.onTap,
     this.btnText2,
     this.icon2,

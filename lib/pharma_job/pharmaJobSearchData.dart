@@ -184,38 +184,71 @@ class PharmaJobSearchData {
     return mySearch.toList();
   }
 
-  Future<List> getAllrecherches() async {
-    List allSearch = [];
-    Future<QuerySnapshot<Map<String, dynamic>>> recherches = FirebaseFirestore.instance.collection('recherches').where('isActive', isEqualTo: true).orderBy('date_created', descending: true).get();
+Future<List<Map<String, dynamic>>> getAllrecherches() async {
+  Set<Map<String, dynamic>> allSearch = {};
+  Set<String> uniqueUserIds = {}; // Stocker les user_id uniques
+  Map<String, Map<String, dynamic>> userCache = {}; // Cache pour stocker les données utilisateur
 
-    Set<String> uniqueUserIds = {}; // Pour stocker les userId uniques
-    Set<Map<String, dynamic>> uniqueSearch = {}; // Pour stocker les userData uniques
+  try {
+    // Étape 1 : Récupérer toutes les recherches actives
+    QuerySnapshot recherchesSnapshot = await FirebaseFirestore.instance
+        .collection('recherches')
+        .where('isActive', isEqualTo: true)
+        .orderBy('date_created', descending: true)
+        .get();
 
-    CollectionReference usersRef = FirebaseFirestore.instance.collection('users');
-
-    var recherchess = await recherches;
-    for (var data in recherchess.docs) {
-      print("Document ID: ${data.id}");
-      print("Data: ${data.data()}");
-      print("-----------------------");
-
-      var rechercheData = data.data() as Map<String, dynamic>?;
-      var userId = rechercheData != null ? rechercheData['user_id'] : '';
-
-      if (!uniqueUserIds.contains(userId)) {
-        // Si l'userId n'a pas encore été traité
-        DocumentSnapshot userDoc = await usersRef.doc(userId).get();
-        Map<String, dynamic> userData = userDoc.exists ? userDoc.data() as Map<String, dynamic> : {};
-        print('Prenom: ${userData['prenom']}');
-        if (userData['nom'] != null && userData['prenom'] != null) {
-          uniqueSearch.add(userData); // Les Sets n'ajouteront pas de doublons
-          uniqueUserIds.add(userId); // Ajouter l'userId au Set
-        }
+    // Collecter les user_id uniques
+    for (var recherche in recherchesSnapshot.docs) {
+      var rechercheData = recherche.data() as Map<String, dynamic>?;
+      if (rechercheData != null && rechercheData['user_id'] != null) {
+        uniqueUserIds.add(rechercheData['user_id']);
       }
     }
 
-    return uniqueSearch.toList();
+    // Étape 2 : Diviser les user_id en lots (batches) pour contourner la limite de 10 IDs de whereIn
+    List<String> userIdList = uniqueUserIds.toList();
+    List<Future<QuerySnapshot>> userRequests = [];
+    int batchSize = 10; // Taille d'un lot pour whereIn
+
+    for (var i = 0; i < userIdList.length; i += batchSize) {
+      var batch = userIdList.sublist(
+        i,
+        i + batchSize > userIdList.length ? userIdList.length : i + batchSize,
+      );
+      userRequests.add(FirebaseFirestore.instance
+          .collection('users')
+          .where(FieldPath.documentId, whereIn: batch)
+          .get());
+    }
+
+    // Étape 3 : Attendre toutes les requêtes de lots en parallèle
+    List<QuerySnapshot> userSnapshots = await Future.wait(userRequests);
+
+    // Construire un cache des utilisateurs à partir des résultats des lots
+    for (var snapshot in userSnapshots) {
+      for (var userDoc in snapshot.docs) {
+        userCache[userDoc.id] = userDoc.data() as Map<String, dynamic>;
+      }
+    }
+
+    // Étape 4 : Construire les résultats finaux avec les recherches et les utilisateurs
+    for (var recherche in recherchesSnapshot.docs) {
+      var rechercheData = recherche.data() as Map<String, dynamic>?;
+      if (rechercheData != null && rechercheData['user_id'] != null) {
+        var userId = rechercheData['user_id'];
+        var userData = userCache[userId]; // Récupérer depuis le cache
+        if (userData != null) {
+          allSearch.add(userData);
+        }
+      }
+    }
+  } catch (e) {
+    print('Erreur lors de la récupération des recherches : $e');
   }
+
+  return allSearch.toList();
+}
+
 
   // TODO: A revoir pour les offres
   Future<List> getAllOffres() async {

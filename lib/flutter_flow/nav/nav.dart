@@ -132,6 +132,11 @@ final GoRouter routerApp = GoRouter(
         builder: (context, state) => NavBarPage(initialPage: 'Reseau', statePage: state.uri.queryParameters['typeIndex']),
       ),
       GoRoute(
+        name: 'Accueil',
+        path: '/accueil',
+        builder: (context, state) => NavBarPage(initialPage: 'Accueil', statePage: state.uri.queryParameters['typeIndex']),
+      ),
+      GoRoute(
           name: 'ReseauImportFromPhone',
           path: '/reseauImportFromPhone',
           builder: (context, state) => NavBarPage(initialPage: 'Reseau', page: ReseauImportFromPhone(type: state.uri.queryParameters['type']))),

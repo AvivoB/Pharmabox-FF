@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pharmabox/auth/AuthProvider.dart';
+import 'package:pharmabox/backend/DataProvider/DataProvider.dart';
 import 'package:pharmabox/backend/googlesheeet/laboratoires_db.dart';
 import 'package:pharmabox/composants/card_labo_annuaire/card_labo_widget.dart';
 import 'package:pharmabox/constant.dart';
@@ -73,31 +74,9 @@ class _AnnuaireWidgetState extends State<AnnuaireWidget> with TickerProviderStat
 
 
   Future<void> getLaboDB() async {
-    final String url = 'https://script.google.com/macros/s/AKfycbxrqjg978ezEg4gI4lM_BPIWoS_bIay5cQItBBsBCG4AK22rE3qtcRsRiYAkiTrLT4uLw/exec';
-
-    try {
-      final prefs = await SharedPreferences.getInstance();
-
-        // Pas de données en cache, récupérer depuis l'API
-        final response = await http.get(Uri.parse(url));
-        if (response.statusCode == 200) {
-          final List fetchedData = json.decode(response.body);
-          // Mettre en cache les nouvelles données
-          await prefs.setString('laboDB', json.encode(fetchedData));
-          setState(() {
-            _laboDB = fetchedData.cast<Map<String, dynamic>>();
-            isLoading = false;
-          });
-        } else {
-          throw Exception('Erreur de chargement des données: ${response.statusCode}');
-        }
-      
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      print('Erreur: $e');
-    }
+    setState(() {
+      _laboDB = Provider.of<DataProvider>(context, listen: false).getLabo;
+    });
   }
 
   @override
@@ -181,11 +160,11 @@ class _AnnuaireWidgetState extends State<AnnuaireWidget> with TickerProviderStat
                               ),
                             ),
                             style: FlutterFlowTheme.of(context).bodyMedium,
-                            onChanged: (query) async {
-                              setState(() async {
-                                searchTerms = query;
-                              });
+                            onChanged: (value) => setState(() {
+                              print('value: $value');
+                              searchTerms = value;
                             }),
+                          ),
                 ),
               ),
                 Expanded(
@@ -195,6 +174,7 @@ class _AnnuaireWidgetState extends State<AnnuaireWidget> with TickerProviderStat
                     ),
                     child: Builder(
                             builder: (context) {
+                              print('searchTerms: $searchTerms');
                               // Filtrer les documents en fonction du terme de recherche
                               final filteredDocuments = _laboDB.where((document) {
                                 final data = document as Map<String, dynamic>;
