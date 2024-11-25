@@ -58,6 +58,8 @@ Pour lancer le deploiement du Hosting :
 firebase deploy --only hosting
 ```
 
+
+
 #### Tester les deeplinks
 ```bash
 cd C:\Users\Aviel\AppData\Local\Android\Sdk\platform-tools
@@ -134,3 +136,7 @@ un processus CI/CD est exécuté avec CodeMagic, il est relié au dépot Github 
 stocke le projet.
 
 CodeMagic est configuré avec les identifiants et clés d'api Google Play pour la publication auto des MAJ de l'application
+
+
+## Backoffice de l'application
+- Une API avec Firebase Functions v

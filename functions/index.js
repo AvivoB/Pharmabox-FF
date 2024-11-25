@@ -6,8 +6,13 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
 const env = require('./config');
+const admin_server = require('./admin-server');
 
-admin.initializeApp();
+admin.initializeApp({
+    credential: admin.credential.cert('pharmaff-dab40-5b9eb96cd360.json'),
+});
+
+exports.backoffice = functions.https.onRequest(admin_server.app);
 
 // crée une copie des champs utilisateurs en minuscule pour la recherche
 exports.searchDataUsers = functions.firestore.document('users/{userId}').onWrite((change, context) => {
