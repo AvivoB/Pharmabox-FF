@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Layout from '../Components/Layout';
 import { useQuery } from 'react-query';
-import { Button, Card, ColorPicker, Form, Input, Modal, Select, Spin, Typography } from 'antd';
+import { Button, Card, ColorPicker, Form, Input, message, Modal, Select, Spin, Typography } from 'antd';
 import EmailEditor from 'react-email-editor';
 import { createTemplate, loadPharmacies, loadTemplates, loadUsers } from '../common-functions';
 import create from '@ant-design/icons/lib/components/IconFont';
@@ -14,6 +14,9 @@ const { Title, Text } = Typography;
 const AppMessage = () => {
   // Gestion des données via React Query
   const { formProps, saveButtonProps } = useForm();
+
+
+  const [messageApi, contextHolder] = message.useMessage();
 
 
   const onFinish = (values) => {
@@ -49,12 +52,19 @@ const AppMessage = () => {
       }
     }).then(response => {
       console.log(response.data);
+      if(response.data.message==='Message dynamique mis à jour avec succès.'){
+        messageApi.open({
+          type: 'success',
+          content: 'Le message dynamique a été vidé avec succès',
+        });
+      }
     }
     )
   }
 
   return (
     <Layout>
+      {contextHolder}
       {/* Titre principal */}
       <Title level={2} className="mb-4">
         Modifier le message dynamique de l'application

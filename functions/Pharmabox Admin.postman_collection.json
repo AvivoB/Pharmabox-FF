@@ -1,0 +1,490 @@
+{
+	"info": {
+		"_postman_id": "37972786-1839-4add-be1b-3110a415a334",
+		"name": "Pharmabox Admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25107728"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "pharmabox-admin@pharmabox.fr",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Pharmabox2023-XNZJ-pk2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/login",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/users",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Annuaire",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/annuaire",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"annuaire"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pharmablabla",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/pharmablabla",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"pharmablabla"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pharmacies",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/backoffice/pharmacies",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"pharmacies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SendNewsletter",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "subject",
+							"value": "Test Newsletter",
+							"type": "text"
+						},
+						{
+							"key": "template_name",
+							"value": "test-email",
+							"type": "text"
+						},
+						{
+							"key": "emails",
+							"value": "contact.devivo@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/send-newsletter",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"send-newsletter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DynamicMessage",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/dynamic-message",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"dynamic-message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DynamicMessage",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "color2",
+							"value": "2E2E2E",
+							"type": "text"
+						},
+						{
+							"key": "button_text",
+							"value": "dddd",
+							"type": "text"
+						},
+						{
+							"key": "link",
+							"value": "http://google.com/",
+							"type": "text"
+						},
+						{
+							"key": "color1",
+							"value": "4E4E4E4",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "Bonjour",
+							"type": "text"
+						},
+						{
+							"key": "text",
+							"value": "Bienevenue sur Pharmabox",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/change-dynamic-message",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"change-dynamic-message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateTemplate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "test-email",
+							"type": "text"
+						},
+						{
+							"key": "html",
+							"value": "<html><body><h1>Bonjour {{nom}} {{prenom}}</h1></body></html>",
+							"type": "text"
+						},
+						{
+							"key": "editor_data",
+							"value": "{\"counters\":{\"u_column\":1,\"u_row\":1,\"u_content_heading\":1,\"u_content_text\":1},\"body\":{\"id\":\"Q_L0mU-gP_\",\"rows\":[{\"id\":\"jvSwZ6tkDH\",\"cells\":[1],\"columns\":[{\"id\":\"Nz01Inxvs7\",\"contents\":[{\"id\":\"VUtUkq7F-l\",\"type\":\"heading\",\"values\":{\"containerPadding\":\"10px\",\"anchor\":\"\",\"headingType\":\"h1\",\"fontSize\":\"22px\",\"textAlign\":\"left\",\"lineHeight\":\"140%\",\"linkStyle\":{\"inherit\":true,\"linkColor\":\"#0000ee\",\"linkHoverColor\":\"#0000ee\",\"linkUnderline\":true,\"linkHoverUnderline\":true},\"displayCondition\":null,\"_styleGuide\":null,\"_meta\":{\"htmlID\":\"u_content_heading_1\",\"htmlClassNames\":\"u_content_heading\"},\"selectable\":true,\"draggable\":true,\"duplicatable\":true,\"deletable\":true,\"hideable\":true,\"text\":\"<strong>Bonjour {{prenom}}</strong>\",\"_languages\":{}}},{\"id\":\"mB6KXU-61J\",\"type\":\"text\",\"values\":{\"containerPadding\":\"10px\",\"anchor\":\"\",\"fontSize\":\"14px\",\"textAlign\":\"left\",\"lineHeight\":\"140%\",\"linkStyle\":{\"inherit\":true,\"linkColor\":\"#0000ee\",\"linkHoverColor\":\"#0000ee\",\"linkUnderline\":true,\"linkHoverUnderline\":true},\"displayCondition\":null,\"_styleGuide\":null,\"_meta\":{\"htmlID\":\"u_content_text_1\",\"htmlClassNames\":\"u_content_text\"},\"selectable\":true,\"draggable\":true,\"duplicatable\":true,\"deletable\":true,\"hideable\":true,\"text\":\"<p style=\\\"line-height: 140%;\\\">Ceci est un mail de test de newsletter</p>\",\"_languages\":{}}}],\"values\":{\"backgroundColor\":\"\",\"padding\":\"0px\",\"border\":{},\"borderRadius\":\"0px\",\"_meta\":{\"htmlID\":\"u_column_1\",\"htmlClassNames\":\"u_column\"}}}],\"values\":{\"displayCondition\":null,\"columns\":false,\"_styleGuide\":null,\"backgroundColor\":\"\",\"columnsBackgroundColor\":\"\",\"backgroundImage\":{\"url\":\"\",\"fullWidth\":true,\"repeat\":\"no-repeat\",\"size\":\"custom\",\"position\":\"center\",\"customPosition\":[\"50%\",\"50%\"]},\"padding\":\"0px\",\"anchor\":\"\",\"hideDesktop\":false,\"_meta\":{\"htmlID\":\"u_row_1\",\"htmlClassNames\":\"u_row\"},\"selectable\":true,\"draggable\":true,\"duplicatable\":true,\"deletable\":true,\"hideable\":true}}],\"headers\":[],\"footers\":[],\"values\":{\"_styleGuide\":null,\"popupPosition\":\"center\",\"popupWidth\":\"600px\",\"popupHeight\":\"auto\",\"borderRadius\":\"10px\",\"contentAlign\":\"center\",\"contentVerticalAlign\":\"center\",\"contentWidth\":\"500px\",\"fontFamily\":{\"label\":\"Arial\",\"value\":\"arial,helvetica,sans-serif\"},\"textColor\":\"#000000\",\"popupBackgroundColor\":\"#FFFFFF\",\"popupBackgroundImage\":{\"url\":\"\",\"fullWidth\":true,\"repeat\":\"no-repeat\",\"size\":\"cover\",\"position\":\"center\"},\"popupOverlay_backgroundColor\":\"rgba(0, 0, 0, 0.1)\",\"popupCloseButton_position\":\"top-right\",\"popupCloseButton_backgroundColor\":\"#DDDDDD\",\"popupCloseButton_iconColor\":\"#000000\",\"popupCloseButton_borderRadius\":\"0px\",\"popupCloseButton_margin\":\"0px\",\"popupCloseButton_action\":{\"name\":\"close_popup\",\"attrs\":{\"onClick\":\"document.querySelector('.u-popup-container').style.display = 'none';\"}},\"language\":{},\"backgroundColor\":\"#F7F8F9\",\"preheaderText\":\"\",\"linkStyle\":{\"body\":true,\"linkColor\":\"#0000ee\",\"linkHoverColor\":\"#0000ee\",\"linkUnderline\":true,\"linkHoverUnderline\":true},\"backgroundImage\":{\"url\":\"\",\"fullWidth\":true,\"repeat\":\"no-repeat\",\"size\":\"custom\",\"position\":\"center\"},\"_meta\":{\"htmlID\":\"u_body\",\"htmlClassNames\":\"u_body\"}}},\"schemaVersion\":17}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/create-template",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"create-template"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Templates",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/templates",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"templates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateNotification",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "Notification de test",
+							"type": "text"
+						},
+						{
+							"key": "body",
+							"value": "Bonjour !",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "dTWZm9x3QiCKdN9FgxrDTv:APA91bG-UjY5XhFaVom1sU-Eeese7HSgGrfgo8_TggjMD9ZddHa_6_Mx45l12ImkR-ha99C4R9hxskVHXnnw9QAuc1NfbXP5CxhSh0AVTBlBf3o3WXj80pA",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server}}/backoffice/create-notification",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"backoffice",
+						"create-notification"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server",
+			"value": "https://us-central1-pharmaff-dab40.cloudfunctions.net",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzMyNTMwODExLCJleHAiOjE3MzI1MzQ0MTF9.hIOx4WbxrntikpZvpxlKOCpjQo0cSqFL_Qo46i47yXw",
+			"type": "string"
+		}
+	]
+}

@@ -113,6 +113,7 @@ const Pharmacies = () => {
         </div>
         <div>
             <Table
+            scroll={{ x: 768 }}
              columns={columns} 
              dataSource={data
                 .reverse()
@@ -126,7 +127,7 @@ const Pharmacies = () => {
         </div>
         <div>
             <h2 className='text-xl font-bold'>Statistiques</h2>
-            <div class="grid grid-cols-2 py-4 gap-4">
+            <div class="grid grid-cols-2 mobile:grid-cols-1 py-4 gap-4">
                 <div>
                     <Card title="Top 5 des groupement les plus populaires" bordered={false} >
                     <Bar

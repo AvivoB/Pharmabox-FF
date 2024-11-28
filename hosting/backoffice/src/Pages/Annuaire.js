@@ -2,12 +2,15 @@ import React, { useMemo, useState } from 'react'
 import Layout from '../Components/Layout'
 import { loadAnnuaire, loadPharmacies } from '../common-functions';
 import { useQuery } from 'react-query';
-import { Card, Select, Spin, Statistic, Table } from 'antd';
+import { Button, Card, Select, Spin, Statistic, Table } from 'antd';
 import { Bar, Column, Line, OrganizationChart } from '@ant-design/charts';
+import axios from 'axios';
+import { Loading3QuartersOutlined } from '@ant-design/icons';
 
 const Annuaire = () => {
 
     const {isLoading, error, data} = useQuery('annuaire', () => loadAnnuaire());
+    const [loadingAnnuaire, setloadingAnnuaire] = useState(false);
 
     const columns = [
         {
@@ -96,6 +99,17 @@ const Annuaire = () => {
         return result;
       }, [data, selectedYear, isLoading]);
 
+    const updateAnnauire = async () => {
+        setloadingAnnuaire(true);
+        axios.post(`${process.env.REACT_APP_API_URL}/annuaire-scrapper`, {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token_pharmabox')}`
+            }
+        }).then(response => {
+            console.log(response.data);
+            setloadingAnnuaire(false);
+        });
+    }
 
     if (isLoading) {
         return (
@@ -107,12 +121,21 @@ const Annuaire = () => {
 
   return (
     <Layout>
-        <h1 className='text-2xl font-bold'>L'annuaire</h1>
-        <div class="grid grid-cols-4 mobile:grid-cols-1 py-6 gap-4">
-            
+        <h1 className='text-2xl font-bold'>L'annuaire : {data.annuaire.length} Laboratoires</h1>
+        <div class="py-6">
+        <Button type={loadingAnnuaire ? 'default' : 'primary'} disabled={loadAnnuaire ? false : true} onClick={() => updateAnnauire()}>
+            {loadingAnnuaire ? (
+                <>
+                <Spin indicator={<Loading3QuartersOutlined color='white' spin />} size="small" /> Récupération en cours depuis LaboData
+                </>
+            ) : (
+                'Mettre à jour l\'annuaire'
+            )}
+            </Button>
         </div>
         <div>
             <Table
+            scroll={{ x: 1500 }}
              columns={columns} 
              dataSource={data.annuaire
                 .reverse()

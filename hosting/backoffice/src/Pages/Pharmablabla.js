@@ -15,6 +15,7 @@ const Pharmablabla = () => {
             title: 'Utilisateur',
             dataIndex: 'user',
             key: 'user',
+            width: 150
         },
         {
             title: 'Post',
@@ -123,7 +124,7 @@ const Pharmablabla = () => {
 
   return (
     <Layout>
-        <h1 className='text-2xl font-bold'>Les pharmacies</h1>
+        <h1 className='text-2xl font-bold'>Le Pharmablabla</h1>
         <div class="grid grid-cols-4 mobile:grid-cols-1 py-6 gap-4">
             <div>
                 <Card title='Nombre de posts' bordered={false}>
@@ -155,6 +156,7 @@ const Pharmablabla = () => {
         </div>
         <div>
             <Table
+            scroll={{ x: 768 }}
              columns={columns} 
              dataSource={data.posts
                 .reverse()

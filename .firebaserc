@@ -1,5 +1,24 @@
 {
   "projects": {
     "default": "pharmaff-dab40"
-  }
+  },
+  "targets": {
+    "pharmaff-dab40": {
+      "hosting": {
+        "pharmabox-fr": [
+          "pharma-box.fr"
+        ],
+        "admin": [
+          "admin.pharma-box.fr"
+        ],
+        "pharmaff-dab40": [
+          "pharmaff-dab40"
+        ],
+        "backoffice-pharmabox": [
+          "backoffice-pharmabox"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

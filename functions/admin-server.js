@@ -7,6 +7,7 @@ const admin = require('firebase-admin');
 const env = require('./config');
 const axios = require('axios');
 const { user } = require("firebase-functions/v1/auth");
+const { ScrappeAnnuaireLaboData } = require("./scrapper/annuaire-labodata");
 app.use(cors({ origin: true }));
 const PORT = 3005;
 const secretKey = 'fgeighzgaieqdbzaehfdgbayilu5fed54e45e4d4z44d4ez4e4de4z4d4ez4derft4r4tfg4';
@@ -56,7 +57,7 @@ app.post('/login', async (req, res) => {
     // Compare from local user en dure
     if (authorisedUsers.some(user => user.email === email && user.password === password)) {
       const userId = 1; // ID utilisateur fictif
-      const token = jwt.sign({ id: userId }, secretKey, { expiresIn: '1h' });
+      const token = jwt.sign({ id: userId }, secretKey, { expiresIn: '24h' });
   
       // Stocker le token dans un cookie
       res.cookie('token', token, { httpOnly: true });
@@ -70,7 +71,7 @@ app.post('/login', async (req, res) => {
 
 app.get('/users', verifyToken, async (req, res) => {
 
-    // try {
+    try {
         const users = await admin.auth().listUsers();
         const firestoreUsersSnapshot = await admin.firestore().collection('users').get();
 
@@ -101,9 +102,9 @@ app.get('/users', verifyToken, async (req, res) => {
         });
 
         return res.status(200).send(usersData);
-    // } catch (error) {
-    //     return res.status(400).send(error);
-    // }
+    } catch (error) {
+        return res.status(400).send(error);
+    }
 });
 
 
@@ -263,12 +264,12 @@ app.get('/templates', verifyToken, async (req, res) => {
 app.post('/send-newsletter', verifyToken, async (req, res) => {
     const { subject, emails, html } = req.body;
 
-    errors = [];
+    const errors = [];
     if (!subject) {
         errors.push('Le sujet du mail est requis.');
     }
     if (!html) {
-        errors.push('Le html est requis.');
+        errors.push('Le contenu HTML est requis.');
     }
     if (!emails) {
         errors.push('Les emails sont requis.');
@@ -276,87 +277,81 @@ app.post('/send-newsletter', verifyToken, async (req, res) => {
 
     if (errors.length > 0) {
         return res.status(400).send({
-            message: 'Erreur : ' + errors.join(', ')
+            message: 'Erreur : ' + errors.join(', '),
         });
     }
 
     try {
-        try {
+        const originalHtmlContent = html;
 
-            var originalHtmlContent = html
+        // Convertir les emails en tableau et éliminer les doublons
+        const emailList = Array.from(new Set(emails.split(',').map(email => email.trim())));
 
-        } catch (error) {
-            if (error.code === 404) {
-                return res.status(404).send({
-                    message: `Template "${template_name}" introuvable dans le bucket. ${error.message}`
-                });
-            }
-            throw error;
-        }
-        
-        // Convertir les emails en tableau
-        const emailList = Array.from(new Set(emails.split(',').map(email => email.trim()))); // Éliminer les doublons
-
-        // Récupérer tous les utilisateurs concernés dans Firestore en une seule requête
+        // Récupérer tous les utilisateurs concernés dans Firestore
         const usersSnapshot = await admin
             .firestore()
             .collection('users')
             .where('email', 'in', emailList)
             .get();
-        
-        if (usersSnapshot.empty) {
-            return res.status(404).send({
-                message: 'Aucun utilisateur trouvé pour les emails spécifiés.'
+
+        const emailPromises = [];
+
+        // Mapper les utilisateurs trouvés dans Firestore
+        const foundUsers = {};
+        if (!usersSnapshot.empty) {
+            usersSnapshot.docs.forEach(doc => {
+                const userData = doc.data();
+                foundUsers[userData.email] = {
+                    nom: userData.nom ?? '',
+                    prenom: userData.prenom ?? '',
+                    poste: userData.poste ?? '',
+                };
             });
         }
 
+        // Envoyer un email personnalisé ou par défaut pour chaque email
+        emailList.forEach(email => {
+            const user = foundUsers[email];
+            let personalizedHtml;
 
+            if (user) {
+                // Personnaliser le contenu HTML pour l'utilisateur trouvé
+                personalizedHtml = originalHtmlContent
+                    .replace(/{{nom}}/g, user.nom)
+                    .replace(/{{prenom}}/g, user.prenom)
+                    .replace(/{{poste}}/g, user.poste);
+            } else {
+                // Utiliser le contenu HTML brut pour les emails sans utilisateur associé
+                personalizedHtml = originalHtmlContent
+                    .replace(/{{nom}}/g, '')
+                    .replace(/{{prenom}}/g, '')
+                    .replace(/{{poste}}/g, '');
+            }
 
-        // Mapper les utilisateurs en associant les données Firestore
-        const usersData = usersSnapshot.docs.map(doc => {
-            const userData = doc.data();
-            return {
-                id: doc.id,
-                email: userData.email,
-                nom: userData.nom ?? '',
-                prenom: userData.prenom ?? '',
-                poste: userData.poste ?? '',
-            };
-        });
-
-        emailPromises = [];
-
-        usersData.forEach(user => {
-            // Cloner le contenu HTML pour chaque utilisateur
-            let personalizedHtml = originalHtmlContent;
-        
-            // Remplacer les placeholders dynamiquement
-            personalizedHtml = personalizedHtml
-                .replace(/{{nom}}/g, user.nom ?? '')
-                .replace(/{{prenom}}/g, user.prenom ?? '')
-                .replace(/{{poste}}/g, user.poste ?? '');
-        
             const mailOptions = {
                 from: env.fromEmail,
-                to: user.email,
+                to: email,
                 subject: subject,
                 html: personalizedHtml,
             };
-        
+
             emailPromises.push(env.transporter.sendMail(mailOptions));
         });
-        
+
         // Attendre que tous les emails soient envoyés
         await Promise.all(emailPromises);
 
         return res.status(200).send({
-            message: `La newsletter a été envoyée à ${emailList.length} utilisateurs.`,
+            message: 'Emails envoyés avec succès.',
         });
     } catch (error) {
-        console.error('Erreur lors de l\'envoi de la newsletter :', error);
-        return res.status(500).send('Erreur interne lors de l\'envoi de la newsletter. :' + error);
+        console.error('Erreur lors de l\'envoi des emails :', error);
+        return res.status(500).send({
+            message: 'Une erreur est survenue lors de l\'envoi des emails.',
+        });
     }
 });
+
 
 
 app.get('/dynamic-message', verifyToken, async (req, res) => {
@@ -485,6 +480,32 @@ app.get('/annuaire', verifyToken, async (req, res) => {
 });
 
 
+// Exemple de route pour le scraping
+app.post('/annuaire-scrapper', verifyToken, async (req, res) => {
+    try {
+        // Appelez votre fonction de scraping ici
+        const data = await ScrappeAnnuaireLaboData();
+
+        // requet post
+        const response = await axios.post('https://script.google.com/macros/s/AKfycbxRX8tju8ITM6sfwh2BivQQvLsh0NZdej6PYh_WCbm9dd0V-NAXztMRhGEFblBke63rtA/exec', data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        // Retournez les données ou un message de succès
+        res.status(200).json({
+            success: response.data.success,
+            message: 'Données récupérées avec succès depuis LaboData',
+        });
+    } catch (error) {
+        console.error('Erreur lors du scraping :', error);
+        res.status(500).json({
+            success: false,
+            message: 'Une erreur est survenue lors du scraping',
+            error: error.message,
+        });
+    }
+});
    
 module.exports = {
     app: app,

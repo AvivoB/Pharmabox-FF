@@ -18,12 +18,28 @@
     },
     "singleProjectMode": true
   },
-  "hosting": {
-    "public": "hosting",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  }
+  "hosting": [
+    {
+      "target": "pharmaff-dab40",
+      "public": "hosting/pharma-box.fr",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "backoffice-pharmabox",
+      "public": "hosting/backoffice/build",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [ {
+        "source": "**",
+        "destination": "/index.html"
+      }]
+    }
+  ]
 }

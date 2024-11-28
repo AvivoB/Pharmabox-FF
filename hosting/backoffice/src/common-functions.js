@@ -16,8 +16,9 @@ export const loadUsers = async () => {
         return response.data;
     }
     catch (error) {
-        window.location.href = '/login';
-    }
+            console.log('error', error);
+            window.location.href = '/login';
+        }
 }
 
 export const loadPharmacies = async () => {

@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox, Alert } from 'antd';
 import axios from 'axios';
 import { getImage } from '../common-functions';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -19,7 +22,9 @@ const Login = () => {
 
       // save token in local storage
       localStorage.setItem('token_pharmabox', response.data.token);
-      // Rediriger ou effectuer une autre action après un login réussi
+      // Rediriger ou effectuer une autre action après un login réussi avec react router
+      // history.push('/users');
+      navigate('/users');
     } catch (err) {
       setError(err.response ? err.response.data.message : 'Identifiants incorrects');
     } finally {

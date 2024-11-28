@@ -1,17 +1,20 @@
 
-# Pharmabox Flutter
+# Pharmabox
 
-Application Flutter Pharmabox
+Ce projet regroupe l'application mobile développé en Flutter pour IOS et Android et toute les fonctionnalités autour.
 
 ## Configuration requise
 
  - Flutter : 3.7.12
  - Dart : 2.19.6
- - Branche : dev-aviel
+ - NodeJS v18
+
+ ## Ressources
  - Projet Firebase : pharmaff-dab40
- - Notifications push : OneSignal
  - Adresse mail du compte google : pharmaboxdb@gmail.com
  - Adresse mail du compte Apple : avielber26@gmail.com
+ - Notifications Push : Firebase Messaging
+ - 
 
 ## Installation du projet en local
 
@@ -45,12 +48,31 @@ Pour lancer le deploiement des functions :
 ```bash
 firebase deploy --only functions
 ```
+Le backoffice est géré par une API hébergée sur les Functions Firebase dans le fichier
+```bash
+admin-server.js
+``` 
+
 ## Hosting Firebase
+- Le domaine pharma-box.fr est lié au dossier ```pharma-box.fr```
+- Le domaine admin.pharma-box.fr est lié au dossier ```backoffice```
 
-Dans le dossier .well-knwown se situe les fichiers pour les deeplinks IOS et Android.
+```
+----hosting
+--------- backoffice
+--------- pharma-box.fr
+```
 
-- La page "profilView" permet de rediriger vers le profil utilisateur
-- La page "pharmacieProfilView" permet de rediriger vers le profil pharmacie
+#### Dossier Backoffice
+Application React JS pour le back office
+
+
+#### Dossier pharma-box.fr
+- .well-knwown : fichiers pour les deeplinks IOS et Android.
+- profilView : permet de rediriger vers le profil utilisateur
+- pharmacieProfilView : permet de rediriger vers le profil pharmacie
+
+
 
 Pour lancer le deploiement du Hosting :
 
@@ -136,7 +158,3 @@ un processus CI/CD est exécuté avec CodeMagic, il est relié au dépot Github 
 stocke le projet.
 
 CodeMagic est configuré avec les identifiants et clés d'api Google Play pour la publication auto des MAJ de l'application
-
-
-## Backoffice de l'application
-- Une API avec Firebase Functions v

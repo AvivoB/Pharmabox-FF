@@ -20,12 +20,14 @@ const Users = () => {
             title: 'Photo',
             dataIndex: 'photoUrl',
             key: 'photoUrl',
-            render : (photoUrl) => photoUrl ? <img src={photoUrl} alt='user' style={{width: '50px', height: '50px', borderRadius: '50%'}} /> : null
+            // responsive: ['lg'],
+            render : (photoUrl) => photoUrl ? <img src={photoUrl} alt='user' className='rounded-full max-w-12' /> : null
         },
         {
             title: 'Nom',
             dataIndex: 'name',
             key: 'name',
+            // responsive: ['md'],
             filter: [{filterMode: 'tree', filterSearch: true,
                 onFilter: (value, record) => record.name.startsWith(value),}]
         },
@@ -33,6 +35,7 @@ const Users = () => {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
+            // responsive: ['md'],
         },
         {
             title: 'Poste',
@@ -135,15 +138,28 @@ const Users = () => {
   const [modalOpen, setmodalOpen] = useState(false);
   const [selectCondition, setSelectCondition] = useState([
     {
+        label: 'Tous les utilisateurs', 
+        value: 'all',
+        items: []
+    },
+    {
         label: 'Profil', 
-        name: 'isComplete', 
-        items: [{label: 'Complet', value: 'true',}, {label: 'Incomplet', value: 'false', active: true}],
-        active: false,
+        value: 'isComplete',
+        items: [{label: 'Complet', value: 'true'}, {label: 'Incomplet', value: 'false'}]
     },
     {
         label: 'Poste', 
         value: 'poste',
-        items: [{label: 'Pharmacien titulaire', value: 'Pharmacien titulaire'}, {label: 'Préparateur', value: 'Préparateur'}]
+        items: [
+            {label: 'Pharmacien titulaire', value: 'Pharmacien titulaire'}, 
+            {label: 'Pharmacien', value: 'Pharmacien'},
+            {label: 'Préparateur', value: 'Préparateur'},
+            {label: 'Rayonniste', value: 'Rayonniste'},
+            {label: 'Conseiller', value: 'Conseiller'},
+            {label: 'Apprenti', value: 'Apprenti'},
+            {label: 'Etudiant pharmacie', value: 'Etudiant pharmacie'},
+            {label: 'Etudiant pharmacie 6ème année validée', value: 'Etudiant pharmacie 6ème année validée'},
+        ]
     },
     {
         label: 'Photo de profil', 
@@ -157,30 +173,29 @@ const Users = () => {
     }
 ]);
 
-    const setActiveCondition = (condition) => {
-        setSelectCondition(selectCondition.map((item) => {
-            console.log(condition);
-            console.log(item.label);
-            if (item.value === condition) {
-                return {...item, active: true};
-            }
-            return {...item, active: false};
-        }));
-    };
+const setActiveCondition = (condition) => {
+    setSelectCondition(selectCondition.map((item) => {
+        if (item.value === condition) {
+            return {...item, active: true};
+        }
+        return {...item, active: false};
+    }));
+};
 
+const sendNotification = async (data) => {
 
-    const sendNotification = async (data) => {
-        console.log('send notification', data);
+    if(data.first_condition === 'all') {
+        var usersNotif = users.filter(user => user.fcm_token);
+    } else {
+        var usersNotif = users.filter(user => user[data.first_condition] === data.second_condition && user.fcm_token);
+    }
+    // recuperer les fcm_token des utilisateurs
+    const tokens = usersNotif.map(user => user.fcm_token).join(',');
 
-        const usersNotif = users.filter(user => user[data.first_condition] === data.second_condition && user.fcm_token);
+    createNotification(tokens, data.title, data.message);
+    setmodalOpen(false);
 
-        // recuperer les fcm_token des utilisateurs
-        const tokens = usersNotif.map(user => user.fcm_token).join(',');
-
-        createNotification(tokens, data.title, data.message);
-        setmodalOpen(false);
-
-    };
+};
 
 
 
@@ -235,7 +250,7 @@ const Users = () => {
             </div>
         </div>
         <div class="py-6">
-            <Modal open={modalOpen} onCancel={() => setmodalOpen(false)} onClose={() => setmodalOpen(false)}>
+            <Modal open={modalOpen} footer={null} onCancel={() => setmodalOpen(false)} onClose={() => setmodalOpen(false)}>
                 <h2 className='text-xl font-bold py-2'>Envoyer une notification aux utilisateurs</h2>
                 <Alert className='my-4' message='Seuls les utilisateurs ayant accepté les notifications les recevront' type='info' showIcon />
                 <Form onFinish={(data) => sendNotification(data)}>
@@ -248,16 +263,17 @@ const Users = () => {
                         ))}
                     </Select>
                     </Form.Item>
-
+                    {selectCondition.find(el => el.active === true) && selectCondition.find(el => el.active === true).items.length > 0 &&
                     <Form.Item name={'second_condition'}>
                         <Select placeholder="Sélectionner une valeur" onChange={() => console.log()}>
-                        {selectCondition.find(el => el.active === true) && selectCondition.find(el => el.active === true).items.map((item) => (
+                        {selectCondition.find(el => el.active === true)  && selectCondition.find(el => el.active === true).items.map((item) => (
                             <Select.Option key={item.value} value={item.value}>
                                 {item.label}
                             </Select.Option>
                         ))}
                         </Select>
                     </Form.Item>
+                    }
                     <Form.Item
                         name="title"
                         rules={[{ required: true, message: 'Entrez un titre pour la notification' }]}
@@ -283,6 +299,7 @@ const Users = () => {
         </div>
         <div>
             <Table
+            scroll={{ x: 768 }}
              columns={columns} 
              dataSource={users
                 .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
