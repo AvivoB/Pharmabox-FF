@@ -11,9 +11,10 @@ const Layout = ({children}) => {
         { key: '1', icon: <UserOutlined />, label: 'Utilisateurs', path: '/users' },
         { key: '2', icon: <MedicineBoxOutlined />, label: 'Pharmacies', path: '/pharmacies' },
         { key: '4', icon: <DiscordOutlined />, label: 'Pharmablabla', path: '/pharmablabla' },      
-        { key: '5', icon: <OrderedListOutlined />, label: 'Annuaire', path: '/annuaire' },
-        { key: '6', icon: <MailOutlined />, label: 'Newsletter', path: '/newslettter' },      
-        { key: '7', icon: <NotificationOutlined />, label: 'App Message', path: '/app-message' },      
+        { key: '5', icon: <WechatWorkOutlined />, label: 'Jobs', path: '/jobs' },      
+        { key: '6', icon: <OrderedListOutlined />, label: 'Annuaire', path: '/annuaire' },
+        { key: '7', icon: <MailOutlined />, label: 'Newsletter', path: '/newslettter' },      
+        { key: '8', icon: <NotificationOutlined />, label: 'App Message', path: '/app-message' },      
       ];
 
 

@@ -110,3 +110,16 @@ export const loadPharmablabla = async () => {
         window.location.href = '/login';
     }
 }
+
+export const loadJobs = async () => {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/jobs`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token_pharmabox')}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        window.location.href = '/login';
+    }
+}

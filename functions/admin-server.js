@@ -506,6 +506,47 @@ app.post('/annuaire-scrapper', verifyToken, async (req, res) => {
         });
     }
 });
+
+app.get('/jobs', verifyToken, async (req, res) => {
+    try {
+        const offres = await admin.firestore().collection('offres').get();
+        const recherches = await admin.firestore().collection('recherches').get();
+        const stats = await admin.firestore().collection('statistics').where('action', '==', 'Open Jobs').get();
+
+
+        const offresData = offres.docs.map(offer => {
+            const offerData = offer.data();
+
+            return {
+                created_at: new Date(offer.createTime._seconds * 1000),
+            };
+        });
+
+        const recherchesData = recherches.docs.map(recherche => {
+            const rechercheData = recherche.data();
+
+            return {
+                created_at: new Date(recherche.createTime._seconds * 1000),
+            };
+        });
+
+        const statsData = stats.docs.map(stat => {
+            
+            return {
+                created_at: new Date(stat.createTime._seconds * 1000),
+            };
+        });
+        
+
+        return res.status(200).send({
+            statistics: statsData,
+            offres: offresData,
+            recherches: recherchesData,
+        });
+    } catch (error) {
+        return res.status(400).send(error);
+    }
+});
    
 module.exports = {
     app: app,

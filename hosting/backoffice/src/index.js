@@ -12,6 +12,7 @@ import Annuaire from './Pages/Annuaire';
 import Newsletter from './Pages/Newsletter';
 import Pharmablabla from './Pages/Pharmablabla';
 import AppMessage from './Pages/AppMessage';
+import Jobs from './Pages/Jobs';
 
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ root.render(
         <Route path="/login" element={<Login/>} />
         <Route path="/users" element={<Users/>} />
         <Route path="/pharmacies" element={<Pharmacies/>} />
+        <Route path="/jobs" element={<Jobs/>} />
         <Route path="/annuaire" element={<Annuaire/>} />
         <Route path="/newslettter" element={<Newsletter/>} />
         <Route path="/app-message" element={<AppMessage/>} />

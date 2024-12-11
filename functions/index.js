@@ -7,6 +7,7 @@ const fs = require('fs');
 const axios = require('axios');
 const env = require('./config');
 const admin_server = require('./admin-server');
+const {Timestamp} = require("firebase-admin/firestore");
 
 admin.initializeApp();
 
@@ -554,7 +555,7 @@ exports.deleteAccount = functions.https.onRequest( async (req, res) => {
 });
 
 // Desactive les offres et recherches qui ont plus d'un mois les dates sont au format UTC
-exports.disableInactiveDocumentss = functions.https.onRequest((req, res) => {
+exports.disableInactiveDocumentss = functions.runWith(runtimeOpts).https.onRequest((req, res) => {
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
@@ -565,15 +566,20 @@ exports.disableInactiveDocumentss = functions.https.onRequest((req, res) => {
 
   const updatePromises = [];
 
+  console.log('Date Firestore: ' + Timestamp.fromDate(oneMonthAgo));
+
   // Mise à jour de la collection 'offres'
-  const offresQuery = offresCollection.where('date_created', '<=', admin.firestore.Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
+  // const offresQuery = offresCollection.where('date_created', '<=', Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
+  const offresQuery = offresCollection.where('date_created', '<=', Timestamp.fromDate(oneMonthAgo))
   updatePromises.push(updateDocuments(offresQuery, currentDate, 'proposition_dispo_interim', oneMonthAgo));
 
   // Mise à jour de la collection 'recherches'
-  const recherchesQuery = recherchesCollection.where('date_created', '<=', admin.firestore.Timestamp.fromDate(oneMonthAgo)).where('isActive', '==', true);
+  const recherchesQuery = recherchesCollection.where('date_created', '<=', Timestamp.fromDate(oneMonthAgo))
   updatePromises.push(updateDocuments(recherchesQuery, currentDate, 'horaire_dispo_interim', oneMonthAgo));
 
   return Promise.all(updatePromises);
+
+  // return null;
 });
 
 function updateDocuments(query, currentDate, dateField, oneMonthAgo) {
@@ -599,21 +605,21 @@ function updateDocuments(query, currentDate, dateField, oneMonthAgo) {
         if (dates.length === 1 && hasPastDates) {
           // Si une seule date passée, on désactive le document
           updatePromises.push(doc.ref.update({ isActive: false }));
-          console.log('ID desactivée: '+ doc.id + ' date: ' + dates[0]);
+          console.log('ID desactivée: '+ doc.id + ' date: ' + doc.data().date_created);
         } else if (dates.length > 1 && hasPastDates && hasFutureDates) {
           // Si plusieurs dates passées, mais il y a aussi des dates futures, on laisse le document actif
           // Vous pouvez ajouter d'autres conditions ici si nécessaire
         } else if (!hasFutureDates) {
           // Si aucune date future, on désactive le document
           updatePromises.push(doc.ref.update({ isActive: false }));
-          console.log('ID desactivée: '+ doc.id + ' date: ' + dates[0]);
+          console.log('ID desactivée: '+ doc.id + ' date: ' + doc.data().date_created);
         }
         // Sinon, on laisse le document actif
       } else {
         // Si le champ de dates est vide, appliquer la logique de désactivation après un mois
-        if (doc.data().date_created <= admin.firestore.Timestamp.fromDate(oneMonthAgo)) {
+        if (doc.data().date_created <=Timestamp.fromDate(oneMonthAgo)) {
           updatePromises.push(doc.ref.update({ isActive: false }));
-          console.log('ID desactivée: '+ doc.id + ' date: ' + dates[0]);
+          console.log('ID desactivée: '+ doc.id + ' date: ' + doc.data().date_created);
         }
       }
     });
