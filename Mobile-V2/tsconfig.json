@@ -1,0 +1,24 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "module": "esnext",
+    "module": "esnext",
+    "module": "esnext",
+    "module": "esnext",
+    "module": "esnext",
+    "strict": false,
+    "checkJs": false,
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
+, "app/onboarding/index.tsx", "components/Button.tsx", "components/Button.tsx"  ]
+}

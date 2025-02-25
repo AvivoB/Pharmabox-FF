@@ -1,0 +1,68 @@
+{
+  "expo": {
+    "name": "InterPharm",
+    "slug": "InterPharm",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/OpenSauceSans-BlackItalic.ttf",
+            "./assets/fonts/OpenSauceSans-Bold.ttf",
+            "./assets/fonts/OpenSauceSans-BoldItalic.ttf",
+            "./assets/fonts/OpenSauceSans-ExtraBold.ttf",
+            "./assets/fonts/OpenSauceSans-ExtraBoldItalic.ttf",
+            "./assets/fonts/OpenSauceSans-Light.ttf",
+            "./assets/fonts/OpenSauceSans-LightItalic.ttf",
+            "./assets/fonts/OpenSauceSans-Medium.ttf",
+            "./assets/fonts/OpenSauceSans-MediumItalic.ttf",
+            "./assets/fonts/OpenSauceSans-Regular.ttf",
+            "./assets/fonts/OpenSauceSans-SemiBold.ttf",
+            "./assets/fonts/OpenSauceSans-SemiBoldItalic.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Autoriser $(PRODUCT_NAME) à accéder à votre caméra pour valider votre identité",
+          "microphonePermission": "Autoriser $(PRODUCT_NAME) à accéder à votre caméra pour valider votre identité",
+          "recordAudioAndroid": true
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
