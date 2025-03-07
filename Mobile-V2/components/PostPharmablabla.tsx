@@ -5,39 +5,35 @@ import { View, Text, Image } from 'react-native';
 
 
 interface PostPharmablablaProps {
-    id: number;
-    name: string;
-    post: string;
-    likes: number;
-    comments: number;
+   item: any;
 }
 
-export const PostPharmablabla = ({ id, name, post, likes, comments } : PostPharmablablaProps) => {
+export const PostPharmablabla = ({ item } : PostPharmablablaProps) => {
   return (
-    <View style={styles.post_pharmablabla}>
-        <View style={styles.post_pharmablabla_content}>
-            <View style={[styles.flex, styles.flex_row, styles.align_start]}>
+    <View className='bg-white my-2 rounded-lg'>
+        <View className='p-6'>
+            <View className='flex flex-row'>
                 <View>
-                    <Image source={require('@/assets/images/Avatar.png')} style={{ width: 40, height: 40, borderRadius: 30 }} />
+                    <Image source={ item.user?.photoUrl ?? require('@/assets/images/Avatar.png')} style={{ width: 40, height: 40, borderRadius: 30 }} />
                 </View>
-                <View style={{ paddingLeft: 10 }}>
-                    <Text style={styles.card_title}>{name}</Text>
-                    <Text style={styles.description}>{name}</Text>
+                <View className='ml-2'>
+                    <Text className='text-xl font-semibold font-poppins'>{item.user?.nom +' '+ item.user?.prenom}</Text>
+                    <Text className='text-md'>{item.user?.poste}</Text>
                 </View>
             </View>
-            <View><Text style={[styles.description]}>{post}</Text></View>
+            <View><Text style={[styles.description]}>{item?.post_content}</Text></View>
         </View>
-        <View style={[styles.post_pharmablabla_bottom, styles.flex, styles.flex_row, styles.item_between, styles.align_center]}>
+        <View className='flex flex-row justify-between px-6 py-2 items-center bg-green_110 rounded-b-lg'>
             <View style={[styles.comments_likes_btn]}>
-                <MaterialIcons name='recommend' size={20} style={{ paddingRight: 10 }} />
-                <Text>{likes}</Text>
+                <MaterialIcons name='recommend' size={20} className='mr-2' />
+                <Text>{item?.likes}</Text>
             </View>
             <View>
-                <Text>Thème</Text>
+                <Text>{item?.theme}</Text>
             </View>
             <View style={[styles.comments_likes_btn]}>
-                <MaterialIcons name='subject' size={20} style={{ paddingRight: 10 }} />
-                <Text>{comments}</Text>
+                <MaterialIcons name='subject' size={20} className='mr-2 ' />
+                <Text>{item?.comments}</Text>
             </View>
         </View>
     </View>

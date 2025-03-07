@@ -1,10 +1,16 @@
 import { StyleSheet } from "react-native";
 import {globalColors} from "./colors.ts";
+import { auth } from "@/common/firebase.js";
 
 export const styles = StyleSheet.create({
     container: {
         padding: 20,
         height: '100%',
+    },
+    auth_container: {
+        padding: 0,
+        height: '100%',
+        justifyContent: 'center',
     },
     h1: {
         fontSize: 38,
@@ -77,7 +83,6 @@ export const styles = StyleSheet.create({
         backgroundColor: globalColors.white_100,
         padding: 15,
         borderRadius: 0,
-        marginTop: 10,
         alignItems: "center",
         outlineColor: globalColors.blue_100,
         outlineWidth: 1,
@@ -154,11 +159,7 @@ export const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: globalColors.white_100,
         height: '100%',
-        padding: 20,
-        marginBottom: 20,
-        borderRadius: 15,
-        shadowColor: globalColors.grey_110,
-        shadowOffset: { width: 0, height: 2 },
+        padding: 10,
     },
     bg_white: {
         backgroundColor: globalColors.white_100,
@@ -199,6 +200,9 @@ export const styles = StyleSheet.create({
         color: globalColors.black_100,
         fontFamily: 'Poppins_400Regular',
     },
+    nav_item_active: {
+        color: globalColors.green_100,
+    },
     bg_account_navbar: {
         backgroundColor: globalColors.white_100,
         padding: 20,
@@ -211,7 +215,7 @@ export const styles = StyleSheet.create({
     post_pharmablabla: {
         backgroundColor: globalColors.white_100,
         marginBottom: 20,
-        borderRadius: 15,
+        borderRadius: 5,
         shadowColor: globalColors.grey_110,
         shadowOffset: { width: 0, height: 2 },
     },
@@ -222,8 +226,8 @@ export const styles = StyleSheet.create({
         marginTop: 10,
         backgroundColor: globalColors.green_110,
         padding: 10,
-        borderBottomLeftRadius: 15,
-        borderBottomRightRadius: 15,
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
     },
     card_title: {
         fontSize: 16,

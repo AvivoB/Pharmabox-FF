@@ -8,7 +8,7 @@ import { SelectInput } from "@/components/SelectInput";
 import { ROLES } from "@/common/constants/ROLES";
 import { AUTH_METHODS } from "@/common/constants/AUTH_METHODS";
 import { JobTitleSelect } from "@/components/JobTitleSelect";
-
+import '@/assets/style/global.css';
 
 export default function Index() {
     const [step, setStep] = useState(0);
