@@ -9,13 +9,20 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Cette application nécessite l'accès à la localisation pour afficher votre position sur la carte"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -58,6 +65,19 @@
           "cameraPermission": "Autoriser $(PRODUCT_NAME) à accéder à votre caméra pour valider votre identité",
           "microphonePermission": "Autoriser $(PRODUCT_NAME) à accéder à votre caméra pour valider votre identité",
           "recordAudioAndroid": true
+        }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsImpl": "mapbox",
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoicGhhcm1hYm94ZGIiLCJhIjoiY204aXZ5cHplMGg1YTJqcXk3NzhnaXE0dyJ9.fxPynZiwRotgyOFuliQH5Q"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Autoriser $(PRODUCT_NAME) à accéder à votre position pour afficher votre position sur la carte",
         }
       ]
     ],

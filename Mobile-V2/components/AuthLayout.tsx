@@ -47,7 +47,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Menu fixe qui prend toute la hauteur */}
       <View className="w-1/6 h-screen bg-white px-4 flex justify-between border-r-2 border-grey_110 shadow-md sticky top-0">
         <View className="py-4 flex flex-row items-center gap-2">
-          <Image source={require('@/assets/images/logo-pharma-box.png')} className="rounded-full" style={{ width: 50, height: 50 }} />
+          <Image source={require('@/assets/images/logo-pharma-box.png')} className="rounded-full" style={{ width: 40, height: 40 }} />
           <Text style={styles.h3}>Pharmabox</Text>
         </View>
         <View className="flex-1">
@@ -56,7 +56,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               <View className={`flex flex-row justify-between items-center gap-2 p-2 my-2 ${item.path === pathname ? 'border rounded-md border-grey_110' : ''}`}>
                 <View className='flex flex-row items-center gap-2'>
                   <MaterialIcons name={item.icon} size={25} />
-                  <Text>{item.label}</Text>
+                  <Text style={styles.description}>{item.label}</Text>
                 </View>
                 <View>
                   {item.path === pathname &&
@@ -73,11 +73,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             </Link>
           ))}
         </View>
-        <View className="py-4">
+        <View className="py-4 border-t border-grey_110">
           {accountItems.map((item, index) => (
             <View className="flex flex-row items-center gap-2 py-2" key={index}>
               <MaterialIcons name={item.icon} size={25} />
-              <Text>{item.label}</Text>
+              <Text style={styles.description}>{item.label}</Text>
             </View>
           ))}
         </View>
