@@ -8,8 +8,8 @@ import { globalColors } from '@/assets/style/colors';
 
 // Create Props interface
 interface ButtonProps {
-  styleType: 'btnPrimary' | 'btnSecondary' | 'btnSecondaryOutline';
   text: string;
+  classNameProps?: string; 
   onPress?: () => void;
   isLink?: boolean;
   href?: RelativePathString | ExternalPathString;
@@ -18,7 +18,7 @@ interface ButtonProps {
 }
 
 
-export const Button = ({styleType, text, isLink, href, onPress, params, isLoading} : ButtonProps) => (
+export const Button = ({classNameProps, text, isLink, href, onPress, params, isLoading} : ButtonProps) => (
   
   isLink && href ? (
     <Link href={{ 
@@ -26,12 +26,12 @@ export const Button = ({styleType, text, isLink, href, onPress, params, isLoadin
       params: { ...params }
      }} asChild>
       <TouchableOpacity>
-        <Text style={styles[styleType]}>{isLoading ? <ActivityIndicator color={globalColors.base_10} /> : text}</Text>
+        <Text className={classNameProps}>{isLoading ? <ActivityIndicator color={globalColors.base_10} /> : text}</Text>
       </TouchableOpacity>
     </Link>
   ) : (
     <TouchableOpacity onPress={onPress}>
-      <Text style={styles[styleType]}>{isLoading ? <ActivityIndicator color={globalColors.base_10} /> : text}</Text>
+      <Text className={classNameProps}>{isLoading ? <ActivityIndicator color={globalColors.base_10} /> : text}</Text>
     </TouchableOpacity>
   )
 );

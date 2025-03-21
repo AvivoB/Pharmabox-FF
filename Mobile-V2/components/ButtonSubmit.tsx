@@ -4,16 +4,16 @@ import { useForm } from './Form';
 
 interface ButtonSubmitProps {
   text: string;
-  styleType?: 'btnPrimary' | 'btnSecondary' | 'btnSecondaryOutline';
+  classNameProps?: string; 
 }
 
-export const ButtonSubmit = ({ text, styleType = 'btnPrimary' }: ButtonSubmitProps) => {
+export const ButtonSubmit = ({ text, classNameProps }: ButtonSubmitProps) => {
   const { isValid, handleSubmit } = useForm();
 
   return (
     <Button 
       onPress={handleSubmit} 
-      styleType={styleType} 
+      classNameProps={classNameProps}
       text={text} 
     />
   );

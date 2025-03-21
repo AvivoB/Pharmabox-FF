@@ -76,3 +76,34 @@ export const formatIban = (iban: string) => {
 
     return formatted;
 }
+
+export const formatDateFirebase = (dateString: string) => {
+    if (!dateString) return '';
+    
+    try {
+      // Si c'est un timestamp Firebase (objet Firestore)
+      if (dateString.seconds) {
+        const date = new Date(dateString.seconds * 1000);
+        return date.toLocaleDateString('fr-FR', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+      
+      // Si c'est une chaîne de date standard
+      const date = new Date(dateString);
+      return date.toLocaleDateString('fr-FR', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      console.log('Erreur de formatage de date:', error);
+      return dateString; // Retourne la date originale en cas d'erreur
+    }
+  };

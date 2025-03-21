@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
     },
     h3: {
         fontSize: 20,
-        lineHeight:12,
+        lineHeight:24,
         color: globalColors.black_100,
         fontFamily: 'Poppins_500Medium'
     },

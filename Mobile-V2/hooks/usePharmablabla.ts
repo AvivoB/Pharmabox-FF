@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { collection, query, orderBy, limit, startAfter, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, limit, startAfter, getDocs, getCountFromServer, where } from 'firebase/firestore';
 import { db } from '@/common/firebase';
 import { useUsers } from './useUsers';
+import { useAuthState } from './auth/useAuth';
+import { getUserById } from './useUsers';
 
 const PAGE_SIZE = 10;
 
@@ -12,6 +14,7 @@ export const usePharmablabla = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const { getUserById, usersCache } = useUsers();
+const { user, loadingAuth } = useAuthState();
 
   const fetchData = async () => {
     if (loading) return;
@@ -43,18 +46,64 @@ export const usePharmablabla = () => {
         ...doc.data()
       }));
       
-      // Récupérer les informations utilisateur pour chaque post
+      // Récupérer les informations utilisateur et les commentaires pour chaque post
       const docsWithUserPromises = docs.map(async (post) => {
+        let userData = null;
+        
         if (post.userId) {
-          const userData = await getUserById(post.userId);
-          return {
-            ...post,
-            user: userData,
-            likes: '0',
-            comments: '0'
-          };
+          userData = await getUserById(post.userId);
         }
-        return post;
+        
+        // Récupérer le nombre de commentaires
+        const commentsRef = collection(db, 'pharmablabla', post.id, 'comments');
+        const commentsSnapshot = await getCountFromServer(commentsRef);
+        const commentsCount = commentsSnapshot.data().count;
+        
+        // Récupérer les commentaires
+        const commentsQuery = query(commentsRef, orderBy('timestamp', 'desc'));
+        const commentsQuerySnapshot = await getDocs(commentsQuery);
+        
+        // Préparer les commentaires avec les données utilisateur
+        const commentsWithUserPromises = commentsQuerySnapshot.docs.map(async (commentDoc) => {
+          const commentData = {
+            id: commentDoc.id,
+            ...commentDoc.data()
+          };
+          
+          if (commentData.fromId) {
+            const commentUserData = await getUserById(commentData.fromId);
+            return {
+              ...commentData,
+              user: commentUserData
+            };
+          }
+          
+          return commentData;
+        });
+        
+        const commentsData = await Promise.all(commentsWithUserPromises);
+        
+        // Récupérer les likes depuis la collection principale "likes"
+        const likesRef = collection(db, 'likes');
+        const likesQuery = query(likesRef, where("document_id", "==", post.id));
+        const likesSnapshot = await getDocs(likesQuery);
+        const likesCount = likesSnapshot.size;
+        const likesQuerySnapshot = await getDocs(likesQuery);
+        
+        const likesData = likesQuerySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        
+        return {
+          ...post,
+          user: userData,
+          likes: likesCount.toString(), // Utilise le nombre de likes de la sous-collection
+          likesData: likesData, // Ajoute les données complètes des likes
+          comments: commentsCount.toString(),
+          commentsData: commentsData,
+          isLikedByMe: likesData.some(like => like?.liked_by === user.uid) // Vérifie si l'utilisateur actuel a déjà liké le post
+        };
       });
       
       const docsWithUsers = await Promise.all(docsWithUserPromises);
