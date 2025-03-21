@@ -24,8 +24,8 @@ export default function index() {
             <View className='py-4 flex flex-row items-center gap-2'>
                 <Text className='' style={styles.h3}>Comment accéder à votre compte ?</Text>
             </View>
-        <Form onSubmit={(values) => console.log(values)}>
-          {authMethode == '' && AUTH_METHODS.map((method) => (
+        <Form onSubmit={(values) => console.log(setAuthMethode(values.authMethode))}>
+          {AUTH_METHODS.map((method) => (
               <InputRadio key={method} name='authMethode' 
                 options={[{ 
                   label: method, 
@@ -37,17 +37,9 @@ export default function index() {
           ))}
         </Form>
         </View>
-        <View className='w-4/6 h-screen'>
+        <View className='w-4/6 h-screen p-6'>
             <Text className='text-3xl font-bold'>Connexion</Text>
-
-        </View>
-
-      <View>
-        {authMethode == '' && AUTH_METHODS.map((method) => (
-            <Button key={method} text={method} onPress={() => setAuthMethode(method)} />
-        ))}
-      </View>
-      {authMethode === 'Email' && (
+            {authMethode === 'Email' && (
         <View>
 
             <Text>Connexion par email</Text>
@@ -58,6 +50,14 @@ export default function index() {
             </Form>
         </View>
         )}
+        </View>
+
+      <View>
+        {authMethode == '' && AUTH_METHODS.map((method) => (
+            <Button key={method} text={method} onPress={() => setAuthMethode(method)} />
+        ))}
+      </View>
+
     </View>
   );
 };
