@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:pharmabox/Laboratoires/LayoutLabo.dart';
 import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/constant.dart';
 import 'package:pharmabox/custom_code/widgets/progress_indicator.dart';
@@ -184,6 +185,13 @@ final GoRouter routerApp = GoRouter(
         name: 'HelperCenter',
         path: '/helperCenter',
         builder: (context, params) => HelpPage()
+      ),
+      GoRoute(
+        name: 'laboratoires',
+        path: '/laboratoires',
+        builder: (context, state) => LayoutLabo(
+          child: Container(),
+        ),
       )
     ] /* .map((r) => r.toRoute(appStateNotifier)).toList(), */
     // urlPathStrategy: UrlPathStrategy.path,

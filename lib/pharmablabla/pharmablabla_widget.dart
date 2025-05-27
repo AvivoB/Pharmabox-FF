@@ -35,8 +35,6 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PharmaBlabla extends StatefulWidget {
@@ -506,7 +504,7 @@ void getPosts() async {
                     // document['postId'] = document.id;
 
                     return Padding(
-                      padding: const EdgeInsets.only(left: 0.0, right: 0.0, top: 2.0, bottom: 2.0),
+                      padding: kIsWeb ? EdgeInsets.only(left: 150.0, right: 150.0, top: 2.0, bottom: 2.0) : EdgeInsets.only(left: 0.0, right: 0.0, top: 2.0, bottom: 2.0),
                       child: GestureDetector(
                           child: document['user'] != null ? CardPharmablabla(data: document) : Container(),
                           onLongPress: () {

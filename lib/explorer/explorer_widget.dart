@@ -37,10 +37,7 @@ import 'explorerSearchData.dart';
 import 'explorer_model.dart';
 export 'explorer_model.dart';
 import 'classPlaceClusterExplorer.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:pharmabox/custom_code/widgets/prediction_ville.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 

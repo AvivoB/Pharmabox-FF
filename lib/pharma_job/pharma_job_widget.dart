@@ -36,7 +36,6 @@ import 'package:provider/provider.dart';
 import 'pharma_job_model.dart';
 export 'pharma_job_model.dart';
 import 'classPlaceClusterPharmaJob.dart';
-// import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -607,7 +606,7 @@ class _PharmaJobWidgetState extends State<PharmaJobWidget> {
                     // height: offres.isNotEmpty || recherches.isNotEmpty ? MediaQuery.of(context).size.height * 0.61 : MediaQuery.of(context).size.height * 0.72,
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: kIsWeb ? const EdgeInsets.fromLTRB(150.0, 16.0, 150.0, 16.0) : const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
                             Padding(

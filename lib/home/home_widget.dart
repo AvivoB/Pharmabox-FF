@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pharmabox/composants/header_app/header_app_widget.dart';
 import 'package:pharmabox/constant.dart';
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               HeaderAppWidget(),
               Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: kIsWeb ? EdgeInsets.all(45.0) : EdgeInsets.all(20.0),
                 child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('Bonjour, dès aujourd\'hui', style: FlutterFlowTheme.of(context).bodyMedium.override(color: blackColor, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'Poppins')),
                   Text('Prenez le contrôle de votre réseau', style: FlutterFlowTheme.of(context).bodyMedium.override(color: blackColor, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'Poppins')),

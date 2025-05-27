@@ -35,8 +35,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'annuaire_model.dart';
 export 'annuaire_model.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pharmabox/custom_code/widgets/prediction_ville.dart';
 import 'package:http/http.dart' as http;
@@ -52,10 +50,8 @@ class AnnuaireWidget extends StatefulWidget {
 }
 
 class _AnnuaireWidgetState extends State<AnnuaireWidget> with TickerProviderStateMixin {
-  TabController? _tabController;
   int currentTAB = 1;
   late AnnuaireModel _model;
-  late AnimationController _animationController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
   final MapController mapController = MapController();
@@ -64,10 +60,7 @@ class _AnnuaireWidgetState extends State<AnnuaireWidget> with TickerProviderStat
   String? selectedItem;
   bool isLoading = true;
   bool searchLoading = false;
-  LatLng? _currentPosition;
   double initialZoom = 10.0;
-
-  List _predictions = [];
 
   List _laboDB = [];
   
@@ -108,12 +101,7 @@ class _AnnuaireWidgetState extends State<AnnuaireWidget> with TickerProviderStat
     setStatistics('Annuaire', 'Open Annuaire');
     _model = createModel(context, () => AnnuaireModel());
     _model.textController ??= TextEditingController();
-    currentTAB = widget.tabSTart ?? 1;
-    _tabController = TabController(initialIndex: 1, length: 3, vsync: this);
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
-    );
+
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -131,6 +119,13 @@ class _AnnuaireWidgetState extends State<AnnuaireWidget> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+
+    if(isLoading) {
+      return Center(
+        child: ProgressIndicatorPharmabox(),
+      );
+    }
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(

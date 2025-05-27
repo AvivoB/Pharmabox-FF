@@ -79,7 +79,7 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
         // height: MediaQuery.of(context).size.height * 0.65,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
-          borderRadius: BorderRadius.circular(0.0),
+          borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
               color: Color.fromRGBO(31, 92, 103, 0.17),
@@ -201,8 +201,8 @@ class _CardPharmablablaState extends State<CardPharmablabla> {
               decoration: BoxDecoration(
                 color: Color(0xFFEFF6F7),
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(0.0),
-                  bottomRight: Radius.circular(0.0),
+                  bottomLeft: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
                   topLeft: Radius.circular(0.0),
                   topRight: Radius.circular(0.0),
                 ),

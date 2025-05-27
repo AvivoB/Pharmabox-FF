@@ -11,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:pharmabox/annuaire/annuaire_widget.dart';
 import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
+import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 import 'package:pharmabox/home/home_widget.dart';
 import 'package:pharmabox/notifications/firebase_notifications_service.dart';
 import 'package:pharmabox/profil/profil_provider.dart';
@@ -36,6 +37,8 @@ import 'index.dart';
 import 'constant.dart';
 import 'package:uni_links/uni_links.dart';
 import 'pharmablabla/pharmablabla_widget.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -60,6 +63,10 @@ void main() async {
   FirebaseMessaging.onMessage.listen((event) {
     // do something
   });
+
+  if(kIsWeb) {
+    usePathUrlStrategy();
+  }
 
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   firebaseMessaging.onTokenRefresh.listen((event) {
@@ -145,6 +152,7 @@ class _MyAppState extends State<MyApp> {
       });
 
   void _handleIncomingLinks() {
+
     if (!kIsWeb) {
       // It will handle app links while the app is already started - be it in
       // the foreground or in the background.
@@ -236,7 +244,111 @@ class _NavBarPageState extends State<NavBarPage> {
       'Pharmacie': ProfilPharmacie(),
     };
 
+    final icons = {
+      'PharmaJob': Icons.campaign_outlined,
+      'PharmaBlabla': Icons.forum_outlined,
+      'Accueil': Icons.home_outlined,
+      'Reseau': Icons.people_alt_outlined,
+      'Annuaire': Icons.sort_outlined,
+      'Profil': Icons.person_outline,
+      'Pharmacie': Icons.local_pharmacy_outlined,
+    };
+
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
+
+    // For web return sidebar
+    if (kIsWeb) {
+      return Scaffold(
+        body: Row(
+          children: [
+            Container(
+              color: Colors.white,
+              width: MediaQuery.of(context).size.width * 0.15,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        PharmaboxLogo(width: 50),
+                        SizedBox(width: 10),
+                        Text(
+                          'Pharmabox',
+                          style: FlutterFlowTheme.of(context).titleLarge.override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  ...tabs.keys.map(
+                    (key) => Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _currentPage = null;
+                              _currentPageName = key;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: currentIndex == tabs.keys.toList().indexOf(key) ? FlutterFlowTheme.of(context).primaryBackground : Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                currentIndex == tabs.keys.toList().indexOf(key)
+                            ? ShaderMask(
+                                shaderCallback: (bounds) => LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Color(0xFF7CEDAC), Color(0xFF42D2FF)], // changez les couleurs comme vous le souhaitez
+                                  stops: [0.0, 1.0],
+                                ).createShader(bounds),
+                                child: Icon(
+                                  icons[key],
+                                  color: Colors.white,
+                                  size: 32.0,
+                                ),
+                              )
+                              :
+                                Icon(
+                                    icons[key],
+                                    color: greyColor,
+                                    size: 32.0,
+                                  ),
+                                SizedBox(width: 10),
+                                Text(key.toString(), overflow: TextOverflow.ellipsis, style: FlutterFlowTheme.of(context).headlineMedium.override(fontFamily: 'Poppins', color: FlutterFlowTheme.of(context).primaryText, fontSize: 14, fontWeight: currentIndex == tabs.keys.toList().indexOf(key) ? FontWeight.w500 : FontWeight.w400)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                ).toList(),
+                  Spacer(),
+                  Container(
+                    color: greyLightColor,
+                    child: Text(
+                        'Web version - Pharmabox',
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                  )
+                ]
+              )
+            ),
+            Expanded(child: _currentPage ?? tabs[_currentPageName] ?? Container()),
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
       body: _currentPage ?? tabs[_currentPageName],

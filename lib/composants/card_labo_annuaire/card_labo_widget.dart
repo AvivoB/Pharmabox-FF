@@ -89,24 +89,6 @@ class _CardLaboWidgetState extends State<CardLaboWidget> {
                             ),
                           ),
                         ),
-                        // GestureDetector(
-                        //   child: Column(
-                        //     mainAxisSize: MainAxisSize.max,
-                        //     mainAxisAlignment: MainAxisAlignment.start,
-                        //     crossAxisAlignment: CrossAxisAlignment.start,
-                        //     children: [
-                        //       Container(
-                        //         width: MediaQuery.of(context).size.width * 0.5,
-                        //         child: Text(
-                        //               widget.data?['name'].toString().toCapitalized() ?? '',
-                        //               style: FlutterFlowTheme.of(context).bodyMedium.override(fontFamily: 'Poppins', color: blackColor, fontSize: 16.0, fontWeight: FontWeight.w600,),
-                        //               overflow: TextOverflow.ellipsis,
-                        //             ),
-                        //       ),
-                        //       SizedBox(height: 2),
-                        //      ],
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -136,26 +118,7 @@ class _CardLaboWidgetState extends State<CardLaboWidget> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Icon(
-                  //   Icons.location_on_outlined,
-                  //   color: Color(0xFF595A71),
-                  //   size: 35.0,
-                  // ),
-                  // Padding(
-                  //   padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                  //   child: Container(
-                  //     child: Text(
-                  //       widget.data['address'] ?? '',
-                  //       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                  //             fontFamily: 'Poppins',
-                  //             color: Color(0xFF595A71),
-                  //           ),
-                  //       overflow: TextOverflow.visible, // Permet le retour à la ligne
-                  //       maxLines: null, // Permet un nombre illimité de lignes
-                  //       softWrap: true, // Active le retour à la ligne
-                  //     ),
-                  //   ),
-                  // ),
+                 
                 ],
               ) : Container(),
             ),
