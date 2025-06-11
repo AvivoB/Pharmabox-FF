@@ -1607,7 +1607,7 @@ class _RegisterStepWidgetState extends State<RegisterStepWidget> {
                                         ),
                                         child: TextButton(
                                           onPressed: () async {
-                                            await launch('https://www.pharma-box.fr/mentions-legales-application.html');
+                                            await launch('https://www.pharma-box.fr/mentions-legales-application-html');
                                           },
                                           child: Text(
                                             'J\'accepte les conditions générales d\'utilisation  cliquez ici pour les consulter',
