@@ -57,7 +57,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: kIsWeb
               ? _buildWebLayout(context)
@@ -129,23 +129,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Créez votre compte Pharma-Box',
-              style: FlutterFlowTheme.of(context).displaySmall.override(
-                fontFamily: 'Poppins',
-                fontSize: 28,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
             SizedBox(height: 10),
-            Text(
-              'Rejoignez un réseau dédié à la pharmacie',
-              textAlign: TextAlign.center,
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                fontFamily: 'Poppins',
-                fontSize: 16,
-              ),
-            ),
             SizedBox(height: 40),
             _buildRegisterForm(context),
           ],
@@ -183,6 +167,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 80, width: 20),
             if(typeConnexion == '')
             Text('En Pharmacie vous êtes ...', style: FlutterFlowTheme.of(context).displaySmall),
             if(typeConnexion == '')
