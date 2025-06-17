@@ -35,7 +35,7 @@ import 'flutter_flow/nav/AppStateNotifier.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'constant.dart';
-import 'package:uni_links/uni_links.dart';
+import 'package:app_links/app_links.dart';
 import 'pharmablabla/pharmablabla_widget.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
@@ -154,9 +154,10 @@ class _MyAppState extends State<MyApp> {
   void _handleIncomingLinks() {
 
     if (!kIsWeb) {
+      final appLinks = AppLinks(); // AppLinks is singleton
       // It will handle app links while the app is already started - be it in
       // the foreground or in the background.
-      _sub = uriLinkStream.listen((Uri? uri) {
+      _sub = appLinks.uriLinkStream.listen((Uri? uri) {
         if (!mounted) return;
         print('got uri: $uri');
         print('got uri: ' + uri!.path);

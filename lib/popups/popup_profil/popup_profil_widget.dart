@@ -1,7 +1,7 @@
 
 import 'package:pharmabox/auth/AuthProvider.dart';
 import 'package:pharmabox/backend/firebase_messaging/firebase_messaging.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../constant.dart';
 import '/auth/firebase_auth/auth_util.dart';
@@ -55,11 +55,15 @@ class _PopupProfilWidgetState extends State<PopupProfilWidget> {
   void shareProfile(String type) {
     if (type == 'profil') {
       final String texte = 'Découvrez mon profil sur Pharmabox : https://pharmaff-dab40.web.app/profilView?userId=' + currentUserUid;
-      Share.share(texte);
+      SharePlus.instance.share(
+        ShareParams(text: texte)
+      );
     }
     if (type == 'pharmacie') {
       final String texte = 'Découvrez ma Pharmacie sur Pharmabox : https://pharmaff-dab40.web.app/pharmacieProfilView?pharmacieId=' + currentUserUid;
-      Share.share(texte);
+      SharePlus.instance.share(
+        ShareParams(text: texte)
+      );
     }
   }
 

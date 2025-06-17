@@ -19,7 +19,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:contacts_service/contacts_service.dart';
+import 'package:contacts_service_plus/contacts_service_plus.dart';
 
 class ReseauImportFromPhone extends StatefulWidget {
   ReseauImportFromPhone({Key? key, String? type})
