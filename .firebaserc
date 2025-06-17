@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "pharmaff-dab40"
-  }
+  },
+  "targets": {
+    "pharmaff-dab40": {
+      "hosting": {
+        "webapp-pharmabox": [
+          "webapp-pharmabox"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

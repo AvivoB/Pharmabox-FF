@@ -18,12 +18,21 @@
     },
     "singleProjectMode": true
   },
-  "hosting": {
-    "public": "hosting",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  }
+  "hosting": [
+    {
+      "target": "site-principal",
+      "public": "hosting",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    },
+    {
+      "target": "admin",
+      "public": "backoffice",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    },
+    {
+      "target": "webapp-pharmabox",
+      "public": "hosting/app",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    }
+  ]
 }
