@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:pharmabox/auth/firebase_auth/apple_auth.dart';
 import 'package:pharmabox/auth/firebase_auth/email_auth.dart';
 import 'package:pharmabox/auth/firebase_auth/google_auth.dart';
@@ -105,7 +106,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             children: [
                               if(typeConnexion == 'email')
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                                padding: kIsWeb ? EdgeInsetsDirectional.fromSTEB(MediaQuery.of(context).size.width * 0.2, 0.0, MediaQuery.of(context).size.width * 0.2, 10.0) : EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.emailController,
                                   autofocus: false,
@@ -160,7 +161,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               ),
                               if(typeConnexion == 'email')
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                                padding: kIsWeb ? EdgeInsetsDirectional.fromSTEB(MediaQuery.of(context).size.width * 0.2, 0.0,MediaQuery.of(context).size.width * 0.2, 10.0) : EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
                                 child: TextFormField(
                                   controller: _model.motdepasseController,
                                   autofocus: false,
@@ -215,7 +216,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               ),
                               if(typeConnexion == 'email')
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                                padding: kIsWeb ? EdgeInsetsDirectional.fromSTEB(MediaQuery.of(context).size.width * 0.2, 0.0,MediaQuery.of(context).size.width * 0.2, 10.0) : EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                                 child: Container(
                                   width: double.infinity,
                                   height: 50.0,
@@ -281,7 +282,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 GestureDetector(
                                   onTap: () => setState(() => typeConnexion = 'email'),
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width * 0.28,
+                                    width: MediaQuery.of(context).size.width * (kIsWeb ? 0.33 : 0.28),
                                     decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context).secondaryBackground,
                                     borderRadius: BorderRadius.circular(4),

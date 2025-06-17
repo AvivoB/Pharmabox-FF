@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pharmabox/custom_code/widgets/input.dart';
+import 'package:pharmabox/custom_code/widgets/pharmabox_logo.dart';
 import 'package:pharmabox/custom_code/widgets/snackbar_message.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -196,10 +197,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       ),
                     ),
                     FlutterFlowDropDown<String>(
+
                       controller: _model.posteValueController ??= FormFieldController<String>(''),
                       options: ['Rayonniste', 'Conseiller', 'Préparateur', 'Apprenti', 'Etudiant pharmacie', 'Etudiant pharmacie 6ème année validée', 'Pharmacien', 'Pharmacien titulaire'],
                       onChanged: (val) => setState(() => _model.posteValue = val),
-                      width: MediaQuery.of(context).size.width * 0.78,
+                      width: MediaQuery.of(context).size.width * (kIsWeb ? 0.43 : 0.78),
                       height: 50,
                       textStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Poppins',
@@ -235,7 +237,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     }
                   }),
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.28,
+                    width: MediaQuery.of(context).size.width * (kIsWeb ? 0.15 : 0.28),
                     decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                     borderRadius: BorderRadius.circular(4),
@@ -282,7 +284,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         
                   },
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.28,
+                    width: MediaQuery.of(context).size.width * (kIsWeb ? 0.15 : 0.28),
                     decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                     borderRadius: BorderRadius.circular(4),
@@ -333,7 +335,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                
                   },
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.28,
+                    width: MediaQuery.of(context).size.width * (kIsWeb ? 0.15 : 0.28),
                     decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                     borderRadius: BorderRadius.circular(4),
